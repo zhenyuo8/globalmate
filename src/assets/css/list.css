@@ -1,0 +1,96 @@
+
+.header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    background: #fff;
+    z-index: 11;
+    height: 33px;
+}
+.myAssist{
+    margin-top: 38px;
+    font-size: 14px;
+}
+.repeat_assist{
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid rgba(241, 241, 241, 1);
+    border-bottom: 1px solid rgba(241, 241, 241, 1);
+    margin-bottom: 16px;
+}
+.top {
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid rgba(241, 241, 241, 1);
+}
+.top .top_left{
+    float: left;
+    margin-left: .35rem;
+}
+.top .top_right{
+    float: right;
+    margin-right: .35rem;
+}
+.middle{
+    height: 146px;
+    padding: 12px .4rem;
+    display: flex;
+    border-bottom: 1px solid rgba(241, 241, 241, 1);
+}
+
+.middle .middle_left{
+    width: 3.74rem;
+    text-align: left;
+    overflow: hidden;
+}
+.middle_left p{
+    line-height: 20px;
+}
+.middle_left .middle_from{
+    margin-top: 26px;
+}
+.middle_decription{
+    height: 100px;
+    overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+    -webkit-box-orient: vertical;
+        -webkit-line-clamp: 10;
+}
+.middle_right{
+    width: 2.8rem;
+    height: auto;
+    margin-left: .18rem;
+}
+.middle_right img{
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+.bottom{
+    line-height: 45px;
+    display: flex;
+    height: 45px;
+    overflow: hidden;
+}
+.bottom > div {
+    flex: 1
+}
+.bottom .bottom_left{
+     text-align: left;
+     margin-left: 0.35rem;
+}
+.bottom_left img{
+        width: 32px;
+    display: inline-block;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+.bottom_left span{
+    display: inline-block;
+}
+.bottom .bottom_right{
+     text-align: right;
+     margin-right: 0.35rem;
+}

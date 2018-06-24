@@ -1,0 +1,113 @@
+.assist{
+    overflow: hidden;
+}
+.header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    background: #fff;
+    z-index: 11;
+    height: 33px;
+}
+.body{
+    margin-top: 38px;
+}
+.main_decription{
+    margin-top: .1rem;
+    border-bottom: 1px solid #F1F1F1
+}
+
+.main_decription_title {
+    font-size: 14px;
+    color: #9B9B9B;
+    height: 44px;
+    line-height: 44px;
+    padding: 0 .2rem;
+    text-align: left;
+    border-bottom: 1px solid #F1F1F1;
+    border-top: 1px solid #F1F1F1
+}
+
+.main_decription_area,
+.main_decription_uploader {
+    padding: .2rem;
+}
+
+.main_decription_area textarea {
+    color: #333;
+    outline: none;
+    height: 146px;
+    resize: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+}
+
+textarea::-webkit-input-placeholder {
+    color: #9B9B9B
+}
+
+.main_decription_uploader_container {
+    width: 1.4rem;
+    height: 1.4rem;
+    position: relative;
+    background: #F8F8F8;
+    border: 1px solid #F2F2F2;
+}
+
+.main_decription_uploader input {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+    background: #F8F8F8;
+    border: 1px solid #F2F2F2;
+    position: absolute;
+    top: 0;
+    opacity: 0;
+}
+.main_style {
+    margin-top: .1rem;
+}
+.icon-add {
+    font-size: 30px;
+    color: #C7C7CC;
+    line-height: 1.4rem;
+}
+.add_label_container{
+    height: 200px;
+    border-top: 1px solid #F2F2F2;
+    padding: 18px;
+}
+.add_label_container span{
+    font-size: 12px;
+    width: 1.44rem;
+    height: 24px;
+    background: #F5A623;
+    color: #fff;
+    border-radius: 3px;
+    display: inline-block;
+    line-height: 24px;
+    float: left;
+}
+.add_content_container{
+    font-size: 14px;
+    position: relative;
+    color: #9B9B9B;
+    background: #fff;
+    box-shadow: 0 2px 8px 0;
+    height: 68px;
+    line-height: 68px;
+    padding: 0 .24rem 0 0.2rem;
+}
+.add_content_container span{
+
+}
+.add_content_title{
+    float: left;
+}
+.add_cotent_icon{
+    float: right;
+    color: #64829D;
+    font-size: 24px;
+}
