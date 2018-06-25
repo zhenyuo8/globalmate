@@ -47,7 +47,7 @@
 input {
     outline: none;
     border: none;
-    height: 92%;
+    height: 90%;
 }
 
 .icon-arrow_right_samll::before {

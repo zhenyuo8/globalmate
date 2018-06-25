@@ -1,5 +1,13 @@
-<style>
-
+<style scoped>
+.header{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    background: #fff;
+    z-index: 11;
+    height: 33px;
+}
 .home_image {
     height: 186px;
     width: 100%;
@@ -76,7 +84,7 @@ export default {
                     'type': 'assist'
                 }, {
                     'text': '陪伴',
-                    'type': 'assist'
+                    'type': 'accompany'
                 }, {
                     'text': '其他',
                     'type': 'other'
