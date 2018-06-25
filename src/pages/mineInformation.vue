@@ -114,16 +114,19 @@
     border: 1px solid #979797;
     line-height: 34px;
 }
-.mineInformation_recommend::after{
+/*.mineInformation_recommend::after{
     content: '';
     clear: both;
-    width: 86%;
+    width: 84%;
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     margin: auto;
     border-bottom: 1px solid rgba(151,151,151,0.34);
+}*/
+.mineInformation_recommend{
+    height: 98px;
 }
 .mineInformation_recommend p{
     text-align: left;
@@ -131,14 +134,19 @@
        color: #9B9B9B;
        padding: 21px .58rem;
 }
+.mineInformation_line{
+    width: 84%;
+    margin: 21px auto;
+    border-bottom: 1px solid rgba(151,151,151,0.34);
+}
 </style>
 
 <template>
 
 <div class="mineInformation">
-    <div class="header">
+    <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
-    </div>
+    </div> -->
     <div class="mineInformation_user_image">
         <img src="../assets/images/secondimage.jpg" alt="">
     </div>
@@ -177,6 +185,9 @@
         <div class="mineInformation_recommend">
             <p>Facebook（脸书）是美国的一个社交网络服务网站 ，创立于2004年2月4日，总部位于美国加利福尼亚州帕拉阿图，2012年3月6日发布Windows版桌面聊天软件Facebook Messenger</p>
         </div>
+    </div>
+    <div class="mineInformation_line">
+
     </div>
     <div class="mineInformation_history_action">
         <div class="" v-for="(item,index) in historyAction">

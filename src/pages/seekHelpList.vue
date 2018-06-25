@@ -5,9 +5,9 @@
 <template>
 
 <div class="myAssist">
-    <div class="header">
+    <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
-    </div>
+    </div> -->
     <div class="repeat_assist" v-for="item in myAssistList">
         <div class="top">
             <span class="top_left">

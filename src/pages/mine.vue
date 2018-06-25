@@ -15,7 +15,7 @@
 }
 
 .mine_body {
-    margin-top: 33px;
+    /*margin-top: 33px;*/
     padding: 21px 0.4rem;
     overflow: hidden;
 }
@@ -42,7 +42,7 @@
 
 .mine_information {
     float: left;
-    width: 76%;
+    /*width: 76%;*/
     height: 60px;
     /*background: red;*/
     margin-left: 0.4rem;
@@ -91,9 +91,9 @@
 <template>
 
 <div class="mine">
-    <div class="header">
+    <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
-    </div>
+    </div> -->
     <div class="mine_body">
         <div class="mine_detail">
             <div class="mine_image" @click='toMineInformation'>

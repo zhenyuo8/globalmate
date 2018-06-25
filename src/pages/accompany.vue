@@ -5,9 +5,9 @@
 <template>
 
 <div class="assist">
-    <div class="header">
+    <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
-    </div>
+    </div> -->
     <div class="body" >
             <div class="main_view">
                 <div class="" v-for="item in listRepeat">

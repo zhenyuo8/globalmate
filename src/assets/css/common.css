@@ -11,7 +11,8 @@
     height: 33px;
 }
 .body{
-    margin-top: 38px;
+    /*margin-top: 38px;*/
+    margin-top: 5px;
 }
 .main_decription{
     margin-top: .1rem;

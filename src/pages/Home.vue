@@ -11,7 +11,7 @@
 .home_image {
     height: 186px;
     width: 100%;
-    margin-top: 33px;
+    /*margin-top: 33px;*/
 }
 
 .home_image img {
@@ -46,9 +46,9 @@
 <template>
 
 <div class="home" id='home'>
-    <div class="header">
+    <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
-    </div>
+    </div> -->
     <div class="home_image">
         <img src="../assets/images/home.jpg" alt="">
     </div>
