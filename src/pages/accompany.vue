@@ -41,7 +41,9 @@
                 </div>
             </div>
     </div>
-
+    <div class="assist_bottom">
+        发布
+    </div>
 </div>
 
 </template>

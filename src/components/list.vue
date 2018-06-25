@@ -40,23 +40,37 @@
 }
 
 .repeate_content_text span {
-    margin-right: .4rem;
+    /*margin-right: .4rem;*/
     color: #9B9B9B;
 }
 
 input {
     outline: none;
     border: none;
-    height: 90%;
+    height: 80%;
+    font-size: 14px;
 }
 
 .icon-arrow_right_samll::before {
-    font-size: 22px;
+    font-size: 24px;
     color: #54698D;
-    position: absolute;
-    right: 0;
 }
+.repeate_content_text_item{
+    width: 84%;
+    float: left;
+}
+.repeate_content_text_image{
+    width: .64rem;
+    height: .64rem;
+    padding: 6px 0;
+    margin-left: 2.2rem;
 
+}
+.repeate_content_text_image img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%
+}
 </style>
 
 <template>
@@ -66,14 +80,23 @@ input {
         {{itemRepeat.title}}
     </div>
     <div class="repeat_content" v-if="!itemRepeat.type">
-        <div class="repeate_content_text" :class="itemRepeat.arrow?'icon-arrow_right_samll':''">
-            <span>{{itemRepeat.text}}</span>
+        <div class="repeate_content_text">
+            <div class="repeate_content_text_item" v-if="!itemRepeat.mintType">
+                {{itemRepeat.text}}
+            </div>
+            <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
+                <div class="repeate_content_text_image" style="width:32px;height:32px">
+                    <img src="" :src="itemRepeat.url" alt="">
+                </div>
+
+                <!-- {{itemRepeat.text}} -->
+            </div>
+            <div class="" :class="itemRepeat.arrow?'icon-arrow_right_samll':''">
+            </div>
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-        <div class="repeate_content_input">
-            <input type="text" name="" value="" placeholder='请输入'>
-        </div>
+         <input type="number" name="" value="" placeholder='请输入'>
     </div>
 </div>
 

@@ -108,7 +108,7 @@
                     <span class="">北京</span>
                 </div>
             </div>
-            <div class="mine_settings">
+            <div class="mine_settings" @click='goEditMineInfo'>
                 设置
             </div>
         </div>
@@ -183,6 +183,16 @@ export default {
                         }
                     });
                 }
+            },
+            goEditMineInfo(){
+                this.$router.push({
+                    path: 'mineInformationEdit',
+                    query: {
+                        'token': '22223',
+                        'title': '哈哈',
+                        'id': 'fffff',
+                    }
+                });
             }
     }
 }

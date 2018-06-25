@@ -105,26 +105,18 @@
     color: #9B9B9B;
     width: 40%;
     text-align: center;
+    height: 32px;
 }
 .mineInformation_edit_button span{
     width: 1.8rem;
     display: inline-block;
     background: #F1F1F1;
-    height: 34px;
+    margin-left: .76rem;
+    height: 30px;
     border: 1px solid #979797;
-    line-height: 34px;
+    line-height: 30px;
 }
-/*.mineInformation_recommend::after{
-    content: '';
-    clear: both;
-    width: 84%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    border-bottom: 1px solid rgba(151,151,151,0.34);
-}*/
+
 .mineInformation_recommend{
     height: 98px;
 }
@@ -138,6 +130,9 @@
     width: 84%;
     margin: 21px auto;
     border-bottom: 1px solid rgba(151,151,151,0.34);
+}
+.mineInformation_history_action{
+    padding-bottom: 20px;
 }
 </style>
 
@@ -178,7 +173,7 @@
                     <span class="mineInformation_praise_text">赞</span>
                 </div>
             </div>
-            <div class="mineInformation_edit_button">
+            <div class="mineInformation_edit_button" @click='goEditMineInfo'>
                 <span>编辑信息</span>
             </div>
         </div>
@@ -258,6 +253,18 @@ export default {
                     }
                 }
             ]
+        }
+    },
+    methods:{
+        goEditMineInfo(){
+            this.$router.push({
+                path: 'mineInformationEdit',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
+                }
+            });
         }
     },
     components: {

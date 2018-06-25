@@ -54,7 +54,7 @@
 }
 .middle_right{
     width: 2.8rem;
-    height: auto;
+    height: 2.8rem;
 }
 .middle_right img{
     width: 100%;
