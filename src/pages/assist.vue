@@ -95,6 +95,9 @@ export default {
         Header,
         List
     },
+    created(){
+        
+    }
 }
 
 </script>
