@@ -1,6 +1,30 @@
 <template>
-    <div class="index">
-        聊天室
+    <div class="chart">
+        <div class="chart_main">
+            <div class="chart_main_content">
+                <div class="chart_main_content_image">
+                    <div class="">
+                        <img src="../assets/images/1.jpeg" alt="">
+                    </div>
+                </div>
+                <div class="chart_main_content_decription">
+                    <span class="detail_name">火影忍者佐助</span>
+                    <span class="detail_type">cool</span>
+                    <span class="detail_brand">japan</span>
+                </div>
+                <div class="detail_list_price">
+                    ¥ 123
+                </div>
+            </div>
+            <div class="chart_main_history">
+
+            </div>
+        </div>
+        <div class="chart_action">
+            <div class="chart_action_input">
+                <input type="text" name="" value="">
+            </div>
+        </div>
     </div>
 </template>
 
@@ -33,5 +57,62 @@ export default {
 </script>
 
 <style>
+    .chart{
+        font-size: 14px;
+        color: #9B9B9B;
+        position: relative;
+    }
+    .chart_main{
+        padding: 10px .3rem;
+    }
+    .chart_main_content{
+        height: 72px;
+        padding: 12px .32rem;
+        border-radius: 14px;
+        background: #F1F1F1;
+        margin-bottom: 9px;
+        display: flex;
+    }
+    .chart_main_content > div{
+        flex: 1
+    }
+    .chart_main_content_image > div{
+        width: 1.44rem;
+        height: 1.44rem;
+    }
+    .chart_main_content_image > div > img{
+        width: 100%;
+        height: 100%;
+    }
+    .chart_main_content_decription{
+        padding: 15px 0;
+    }
+    .chart_main_content_decription span{
+        line-height: 20px;
+        float: left;
+        margin-right: .2rem;
+    }
+    .detail_list_price{
+        text-align: right;
+        font-size: 18px;
+        line-height: 72px;
+    }
 
+    .chart_action{
+        position: fixed;
+        height: 44px;
+        background: #F1F1F1;
+        width: 100%;
+        bottom: 0;
+    }
+    .chart_action_input{
+        width: 80%;
+        height: 100%;
+        margin: auto;
+    }
+    .chart_action_input input{
+        height: 62%;
+        width: 100%;
+        margin-top: 2%;
+    }
 </style>
