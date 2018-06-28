@@ -110,7 +110,7 @@ export default {
                     path: item.type,
                     query: {
                         'token': '22223',
-                        'title': '哈哈',
+                        'title': item.text,
                         'id': 'fffff',
                     }
                 });

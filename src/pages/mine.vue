@@ -155,6 +155,7 @@ export default {
                     icon: '../assets/logo.png'
                 }
             },
+            title:''
         }
     },
     components: {
@@ -194,6 +195,18 @@ export default {
                     }
                 });
             }
+    },
+    activated(){
+        alert(111)
+        document.title='what ever you want'
+    },
+    watch:{
+        'title':function (val,old) {
+            document.title=val
+        }
+    },
+    created(){
+        this.title=this.$route.query.title;
     }
 }
 

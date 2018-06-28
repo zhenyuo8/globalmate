@@ -8,7 +8,7 @@
     <!-- <div class="header">
         <Header :hearderParas='hearderParas'></Header>
     </div> -->
-    <div class="repeat_assist" v-for="item in myAssistList">
+    <div class="repeat_assist" v-for="item in myAssistList" @click='showDetail'>
         <div class="top">
             <span class="top_left">
                         {{item.data.top.title}}
@@ -117,6 +117,18 @@ export default {
                     }
                 }
             }]
+        }
+    },
+    methods:{
+        showDetail(){
+            this.$router.push({
+                path: 'detail',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
+                }
+            });
         }
     }
 

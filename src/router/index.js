@@ -10,8 +10,8 @@ import mineInformationEdit from '@/pages/mineInformationEdit'//个人资料编�
 import other from '@/pages/other'//其他
 import myAssist from '@/pages/myAssist'//我发布的
 import seekHelpList from '@/pages/seekHelpList'//求助列表
-import chart from '@/pages/chart'//求助列表
-import detail from '@/pages/detail'//求助列表
+import chart from '@/pages/chart'//聊天页面
+import detail from '@/pages/detail'//求助详情页
 Vue.use(Router)
 
 export default new Router({

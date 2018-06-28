@@ -240,8 +240,7 @@
             留言
         </div>
         <div class="detail_message_chart">
-            <span>聊一下</span>
-
+            <span @click='goChart'>聊一下</span>
         </div>
     </div>
 </div>
@@ -258,6 +257,18 @@ export default {
     data() {
         return {
 
+        }
+    },
+    methods:{
+        goChart(){
+            this.$router.push({
+                path: 'chart',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
+                }
+            });
         }
     }
 

@@ -8,12 +8,14 @@
                     </div>
                 </div>
                 <div class="chart_main_content_decription">
-                    <span class="detail_name">火影忍者佐助</span>
+                    <span class="detail_name">火影忍</span>
                     <span class="detail_type">cool</span>
                     <span class="detail_brand">japan</span>
                 </div>
-                <div class="detail_list_price">
-                    ¥ 123
+                <div class="chart_main_content_action">
+                    <div class="">
+                        <span></span>
+                    </div>
                 </div>
             </div>
             <div class="chart_main_history">
@@ -107,12 +109,15 @@ export default {
     }
     .chart_action_input{
         width: 80%;
-        height: 100%;
         margin: auto;
     }
     .chart_action_input input{
-        height: 62%;
-        width: 100%;
-        margin-top: 2%;
+        height: 36px;
+        padding: 0 .2rem;
+        width: 90%;
+        margin-top: 4px;
+        outline: none;
+        border: 1px solid rgba(151,151,151,0.3);
+        border-radius: 4px;
     }
 </style>
