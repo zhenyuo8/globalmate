@@ -22,9 +22,15 @@
 
             </div>
         </div>
-        <div class="chart_action">
+        <div class="chart_action" style="display:flex">
+            <div class="" style="width:10%;">
+                <span class="icon-cool"></span>
+            </div>
             <div class="chart_action_input">
                 <input type="text" name="" value="">
+            </div>
+            <div class="" style="width:10%;">
+                <span class="icon-cool"></span>
             </div>
         </div>
     </div>
@@ -109,15 +115,21 @@ export default {
     }
     .chart_action_input{
         width: 80%;
+        /*padding: 0 0.08rem;*/
         margin: auto;
     }
     .chart_action_input input{
-        height: 36px;
+        height: 34px;
         padding: 0 .2rem;
         width: 90%;
-        margin-top: 4px;
+        /*margin-top: 4px;*/
         outline: none;
         border: 1px solid rgba(151,151,151,0.3);
         border-radius: 4px;
+    }
+    .icon-cool{
+        font-size: 20px;
+        /*color: red;*/
+        line-height: 44px;
     }
 </style>
