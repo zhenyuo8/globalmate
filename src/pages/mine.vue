@@ -164,30 +164,19 @@ export default {
     },
     methods: {
         toMineInformation() {
-                this.$router.push({
-                    path: 'mineInformation',
-                    query: {
-                        'token': '22223',
-                        'title': '哈哈',
-                        'id': 'fffff',
-                    }
-                });
-            },
-            clickCallBack(item) {
-                if (item.mineType === 'publish') {
-                    this.$router.push({
-                        path: 'myAssist',
-                        query: {
-                            'token': '22223',
-                            'title': '哈哈',
-                            'id': 'fffff',
-                        }
-                    });
+            this.$router.push({
+                path: 'mineInformation',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
                 }
-            },
-            goEditMineInfo(){
+            });
+        },
+        clickCallBack(item) {
+            if (item.mineType === 'publish') {
                 this.$router.push({
-                    path: 'mineInformationEdit',
+                    path: 'myAssist',
                     query: {
                         'token': '22223',
                         'title': '哈哈',
@@ -195,10 +184,34 @@ export default {
                     }
                 });
             }
+        },
+        goEditMineInfo(){
+            this.$router.push({
+                path: 'mineInformationEdit',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
+                }
+            });
+        },
+        loadData(){
+            this.axios.get('http://10.4.111.46:9090/globalmate/rest/assist/listSOS',{
+                headers:{
+                    token:'33f8b8d07d6c4c15b3b3af5e4edc21ee'
+                }
+
+            }).then(()=>{
+                console.log(1111)
+            }).catch((e)=>{
+                console.log(e);
+            })
+            console.log(this.axios)
+        }
+
     },
     activated(){
-        alert(111)
-        document.title='what ever you want'
+
     },
     watch:{
         'title':function (val,old) {
@@ -206,6 +219,7 @@ export default {
         }
     },
     created(){
+        this.loadData();
         this.title=this.$route.query.title;
     }
 }

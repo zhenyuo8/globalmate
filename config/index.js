@@ -33,7 +33,19 @@ module.exports = {
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
 
-    cssSourceMap: true
+    cssSourceMap: true,
+    proxyTable: {
+        '/api': {
+            // 我要请求的地址
+            target: 'http://10.4.111.23:9090/globalmate/index.jsp',
+            //是否跨域
+            changeOrigin: true,
+            // 重写地址
+            pathRewrite: {
+              '^/api': '/api'
+            }
+        }
+    }
   },
 
   build: {
@@ -64,6 +76,8 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report
+    bundleAnalyzerReport: process.env.npm_config_report,
+
+
   }
 }

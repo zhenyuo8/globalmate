@@ -71,51 +71,84 @@
 import Header from '../components/header.vue'
 export default {
     data() {
-            return {
-                hearderParas: {
-                    title: 'GM公众号',
-                    right: {
-                        text: '',
-                        icon: '../assets/logo.png'
-                    }
-                },
-                navData: [{
-                    'text': '帮代',
-                    'type': 'assist'
-                }, {
-                    'text': '陪伴',
-                    'type': 'accompany'
-                }, {
-                    'text': '其他',
-                    'type': 'other'
-                }],
-                navSecData: [{
-                    'text': '个人中心',
-                    'type': 'mine'
-                }, {
-                    'text': '我的求助',
-                    'type': 'myAssist'
-                }, {
-                    'text': '平台反馈',
-                    'type': 'other'
-                }],
-            }
-        },
-        components: {
-            Header,
-        },
-        methods: {
-            navRoute(item) {
-                this.$router.push({
-                    path: item.type,
-                    query: {
-                        'token': '22223',
-                        'title': item.text,
-                        'id': 'fffff',
-                    }
-                });
-            }
+        return {
+            hearderParas: {
+                title: 'GM公众号',
+                right: {
+                    text: '',
+                    icon: '../assets/logo.png'
+                }
+            },
+            navData: [{
+                'text': '帮代',
+                'type': 'assist'
+            }, {
+                'text': '陪伴',
+                'type': 'accompany'
+            }, {
+                'text': '其他',
+                'type': 'other'
+            }],
+            navSecData: [{
+                'text': '个人中心',
+                'type': 'mine'
+            }, {
+                'text': '我的求助',
+                'type': 'myAssist'
+            }, {
+                'text': '平台反馈',
+                'type': 'other'
+            },{
+                'text': '注册',
+                'type': 'regsist'
+            },{
+                'text': '登入',
+                'type': 'login'
+            }],
         }
-}
+    },
+    components: {
+        Header,
+    },
+     methods: {
+         navRoute(item) {
+             if(item.type==='regsist'){
+                 this.axios.post('http://10.4.111.46:9090/globalmate/rest/user/add',{
+                     name:'zhenyuo8',
+                     nikename:'zhenyuo8',
+                     password:'123456qwe',
+                     email:'',
+                     phone:'18470186126',
+                     idNumber:'',
+                     pic:'',
+                     school:'',
+                     where:'',
+                     hobby:'',
+                 }).then((res)=>{
+                     console.log(res);
+                 }).catch((e)=>{
+                     console.log(e);
+                 })
+             }else if(item.type==='login'){
+                 this.axios.get('http://10.4.111.46:9090/globalmate/rest/user/login'+'/18470186126/123456qwe',{
 
+                 }).then((res)=>{
+                     console.log(res);
+                 }).catch((e)=>{
+                     console.log(e);
+                 })
+             }else {
+                 this.$router.push({
+                     path: item.type,
+                     query: {
+                         'token': '22223',
+                         'title': item.text,
+                         'id': 'fffff',
+                     }
+                 });
+             }
+
+         }
+     }
+ }
 </script>
