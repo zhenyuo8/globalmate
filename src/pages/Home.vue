@@ -82,6 +82,9 @@ export default {
             navData: [{
                 'text': '帮代',
                 'type': 'assist'
+            },{
+                'text': '帮带',
+                'type': 'carryAssist'
             }, {
                 'text': '陪伴',
                 'type': 'accompany'
@@ -113,7 +116,7 @@ export default {
      methods: {
          navRoute(item) {
              if(item.type==='regsist'){
-                 this.axios.post('http://10.4.111.46:9090/globalmate/rest/user/add',{
+                 this.axios.post('http://10.4.111.31:9090/globalmate/rest/user/add',{
                      name:'zhenyuo8',
                      nikename:'zhenyuo8',
                      password:'123456qwe',
@@ -130,9 +133,11 @@ export default {
                      console.log(e);
                  })
              }else if(item.type==='login'){
-                 this.axios.get('http://10.4.111.46:9090/globalmate/rest/user/login'+'/18470186126/123456qwe',{
+                 this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/login'+'/18470186126/123456qwe',{
 
                  }).then((res)=>{
+                     this.token=res.data.data;
+                     console.log(res.data.data);
                      console.log(res);
                  }).catch((e)=>{
                      console.log(e);
@@ -141,7 +146,7 @@ export default {
                  this.$router.push({
                      path: item.type,
                      query: {
-                         'token': '22223',
+                         'token': this.token,
                          'title': item.text,
                          'id': 'fffff',
                      }

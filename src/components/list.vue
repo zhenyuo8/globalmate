@@ -82,7 +82,8 @@ input {
     <div class="repeat_content" v-if="!itemRepeat.type">
         <div class="repeate_content_text">
             <div class="repeate_content_text_item" v-if="!itemRepeat.mintType">
-                {{itemRepeat.text}}
+                <span>{{itemRepeat.text}}</span>
+
             </div>
             <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
                 <div class="repeate_content_text_image" style="width:32px;height:32px">
@@ -96,7 +97,7 @@ input {
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-         <input type="number" name="" value="" placeholder='请输入'>
+         <input type="text" name="" value="" placeholder='请输入'>
     </div>
 </div>
 
@@ -120,10 +121,17 @@ export default {
                 default: function() {
 
                 }
+            },
+            getConfig: {
+                type: Function,
+                default: function() {
+
+                }
             }
         },
         methods: {
             clickBack(item) {
+                // this.getConfig(item)
                 this.clickCallBack(item)
             }
         }

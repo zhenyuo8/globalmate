@@ -36,7 +36,7 @@
                 </div>
             </div>
     </div>
-    <div class="assist_bottom">
+    <div class="assist_bottom" @click='publish'>
         发布
     </div>
 </div>
@@ -76,6 +76,18 @@ export default {
         List
     },
     methods:{
+        publish(){
+           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/other/add'+'?token='+this.$route.query.token,{
+               'description':'帮忙翻译韩语文章，立刻马上',
+               'rewardAmount':'',
+               'payway':'',
+
+           }).then((res)=>{
+               console.log(res);
+           }).catch((e)=>{
+               console.log(e);
+           });
+        },
         addLabel(){
             alert('添加标签~~')
         }

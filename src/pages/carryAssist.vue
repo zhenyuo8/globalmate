@@ -56,23 +56,31 @@ export default {
         return {
             listRepeat: [{
                 title: '方式',
-                text: 'buy',
+                text: 'carry',
                 arrow: true
             }, {
-                title: '国家',
+                title: '从哪里',
                 text: '美国',
                 arrow: true
             }, {
+                title: '到哪里',
+                text: '中国香港',
+                arrow: true
+            }, {
+                title: '到达时间',
+                text: '2018-09-01',
+                arrow: true
+            }, {
                 title: '物品类型',
-                text: '奶粉',
+                text: '电子产品',
                 arrow: true
             } , {
                 title: '品牌',
-                text: '美素佳儿',
+                text: 'nike',
                 arrow: true
             }, {
                 title: '商品名称',
-                text: '美素佳儿1段',
+                text: 'nike',
                 arrow: false,
                 type: 'input',
             },{
@@ -100,15 +108,19 @@ export default {
     },
     methods:{
         publish(){
-           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,{
-               'country':'美国',
-               'brand':'nike',
-               'goodsName':'nike x12',
+           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/carry/add'+'?token='+this.$route.query.token,{
+               'to':'美国',
+               'from':'中国香港',
+               'arrive':'2018-09-01',
+               'brand':'美素佳儿',
+               'goodsName':'美素佳儿1段',
                'deliveryWay':'快递',
                'payway':'',
                'description':'',
                'pic':'',
                'rewardAmount':'',
+               'weight':'',
+               'volume':'',
            }).then((res)=>{
                console.log(res);
            }).catch((e)=>{

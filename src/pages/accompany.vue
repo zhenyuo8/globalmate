@@ -5,9 +5,6 @@
 <template>
 
 <div class="assist">
-    <!-- <div class="header">
-        <Header :hearderParas='hearderParas'></Header>
-    </div> -->
     <div class="body" >
             <div class="main_view">
                 <div class="" v-for="item in listRepeat">
@@ -41,7 +38,7 @@
                 </div>
             </div>
     </div>
-    <div class="assist_bottom">
+    <div class="assist_bottom" @click='publish'>
         发布
     </div>
 </div>
@@ -49,32 +46,33 @@
 </template>
 
 <script>
-
-import Header from '../components/header.vue'
 import List from '../components/list.vue'
 export default {
     'name': 'assist',
     data() {
         return {
-            hearderParas: {
-                title: '陪伴',
-                right: {
-                    text: '发布',
-                    icon: '../assets/logo.png'
-                }
-            },
             listRepeat: [{
                 title: '方式',
                 text: '陪玩／通宵达旦',
                 arrow: true
             }, {
-                title: '物品类型',
-                text: '电子产品',
+                title: '目的地',
+                text: '香港',
                 arrow: true
             }, {
                 title: '紧急程度',
                 text: '紧急',
                 arrow: true
+            }, {
+                title: '开始时间',
+                text: '请选择',
+                arrow: true,
+                key:'start',
+            }, {
+                title: '结束时间',
+                text: '请选择',
+                arrow: true,
+                key:'end',
             }],
             payStyle: {
                 title: '交收方式',
@@ -90,10 +88,25 @@ export default {
         }
     },
     components: {
-        Header,
         List
     },
     methods:{
+        publish(){
+           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/accompany/add'+'?token='+this.$route.query.token,{
+               'where':'香港',
+               'startTime':new Date().getTime(),
+               'endTime':new Date().getTime()+636071106,
+               'doctor':'',
+               'payway':'',
+               'description':'',
+               'type':'',
+               'rewardAmount':'',
+           }).then((res)=>{
+               console.log(res);
+           }).catch((e)=>{
+               console.log(e);
+           });
+        },
         addLabel(){
             alert('添加标签~~')
         }

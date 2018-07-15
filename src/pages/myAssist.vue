@@ -129,7 +129,19 @@ export default {
                     'id': 'fffff',
                 }
             });
+        },
+        loadData(){
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
+                onlyCurrentUser:''
+            }).then((res)=>{              
+                console.log(res);
+            }).catch((e)=>{
+                console.log(e);
+            })
         }
+    },
+    created(){
+        this.loadData();
     }
 
 }

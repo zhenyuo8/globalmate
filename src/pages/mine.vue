@@ -196,10 +196,7 @@ export default {
             });
         },
         loadData(){
-            this.axios.get('http://10.4.111.46:9090/globalmate/rest/assist/listSOS',{
-                headers:{
-                    token:'33f8b8d07d6c4c15b3b3af5e4edc21ee'
-                }
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/listSOS'+'?token='+this.$route.query.token,{
 
             }).then(()=>{
                 console.log(1111)
@@ -219,6 +216,7 @@ export default {
         }
     },
     created(){
+        console.log(this.$route);
         this.loadData();
         this.title=this.$route.query.title;
     }

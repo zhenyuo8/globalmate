@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/pages/Home'
 import index from '@/pages/index'
 import assist from '@/pages/assist'//帮代
+import carryAssist from '@/pages/carryAssist'//帮代
 import accompany from '@/pages/accompany'//帮代
 import mine from '@/pages/mine'//我的
 import mineInformation from '@/pages/mineInformation'//个人信息
@@ -30,6 +31,11 @@ export default new Router({
         path: '/assist',
         name: 'assist',
         component: assist,
+    },
+    {
+        path: '/carryAssist',
+        name: 'carryAssist',
+        component: carryAssist,
     },
     {
         path: '/accompany',
