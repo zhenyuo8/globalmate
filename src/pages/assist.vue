@@ -4,13 +4,41 @@
 
 </style>
 
+<style media="screen">
+    .list_show{
+        position: fixed;
+        right:0;
+        top:0;
+        bottom:0;
+        width:7.5rem;
+        background:#f5f5f5;
+       -webkit-transition: all .2s ease-in;
+       -moz-transition: all .2s ease-in;
+       transition: all .2s ease-in;
+    }
+    .list_hide{
+        position: fixed;
+        right: -7.5rem;
+        top:0;
+        bottom:0;
+        width:7.1rem;
+        background:#fff;
+        -webkit-transition: all .2s ease-out;
+        -moz-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+    }
+    .main_view_repeat:last-child{
+        border-bottom: 1px solid #f1f1f1;
+    }
+</style>
+
 <template>
 
 <div class="assist">
     <div class="body">
         <div class="main_view">
-            <div class="" v-for="item in listRepeat" :getConfig='getConfig'>
-                <List :itemRepeat='item'></List>
+            <div class="main_view_repeat" v-for="item in listRepeat">
+                <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
             </div>
         </div>
         <div class="main_decription">
@@ -29,8 +57,8 @@
         </div>
 
         <div class="main_style">
-            <List :itemRepeat='payStyle'></List>
-            <List :itemRepeat='myReward'></List>
+            <List :itemRepeat='payStyle' :clickCallBack='clickCallBack'></List>
+            <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
             <div class="add_label_container" @click=''>
                 <span>添加标签</span>
             </div>
@@ -43,6 +71,7 @@
     <div class="assist_bottom" @click='publish'>
         发布
     </div>
+     <selectList :class="show?'list_show':'list_hide'" :selectCallBack='selectCallBack' :selectItem='selectItem'></selectList>
 </div>
 
 </template>
@@ -50,6 +79,7 @@
 <script>
 
 import List from '../components/list.vue'
+import selectList from '../components/selectList.vue'
 export default {
     'name': 'assist',
     data() {
@@ -57,49 +87,86 @@ export default {
             listRepeat: [{
                 title: '方式',
                 text: 'buy',
-                arrow: true
+                arrow: true,
+                key:'style',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'businessType'
             }, {
                 title: '国家',
                 text: '美国',
-                arrow: true
+                arrow: false,
+                type: 'input',
+                key:'country',
+                isRequire:true,
+                isPlacehold:true,
+                componentKey:'country'
             }, {
                 title: '物品类型',
                 text: '奶粉',
-                arrow: true
+                arrow: true,
+                key:'type',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'type'
             } , {
                 title: '品牌',
                 text: '美素佳儿',
-                arrow: true
+                arrow: true,
+                key:'brand',
+                isRequire:true,
+                isPlacehold:true,
+                componentKey:'brand'
             }, {
                 title: '商品名称',
                 text: '美素佳儿1段',
                 arrow: false,
                 type: 'input',
+                key:'goodsName',
+                isRequire:true,
+                isPlacehold:true,
+                componentKey:'goodsName'
             },{
                 title: '紧急程度',
                 text: '紧急',
-                arrow: true
+                arrow: true,
+                key:'emergency',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'emergency'
             }],
             payStyle: {
                 title: '交收方式',
                 text: '',
-                arrow: true
+                arrow: true,
+                key:'delivery',
+                isRequire:true,
+                isPlacehold:true,
+                componentKey:'deliveryWay'
+
             },
             myReward: {
                 title: '我的悬赏',
                 text: '',
                 type: 'input',
-                arrow: false
+                arrow: false,
+                key:'reward',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'rewardAmount'
             },
-            publishData:[]
+            publishData:[],
+            show:false,
+            selectItem:{}
         }
 
     },
     components: {
-        List
+        List,selectList
     },
     methods:{
         publish(){
+           let postData=this.getListData();
            this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,{
                'country':'美国',
                'brand':'nike',
@@ -114,6 +181,60 @@ export default {
            }).catch((e)=>{
                console.log(e);
            });
+        },
+        clickCallBack(item,e) {
+            if(!item.type){
+                this.show=true;
+                this.selectItem=item;
+            }else{
+                if(e){
+                    this.selectCallBack(e.target.value,item);
+                }
+            }
+        },
+        selectCallBack(value,selectItem){
+            this.show=false;
+            let key=selectItem.key;
+            switch (key) {
+                case 'delivery':
+                    this.payStyle.text=value;
+                    this.payStyle.isPlacehold=false;
+                    break;
+                case 'reward':
+                    this.myReward.text=value;
+                    this.myReward.isPlacehold=false;
+                    break;
+                default:
+                    this.listRepeat.forEach(function (item,index) {
+                        if(item.key===selectItem.key){
+                            item.text=value;
+                            item.isPlacehold=false;
+                        }
+                    });
+                    break;
+
+            }
+
+        },
+        getListData(){
+            let listRepeat=this.listRepeat;
+            let postData={};
+            listRepeat.forEach(function (item,index) {
+                if(item.isPlacehold&&!item.isRequire){
+                    postData[item.componentKey]='';
+                }else if(!item.isPlacehold){
+                    postData[item.componentKey]=item.text;
+                }else {
+                    alert(item.title)
+                }
+            })
+            if(!this.payStyle.isPlacehold){
+                 postData[this.payStyle.componentKey]=this.payStyle.text;
+            }
+            if(!this.myReward.isPlacehold){
+                 postData[this.myReward.componentKey]=this.myReward.text;
+            }
+            return postData;
         },
         getConfig(item){
 

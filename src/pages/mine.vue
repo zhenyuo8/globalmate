@@ -85,6 +85,28 @@
 .mine_business {
     border-bottom: 1px solid rgba(241, 241, 241, 1)
 }
+.list_show{
+    position: fixed;
+    right:0;
+    top:0;
+    bottom:0;
+    width:7.5rem;
+    background:#f5f5f5;
+   -webkit-transition: all .2s ease-in;
+   -moz-transition: all .2s ease-in;
+   transition: all .2s ease-in;
+}
+.list_hide{
+    position: fixed;
+    right: -7.5rem;
+    top:0;
+    bottom:0;
+    width:7.1rem;
+    background:#fff;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+}
 
 </style>
 
@@ -118,6 +140,7 @@
             <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
         </div>
     </div>
+    <!-- <selectList :class="show?'list_show':'list_hide'" :selectCallBack='selectCallBack' ></selectList> -->
 </div>
 
 </template>
@@ -126,6 +149,7 @@
 
 import Header from '../components/header.vue'
 import List from '../components/list.vue'
+import selectList from '../components/selectList.vue'
 export default {
     'name': 'mine',
     data() {
@@ -155,12 +179,14 @@ export default {
                     icon: '../assets/logo.png'
                 }
             },
-            title:''
+            title:'',
+            show:false
         }
     },
     components: {
         Header,
-        List
+        List,
+        selectList
     },
     methods: {
         toMineInformation() {

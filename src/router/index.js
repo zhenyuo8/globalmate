@@ -13,6 +13,7 @@ import myAssist from '@/pages/myAssist'//我发布的
 import seekHelpList from '@/pages/seekHelpList'//求助列表
 import chart from '@/pages/chart'//聊天页面
 import detail from '@/pages/detail'//求助详情页
+import selectList from '@/pages/selectList'//求助详情页
 Vue.use(Router)
 
 export default new Router({
@@ -81,6 +82,11 @@ export default new Router({
         path: '/detail',
         name: 'detail',
         component: detail,
+    },
+    {
+        path: '/selectList',
+        name: 'selectList',
+        component: selectList,
     },
   ]
 })

@@ -15,7 +15,6 @@
     position: absolute;
     left: 0;
     right: 0;
-    /*bottom: 0;*/
     border-bottom: 2px solid #F1F1F1;
     color: #e9e9e9;
     -webkit-transform-origin: 0 0;
@@ -77,27 +76,25 @@ input {
 
 <div class="repeat" @click='clickBack(itemRepeat)'>
     <div class="repeat_title">
-        {{itemRepeat.title}}
+        <span style="color:red" v-if="itemRepeat.isRequire">*</span>
+        <span>{{itemRepeat.title}}</span>
     </div>
     <div class="repeat_content" v-if="!itemRepeat.type">
         <div class="repeate_content_text">
             <div class="repeate_content_text_item" v-if="!itemRepeat.mintType">
                 <span>{{itemRepeat.text}}</span>
-
             </div>
             <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
                 <div class="repeate_content_text_image" style="width:32px;height:32px">
                     <img src="" :src="itemRepeat.url" alt="">
                 </div>
-
-                <!-- {{itemRepeat.text}} -->
             </div>
             <div class="" :class="itemRepeat.arrow?'icon-arrow_right_samll':''">
             </div>
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-         <input type="text" name="" value="" placeholder='请输入'>
+         <input type="text" name="" value="" placeholder='请输入' @change='change(itemRepeat,$event)'>
     </div>
 </div>
 
@@ -107,34 +104,36 @@ input {
 
 export default {
     data() {
-            return {
+        return {
 
-            }
-        },
-        props: {
-            itemRepeat: {
-                type: Object,
-                default: {}
-            },
-            clickCallBack: {
-                type: Function,
-                default: function() {
-
-                }
-            },
-            getConfig: {
-                type: Function,
-                default: function() {
-
-                }
-            }
-        },
-        methods: {
-            clickBack(item) {
-                // this.getConfig(item)
-                this.clickCallBack(item)
-            }
         }
+    },
+     props: {
+         itemRepeat: {
+             type: Object,
+             default: {}
+         },
+         clickCallBack: {
+             type: Function,
+             default: function() {
+
+             }
+         },
+         getConfig: {
+             type: Function,
+             default: function() {
+
+             }
+         }
+     },
+     methods: {
+         clickBack(item) {
+             this.clickCallBack(item)
+         },
+         change(item,e){
+             this.clickCallBack(item,e)
+         }
+     }
 }
 
 </script>
