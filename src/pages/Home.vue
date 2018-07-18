@@ -81,16 +81,20 @@ export default {
             },
             navData: [{
                 'text': '帮代',
-                'type': 'assist'
+                'type': 'assist',
+                'form':'assist'
             },{
                 'text': '帮带',
-                'type': 'carryAssist'
+                'type': 'assist',
+                'form':'carryAssist'
             }, {
                 'text': '陪伴',
-                'type': 'accompany'
+                'type': 'assist',
+                'form':'accompany'
             }, {
                 'text': '其他',
-                'type': 'other'
+                'type': 'assist',
+                'form':'other'
             }],
             navSecData: [{
                 'text': '个人中心',
@@ -148,7 +152,8 @@ export default {
                      query: {
                          'token': this.token,
                          'title': item.text,
-                         'id': 'fffff',
+                         'type': item.type,
+                         'form': item.form,
                      }
                  });
              }

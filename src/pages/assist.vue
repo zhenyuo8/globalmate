@@ -43,7 +43,7 @@
         </div>
         <div class="main_decription">
             <div class="main_decription_title">
-                标题 简单说下求助内容
+                <List :itemRepeat='title' :clickCallBack='clickCallBack'></List>
             </div>
             <div class="main_decription_area">
                 <textarea name="name" placeholder='描述一下求助细节 时间 航班 人数 地点 偏好的景点等等' style='width:100%'></textarea>
@@ -57,7 +57,7 @@
         </div>
 
         <div class="main_style">
-            <List :itemRepeat='payStyle' :clickCallBack='clickCallBack'></List>
+            <List :itemRepeat='payStyle' :clickCallBack='clickCallBack' v-if="payStyle"></List>
             <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
             <div class="add_label_container" @click=''>
                 <span>添加标签</span>
@@ -80,64 +80,16 @@
 
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
+
+import { Toast } from 'mint-ui';
 export default {
     'name': 'assist',
     data() {
         return {
-            listRepeat: [{
-                title: '方式',
-                text: 'buy',
-                arrow: true,
-                key:'style',
-                isRequire:false,
-                isPlacehold:true,
-                componentKey:'businessType'
-            }, {
-                title: '国家',
-                text: '美国',
-                arrow: false,
-                type: 'input',
-                key:'country',
-                isRequire:true,
-                isPlacehold:true,
-                componentKey:'country'
-            }, {
-                title: '物品类型',
-                text: '奶粉',
-                arrow: true,
-                key:'type',
-                isRequire:false,
-                isPlacehold:true,
-                componentKey:'type'
-            } , {
-                title: '品牌',
-                text: '美素佳儿',
-                arrow: true,
-                key:'brand',
-                isRequire:true,
-                isPlacehold:true,
-                componentKey:'brand'
-            }, {
-                title: '商品名称',
-                text: '美素佳儿1段',
-                arrow: false,
-                type: 'input',
-                key:'goodsName',
-                isRequire:true,
-                isPlacehold:true,
-                componentKey:'goodsName'
-            },{
-                title: '紧急程度',
-                text: '紧急',
-                arrow: true,
-                key:'emergency',
-                isRequire:false,
-                isPlacehold:true,
-                componentKey:'emergency'
-            }],
+            listRepeat: [],
             payStyle: {
                 title: '交收方式',
-                text: '',
+                text: '请选择',
                 arrow: true,
                 key:'delivery',
                 isRequire:true,
@@ -147,7 +99,7 @@ export default {
             },
             myReward: {
                 title: '我的悬赏',
-                text: '',
+                text: '请输入',
                 type: 'input',
                 arrow: false,
                 key:'reward',
@@ -155,28 +107,29 @@ export default {
                 isPlacehold:true,
                 componentKey:'rewardAmount'
             },
+            title: {
+                title: '标题',
+                text: '简单说下求助内容',
+                type: 'input',
+                arrow: false,
+                key:'title',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'title'
+            },
             publishData:[],
             show:false,
-            selectItem:{}
+            selectItem:{},
         }
 
     },
     components: {
-        List,selectList
+        List,selectList,Toast
     },
     methods:{
         publish(){
            let postData=this.getListData();
-           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,{
-               'country':'美国',
-               'brand':'nike',
-               'goodsName':'nike x12',
-               'deliveryWay':'快递',
-               'payway':'',
-               'description':'',
-               'pic':'',
-               'rewardAmount':'',
-           }).then((res)=>{
+           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
                console.log(res);
            }).catch((e)=>{
                console.log(e);
@@ -204,6 +157,10 @@ export default {
                     this.myReward.text=value;
                     this.myReward.isPlacehold=false;
                     break;
+                case 'title':
+                    this.title.text=value;
+                    this.title.isPlacehold=false;
+                    break;
                 default:
                     this.listRepeat.forEach(function (item,index) {
                         if(item.key===selectItem.key){
@@ -225,7 +182,8 @@ export default {
                 }else if(!item.isPlacehold){
                     postData[item.componentKey]=item.text;
                 }else {
-                    alert(item.title)
+                    alert(item.title+'为必填项')
+                    return;
                 }
             })
             if(!this.payStyle.isPlacehold){
@@ -234,10 +192,227 @@ export default {
             if(!this.myReward.isPlacehold){
                  postData[this.myReward.componentKey]=this.myReward.text;
             }
+            if(!this.title.isPlacehold){
+                 postData[this.title.componentKey]=this.title.text;
+            }
+            if(this.$el.querySelector('.main_decription_area textarea')){
+                postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
+            }
             return postData;
         },
-        getConfig(item){
+        listRepeatProcess(){
+            let form=this.$route.query.form;
+            switch (form) {
+                case 'assist':
+                    this.listRepeat=[{
+                        title: '方式',
+                        text: '请选择',
+                        arrow: true,
+                        key:'style',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'businessType'
+                    }, {
+                        title: '国家',
+                        text: '请输入',
+                        arrow: false,
+                        type: 'input',
+                        key:'country',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'country'
+                    }, {
+                        title: '物品类型',
+                        text: '请选择',
+                        arrow: true,
+                        key:'type',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'type'
+                    } , {
+                        title: '品牌',
+                        text: '请选择',
+                        arrow: true,
+                        key:'brand',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'brand'
+                    }, {
+                        title: '商品名称',
+                        text: '请输入',
+                        arrow: false,
+                        type: 'input',
+                        key:'goodsName',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'goodsName'
+                    },{
+                        title: '紧急程度',
+                        text: '请选择',
+                        arrow: true,
+                        key:'emergency',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'emergency'
+                    }];
+                    this.payStyle={
+                        title: '交收方式',
+                        text: '请选择',
+                        arrow: true,
+                        key:'delivery',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'deliveryWay'
 
+                    };
+                    break;
+                case 'accompany':
+                    this.listRepeat=[{
+                        title: '方式',
+                        text: '请选择',
+                        arrow: true,
+                        key:'style',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'businessType'
+                    }, {
+                        title: '目的地',
+                        text: '请输入',
+                        arrow: false,
+                        type: 'input',
+                        key:'country',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'country'
+                    }, {
+                        title: '紧急程度',
+                        text: '请选择',
+                        arrow: true,
+                        key:'emergency',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'emergency'
+                    },
+                    //  {
+                    //     title: '开始时间',
+                    //     text: '请选择',
+                    //     arrow: true,
+                    //     key:'start',
+                    // }, {
+                    //     title: '结束时间',
+                    //     text: '请选择',
+                    //     arrow: true,
+                    //     key:'end',
+                    // }
+                ];
+                    this.payStyle=false;
+                    break;
+                case 'carryAssist':
+                    this.listRepeat=[{
+                        title: '方式',
+                        text: '请选择',
+                        arrow: true,
+                        key:'style',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'businessType'
+                    }, {
+                        title: '从哪里',
+                        text: '请输入',
+                        arrow: false,
+                        type: 'input',
+                        key:'country',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'country'
+                    }, {
+                        title: '到哪里',
+                        text: '请输入',
+                        arrow: false,
+                        type: 'input',
+                        key:'country',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'country'
+                    },
+                    //  {
+                    //     title: '到达时间',
+                    //     text: '2018-09-01',
+                    //     arrow: true
+                    // },
+                     {
+                        title: '物品类型',
+                        text: '请选择',
+                        arrow: true,
+                        key:'type',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'type'
+                    } , {
+                        title: '品牌',
+                        text: '请选择',
+                        arrow: true,
+                        key:'brand',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'brand'
+                    }, {
+                        title: '商品名称',
+                        text: '请选择',
+                        arrow: false,
+                        type: 'input',
+                        key:'goodsName',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'goodsName'
+                    },{
+                        title: '紧急程度',
+                        text: '请选择',
+                        arrow: true,
+                        key:'emergency',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'emergency'
+                    }];
+                    this.payStyle={
+                        title: '交收方式',
+                        text: '请选择',
+                        arrow: true,
+                        key:'delivery',
+                        isRequire:true,
+                        isPlacehold:true,
+                        componentKey:'deliveryWay'
+
+                    };
+                    break;
+                default:
+                    this.listRepeat=[{
+                        title: '紧急程度',
+                        text: '请选择',
+                        arrow: true,
+                        key:'emergency',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'emergency'
+                    }];
+                    this.payStyle=false;
+                    break;
+            }
+        }
+    },
+    activated(){
+        this.listRepeatProcess();
+    },
+    computed:{
+        form: function() {
+            return this.$route.query.form || "";
+        },
+    },
+    watch:{
+        'form':function (newvalue,old) {
+            if(newvalue&&old){
+                this.listRepeatProcess();
+            }
         }
     },
     created(){

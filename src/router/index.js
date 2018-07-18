@@ -21,72 +21,114 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      meta:{
+          index:1
+      }
     },
     {
         path: '/index',
         name: 'index',
         component: index,
+        meta:{
+            index:2
+        }
     },
     {
         path: '/assist',
         name: 'assist',
         component: assist,
+        meta:{
+            index:3
+        }
     },
     {
         path: '/carryAssist',
         name: 'carryAssist',
         component: carryAssist,
+        meta:{
+            index:4
+        }
     },
     {
         path: '/accompany',
         name: 'accompany',
         component: accompany,
+        meta:{
+            index:5
+        }
     },
     {
         path: '/mine',
         name: 'mine',
         component: mine,
+        meta:{
+            index:6
+        }
     },
     {
         path: '/mineInformation',
         name: 'mineInformation',
         component: mineInformation,
+        meta:{
+            index:7
+        }
     },
     {
         path: '/mineInformationEdit',
         name: 'mineInformationEdit',
         component: mineInformationEdit,
+        meta:{
+            index:8
+        }
     },
     {
         path: '/other',
         name: 'other',
         component: other,
+        meta:{
+            index:9
+        }
     },
     {
         path: '/myAssist',
         name: 'myAssist',
         component: myAssist,
+        meta:{
+            index:10
+        }
     },
     {
         path: '/seekHelpList',
         name: 'seekHelpList',
         component: seekHelpList,
+        meta:{
+            index:11
+        }
     },
     {
         path: '/chart',
         name: 'chart',
         component: chart,
+        meta:{
+            index:12
+        }
     },
     {
         path: '/detail',
         name: 'detail',
         component: detail,
+        meta:{
+            index:13
+        }
     },
     {
         path: '/selectList',
         name: 'selectList',
         component: selectList,
+        meta:{
+            index:14
+        }
     },
   ]
 })

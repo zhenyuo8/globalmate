@@ -94,7 +94,7 @@ input {
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-         <input type="text" name="" value="" placeholder='请输入' @change='change(itemRepeat,$event)'>
+         <input type="text" name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
     </div>
 </div>
 
