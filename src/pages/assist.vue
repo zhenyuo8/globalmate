@@ -51,7 +51,7 @@
             <div class="main_decription_uploader">
                 <div class="main_decription_uploader_container">
                     <span class="icon-add"></span>
-                    <input type="file" name="" value="+">
+                    <input type="file" name="" value="+" @change="uploadImg($event)">
                 </div>
             </div>
         </div>
@@ -127,6 +127,7 @@ export default {
         List,selectList,Toast
     },
     methods:{
+        // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
            this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
@@ -173,6 +174,7 @@ export default {
             }
 
         },
+        // 获取发布所需要的数据
         getListData(){
             let listRepeat=this.listRepeat;
             let postData={};
@@ -200,6 +202,10 @@ export default {
             }
             return postData;
         },
+        uploadImg(e){
+            console.log(e);
+        },
+        // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
             switch (form) {
@@ -263,7 +269,6 @@ export default {
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'deliveryWay'
-
                     };
                     break;
                 case 'accompany':
@@ -292,19 +297,7 @@ export default {
                         isRequire:false,
                         isPlacehold:true,
                         componentKey:'emergency'
-                    },
-                    //  {
-                    //     title: '开始时间',
-                    //     text: '请选择',
-                    //     arrow: true,
-                    //     key:'start',
-                    // }, {
-                    //     title: '结束时间',
-                    //     text: '请选择',
-                    //     arrow: true,
-                    //     key:'end',
-                    // }
-                ];
+                    }];
                     this.payStyle=false;
                     break;
                 case 'carryAssist':
@@ -334,13 +327,7 @@ export default {
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'country'
-                    },
-                    //  {
-                    //     title: '到达时间',
-                    //     text: '2018-09-01',
-                    //     arrow: true
-                    // },
-                     {
+                    },{
                         title: '物品类型',
                         text: '请选择',
                         arrow: true,

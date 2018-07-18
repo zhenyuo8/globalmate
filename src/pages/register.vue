@@ -81,7 +81,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 @import "../assets/css/login.css";
 #register{
 	position: absolute;
@@ -94,10 +94,10 @@
 	/*padding: 18px 6% 60px 6%;*/
 	margin: auto;
 	background: rgb(247, 247, 247);
-	border: 1px solid rgba(147, 184, 189,0.8);
+	border: 1px solid rgba(153, 154, 153,0.1);
 	box-shadow:
 		0pt 2px 5px rgba(105, 108, 109,  0.7),
-		0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
+		0px 0px 8px 5px rgba(208, 223, 226, 0.1) inset;
 	border-radius: 5px;
 }
 </style>

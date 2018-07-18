@@ -62,6 +62,7 @@
             {{item.text}}
         </div>
     </div>
+    <tips :showTipsText='showTipsText'></tips>
 </div>
 
 </template>
@@ -69,6 +70,7 @@
 <script>
 
 import Header from '../components/header.vue'
+import tips from '../components/tips.vue'
 export default {
     data() {
         return {
@@ -112,10 +114,11 @@ export default {
                 'text': '登入',
                 'type': 'login'
             }],
+            showTipsText:''
         }
     },
     components: {
-        Header,
+        Header,tips
     },
      methods: {
          navRoute(item) {
@@ -163,17 +166,21 @@ export default {
                 //      console.log(e);
                 //  })
              }else {
-                 this.$router.push({
-                     path: item.type,
-                     query: {
-                         'token': this.token,
-                         'title': item.text,
-                         'type': item.type,
-                         'form': item.form,
-                     }
-                 });
+                 this.token=window.localStorage.getItem('TOKEN');
+                 if(!this.token){
+                     this.showTipsText='请选登入...';
+                 }else{
+                    this.$router.push({
+                        path: item.type,
+                        query: {
+                            'token': this.token,
+                            'title': item.text,
+                            'type': item.type,
+                            'form': item.form,
+                        }
+                    });
+                 }
              }
-
          }
      }
  }
