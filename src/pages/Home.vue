@@ -107,7 +107,7 @@ export default {
                 'type': 'other'
             },{
                 'text': '注册',
-                'type': 'regsist'
+                'type': 'register'
             },{
                 'text': '登入',
                 'type': 'login'
@@ -119,33 +119,49 @@ export default {
     },
      methods: {
          navRoute(item) {
-             if(item.type==='regsist'){
-                 this.axios.post('http://10.4.111.31:9090/globalmate/rest/user/add',{
-                     name:'zhenyuo8',
-                     nikename:'zhenyuo8',
-                     password:'123456qwe',
-                     email:'',
-                     phone:'18470186126',
-                     idNumber:'',
-                     pic:'',
-                     school:'',
-                     where:'',
-                     hobby:'',
-                 }).then((res)=>{
-                     console.log(res);
-                 }).catch((e)=>{
-                     console.log(e);
-                 })
-             }else if(item.type==='login'){
-                 this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/login'+'/18470186126/123456qwe',{
+             if(item.type==='register'){
+                 this.$router.push({
+                     path: item.type,
+                     query: {
+                         'title': item.text,
+                         'type': item.type,
+                     }
+                 });
 
-                 }).then((res)=>{
-                     this.token=res.data.data;
-                     console.log(res.data.data);
-                     console.log(res);
-                 }).catch((e)=>{
-                     console.log(e);
-                 })
+                //  this.axios.post('http://10.4.111.31:9090/globalmate/rest/user/add',{
+                //      name:'zhenyuo8',
+                //      nikename:'zhenyuo8',
+                //      password:'123456qwe',
+                //      email:'',
+                //      phone:'18470186126',
+                //      idNumber:'',
+                //      pic:'',
+                //      school:'',
+                //      where:'',
+                //      hobby:'',
+                //  }).then((res)=>{
+                //      console.log(res);
+                //  }).catch((e)=>{
+                //      console.log(e);
+                //  })
+             }else if(item.type==='login'){
+                  this.$router.push({
+                      path: item.type,
+                      query: {
+                          'title': item.text,
+                          'type': item.type,
+                      }
+                  });
+
+                //  this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/login'+'/18470186126/123456qwe',{
+                 //
+                //  }).then((res)=>{
+                //      this.token=res.data.data;
+                //      console.log(res.data.data);
+                //      console.log(res);
+                //  }).catch((e)=>{
+                //      console.log(e);
+                //  })
              }else {
                  this.$router.push({
                      path: item.type,

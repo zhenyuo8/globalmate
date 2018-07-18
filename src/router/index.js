@@ -14,6 +14,8 @@ import seekHelpList from '@/pages/seekHelpList'//求助列表
 import chart from '@/pages/chart'//聊天页面
 import detail from '@/pages/detail'//求助详情页
 import selectList from '@/pages/selectList'//求助详情页
+import register from '@/pages/register'//求助详情页
+import login from '@/pages/login'//求助详情页
 Vue.use(Router)
 
 export default new Router({
@@ -128,6 +130,22 @@ export default new Router({
         component: selectList,
         meta:{
             index:14
+        }
+    },
+    {
+        path: '/register',
+        name: 'register',
+        component: register,
+        meta:{
+            index:15
+        }
+    },
+    {
+        path: '/login',
+        name: 'login',
+        component: login,
+        meta:{
+            index:16
         }
     },
   ]

@@ -1,0 +1,35 @@
+h1{
+	font-size: 18px;
+	height: 54px;
+	line-height: 54px;
+}
+#register form p{
+	font-size: 14px;
+	height: 40px;
+	line-height: 40px;
+	color: #9B9B9B;
+	margin-top: 12px;
+}
+#register form {
+	padding: 10px;
+}
+#register form label{
+	margin-right: .2rem;
+	color: #333!important;
+}
+#register form p input{
+	font-size: 14px;
+	height: 76%;
+	padding: 0 4px;
+	color: #ff4a5a
+}
+.signin input{
+	width: 60%;
+	height: 100%!important;
+	color: #fff!important;
+	background: #ff4a5a;
+	outline: none;
+	border: none;
+	font-size: 16px!important
+}
+input:focus{ outline:none; }
