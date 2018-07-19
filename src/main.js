@@ -6,6 +6,8 @@ import axios from 'axios';
 import qs from 'qs';
 import router from './router'
 import './assets/css/reset.css'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
 Vue.prototype.qs = qs
 Vue.config.productionTip = false
