@@ -11,7 +11,7 @@
 		},
 		data(){
 			return{
-
+                // showTipsText:''
 			}
 		},
 		props:{
@@ -27,9 +27,11 @@
 
 		},
 		activated(){
-			
+
 		},
 		created(){
+            console.log(this.showTipsText);
+            // this.showTipsText=this.showTipsText
 			setTimeout(()=>{
 				this.showTipsText='';
 			},4000);

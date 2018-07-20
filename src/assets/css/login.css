@@ -32,4 +32,10 @@ form p input{
 	border: none;
 	font-size: 16px!important
 }
+input {
+	outline: none;
+	-webkit-appearance: none;
+	border-radius: 0;
+	border: none
+}
 input:focus{ outline:none; }

@@ -16,22 +16,23 @@ import detail from '@/pages/detail'//求助详情页
 import selectList from '@/pages/selectList'//求助详情页
 import register from '@/pages/register'//求助详情页
 import login from '@/pages/login'//求助详情页
+import im from '@/pages/im'//求助详情页
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
+      name: 'index',
+      component: index,
       meta:{
           index:1
       }
     },
     {
-        path: '/index',
-        name: 'index',
-        component: index,
+        path: '/Home',
+        name: 'Home',
+        component: Home,
         meta:{
             index:2
         }
@@ -146,6 +147,14 @@ export default new Router({
         component: login,
         meta:{
             index:16
+        }
+    },
+    {
+        path: '/im',
+        name: 'im',
+        component: im,
+        meta:{
+            index:17
         }
     },
   ]

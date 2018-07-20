@@ -131,7 +131,12 @@ export default {
         publish(){
            let postData=this.getListData();
            this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
-               console.log(res);
+               if(data.data.success){
+                   window.history.go(-1);
+               }else{
+                   alert('请确认后再提交')
+               }
+
            }).catch((e)=>{
                console.log(e);
            });
@@ -208,6 +213,7 @@ export default {
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
+            console.log(form);
             switch (form) {
                 case 'assist':
                     this.listRepeat=[{
@@ -345,7 +351,7 @@ export default {
                         componentKey:'brand'
                     }, {
                         title: '商品名称',
-                        text: '请选择',
+                        text: '请输入',
                         arrow: false,
                         type: 'input',
                         key:'goodsName',

@@ -188,14 +188,19 @@ export default {
         List,
         selectList
     },
+    computed:{
+        'token':function () {
+            return this.$route.query.token;
+        }
+    },
     methods: {
         toMineInformation() {
             this.$router.push({
                 path: 'mineInformation',
                 query: {
-                    'token': '22223',
+                    'token': this.token,
                     'title': '哈哈',
-                    'id': 'fffff',
+                    'id': 'mineInformation',
                 }
             });
         },
@@ -204,9 +209,9 @@ export default {
                 this.$router.push({
                     path: 'myAssist',
                     query: {
-                        'token': '22223',
-                        'title': '哈哈',
-                        'id': 'fffff',
+                        'token': this.token,
+                        'title': '求助列表',
+                        'id': 'myAssist',
                     }
                 });
             }
@@ -215,9 +220,9 @@ export default {
             this.$router.push({
                 path: 'mineInformationEdit',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
+                    'token': this.token,
+                    'title': '编辑',
+                    'id': 'mineInformationEdit',
                 }
             });
         },

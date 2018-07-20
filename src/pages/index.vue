@@ -1,13 +1,35 @@
 <template>
     <div class="index" id='index'>
+        <div class="header">
+            <div class="location left">
+                <div class="icon-map-location"></div>
+                <div class="name">北京</div>
+            </div>
+            <div class="min right">
+                <div class="sos" style="font-size:16px">
+                    <i>sos</i>
+                </div>
+                <!-- <div class="icon-Document_im">
+
+                </div> -->
+                <div class="icon-user" @click='showPersonalInf()'>
+
+                </div>
+            </div>
+            <div class="user_wrap" v-show="showPersonal">
+                <span @click='goPersonalCenter'>个人中心</span>
+                <span @click='login'>登入</span>
+                <span @click='register'>注册</span>
+            </div>
+        </div>
         <div class="swpier_container" >
             <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
-                <swiper-slide class="swiper-item" v-for="item in slides"><img :src='item' alt=""></swiper-slide>
+                <swiper-slide class="swiper-item" v-for="(item,index) in slides" :key='index'><img :src='item' alt=""></swiper-slide>
                 <div class="swiper-pagination" slot="pagination"></div>
             </swiper>
         </div>
         <ul class="mainmenu">
-            <li v-for="(item,index) in mainmenu" @click='publish(item)'><a href="javascript:;" ><b><img src="images/tb01.png" /></b><span>{{item.title}}</span></a></li>
+            <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
             <!-- <li><a href="/#/assist" ><b><img src="images/tb01.png" /></b><span>学习互助</span></a></li>
             <li><a href="/#/assist" ><b><img src="images/tb02.png" /></b><span>教材</span></a></li>
             <li><a href="/#/assist" ><b><img src="images/tb03.png" /></b><span>办手续</span></a></li>
@@ -45,16 +67,18 @@
                 <li>提供帮助</li>
             </ul>
         </div>
+        <tips :showTipsText='showTipsText'></tips>
     </div>
 </template>
 
 <script>
-    import { swipe, SwipeItem } from 'vue-awesome-swiper';
+    import { swipe, SwipeItem } from 'vue-awesome-swiper'
+    import tips from '../components/tips.vue'
     require('swiper/dist/css/swiper.css')
 	export default {
         'name':'index',
         components:{
-            swipe, SwipeItem
+            swipe, SwipeItem,tips
         },
 		data(){
 			return{
@@ -82,56 +106,68 @@
                 mainmenu:[
                     {
                         'title':'学习互助',
-                        'key':'learn_togther',
+                        'key':'learnco',
                         'type':'assist',
                         'form':'assist',
+                        'icon':'icon-pen'
                     },{
                         'title': '教材',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                        'icon':'icon-book'
                     },{
                         'title': '办手续',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                         'icon':'icon-Document_2_yinzhang'
                     },{
                         'title': '换汇',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                         'icon':''
                     },{
                         'title': '就医',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                         'icon':'icon-local_hospital'
                     },{
                         'title': '帮带',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'carryAssist'
+                        'form':'carryAssist',
+                         'icon':''
                     },{
                         'title': '租赁',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                         'icon':''
                     }, {
                         'title': '陪伴',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'accompany'
+                        'form':'accompany',
+                         'icon':''
                     },{
                         'title': '代购',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'aassist'
+                        'form':'aassist',
+                         'icon':'icon-icon-announce'
                     }, {
                         'title': '其他',
                         'key': 'assist',
                         'type': 'assist',
-                        'form':'other'
+                        'form':'other',
+                         'icon':''
                     }
-                ]
+                ],
+                showPersonal:false,
+                showTipsText:'',
 			}
 		},
         computed: {
@@ -144,6 +180,8 @@
         },
 		methods:{
             publish(item){
+                console.log(item);
+                this.token=window.localStorage.getItem('TOKEN');
                 this.$router.push({
                     path: item.type,
                     query: {
@@ -153,7 +191,44 @@
                         'form': item.form,
                     }
                 });
-            }
+            },
+            showPersonalInf(){
+                this.showPersonal=!this.showPersonal;
+            },
+            goPersonalCenter(){
+                this.token=window.localStorage.getItem('TOKEN');
+                if(!this.token){
+                    alert('请先登入..')
+                    // this.showTipsText='请先登入...';
+                    return
+                }
+                this.showPersonal=!this.showPersonal;
+                this.$router.push({
+                    path: 'mine',
+                    query: {
+                        'token': this.token,
+                        'title': '个人中心',
+                    }
+                });
+            },
+            login(){
+                this.showPersonal=!this.showPersonal;
+                this.$router.push({
+                    path: 'login',
+                    query: {
+                        'title': '登陆',
+                    }
+                });
+            },
+            register(){
+                this.showPersonal=!this.showPersonal;
+                this.$router.push({
+                    path: 'register',
+                    query: {
+                        'title': '注册',
+                    }
+                });
+            },
 		},
         created(){
 
@@ -166,6 +241,91 @@
         background: #efefef;
         overflow: hidden;
     }
+    .header{
+        height: 44px;
+        font-size: 14px;
+        /*padding: 0 .4rem;*/
+        /*overflow: hidden;*/
+    }
+    .header > div{
+        /*line-height: 44px;*/
+        color: #bfbfbf;
+    }
+    .location > div {
+        float: left;
+    }
+    .header .location .name{
+        line-height: 44px;
+        color: #333;
+        /*margin-left: .2rem*/
+    }
+    .icon-map-location::before{
+        font-size: 26px;
+        line-height: 44px;
+    }
+    .header .left{
+        float: left;
+    }
+    .header .right{
+        float: right;
+        display: flex;
+       /*width: 50%*/
+    }
+    .icon-Document_im::before{
+        color: #bfbfbf;
+        font-size: 32px;
+        line-height: 44px;
+    }
+    .sos{
+        line-height: 44px;
+    }
+    .sos i{
+        padding: 1px;
+        font-weight: 500;
+        border: 1px solid #bfbfbf;
+        border-radius: 50%;
+    }
+    .icon-user::before{
+        color: #bfbfbf;
+        font-size: 26px;
+        line-height: 44px;
+    }
+    .icon-map-location{
+        width: 0.88rem;
+    }
+    .icon-user{
+        position: relative;
+        font-size:20px;
+        color:#9f9f9f;
+        margin-left: .2rem;
+        width: .88rem;
+    }
+    .user_wrap{
+        position: absolute;
+        z-index: 11;
+        right: .12rem;
+        top: 46px;
+        font-size: 14px;
+        color: #333!important;
+        display: flex;
+        flex-direction: column;
+        background: rgba(255,255,255,0.6);
+
+        border-radius: 4px;
+    }
+    .user_wrap > span{
+        display: inline-block;
+        height: 36px;
+        padding: 0 .2rem;
+        line-height: 36px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #eee;
+    }
+    .user_wrap > span:last-child{
+        border: none;
+    }
+
+
     .swiper-item{
         height: 177px!important;
     }
@@ -191,17 +351,16 @@
         overflow:hidden;
     }
 
-     .mainmenu li a{ display:block;  color:#FFF;   text-align:center }
+     .mainmenu li a{ display:block;  color:#FFF;   text-align:center;text-decoration:none}
      .mainmenu li a b{
         display:block;
         border-radius: 50%;
         height:1rem;
-         /*height:80px;*/
+        font-size: 28px;
+        line-height: 1rem;
     }
      .mainmenu li a img{
         margin: 15px auto 15px;
-        /*width: 50px;
-        height: 50px;*/
     }
 
      .mainmenu li a span{ display:block; height:30px; line-height:30px;background-color:#FFF; color: #999; font-size:12px; }
