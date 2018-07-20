@@ -6,7 +6,7 @@
                 <div class="name">北京</div>
             </div>
             <div class="min right">
-                <div class="sos" style="font-size:16px">
+                <div class="sos">
                     <i>sos</i>
                 </div>
                 <!-- <div class="icon-Document_im">
@@ -245,7 +245,7 @@
         height: 44px;
         font-size: 14px;
         /*padding: 0 .4rem;*/
-        /*overflow: hidden;*/
+        overflow: hidden;
     }
     .header > div{
         /*line-height: 44px;*/
@@ -284,6 +284,10 @@
         font-weight: 500;
         border: 1px solid #bfbfbf;
         border-radius: 50%;
+        display: inline-block;
+        height: .5rem;
+        width: .5rem;
+        line-height: .5rem;
     }
     .icon-user::before{
         color: #bfbfbf;

@@ -12,7 +12,7 @@
 }
 .body{
     /*margin-top: 38px;*/
-    margin-top: 48px;
+    margin-top: 5px;
     padding-bottom: 46px;
 }
 .main_decription{
@@ -117,12 +117,12 @@ textarea::-webkit-input-placeholder {
     position: fixed;
     left: 0;
     right: 0;
-    top: 0;
+    bottom: 0;
     font-size: 18px;
     height: 45px;
     line-height: 45px;
     color: #007aff;
     background: #fff;
     border-top: 1px solid #F2F2F2;
-    box-shadow: 0 0px 1px 0;
+    /*box-shadow: 0 0px 1px 0;*/
 }
