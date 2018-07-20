@@ -3,6 +3,7 @@
 		<div class="um-content p5" id="content">
 			<div id="convo">
 				<ul class="chat-thread" id="chat-thread">
+					
 				</ul>
 			</div>
 		</div>
@@ -41,7 +42,7 @@ export default {
 				 $('#chat-thread').append($li);
 			}
 			this.index++;
-
+			this.chartValue=''
 		    let top = $('#convo').height();
 		    $('#content').animate({
 		        scrollTop: top

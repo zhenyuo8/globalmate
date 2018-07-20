@@ -16,8 +16,8 @@
         </div>
         <div class="middle">
             <div class="middle_left">
-                <p class="middle_decription">{{item.conceretNeed.decription}}</p>
-                <p class="middle_from">{{item.conceretNeed.country}}</p>
+                <p class="middle_decription">{{item.conceretNeed.descrition}}</p>
+                <p class="middle_from">来自 {{item.conceretNeed.country}}</p>
             </div>
             <div class="middle_right">
                 <img :src='imagesList[index%3]' alt="">

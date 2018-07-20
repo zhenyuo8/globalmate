@@ -82,7 +82,8 @@
      margin-left: 0.35rem;
 }
 .bottom_left img{
-        width: 32px;
+    width: .64rem;
+    height: .64rem;
     display: inline-block;
     border-radius: 50%;
     vertical-align: middle;
