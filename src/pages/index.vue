@@ -9,10 +9,10 @@
                 <div class="sos">
                     <i>sos</i>
                 </div>
-                <!-- <div class="icon-Document_im">
+                <div class="icon-Document_im" @click='toMessage()'>
 
-                </div> -->
-                <div class="icon-user" @click='showPersonalInf()'>
+                </div>
+                <div class="icon-user" @click='showPersonalInf()' :class="token?'login_yes':'login_no'">
 
                 </div>
             </div>
@@ -64,7 +64,7 @@
         <div class="buttom_action">
             <ul>
                 <li class="need_help">寻求帮助</li>
-                <li>提供帮助</li>
+                <li @click='offer'>提供帮助</li>
             </ul>
         </div>
         <tips :showTipsText='showTipsText'></tips>
@@ -127,7 +127,7 @@
                         'key': 'assist',
                         'type': 'assist',
                         'form':'other',
-                         'icon':''
+                         'icon':'icon-coin-yen'
                     },{
                         'title': '就医',
                         'key': 'assist',
@@ -139,19 +139,19 @@
                         'key': 'assist',
                         'type': 'assist',
                         'form':'carryAssist',
-                         'icon':''
+                         'icon':'icon-flight_takeoff'
                     },{
                         'title': '租赁',
                         'key': 'assist',
                         'type': 'assist',
                         'form':'other',
-                         'icon':''
+                         'icon':'icon-office'
                     }, {
                         'title': '陪伴',
                         'key': 'assist',
                         'type': 'assist',
                         'form':'accompany',
-                         'icon':''
+                         'icon':'icon-pacman'
                     },{
                         'title': '代购',
                         'key': 'assist',
@@ -163,11 +163,12 @@
                         'key': 'assist',
                         'type': 'assist',
                         'form':'other',
-                         'icon':''
+                         'icon':'icon-more-horizontal'
                     }
                 ],
                 showPersonal:false,
                 showTipsText:'',
+                token:''
 			}
 		},
         computed: {
@@ -229,9 +230,25 @@
                     }
                 });
             },
+            offer(){
+                this.$router.push({
+                    path: 'seekHelpList',
+                    query: {
+                        'title': '求助列表',
+                    }
+                });
+            },
+            toMessage(){
+                alert('消息列表')
+            }
 		},
         created(){
-
+            let _this=this;
+            $('body').on('click',function (e) {
+                if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
+                    _this.showPersonal=false;
+                }
+            })
         }
 	}
 </script>
@@ -271,6 +288,15 @@
         display: flex;
        /*width: 50%*/
     }
+    .icon-Document_im{
+        width: .76rem;
+    }
+    .icon-Document_im::after{
+        width: .1rem;
+        height: .1rem;
+        background: red;
+        border-radius: 50%;
+    }
     .icon-Document_im::before{
         color: #bfbfbf;
         font-size: 32px;
@@ -290,7 +316,7 @@
         line-height: .5rem;
     }
     .icon-user::before{
-        color: #bfbfbf;
+        /*color: #bfbfbf;*/
         font-size: 26px;
         line-height: 44px;
     }
@@ -304,26 +330,46 @@
         margin-left: .2rem;
         width: .88rem;
     }
+    .login_yes{
+        color:#9f9f9f;
+    }
+    .login_no{
+        color:#007aff!important;
+    }
     .user_wrap{
         position: absolute;
         z-index: 11;
         right: .12rem;
-        top: 46px;
+        top: 50px;
         font-size: 14px;
         color: #333!important;
         display: flex;
         flex-direction: column;
-        background: rgba(255,255,255,0.6);
-
+        background: rgba(255,255,255,0.9);
         border-radius: 4px;
+    }
+    .user_wrap::after{
+            -webkit-transform: rotate(45deg);
+            transform: rotate(45deg);
+            right: 8px;
+            background: rgba(255,255,255,0.8);
+            border-color: #89a8e0 #89a8e0 transparent transparent;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+        position: absolute;
+        top: -5px;
+        content: '';
+        height: 10px;
+        width: 10px;
+        /*border: 1px solid;*/
     }
     .user_wrap > span{
         display: inline-block;
         height: 36px;
-        padding: 0 .2rem;
+        padding: 0 .3rem;
         line-height: 36px;
         box-sizing: border-box;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #e6e6e6;
     }
     .user_wrap > span:last-child{
         border: none;
@@ -463,8 +509,8 @@
          box-shadow:0px 1px 0px 0px rgba(178,178,178,1);
      }
      .buttom_action ul{
-         height: 32px;
-         padding: 7px 0;
+         height: 24px;
+         padding: 10px 0;
      }
      .buttom_action ul li{
          display: inline-block;
@@ -472,8 +518,8 @@
          font-size: 16px;
          font-weight: 500;
          float: left;
-         height: 32px;
-         line-height: 32px;
+         height: 24px;
+         line-height: 24px;
          color: #007aff;
      }
      .need_help{

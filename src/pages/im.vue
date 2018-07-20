@@ -3,7 +3,7 @@
 		<div class="um-content p5" id="content">
 			<div id="convo">
 				<ul class="chat-thread" id="chat-thread">
-					
+
 				</ul>
 			</div>
 		</div>
@@ -33,11 +33,20 @@ export default {
     methods:{
 		createUserTalk() {
 			if(!this.chartValue) return;
-			let headerPath = "../assets/images/icon.png"
+			let headerPath = "../assets/images/icon.png";
+			let li=document.createElement('li');
+			let img=document.createElement('img');
+			let div=document.createElement('div');
+			div.className='chat-item-text';
+			img.src="../assets/images/icon.png";
+
 			if(this.index%2===0){
-			    let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
-				 $('#chat-thread').append($li);
+				li.className='right-item';
+				
+			    // let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
+				//  $('#chat-thread').append($li);
 			}else {
+				li.className='left-item';
 				let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+this.chartValue+'</div> </li>');
 				 $('#chat-thread').append($li);
 			}
