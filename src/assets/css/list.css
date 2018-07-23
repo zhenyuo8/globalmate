@@ -33,10 +33,10 @@
     margin-right: .35rem;
 }
 .middle{
-    height: 146px;
+    /*height: 146px;*/
     padding: 12px .4rem;
     display: flex;
-    border-bottom: 1px solid rgba(241, 241, 241, 1);
+    /*border-bottom: 1px solid rgba(241, 241, 241, 1);*/
 }
 
 .middle .middle_left{
@@ -48,7 +48,7 @@
     line-height: 20px;
 }
 .middle_left .middle_from{
-    margin-top: 26px;
+    /*margin-top: 26px;*/
 }
 .middle_decription{
     height: 100px;
@@ -94,4 +94,24 @@
 .bottom .bottom_right{
      text-align: right;
      margin-right: 0.35rem;
+}
+
+
+.action_list{
+    display: flex;
+    width: 100%;
+    /*height: 32px;*/
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(241, 241, 241, 1);
+}
+.action_list>div{
+    flex: 1
+}
+.action_list>div span{
+    width: 70%;
+    display: inline-block;
+    height: 32px;
+    border: 1px solid #eee;
+    line-height: 32px;
+    border-radius: 6px;
 }

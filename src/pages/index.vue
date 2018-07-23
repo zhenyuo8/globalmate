@@ -9,7 +9,7 @@
                 <div class="sos" @click='toSOS()'>
                     <i>sos</i>
                 </div>
-                <div class="icon-Document_im" @click='toMessage()'>
+                <div class="icon-global-im" @click='toMessage()'>
 
                 </div>
                 <div class="icon-user" @click='showPersonalInf()' :class="token?'login_yes':'login_no'">
@@ -221,7 +221,9 @@
                 });
             },
             register(){
+                this.token=window.localStorage.getItem('TOKEN');
                 this.showPersonal=!this.showPersonal;
+                if(!this.toekn) return
                 this.$router.push({
                     path: 'register',
                     query: {
@@ -230,9 +232,12 @@
                 });
             },
             offer(){
+                this.token=window.localStorage.getItem('TOKEN');
+                 if(!this.toekn) return
                 this.$router.push({
                     path: 'seekHelpList',
                     query: {
+                        'token':this.token,
                         'title': '求助列表',
                     }
                 });
@@ -297,17 +302,19 @@
         display: flex;
        /*width: 50%*/
     }
-    .icon-Document_im{
+    .icon-global-im{
         width: .76rem;
+        margin-left: 0.2rem;
     }
-    .icon-Document_im::after{
+    .icon-global-im::after{
         width: .1rem;
         height: .1rem;
         background: red;
         border-radius: 50%;
     }
-    .icon-Document_im::before{
+    .icon-global-im::before{
         color: #bfbfbf;
+
         font-size: 32px;
         line-height: 44px;
     }
@@ -317,11 +324,12 @@
     .sos i{
         padding: 1px;
         font-weight: 500;
-        border: 1px solid #bfbfbf;
+        color: red;
+        border: 2px solid red;
         border-radius: 50%;
         display: inline-block;
         height: .5rem;
-        width: .5rem;
+        width: .8rem;
         line-height: .5rem;
     }
     .icon-user::before{
@@ -336,7 +344,7 @@
         position: relative;
         font-size:20px;
         color:#9f9f9f;
-        margin-left: .2rem;
+        margin-left: .1rem;
         width: .88rem;
     }
     .login_yes{

@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?6w086');
-  src:  url('fonts/icomoon.eot?6w086#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?6w086') format('truetype'),
-    url('fonts/icomoon.woff?6w086') format('woff'),
-    url('fonts/icomoon.svg?6w086#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?nh51dl');
+  src:  url('fonts/icomoon.eot?nh51dl#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?nh51dl') format('truetype'),
+    url('fonts/icomoon.woff?nh51dl') format('woff'),
+    url('fonts/icomoon.svg?nh51dl#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,41 +24,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-more-horizontal:before {
-  content: "\e958";
-}
-.icon-flight_takeoff:before {
-  content: "\e959";
-}
-.icon-local_hospital:before {
-  content: "\e950";
-}
-.icon-map-pin2:before {
-  content: "\e951";
-}
-.icon-arrow_right_samll:before {
-  content: "\e901";
-}
-.icon-pacman:before {
-  content: "\e95a";
-}
-.icon-game:before {
-  content: "\e95a";
-}
-.icon-book:before {
-  content: "\e952";
-}
-.icon-book2:before {
-  content: "\e953";
-}
-.icon-pen:before {
-  content: "\e954";
-}
-.icon-tools:before {
-  content: "\e955";
-}
-.icon-map-location:before {
-  content: "\e956";
+.icon-global-im:before {
+  content: "\e95d";
+  color: #5c5d5d;
 }
 .icon-header_back:before {
   content: "\e900";
@@ -303,6 +271,42 @@
 }
 .icon-Document_zhengwenmuban:before {
   content: "\e94f";
+}
+.icon-more-horizontal:before {
+  content: "\e958";
+}
+.icon-flight_takeoff:before {
+  content: "\e959";
+}
+.icon-local_hospital:before {
+  content: "\e950";
+}
+.icon-map-pin2:before {
+  content: "\e951";
+}
+.icon-arrow_right_samll:before {
+  content: "\e901";
+}
+.icon-pacman:before {
+  content: "\e95a";
+}
+.icon-game:before {
+  content: "\e95a";
+}
+.icon-book:before {
+  content: "\e952";
+}
+.icon-book2:before {
+  content: "\e953";
+}
+.icon-pen:before {
+  content: "\e954";
+}
+.icon-tools:before {
+  content: "\e955";
+}
+.icon-map-location:before {
+  content: "\e956";
 }
 .icon-cool:before {
   content: "\e9eb";

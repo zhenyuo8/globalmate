@@ -23,6 +23,17 @@
                 <img :src='imagesList[index%3]' alt="">
             </div>
         </div>
+        <div class="action_list">
+            <div class="re_edit">
+                <span>重新编辑</span>
+            </div>
+            <div class="done">
+                <span @click='finished($event,item)'>完成</span>
+            </div>
+            <div class="comment">
+                <span>评价</span>
+            </div>
+        </div>
         <div class="bottom">
             <div class="bottom_left">
                 <img :src='imagesList[index%3]' alt="" class="bottom_left_userimage">
@@ -56,6 +67,20 @@ export default {
         }
     },
     methods:{
+        finished(e,item){
+            console.log(e);
+            e.preventDefault();
+            e.cancelBubble=true;
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
+                'needId':item.need.id,
+                'action':'coplete'
+            }).then(res=>{
+                console.log(res);
+            }).catch(e=>{
+                console.log(e);
+            })
+            console.log(item);
+        },
         showDetail(){
             this.$router.push({
                 path: 'detail',
