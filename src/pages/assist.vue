@@ -30,6 +30,17 @@
     .main_view_repeat:last-child{
         border-bottom: 1px solid #f1f1f1;
     }
+    .main_decription_uploader_container_img{
+        width:1.4rem;height:1.4rem;margin-right:0.1rem;border: 1px solid #F2F2F2;
+    }
+    .hide_space{
+        display: flex;
+    }
+    .prev_imgae{
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+    }
 </style>
 
 <template>
@@ -49,6 +60,9 @@
                 <textarea name="name" placeholder='描述一下求助细节 时间 航班 人数 地点 偏好的景点等等' style='width:100%'></textarea>
             </div>
             <div class="main_decription_uploader">
+                <div class="hide_space">
+
+                </div>
                 <div class="main_decription_uploader_container">
                     <span class="icon-add"></span>
                     <input type="file" name="" value="+" @change="uploadImg($event)">
@@ -208,7 +222,40 @@ export default {
             return postData;
         },
         uploadImg(e){
-            console.log(e);
+            let _this=this;
+            var file = e.target.files[0];
+            // 确认选择的文件是图片
+            if(file.type.indexOf("image") == 0) {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    // 图片base64化
+                    let newUrl = this.result;
+                    let con=$('<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="'+newUrl+'"/></div>');
+                    $('.hide_space').append(con);
+                };
+            }
+        },
+        dataURItoBlob(base64Data){
+            let byteString;
+            if(base64Data.split(',')[0].indexOf('base64')>=0){
+                byteString=atob(base64Data.split(',')[1]);
+            }else{
+                byteString=unescape(base64Data.split(',')[1]);
+            }
+            let mimeString=base64Data.split(',')[0].split(':')[1].split(';')[0];
+            let ia=new Uint8Array(byteString.length);
+            for(var i=0;i<byteString.length;i++){
+                ia[i]=byteString.charCodeAt(i);
+            }
+            return new Blob([ia],{type:mimeString})
+        },
+        uploadImgToServer(){
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/file/ossPolicy','').then(res=>{
+                console.log(res);
+            }).catch(e=>{
+
+            })
         },
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){

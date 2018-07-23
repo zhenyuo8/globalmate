@@ -34,6 +34,7 @@
 .main_decription_area,
 .main_decription_uploader {
     padding: .2rem;
+    display: flex;
 }
 
 .main_decription_area textarea {
