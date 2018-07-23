@@ -41,11 +41,16 @@
 				 this.axios.get(url,{
 
                  }).then((res)=>{
-					 window.localStorage.setItem('TOKEN',res.data.data);
-                     this.token=res.data.data;
-					 setTimeout(()=>{
-						 window.history.go(-1);
-					 },1000);
+                     console.log(res);
+                     if(res.data.success){
+                          window.localStorage.setItem('TOKEN',res.data.data);
+                          this.token=res.data.data;
+     					 setTimeout(()=>{
+     						 window.history.go(-1);
+     					 },1000);
+                     }else {
+                         this.showTipsText='网络异常,请稍后再试!'
+                     }
                  }).catch((e)=>{
 					 this.showTipsText='网络异常,请稍后再试!'
                  })

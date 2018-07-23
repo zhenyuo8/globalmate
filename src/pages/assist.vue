@@ -53,6 +53,17 @@
                 <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
             </div>
         </div>
+        <div class="main_style">
+            <List :itemRepeat='payStyle' :clickCallBack='clickCallBack' v-if="payStyle"></List>
+            <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
+            <!-- <div class="add_label_container" @click=''>
+                <span>添加标签</span>
+            </div>
+            <div class="add_content_container">
+                <span class="add_content_title">添加内容</span>
+                <span class="add_cotent_icon">+</span>
+            </div> -->
+        </div>
         <div class="main_decription">
             <div class="main_decription_title">
                 <List :itemRepeat='title' :clickCallBack='clickCallBack'></List>
@@ -71,17 +82,7 @@
             </div>
         </div>
 
-        <div class="main_style">
-            <List :itemRepeat='payStyle' :clickCallBack='clickCallBack' v-if="payStyle"></List>
-            <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
-            <div class="add_label_container" @click=''>
-                <span>添加标签</span>
-            </div>
-            <div class="add_content_container">
-                <span class="add_content_title">添加内容</span>
-                <span class="add_cotent_icon">+</span>
-            </div>
-        </div>
+
     </div>
     <div class="assist_bottom" @click='publish'>
         发布

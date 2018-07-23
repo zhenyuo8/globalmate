@@ -199,7 +199,7 @@ export default {
                 path: 'mineInformation',
                 query: {
                     'token': this.token,
-                    'title': '哈哈',
+                    'title': '个人信息',
                     'id': 'mineInformation',
                 }
             });
@@ -227,10 +227,10 @@ export default {
             });
         },
         loadData(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/listSOS'+'?token='+this.$route.query.token,{
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
 
-            }).then(()=>{
-                console.log(1111)
+            }).then((res)=>{
+                console.log(res,1111111)
             }).catch((e)=>{
                 console.log(e);
             })
