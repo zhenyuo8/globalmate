@@ -2,19 +2,19 @@
     <div class="register" id='register'>
 		<form  action="" onsubmit='return false'>
 				<p>
-					<label for="usernamesignup" class="uname" data-icon="u">姓名</label>
-					<input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="username" />
+					<!-- <label for="usernamesignup" class="uname" data-icon="u">姓名</label> -->
+					<input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="用户名" />
 				</p>
 				<p>
-					<label for="emailsignup" class="youmail" data-icon="e" > 邮箱</label>
+					<!-- <label for="emailsignup" class="youmail" data-icon="e" > 邮箱</label> -->
 					<input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="请输入邮箱"/>
 				</p>
 				<p>
-					<label for="passwordsignup" class="youpasswd" data-icon="p">密码 </label>
+					<!-- <label for="passwordsignup" class="youpasswd" data-icon="p">密码 </label> -->
 					<input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="输入密码"/>
 				</p>
 				<p>
-					<label for="phonesignup" class="youphone" data-icon="p">手机 </label>
+					<!-- <label for="phonesignup" class="youphone" data-icon="p">手机 </label> -->
 					<input id="phonesignup" name="phonesignup" required="required" type="number" placeholder="输入手机号码"/>
 				</p>
 				<!-- <p>

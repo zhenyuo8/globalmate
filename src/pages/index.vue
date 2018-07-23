@@ -6,7 +6,7 @@
                 <div class="name">北京</div>
             </div>
             <div class="min right">
-                <div class="sos">
+                <div class="sos" @click='toSOS()'>
                     <i>sos</i>
                 </div>
                 <div class="icon-Document_im" @click='toMessage()'>
@@ -181,7 +181,6 @@
         },
 		methods:{
             publish(item){
-                console.log(item);
                 this.token=window.localStorage.getItem('TOKEN');
                 this.$router.push({
                     path: item.type,
@@ -235,6 +234,16 @@
                     path: 'seekHelpList',
                     query: {
                         'title': '求助列表',
+                    }
+                });
+            },
+            toSOS(){
+                this.token=window.localStorage.getItem('TOKEN');
+                this.$router.push({
+                    path: 'myAssist',
+                    query: {
+                        'token':this.token,
+                        'title': 'SOS',
                     }
                 });
             },
@@ -331,10 +340,11 @@
         width: .88rem;
     }
     .login_yes{
-        color:#9f9f9f;
+        color:#007aff!important;
+
     }
     .login_no{
-        color:#007aff!important;
+        color:#bfbfbf!important;
     }
     .user_wrap{
         position: absolute;

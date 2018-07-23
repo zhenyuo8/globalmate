@@ -2,12 +2,12 @@
     <div class="login" id='login'>
 		<form  action="" onsubmit='return false'>
 			<p>
-				<label for="phonesignup" class="youphone" data-icon="p">手机 </label>
-				<input id="phonesignup" name="phonesignup" required="required" type="number" placeholder="输入手机号码"/>
+				<!-- <label for="phonesignup" class="youphone" data-icon="p">手机 </label> -->
+				<input id="phonesignup" name="phonesignup" required="required" type="number" placeholder="账号"/>
 			</p>
 			<p>
-				<label for="passwordsignup" class="youpasswd" data-icon="p">密码 </label>
-				<input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="输入密码"/>
+				<!-- <label for="passwordsignup" class="youpasswd" data-icon="p">密码 </label> -->
+				<input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="密码"/>
 			</p>
 			<p class="signin button">
 				<input type="button" value="登入" @click='login' />

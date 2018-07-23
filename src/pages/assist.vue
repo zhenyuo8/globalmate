@@ -41,6 +41,7 @@
         height: 100%;
         display: inline-block;
     }
+
 </style>
 
 <template>
@@ -144,6 +145,7 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
+           console.log(postData);
            this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
                if(data.data.success){
                    window.history.go(-1);
@@ -156,9 +158,30 @@ export default {
            });
         },
         clickCallBack(item,e) {
+            let _this=this;
             if(!item.type){
-                this.show=true;
-                this.selectItem=item;
+                if(item.key==='date'){
+                    if(!this.calendar){
+                        this.calendar = new datePicker();
+                        this.calendar.init({
+                        	'trigger': '#arrive', /*按钮选择器，用于触发弹出插件*/
+                        	'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+                        	'minDate':'1900-1-1',/*最小日期*/
+                        	'maxDate':'2100-12-31',/*最大日期*/
+                        	'onSubmit':function(){/*确认时触发事件*/
+                        		var theSelectData=this.value;
+                                _this.selectCallBack(theSelectData,item);
+                        	},
+                        	'onClose':function(){/*取消时触发事件*/
+                        	}
+                        })
+                    }
+
+                }else{
+                   this.show=true;
+                   this.selectItem=item;
+                }
+
             }else{
                 if(e){
                     this.selectCallBack(e.target.value,item);
@@ -183,15 +206,22 @@ export default {
                     break;
                 default:
                     this.listRepeat.forEach(function (item,index) {
-                        if(item.key===selectItem.key){
-                            item.text=value;
-                            item.isPlacehold=false;
+                        if(item.key==='date'){
+                            if(item.key===selectItem.key&&item.componentKey===selectItem.componentKey){
+                                item.text=value;
+                                item.isPlacehold=false;
+                            }
+                        }else{
+                            if(item.key===selectItem.key){
+                                item.text=value;
+                                item.isPlacehold=false;
+                            }
                         }
+
                     });
                     break;
 
             }
-
         },
         // 获取发布所需要的数据
         getListData(){
@@ -260,7 +290,6 @@ export default {
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
-            console.log(form);
             switch (form) {
                 case 'assist':
                     this.listRepeat=[{
@@ -342,6 +371,22 @@ export default {
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'country'
+                    },{
+                        title: '开始时间',
+                        text: '请选择',
+                        arrow: true,
+                        key:'date',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'startTime'
+                    },{
+                        title: '结束时间',
+                        text: '请选择',
+                        arrow: true,
+                        key:'date',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'endTime'
                     }, {
                         title: '紧急程度',
                         text: '请选择',
@@ -380,6 +425,14 @@ export default {
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'country'
+                    },{
+                        title: '到达时间',
+                        text: '请选择',
+                        arrow: true,
+                        key:'date',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'arrive'
                     },{
                         title: '物品类型',
                         text: '请选择',

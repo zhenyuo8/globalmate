@@ -1,0 +1,45 @@
+    .ym_roll, .date_roll, .datetime_roll, .time_roll{
+        font-size: 14px;
+        font-weight: normal;
+    }
+    .ym_roll>div, .date_roll>div, .datetime_roll>div, .time_roll>div{
+        font-size: 1.2em!important;
+    }
+    .date_roll>div{
+        height: 180px!important;
+    }
+    .date_roll>div:nth-child(2) .date_grid>div{
+        left:70%;
+    }
+    .date_roll_mask{
+        padding: 0!important
+    }
+    .date_roll>div:nth-child(1), .datetime_roll>div:nth-child(1){
+        flex: 3
+    }
+    .date_roll>div:nth-child(2){
+        flex: 3
+    }
+    .ym_roll>div, .date_roll>div, .datetime_roll>div, .time_roll>div{
+        flex: 3
+    }
+    .date_btn_box .date_btn{
+        font-size: 1em!important;
+        font-weight: normal!important;
+    }
+    .lcalendar_cancel{
+        color: #9b9b9b
+    }
+    .date_ctrl{
+        background: #fff;
+        color: #333;
+    }
+    .date_grid{
+        top: 4.7em!important
+    }
+    .date_roll>div:nth-child(2) .gear{
+        text-indent:0;
+    }
+    .ym_roll>div .gear, .date_roll>div .gear, .datetime_roll>div .gear, .time_roll>div .gear{
+        margin-top: -3.2em!important;
+    }

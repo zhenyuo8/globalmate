@@ -82,7 +82,7 @@ input {
     <div class="repeat_content" v-if="!itemRepeat.type">
         <div class="repeate_content_text">
             <div class="repeate_content_text_item" v-if="!itemRepeat.mintType">
-                <span>{{itemRepeat.text}}</span>
+                <span :id='itemRepeat.componentKey' :name='itemRepeat.componentKey'>{{itemRepeat.text}}</span>
             </div>
             <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
                 <div class="repeate_content_text_image" style="width:32px;height:32px">

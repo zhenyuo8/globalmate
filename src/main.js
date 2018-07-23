@@ -6,6 +6,7 @@ import axios from 'axios';
 import qs from 'qs';
 import router from './router'
 import './assets/css/reset.css'
+import '../static/css/datePicker.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios

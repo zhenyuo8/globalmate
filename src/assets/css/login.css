@@ -9,6 +9,8 @@ form p{
 	line-height: 40px;
 	color: #9B9B9B;
 	margin-top: 12px;
+	width: 70%;
+	margin: 12px auto 0;
 }
 form {
 	padding: 10px;
@@ -20,11 +22,15 @@ form label{
 form p input{
 	font-size: 14px;
 	height: 76%;
-	padding: 0 4px;
-	color: #ff4a5a
+	padding: 2px 4px;
+	color: #ff4a5a;
+	width: 100%;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	background: #fff
 }
 .signin input{
-	width: 60%;
+	width: 104%;
 	height: 100%!important;
 	color: #fff!important;
 	background: #ff4a5a;
