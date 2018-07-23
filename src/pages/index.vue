@@ -43,7 +43,13 @@
         </ul>
         <div class="rank service_star">
             <div class="rank_title service_star_title">
-                服务之星榜单
+                <div class="left">
+                    服务之星榜单
+                </div>
+                <div class="right">
+                    查看榜单
+                </div>
+
             </div>
             <ul>
                 <li><a href="javascript:;"><img src="../assets/images/1.jpeg" alt=""></a></li>
@@ -53,7 +59,13 @@
         </div>
         <div class="rank school_star">
             <div class="rank_title school_star_title">
-                校园龙虎榜
+                <div class="left">
+                    校园龙虎榜
+                </div>
+                <div class="right">
+                    查看榜单
+                </div>
+
             </div>
             <ul>
                 <li><a href="javascript:;"><img src="../assets/images/11.jpeg" alt=""></a></li>
@@ -186,7 +198,7 @@
                     path: item.type,
                     query: {
                         'token': this.token,
-                        'title': item.text,
+                        'title': item.title,
                         'type': item.type,
                         'form': item.form,
                     }
@@ -509,7 +521,17 @@
      }
      .rank_title {
          padding: 7px .22rem;
+         /*text-align: left;*/
+         display: flex;
+     }
+     .school_star_title>div, .service_star_title>div {
+         flex: 1
+     }
+     .school_star_title .left, .service_star_title .left{
          text-align: left;
+     }
+     .school_star_title .right, .service_star_title .right{
+         text-align: right;
      }
      .rank ul li:last-child{
          margin: 0;

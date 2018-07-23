@@ -17,6 +17,9 @@ import selectList from '@/pages/selectList'//求助详情页
 import register from '@/pages/register'//求助详情页
 import login from '@/pages/login'//求助详情页
 import im from '@/pages/im'//求助详情页
+import evaluate from '@/pages/evaluate'//求助详情页
+import feedback from '@/pages/feedback'//意见反馈
+import rankAll from '@/pages/rankAll'//意见反馈
 Vue.use(Router)
 
 export default new Router({
@@ -155,6 +158,30 @@ export default new Router({
         component: im,
         meta:{
             index:17
+        }
+    },
+    {
+        path: '/evaluate',
+        name: 'evaluate',
+        component: evaluate,
+        meta:{
+            index:18
+        }
+    },
+    {
+        path: '/feedback',
+        name: 'feedback',
+        component: feedback,
+        meta:{
+            index:18
+        }
+    },
+    {
+        path: '/rankAll',
+        name: 'rankAll',
+        component: rankAll,
+        meta:{
+            index:18
         }
     },
   ]

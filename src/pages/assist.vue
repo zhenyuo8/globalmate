@@ -97,7 +97,7 @@
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
 
-import { Toast } from 'mint-ui';
+import { Toast} from 'mint-ui';
 export default {
     'name': 'assist',
     data() {
@@ -291,15 +291,16 @@ export default {
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
+            console.log(this.$route.query);
             switch (form) {
                 case 'assist':
                     this.listRepeat=[{
                         title: '方式',
-                        text: '请选择',
+                        text: this.$route.query.title,
                         arrow: true,
                         key:'style',
                         isRequire:false,
-                        isPlacehold:true,
+                        isPlacehold:false,
                         componentKey:'businessType'
                     }, {
                         title: '国家',
@@ -357,11 +358,11 @@ export default {
                 case 'accompany':
                     this.listRepeat=[{
                         title: '方式',
-                        text: '请选择',
+                        text: this.$route.query.title,
                         arrow: true,
                         key:'style',
                         isRequire:false,
-                        isPlacehold:true,
+                        isPlacehold:false,
                         componentKey:'businessType'
                     }, {
                         title: '目的地',
@@ -402,11 +403,11 @@ export default {
                 case 'carryAssist':
                     this.listRepeat=[{
                         title: '方式',
-                        text: '请选择',
+                        text: this.$route.query.title,
                         arrow: true,
                         key:'style',
                         isRequire:false,
-                        isPlacehold:true,
+                        isPlacehold:false,
                         componentKey:'businessType'
                     }, {
                         title: '从哪里',

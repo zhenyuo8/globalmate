@@ -70,11 +70,38 @@ input {
     height: 100%;
     border-radius: 50%
 }
+
+</style>
+<style media="screen">
+.mint-switch{
+    margin-right: .08rem;
+}
+    .mint-switch-core{
+        height: .50rem!important;
+        width: .76rem!important;
+    }
+    .mint-switch-core::after{
+        width: .43rem!important;
+        height: .43rem!important;
+        border-radius:50%!important
+    }
+    .mint-switch-input:checked + .mint-switch-core::after{
+        transform: translateX(12px)!important;
+    }
+    .mint-switch-core::before{
+        height: .46rem!important;
+        width: .72rem!important
+    }
+    .mint-switch-input:checked + .mint-switch-core{
+        background: #66fd66!important;
+        border-color: #66fd66!important
+    }
 </style>
 
 <template>
 
 <div class="repeat" @click='clickBack(itemRepeat)'>
+     <mt-switch v-model="value" @change="turn($event,itemRepeat)" v-if="itemRepeat.componentKey==='rewardAmount'"></mt-switch>
     <div class="repeat_title">
         <span style="color:red" v-if="itemRepeat.isRequire">*</span>
         <span>{{itemRepeat.title}}</span>
@@ -94,18 +121,24 @@ input {
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-         <input type="text" name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
+         <input type="text" :disabled='itemRepeat.componentKey==="rewardAmount"&& !value' name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
     </div>
 </div>
 
 </template>
 
 <script>
-
+import Vue from 'vue'
+import {Switch} from 'mint-ui';
+import'mint-ui/lib/style.css'
+Vue.component(Switch.name, Switch);
 export default {
+    components:{
+
+    },
     data() {
         return {
-
+            value:true
         }
     },
      props: {
@@ -128,10 +161,15 @@ export default {
      },
      methods: {
          clickBack(item) {
-             this.clickCallBack(item)
+             if(item.key!=='style'){
+                 this.clickCallBack(item)
+             }
          },
          change(item,e){
              this.clickCallBack(item,e)
+         },
+         turn(e,item){
+             this.itemRepeat.disabled=this.value;
          }
      }
 }
