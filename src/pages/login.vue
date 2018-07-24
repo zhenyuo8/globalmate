@@ -41,9 +41,9 @@
 				 this.axios.get(url,{
 
                  }).then((res)=>{
-                     console.log(res);
                      if(res.data.success){
                           window.localStorage.setItem('TOKEN',res.data.data);
+                          window.localStorage.setItem('USERPHONE',postData.phone);
                           this.token=res.data.data;
      					 setTimeout(()=>{
      						 window.history.go(-1);

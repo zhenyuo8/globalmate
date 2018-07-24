@@ -29,8 +29,8 @@
 				<img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech'/>
 
 				<div class="show-input">
-					<input type="text" class="form-control chat-input" placeholder="" v-model='chartValue'/>
-					<button class="btn chat-send" @click='createUserTalk'>
+					<input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter ="createUserTalk()"/>
+					<button class="btn chat-send" @click='createUserTalk()'>
 						发送
 					</button>
 				</div>
@@ -44,59 +44,51 @@ export default {
     data(){
         return{
 			chartValue:'',
-			index:0
+
         }
     },
     methods:{
-		createUserTalk() {
-			if(!this.chartValue) return;
+		createUserTalk(arg) {
 			let headerPath = "../assets/images/icon.png";
-			let li=document.createElement('li');
-			let img=document.createElement('img');
-			let div=document.createElement('div');
-			div.className='chat-item-text';
-			img.src="../assets/images/icon.png";
-			YYIMChat.sendTextMessage({
-				to: '13578799001',
-				type: 'chat',
-				content: this.chartValue,
-				body: {},
-				success:function(data){
-					console.log(data);
-				},
-				error:function(err){
-					console.log(err);
-				}
-			})
-			if(true){
-				li.className='right-item';
+			if(!arg){
+				if(!this.chartValue) return;
+				YYIMChat.sendTextMessage({
+					to: '13578799001',
+					type: 'chat',
+					content: this.chartValue,
+					body: {},
+					success:function(data){
+						console.log(data);
+					},
+					error:function(err){
+						console.log(err);
+					}
+				})
 			    let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
 				 $('#chat-thread').append($li);
 			}else {
-				li.className='left-item';
-				let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+this.chartValue+'</div> </li>');
+				if(!arg) return;
+				let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
 				 $('#chat-thread').append($li);
 			}
-			this.index++;
 			this.chartValue=''
 		    let top = $('#convo').height();
 		    $('#content').animate({
 		        scrollTop: top
 		    }, 100);
 		},
+		createOnMessage(){
+
+		},
 		getToken(){
-			let postData={
-				'username':'zhenyu',
-				'clientId':'44a18837b5acf71f0017772df15e1542',
-				'clientSecret':'959E5086D0544F36C915F91B624EA8DE'
-			}
+			let username=window.localStorage.getItem('USERPHONE');
 			 $.ajax({
 		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
 		        type: 'POST',
 		        dataType: 'json',
 		        headers: {"Content-Type": "application/json"},
 		        data: JSON.stringify({
-		            "username":'zhenyu',
+		            "username":'13578799001',
 		            "clientId":"44a18837b5acf71f0017772df15e1542",
 		            "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
 		        }),
@@ -104,7 +96,7 @@ export default {
 		            let clientIdentify = "pc" + String(new Date().getTime());
 		            //登陆YYIMSDK
 		            YYIMChat.login({
-		                "username": 'zhenyu',
+		                "username": '13578799001',
 		                "token": result.token,
 		                "expiration": result.expiration,
 		                "appType": 4,
@@ -117,7 +109,7 @@ export default {
 		    });
 		},
 		init(){
-
+			let _this=this;
 			YYIMChat.initSDK({
 	        	app: 'globalmate_test', //appId应用id
 	        	etp: 'zxy_test', //etpId企业id
@@ -135,7 +127,7 @@ export default {
 					// 登录成功
 					YYIMChat.getVCard({
 						success:function(res){
-							console.log(res);
+
 						}
 					})
 				},
@@ -174,7 +166,8 @@ export default {
 					//好友信息更改
 				},
 				onMessage: function(arg) {
-					console.log(arg,1111111);
+					console.log(_this);
+					_this.createUserTalk(arg)
 					//收到消息,包括收到他人给自己发的消息和所有的群消息
 				},
 				onGroupUpdate: function(arg) {
@@ -199,7 +192,6 @@ export default {
 					//透传业务消息
 				},
 			});
-			console.log(YYIMChat);
 			YYIMChat.onMessage();
 			this.getToken();
 		}
