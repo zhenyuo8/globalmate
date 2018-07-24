@@ -37,8 +37,8 @@
         <div class="bottom">
             <div class="bottom_left">
                 <img :src='imagesList[index%3]' alt="" class="bottom_left_userimage">
-                <span class="bottom_left_username">{{item.need.userId}}</span>
-                <span class="bottom_left_time">{{item.need.createTime}}</span>
+                <span class="bottom_left_username">{{item.need.userName}}</span>
+                <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
             </div>
             <div class="bottom_right">
                 {{item.conceretNeed.rewardAmount}}
@@ -90,6 +90,16 @@ export default {
                     'id': 'fffff',
                 }
             });
+        },
+        timestampToTime(time){
+            let date = new Date(time);
+            let Y = date.getFullYear() + '-';
+            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            let D = date.getDate() + '';
+            let h = date.getHours() + ':';
+            let m = date.getMinutes() + ':';
+            let s = date.getSeconds();
+            return Y+M+D;
         },
         loadData(){
             this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{

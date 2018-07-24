@@ -171,6 +171,26 @@ export default {
                 text: 223,
                 arrow: true,
                 mineType: 'solove'
+            }, {
+                title: 'SOS',
+                text: '',
+                arrow: true,
+                mineType: 'sos'
+            }, {
+                title: '我的评论',
+                text: '',
+                arrow: true,
+                mineType: 'comments'
+            }, {
+                title: '我的朋友',
+                text: '',
+                arrow: true,
+                mineType: 'friends'
+            }, {
+                title: '意见反馈',
+                text: '',
+                arrow: true,
+                mineType: 'feedback'
             }],
             mineInformation: {
                 title: '我的',

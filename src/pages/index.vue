@@ -235,7 +235,7 @@
             register(){
                 this.token=window.localStorage.getItem('TOKEN');
                 this.showPersonal=!this.showPersonal;
-                if(!this.toekn) return
+                if(!this.token) return
                 this.$router.push({
                     path: 'register',
                     query: {
@@ -245,7 +245,8 @@
             },
             offer(){
                 this.token=window.localStorage.getItem('TOKEN');
-                 if(!this.toekn) return
+                console.log(this.token);
+                 if(!this.token) return
                 this.$router.push({
                     path: 'seekHelpList',
                     query: {
@@ -337,6 +338,8 @@
         padding: 1px;
         font-weight: 500;
         color: red;
+        font-weight: 600;
+        font-size: 16px;
         border: 2px solid red;
         border-radius: 50%;
         display: inline-block;

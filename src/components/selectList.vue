@@ -101,7 +101,7 @@ export default {
 					this.options=['服装','电器','生活用品','药品','其他']
 					break
 				case 'style':
-					this.options=['代购','陪伴','学习','帮忙','其他']
+					this.options=['学习互助','代购','陪伴','帮代','教材','就医','换汇','租赁','办手续','其他']
 					break
 				case 'delivery':
 					this.options=['快递','当面','朋友转交','其他']

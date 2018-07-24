@@ -489,6 +489,14 @@ export default {
                         isRequire:false,
                         isPlacehold:true,
                         componentKey:'emergency'
+                    },{
+                        title: '日期',
+                        text: '请选择',
+                        arrow: true,
+                        key:'date',
+                        isRequire:false,
+                        isPlacehold:true,
+                        componentKey:'date'
                     }];
                     this.payStyle=false;
                     break;
