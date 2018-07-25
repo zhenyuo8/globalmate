@@ -2,6 +2,10 @@
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
+const htmlWebpackPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
@@ -67,6 +71,26 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new ExtractTextPlugin('style.css'),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendors',
+      filename: 'vendors.[hash].js'
+    }),
+    new htmlWebpackPlugin({
+      hash: true,
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true
+      },
+    //   favicon: path.join(APP_SRC, '/asset/images/ico.ico'),
+    //   template: path.join(APP_SRC, '/template/index.html')
+    }),
+    new webpack.DefinePlugin({
+      __ENV__: JSON.stringify(process.env.NODE_ENV)
+    })
+],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
     // source contains it (although only uses it if it's native).

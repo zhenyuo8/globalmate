@@ -1,7 +1,7 @@
 <template>
     <div class="rank_all">
 		<div class="main_img">
-			<img src="../assets/images/firstimage.jpg" alt="">
+			<img src="../assets/images/stanfu.jpeg" alt="">
 		</div>
 		<div class="rank_content">
             <mt-navbar v-model="selected">
@@ -72,7 +72,8 @@
         width: 2rem;
         padding: 12px 0;
         display: inline-block;
-        margin-bottom: 0
+        margin-bottom: 0;
+        vertical-align: top;
     }
     .mint-navbar .mint-tab-item.is-selected{
         border: none;

@@ -96,6 +96,7 @@
 
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
+import CONFIG from '../config/config'
 
 import { Toast} from 'mint-ui';
 export default {
@@ -146,8 +147,8 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
-           console.log(postData);
-           this.axios.post('http://10.4.111.31:9090/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
+           this.apiHost=CONFIG[__ENV__].apiHost;
+           this.axios.post(this.apiHost+'/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
                if(data.data.success){
                    window.history.go(-1);
                }else{
@@ -282,7 +283,7 @@ export default {
             return new Blob([ia],{type:mimeString})
         },
         uploadImgToServer(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/file/ossPolicy','').then(res=>{
+            this.axios.get(this.apiHost+'/globalmate/rest/file/ossPolicy','').then(res=>{
                 console.log(res);
             }).catch(e=>{
 

@@ -86,6 +86,7 @@
 <script>
     import { swipe, SwipeItem } from 'vue-awesome-swiper'
     import tips from '../components/tips.vue'
+    import CONFIG from '../config/config.js'
     require('swiper/dist/css/swiper.css')
 	export default {
         'name':'index',
@@ -280,6 +281,9 @@
 		},
         created(){
             let _this=this;
+            console.log(CONFIG)
+            console.log(__ENV__);
+            console.log(CONFIG[__ENV__].apiHost);
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
                     _this.showPersonal=false;

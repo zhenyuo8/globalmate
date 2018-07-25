@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import CONFIG from '../config/config.js'
 	export default {
 		data(){
 			return{
@@ -42,8 +43,12 @@
 		},
 		methods:{
 			register(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
 				let postData=this.getRegisterData();
-				 this.axios.post('http://10.4.111.31:9090/globalmate/rest/user/add',postData).then((res)=>{
+				 this.axios.post(this.apiHost+'/globalmate/rest/user/add',postData).then((res)=>{
+                     if(res.data){
+                         window.history.go(-1);
+                     }
                      console.log(res);
                  }).catch((e)=>{
                      console.log(e);

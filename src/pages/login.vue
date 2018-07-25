@@ -37,7 +37,8 @@
 		methods:{
 			login(){
 				let postData=this.getRegisterData();
-				let url='http://10.4.111.31:9090/globalmate/rest/user/login/'+postData.phone+'/'+postData.password;
+                this.apiHost=CONFIG[__ENV__].apiHost;
+				let url=this.apiHost+'/globalmate/rest/user/login/'+postData.phone+'/'+postData.password;
 				 this.axios.get(url,{
 
                  }).then((res)=>{

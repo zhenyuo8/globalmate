@@ -2,13 +2,11 @@ module.exports = {
   version: '1.0',
   development: {
     host: window.location.protocol + '//' + window.location.host, //当前域名
-    apiHost: 'http://ys.chaoke.com:91', //后端接口域名
-    // apiHost: 'http://10.4.111.23:9090/globalmate/index.jsp', //后端接口域名
+    apiHost: 'http://10.4.111.31:9090', //后端接口域名
   },
   test: {
     host: window.location.protocol + '//' + window.location.host, //当前域名
-    apiHost: 'http://ys.chaoke.com:91',
-    // apiHost: 'http://123.103.9.190:81',
+    apiHost: 'http://172.20.8.236:10003',
   },
   prevProduction: {
     host: window.location.protocol + '//' + window.location.host, //当前域名

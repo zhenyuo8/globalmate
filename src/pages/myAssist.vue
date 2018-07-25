@@ -50,7 +50,7 @@
 </template>
 
 <script>
-
+import CONFIG from '../config/config.js'
 export default {
     'name': 'myAssist',
     components: {
@@ -68,10 +68,10 @@ export default {
     },
     methods:{
         finished(e,item){
-            console.log(e);
+            this.apiHost=CONFIG[__ENV__];
             e.preventDefault();
             e.cancelBubble=true;
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
                 'needId':item.need.id,
                 'action':'coplete'
             }).then(res=>{

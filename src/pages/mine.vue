@@ -125,6 +125,7 @@
 import Header from '../components/header.vue'
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
+import CONFIG from '../config/config'
 export default {
     'name': 'mine',
     data() {
@@ -229,7 +230,7 @@ export default {
             });
         },
         loadData(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
                 if(res.data.success){

@@ -50,6 +50,7 @@
 
 <script>
 import searchInput from '../components/searchInput.vue'
+import CONFIG from '../config/config'
 export default {
     'name': 'myAssist',
     components: {
@@ -72,7 +73,8 @@ export default {
         finished(e,item){
             e.preventDefault();
             e.cancelBubble=true;
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
                 'needId':item.need.id,
                 'action':'coplete'
             }).then(res=>{
@@ -110,7 +112,8 @@ export default {
 
         },
         getUserInfo(userId,callback){
-          this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/list/'+userId+'/?token='+this.$route.query.token,{}).then(res=>{
+          this.apiHost=CONFIG[__ENV__].apiHost;
+          this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'/?token='+this.$route.query.token,{}).then(res=>{
               if(res.data&&res.data.success){
                   callback(res.data.data);
               }
@@ -145,7 +148,8 @@ export default {
             return Y+M+D;
         },
         loadData(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
                 onlyCurrentUser:''
             }).then((res)=>{
                 if(res.data.success){
