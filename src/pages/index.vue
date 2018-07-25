@@ -46,7 +46,7 @@
                 <div class="left">
                     服务之星榜单
                 </div>
-                <div class="right">
+                <div class="right" @click='goRankAll("service")'>
                     查看榜单
                 </div>
 
@@ -62,7 +62,7 @@
                 <div class="left">
                     校园龙虎榜
                 </div>
-                <div class="right">
+                <div class="right" @click='goRankAll("school")'>
                     查看榜单
                 </div>
 
@@ -245,7 +245,6 @@
             },
             offer(){
                 this.token=window.localStorage.getItem('TOKEN');
-                console.log(this.token);
                  if(!this.token) return
                 this.$router.push({
                     path: 'seekHelpList',
@@ -267,6 +266,16 @@
             },
             toMessage(){
                 alert('消息列表')
+            },
+            goRankAll(key){
+                this.$router.push({
+                    path: 'rankAll',
+                    query: {
+                        'token': this.token,
+                        'title': '榜单',
+                        'type': key,
+                    }
+                });
             }
 		},
         created(){

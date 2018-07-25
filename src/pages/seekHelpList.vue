@@ -70,7 +70,6 @@ export default {
     },
     methods:{
         finished(e,item){
-            console.log(e);
             e.preventDefault();
             e.cancelBubble=true;
             this.axios.get('http://10.4.111.31:9090/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
@@ -95,15 +94,29 @@ export default {
         goHelp(e,item){
             e.preventDefault;
             e.cancelBubble=true;
-            console.log(item);
-            this.$router.push({
-                path: 'im',
-                query: {
-                    'token': this.token,
-                    'title': '去帮助',
-                    'id': 'fffff',
-                }
-            });
+            let _this=this;
+            this.getUserInfo(item.need.userId,function(data){
+                _this.$router.push({
+                    path: 'im',
+                    query: {
+                        'token': _this.token,
+                        'title': data.nikename,
+                        'id': 'fffff',
+                        'toChartUser':data.nikename,
+                        'toChartId':data.phone
+                    }
+                });
+            })
+
+        },
+        getUserInfo(userId,callback){
+          this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/list/'+userId+'/?token='+this.$route.query.token,{}).then(res=>{
+              if(res.data&&res.data.success){
+                  callback(res.data.data);
+              }
+          }).catch(e=>{
+
+          })
         },
         searchCallBack(data){
             this.msg=!this.msg;
@@ -153,9 +166,10 @@ export default {
         },
     },
     activated(){
-      console.log(11111111)  
+      console.log(11111111)
     },
     created(){
+        this.token=this.$route.query.token;
         this.loadData();
     }
 

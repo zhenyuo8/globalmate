@@ -50,10 +50,11 @@ export default {
     methods:{
 		createUserTalk(arg) {
 			let headerPath = "../assets/images/icon.png";
+			console.log(this.$route.query);
 			if(!arg){
 				if(!this.chartValue) return;
 				YYIMChat.sendTextMessage({
-					to: '13578799001',
+					to: this.$route.query.toChartId+'',
 					type: 'chat',
 					content: this.chartValue,
 					body: {},
@@ -88,7 +89,7 @@ export default {
 		        dataType: 'json',
 		        headers: {"Content-Type": "application/json"},
 		        data: JSON.stringify({
-		            "username":'13578799001',
+		            "username":username,
 		            "clientId":"44a18837b5acf71f0017772df15e1542",
 		            "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
 		        }),
@@ -96,7 +97,7 @@ export default {
 		            let clientIdentify = "pc" + String(new Date().getTime());
 		            //登陆YYIMSDK
 		            YYIMChat.login({
-		                "username": '13578799001',
+		                "username": username,
 		                "token": result.token,
 		                "expiration": result.expiration,
 		                "appType": 4,
@@ -166,7 +167,6 @@ export default {
 					//好友信息更改
 				},
 				onMessage: function(arg) {
-					console.log(_this);
 					_this.createUserTalk(arg)
 					//收到消息,包括收到他人给自己发的消息和所有的群消息
 				},

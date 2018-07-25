@@ -8,6 +8,9 @@ import router from './router'
 import './assets/css/reset.css'
 import '../static/css/datePicker.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import Mint from'mint-ui'
+import'mint-ui/lib/style.css'
+Vue.use(Mint);
 Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
 Vue.prototype.qs = qs

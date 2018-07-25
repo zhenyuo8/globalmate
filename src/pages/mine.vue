@@ -85,49 +85,25 @@
 .mine_business {
     border-bottom: 1px solid rgba(241, 241, 241, 1)
 }
-.list_show{
-    position: fixed;
-    right:0;
-    top:0;
-    bottom:0;
-    width:7.5rem;
-    background:#f5f5f5;
-   -webkit-transition: all .2s ease-in;
-   -moz-transition: all .2s ease-in;
-   transition: all .2s ease-in;
-}
-.list_hide{
-    position: fixed;
-    right: -7.5rem;
-    top:0;
-    bottom:0;
-    width:7.1rem;
-    background:#fff;
-    -webkit-transition: all .2s ease-out;
-    -moz-transition: all .2s ease-out;
-    transition: all .2s ease-out;
-}
+
 
 </style>
 
 <template>
 
 <div class="mine">
-    <!-- <div class="header">
-        <Header :hearderParas='hearderParas'></Header>
-    </div> -->
     <div class="mine_body">
         <div class="mine_detail">
             <div class="mine_image" @click='toMineInformation'>
-                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg" alt="">
+                <img :src="userInfo.pic" alt="">
             </div>
             <div class="mine_information" @click='toMineInformation'>
                 <div class="mine_top">
-                    <span class="mine_username">圈圈</span>
-                    <span class="mine_call">好人值 101</span>
+                    <span class="mine_username">{{userInfo.username}}</span>
+                    <span class="mine_call">好人值 {{userInfo.call}}</span>
                 </div>
                 <div class="mine_location">
-                    <span class="">北京</span>
+                    <span class="">{{userInfo.country}}</span>
                 </div>
             </div>
             <div class="mine_settings" @click='goEditMineInfo'>
@@ -140,7 +116,6 @@
             <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
         </div>
     </div>
-    <!-- <selectList :class="show?'list_show':'list_hide'" :selectCallBack='selectCallBack' ></selectList> -->
 </div>
 
 </template>
@@ -154,21 +129,14 @@ export default {
     'name': 'mine',
     data() {
         return {
-            hearderParas: {
-                title: '我的',
-                right: {
-                    text: '',
-                    icon: '../assets/logo.png'
-                }
-            },
             listRepeat: [{
                 title: '我发布的',
-                text: 2,
+                text: '',
                 arrow: true,
                 mineType: 'publish'
             }, {
                 title: '我解决的',
-                text: 223,
+                text: '',
                 arrow: true,
                 mineType: 'solove'
             }, {
@@ -192,15 +160,14 @@ export default {
                 arrow: true,
                 mineType: 'feedback'
             }],
-            mineInformation: {
-                title: '我的',
-                right: {
-                    text: '',
-                    icon: '../assets/logo.png'
-                }
-            },
+
             title:'',
-            show:false
+            userInfo:{
+                username:'',
+                country:'',
+                call:'',
+                pic:''
+            }
         }
     },
     components: {
@@ -225,15 +192,30 @@ export default {
             });
         },
         clickCallBack(item) {
-            if (item.mineType === 'publish') {
-                this.$router.push({
-                    path: 'myAssist',
-                    query: {
-                        'token': this.token,
-                        'title': '求助列表',
-                        'id': 'myAssist',
-                    }
-                });
+            let type=item.mineType;
+            switch (type) {
+                case 'publish':
+                    this.$router.push({
+                        path: 'myAssist',
+                        query: {
+                            'token': this.token,
+                            'title': '求助列表',
+                            'id': 'myAssist',
+                        }
+                    });
+                    break;
+                case 'feedback':
+                    this.$router.push({
+                        path: 'feedback',
+                        query: {
+                            'token': this.token,
+                            'title': '意见反馈',
+                            'id': 'feedback',
+                        }
+                    });
+                    break;
+                default:
+
             }
         },
         goEditMineInfo(){
@@ -247,14 +229,20 @@ export default {
             });
         },
         loadData(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
+            this.axios.get('http://10.4.111.31:9090/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
-                console.log(res,1111111)
+                if(res.data.success){
+                    let data=res.data.data;
+                    this.userInfo.username=data.nikename;
+                    this.userInfo.country=data.country;
+                    this.userInfo.call=data.enable;
+                    this.userInfo.pic=data.pic||'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg';
+                }
+
             }).catch((e)=>{
                 console.log(e);
             })
-            console.log(this.axios)
         }
 
     },
