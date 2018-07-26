@@ -8,11 +8,11 @@
     <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail'>
         <div class="top">
             <span class="top_left">
-                        {{item.conceretNeed.title}}
-                    </span>
+                {{item.conceretNeed.title}}
+            </span>
             <span class="top_right">
-                        {{item.conceretNeed.type}}
-                    </span>
+                {{item.conceretNeed.type}}
+            </span>
         </div>
         <div class="middle">
             <div class="middle_left">
@@ -110,13 +110,13 @@ export default {
                      this.listm=[];
                      for(var i=0;i<data.length;i++){
                          if(data[i].conceretNeed&&data[i].conceretNeed.title){
-                             console.log(i%3);
                              data[i].conceretNeed.url=this.imagesList[i]
+                             if(data[i].conceretNeed.pic){
+                                //  data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                             }
                              this.myAssistList.push(data[i])
                          }
                      }
-                     console.log(this.myAssistList);
-                     console.log(this.imagesList);
                 }else{
 
                 }

@@ -230,6 +230,7 @@ export default {
             });
         },
         loadData(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
             this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
 
             }).then((res)=>{

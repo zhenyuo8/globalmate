@@ -52,7 +52,7 @@
     <div class="home_image">
         <img src="../assets/images/home.jpg" alt="">
     </div>
-    <div class="nav">
+    <!-- <div class="nav">
         <div class="nav_item" v-for="item in navData" @click='navRoute(item)'>
             {{item.text}}
         </div>
@@ -61,6 +61,9 @@
         <div class="nav_item" v-for="item in navSecData" @click='navRoute(item)'>
             {{item.text}}
         </div>
+    </div> -->
+    <div class="">
+        <button type="button" name="button"  id='browse'>选择文件</button>
     </div>
     <tips :showTipsText='showTipsText'></tips>
 </div>
@@ -182,6 +185,18 @@ export default {
                  }
              }
          }
+     },
+     created(){
+         setTimeout(()=>{
+             var uploader = new plupload.Uploader({
+                browse_button : 'browse', //触发文件选择对话框的按钮，为那个元素id
+                url : 'https://oss.aliyuncs.com', //服务器端的上传页面地址
+                flash_swf_url : '../libs/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+                max_file_size: '2mb',//限制为2MB
+                silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+            });
+            uploader.init();
+         },500)
      }
  }
 </script>

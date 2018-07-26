@@ -46,7 +46,7 @@
 
 <template>
 
-<div class="assist">
+<div class="assist" @click='removeFile($event)'>
     <div class="body">
         <div class="main_view">
             <div class="main_view_repeat" v-for="item in listRepeat">
@@ -71,13 +71,13 @@
             <div class="main_decription_area">
                 <textarea name="name" placeholder='描述一下求助细节 时间 航班 人数 地点 偏好的景点等等' style='width:100%'></textarea>
             </div>
-            <div class="main_decription_uploader">
+            <div class="main_decription_uploader" >
                 <div class="hide_space">
 
                 </div>
-                <div class="main_decription_uploader_container">
-                    <span class="icon-add"></span>
-                    <input type="file" name="" value="+" @change="uploadImg($event)">
+                <div class="main_decription_uploader_container" >
+                    <span class="icon-add" id='uploader'></span>
+                    <!-- <input type="file" name="" value="+" @change="uploadImg($event)"> -->
                 </div>
             </div>
         </div>
@@ -137,6 +137,7 @@ export default {
             publishData:[],
             show:false,
             selectItem:{},
+            filesHasUpload:[]
         }
 
     },
@@ -147,9 +148,29 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
+           switch (this.key) {
+               case 'buy':
+                   this.submitUrl='/globalmate/rest/need/buy/add'
+                   break;
+               case 'accompany':
+                    this.submitUrl='/globalmate/rest/need/accompany/add'
+                    break;
+               case 'carryAssist':
+                    this.submitUrl='/globalmate/rest/need/carry/add'
+                    break;
+               case 'learnco':
+                    this.submitUrl='/globalmate/rest/need/learnco/add'
+                    break;
+               case 'other':
+                    this.submitUrl='/globalmate/rest/need/carry/add';
+                    break;
+               default:
+                    this.submitUrl='/globalmate/rest/need/other/add';
+                    break;
+           }
            this.apiHost=CONFIG[__ENV__].apiHost;
-           this.axios.post(this.apiHost+'/globalmate/rest/need/buy/add'+'?token='+this.$route.query.token,postData).then((res)=>{
-               if(data.data.success){
+           this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
+               if(res.data.success){
                    window.history.go(-1);
                }else{
                    alert('请确认后再提交')
@@ -251,48 +272,14 @@ export default {
             if(this.$el.querySelector('.main_decription_area textarea')){
                 postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
             }
+            if(this.filesHasUpload.length!==0){
+                postData['pic']=this.filesHasUpload.join(';')
+            }
             return postData;
-        },
-        uploadImg(e){
-            let _this=this;
-            var file = e.target.files[0];
-            // 确认选择的文件是图片
-            if(file.type.indexOf("image") == 0) {
-                let reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = function(e) {
-                    // 图片base64化
-                    let newUrl = this.result;
-                    let con=$('<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="'+newUrl+'"/></div>');
-                    $('.hide_space').append(con);
-                };
-            }
-        },
-        dataURItoBlob(base64Data){
-            let byteString;
-            if(base64Data.split(',')[0].indexOf('base64')>=0){
-                byteString=atob(base64Data.split(',')[1]);
-            }else{
-                byteString=unescape(base64Data.split(',')[1]);
-            }
-            let mimeString=base64Data.split(',')[0].split(':')[1].split(';')[0];
-            let ia=new Uint8Array(byteString.length);
-            for(var i=0;i<byteString.length;i++){
-                ia[i]=byteString.charCodeAt(i);
-            }
-            return new Blob([ia],{type:mimeString})
-        },
-        uploadImgToServer(){
-            this.axios.get(this.apiHost+'/globalmate/rest/file/ossPolicy','').then(res=>{
-                console.log(res);
-            }).catch(e=>{
-
-            })
         },
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
-            console.log(this.$route.query);
             switch (form) {
                 case 'assist':
                     this.listRepeat=[{
@@ -502,7 +489,98 @@ export default {
                     this.payStyle=false;
                     break;
             }
+        },
+        removeFile(e){
+            if(e.target.className==='prev_imgae'){
+                $(e.target.parentNode).remove();
+                this.filesHasUpload.splice($(e.target.parentNode).index(),1);
+            }
+        },
+        previewImage(file,callback){
+            if(!file || !/image\//.test(file.type)) return;
+        if(file.type=='image/gif'){
+            var fr = new mOxie.FileReader();
+            fr.onload = function(){
+                callback(fr.result);
+                fr.destroy();
+                fr = null;
+            }
+            fr.readAsDataURL(file.getSource());
+        }else{
+            var preloader = new mOxie.Image();
+            preloader.onload = function() {
+                preloader.downsize( 100, 100 );
+                var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
+                callback && callback(imgsrc);
+                preloader.destroy();
+                preloader = null;
+            };
+            preloader.load( file.getSource() );
         }
+        },
+        initUploader(){
+            let _this=this;
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let ossMap={};
+            this.filesHasUpload=[];
+            this.multipart_params={
+                'key':'',
+                'policy':'',
+                'OSSAccessKeyId':'',
+                'success_action_status':'',
+                'signature':''
+            }
+            this.axios.get(this.apiHost+'/globalmate/rest/file/ossPolicy'+'?token='+this.$route.query.token,'').then(res=>{
+                if(res.data.success){
+                    ossMap.accessid=res.data.data.accessid;
+                    ossMap.policy=res.data.data.policy;
+                    ossMap.signature=res.data.data.signature;
+                    ossMap.key=res.data.data.dir;
+                    ossMap.host=res.data.data.host;
+                    ossMap.success_action_status=200;
+                }
+            }).catch(e=>{
+
+            })
+            this.fileUploader=new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                browse_button : 'uploader', //触发文件选择对话框的按钮，为那个元素id
+                url : 'http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/', //服务器端的上传页面地址
+                flash_swf_url : '../libs/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+                silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+            });
+            this.fileUploader.bind('FilesAdded',function(uploader,files){
+        		 for(var i=0,len=files.length;i<len;i++){
+                    var file_name=files[i].name;
+                    !function(i){
+                        _this.previewImage(files[i],function(imgsrc){
+                            let con=$('<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="'+imgsrc+'"/></div>');
+                            $('.hide_space').append(con);
+                        });
+                    }(i);
+                }
+                _this.fileUploader.start();
+	       });
+           this.fileUploader.bind('BeforeUpload',function(up,file){
+               file.name=new Date().getTime()+'_'+file.name;
+               _this.multipart_params={
+                   'key':ossMap.key+'_'+file.name,
+                   'policy':ossMap.policy,
+                   'OSSAccessKeyId':ossMap.accessid,
+                   'success_action_status':'200',
+                   'signature':ossMap.signature
+               }
+               up.setOption({
+                   'url':ossMap.host,
+                   'multipart_params':_this.multipart_params,
+               })
+           });
+           this.fileUploader.bind('FileUploaded',function(up,file,info){
+               _this.filesHasUpload.push(ossMap.host+'/'+_this.multipart_params.key);
+           });
+           this.fileUploader.init();
+        },
+
     },
     activated(){
         this.listRepeatProcess();
@@ -511,16 +589,26 @@ export default {
         form: function() {
             return this.$route.query.form || "";
         },
+        key: function() {
+            return this.$route.query.key || "";
+        },
     },
     watch:{
         'form':function (newvalue,old) {
             if(newvalue&&old){
                 this.listRepeatProcess();
             }
+        },
+        'key':function (newvalue,old) {
+            if(newvalue&&old){
+                this.type=this.$route.query.newvalue;
+            }
         }
     },
     created(){
-
+        setTimeout(()=>{
+           this.initUploader();
+       },1000);
     }
 }
 

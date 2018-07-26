@@ -125,49 +125,49 @@
                         'icon':'icon-pen'
                     },{
                         'title': '教材',
-                        'key': 'assist',
+                        'key': 'other',
                         'type': 'assist',
                         'form':'other',
                         'icon':'icon-book'
                     },{
                         'title': '办手续',
-                        'key': 'assist',
+                        'key': 'other',
                         'type': 'assist',
                         'form':'other',
                          'icon':'icon-Document_2_yinzhang'
                     },{
                         'title': '换汇',
-                        'key': 'assist',
+                        'key': 'other',
                         'type': 'assist',
                         'form':'other',
                          'icon':'icon-coin-yen'
                     },{
                         'title': '就医',
-                        'key': 'assist',
+                        'key': 'other',
                         'type': 'assist',
                         'form':'other',
                          'icon':'icon-local_hospital'
                     },{
                         'title': '帮带',
-                        'key': 'assist',
+                        'key': 'carry',
                         'type': 'assist',
                         'form':'carryAssist',
                          'icon':'icon-flight_takeoff'
                     },{
                         'title': '租赁',
-                        'key': 'assist',
+                        'key': 'other',
                         'type': 'assist',
                         'form':'other',
                          'icon':'icon-office'
                     }, {
                         'title': '陪伴',
-                        'key': 'assist',
+                        'key': 'accompany',
                         'type': 'assist',
                         'form':'accompany',
                          'icon':'icon-pacman'
                     },{
                         'title': '代购',
-                        'key': 'assist',
+                        'key': 'buy',
                         'type': 'assist',
                         'form':'aassist',
                          'icon':'icon-icon-announce'
@@ -195,6 +195,10 @@
 		methods:{
             publish(item){
                 this.token=window.localStorage.getItem('TOKEN');
+                if(!this.token) {
+                    // alert('请先登入')
+                    // return;
+                }
                 this.$router.push({
                     path: item.type,
                     query: {
@@ -202,6 +206,7 @@
                         'title': item.title,
                         'type': item.type,
                         'form': item.form,
+                        'key':item.key
                     }
                 });
             },
@@ -279,11 +284,15 @@
                 });
             }
 		},
+        activated(){
+            this.token=window.localStorage.getItem('TOKEN');
+        },
+
         created(){
+            window.localStorage.removeItem('TOKEN');
+            console.log(plupload);
+           
             let _this=this;
-            console.log(CONFIG)
-            console.log(__ENV__);
-            console.log(CONFIG[__ENV__].apiHost);
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
                     _this.showPersonal=false;
