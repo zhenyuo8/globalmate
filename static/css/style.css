@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?9zqhhl');
-  src:  url('fonts/icomoon.eot?9zqhhl#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?9zqhhl') format('truetype'),
-    url('fonts/icomoon.woff?9zqhhl') format('woff'),
-    url('fonts/icomoon.svg?9zqhhl#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?i0d1jp');
+  src:  url('fonts/icomoon.eot?i0d1jp#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?i0d1jp') format('truetype'),
+    url('fonts/icomoon.woff?i0d1jp') format('woff'),
+    url('fonts/icomoon.svg?i0d1jp#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,23 +24,56 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-heart2:before {
-  content: "\e95f";
+.icon-chat:before {
+  content: "\e962";
 }
-.icon-user:before {
-  content: "\e957";
+.icon-heart3:before {
+  content: "\e960";
 }
-.icon-heart:before {
-  content: "\e95e";
+.icon-pacman:before {
+  content: "\e95a";
 }
-.icon-cool:before {
-  content: "\e9eb";
+.icon-game:before {
+  content: "\e95a";
 }
-.icon-office:before {
-  content: "\e95b";
+.icon-book:before {
+  content: "\e952";
 }
-.icon-coin-yen:before {
-  content: "\e95c";
+.icon-book2:before {
+  content: "\e953";
+}
+.icon-pen:before {
+  content: "\e954";
+}
+.icon-tools:before {
+  content: "\e955";
+}
+.icon-map-location:before {
+  content: "\e956";
+}
+.icon-messages:before {
+  content: "\e961";
+}
+.icon-more-horizontal:before {
+  content: "\e958";
+}
+.icon-flight_takeoff:before {
+  content: "\e959";
+}
+.icon-local_hospital:before {
+  content: "\e950";
+}
+.icon-map-pin2:before {
+  content: "\e951";
+}
+.icon-arrow_right_samll:before {
+  content: "\e901";
+}
+.icon-dengji:before {
+  content: "\e947";
+}
+.icon-add:before {
+  content: "\e948";
 }
 .icon-global-im:before {
   content: "\e95d";
@@ -290,45 +323,21 @@
 .icon-Document_zhengwenmuban:before {
   content: "\e94f";
 }
-.icon-more-horizontal:before {
-  content: "\e958";
+.icon-heart:before {
+  content: "\e95e";
 }
-.icon-flight_takeoff:before {
-  content: "\e959";
+.icon-cool:before {
+  content: "\e9eb";
 }
-.icon-local_hospital:before {
-  content: "\e950";
+.icon-office:before {
+  content: "\e95b";
 }
-.icon-map-pin2:before {
-  content: "\e951";
+.icon-coin-yen:before {
+  content: "\e95c";
 }
-.icon-arrow_right_samll:before {
-  content: "\e901";
+.icon-heart2:before {
+  content: "\e95f";
 }
-.icon-map-location:before {
-  content: "\e956";
-}
-.icon-heart3:before {
-  content: "\e960";
-}
-.icon-pacman:before {
-  content: "\e95a";
-}
-.icon-game:before {
-  content: "\e95a";
-}
-.icon-book:before {
-  content: "\e952";
-}
-.icon-book2:before {
-  content: "\e953";
-}
-.icon-pen:before {
-  content: "\e954";
-}
-.icon-tools:before {
-  content: "\e955";
-}
-.icon-map-location:before {
-  content: "\e956";
+.icon-user:before {
+  content: "\e957";
 }

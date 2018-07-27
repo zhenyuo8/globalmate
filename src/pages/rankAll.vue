@@ -5,10 +5,10 @@
 		</div>
 		<div class="rank_content">
             <mt-navbar v-model="selected">
-                <mt-tab-item v-for="(item,index) in tabContent" :id="index">{{item.key}}</mt-tab-item>
+                <mt-tab-item v-for="(item,index) in tabContent" :id="index" :key='index'>{{item.key}}</mt-tab-item>
             </mt-navbar>
             <mt-tab-container v-model="selected">
-                <mt-tab-container-item v-for="(item,index) in tabContent" :id="index">
+                <mt-tab-container-item v-for="(item,index) in tabContent" :id="index" :key='index'>
                     <ul class="rank_user_img"  >
                         <li v-for="items in item.list">
                             <img src="../assets/images/12.jpeg" alt="">

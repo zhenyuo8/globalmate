@@ -102,7 +102,7 @@
 }
 .mineInformation_edit_button{
     font-size: 14px;
-    color: #9B9B9B;
+    color: #fff;
     width: 40%;
     text-align: center;
     height: 32px;
@@ -110,12 +110,33 @@
 .mineInformation_edit_button span{
     width: 1.8rem;
     display: inline-block;
-    background: #F1F1F1;
+    background: #007aff;
     margin-left: .76rem;
-    height: 30px;
-    border: 1px solid #979797;
-    line-height: 30px;
+    height: 32px;
+    border-radius: 4px;
+    line-height: 32px;
 }
+.mineInformation_chart_button{
+    font-size: 14px;
+    color: #fff;
+    width: 40%;
+    text-align: center;
+    height: 32px;
+}
+ .mineInformation_chart_button span{
+    width: auto!important;
+    margin-left: 0!important;
+    padding: 0 .08rem;
+    display: inline-block;
+    background: #007aff;
+    height: 32px;
+    border-radius: 4px;
+    line-height: 32px;
+}
+ .mineInformation_chart_button .icon-chat::before{
+     margin-right: .08rem;
+     font-weight: bold;
+ }
 
 .mineInformation_recommend{
     height: 98px;
@@ -176,9 +197,18 @@
             <div class="mineInformation_edit_button" @click='goEditMineInfo'>
                 <span>编辑信息</span>
             </div>
+            <!-- <div class="mineInformation_chart_button" @click='chartWith'>
+                <span class="icon-chat">联系她/他</span>
+            </div> -->
         </div>
         <div class="mineInformation_recommend">
             <p>Facebook（脸书）是美国的一个社交网络服务网站 ，创立于2004年2月4日，总部位于美国加利福尼亚州帕拉阿图，2012年3月6日发布Windows版桌面聊天软件Facebook Messenger</p>
+        </div>
+        <div class="mineInformation_school">
+
+        </div>
+        <div class="mineInformation_hobby">
+
         </div>
     </div>
     <div class="mineInformation_line">
@@ -259,6 +289,16 @@ export default {
         goEditMineInfo(){
             this.$router.push({
                 path: 'mineInformationEdit',
+                query: {
+                    'token': '22223',
+                    'title': '哈哈',
+                    'id': 'fffff',
+                }
+            });
+        },
+        chartWith(){
+            this.$router.push({
+                path: 'im',
                 query: {
                     'token': '22223',
                     'title': '哈哈',
