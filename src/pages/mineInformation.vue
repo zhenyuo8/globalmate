@@ -20,7 +20,7 @@
 }
 
 .mineInformation_info {
-    height: 190px;
+    /*height: 190px;*/
     position: relative;
 }
 
@@ -155,6 +155,37 @@
 .mineInformation_history_action{
     padding-bottom: 20px;
 }
+.mineInformation_hobby, .mineInformation_school{
+     font-size: 14px;
+     color: #999;
+     width: 80%;
+     padding: 16px 0;
+     margin: auto;
+     margin-top: 12px;
+}
+.mineInformation_school{
+    border: 1px solid #eee;
+    border-radius: 6px;
+    position: relative;
+}
+.mineInformation_school_title{
+    height: 32px;
+    line-height: 32px;
+    position: absolute;
+    top: -16px;
+    background: #fff;
+    padding: 0 10px;
+    right: 35%;
+
+}
+.mineInformation_school_content_repeat{
+    /*display: flex;*/
+}
+.mineInformation_school_content_repeat span{
+    height: 32px;
+    line-height: 32px;
+
+}
 </style>
 
 <template>
@@ -205,10 +236,38 @@
             <p>Facebook（脸书）是美国的一个社交网络服务网站 ，创立于2004年2月4日，总部位于美国加利福尼亚州帕拉阿图，2012年3月6日发布Windows版桌面聊天软件Facebook Messenger</p>
         </div>
         <div class="mineInformation_school">
-
+            <div class="mineInformation_school_title">
+                我的圈子
+            </div>
+            <div class="mineInformation_school_content">
+                <div class="mineInformation_school_content_repeat">
+                    <span class="scholl_name">南开大学</span>
+                    <span class="scholl_time">2006-09-01</span>
+                    <span class="scholl_professional">中文历史</span>
+                    <span class="scholl_grade">1</span>
+                </div>
+                <div class="mineInformation_school_content_repeat">
+                    <span class="scholl_name">南开大学</span>
+                    <span class="scholl_time">2006-09-01</span>
+                    <span class="scholl_professional">中文历史</span>
+                    <span class="scholl_grade">1</span>
+                </div>
+            </div>
         </div>
         <div class="mineInformation_hobby">
-
+            <div class="mineInformation_hobby_title">
+                个人特质
+            </div>
+            <div class="mineInformation_hobby_content">
+                <div class="mineInformation_hobby_love">
+                    <span class="title">兴趣爱好 ：</span>
+                    <span class="content">喜欢打篮球，游泳</span>
+                </div>
+                <div class="mineInformation_hobby_offer">
+                    <span class="title">愿意提供的帮助 ：</span>
+                    <span class="content">帮带／陪伴</span>
+                </div>
+            </div>
         </div>
     </div>
     <div class="mineInformation_line">
