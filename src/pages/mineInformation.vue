@@ -155,36 +155,57 @@
 .mineInformation_history_action{
     padding-bottom: 20px;
 }
-.mineInformation_hobby, .mineInformation_school{
+.mineInformation_hobby, .mineInformation_school, .mineInformation_comment{
      font-size: 14px;
      color: #999;
      width: 80%;
      padding: 16px 0;
      margin: auto;
-     margin-top: 12px;
+     margin-top: 20px;
+     border: 1px solid #eee;
+     border-radius: 6px;
+     position: relative;
 }
 .mineInformation_school{
-    border: 1px solid #eee;
-    border-radius: 6px;
-    position: relative;
+
 }
-.mineInformation_school_title{
+.mineInformation_school_title, .mineInformation_hobby_title, .mineInformation_comment_title{
     height: 32px;
     line-height: 32px;
     position: absolute;
     top: -16px;
     background: #fff;
     padding: 0 10px;
-    right: 35%;
+    left: 6%;
 
 }
 .mineInformation_school_content_repeat{
     /*display: flex;*/
 }
-.mineInformation_school_content_repeat span{
+.mineInformation_school_content_repeat span, .mineInformation_hobby_offer span, .mineInformation_hobby_love span{
     height: 32px;
     line-height: 32px;
-
+    color: #333;
+}
+.mineInformation_comment_content{
+    overflow: hidden;
+}
+.mineInformation_comment_content span{
+    color: #fff;
+    padding: .1rem 0.15rem;
+    border-radius: 4px;
+    margin-top: 12px;
+    float: left;
+    margin-left: .2rem;
+}
+.mineInformation_comment_content span:nth-child(3n+1){
+    background: red;
+}
+.mineInformation_comment_content span:nth-child(3n+2){
+    background: #cc00ff;
+}
+.mineInformation_comment_content span:nth-child(3n+3){
+    background: blue;
 }
 </style>
 
@@ -235,6 +256,9 @@
         <div class="mineInformation_recommend">
             <p>Facebook（脸书）是美国的一个社交网络服务网站 ，创立于2004年2月4日，总部位于美国加利福尼亚州帕拉阿图，2012年3月6日发布Windows版桌面聊天软件Facebook Messenger</p>
         </div>
+        <div class="mineInformation_line">
+
+        </div>
         <div class="mineInformation_school">
             <div class="mineInformation_school_title">
                 我的圈子
@@ -247,9 +271,9 @@
                     <span class="scholl_grade">1</span>
                 </div>
                 <div class="mineInformation_school_content_repeat">
-                    <span class="scholl_name">南开大学</span>
-                    <span class="scholl_time">2006-09-01</span>
-                    <span class="scholl_professional">中文历史</span>
+                    <span class="scholl_name">临川中学</span>
+                    <span class="scholl_time">2003-09-01</span>
+                    <span class="scholl_professional">高中理科</span>
                     <span class="scholl_grade">1</span>
                 </div>
             </div>
@@ -267,6 +291,19 @@
                     <span class="title">愿意提供的帮助 ：</span>
                     <span class="content">帮带／陪伴</span>
                 </div>
+            </div>
+        </div>
+        <div class="mineInformation_comment">
+            <div class="mineInformation_comment_title">
+                别人眼中的我
+            </div>
+            <div class="mineInformation_comment_content">
+                <span class="">诚实</span>
+                <span>守时，靠谱</span>
+                <span>年轻思维活跃</span>
+                <span>家有萌娃</span>
+                <span>实力派+偶像派</span>
+                <span>坑货</span>
             </div>
         </div>
     </div>

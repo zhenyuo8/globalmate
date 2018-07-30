@@ -20,6 +20,7 @@ import im from '@/pages/im'//求助详情页
 import evaluate from '@/pages/evaluate'//求助详情页
 import feedback from '@/pages/feedback'//意见反馈
 import rankAll from '@/pages/rankAll'//意见反馈
+import personalFile from '@/pages/personalFile'//意见反馈
 Vue.use(Router)
 
 export default new Router({
@@ -180,6 +181,14 @@ export default new Router({
         path: '/rankAll',
         name: 'rankAll',
         component: rankAll,
+        meta:{
+            index:18
+        }
+    },
+    {
+        path: '/personalFile',
+        name: 'personalFile',
+        component: personalFile,
         meta:{
             index:18
         }

@@ -46,6 +46,12 @@ import CONFIG from '../config/config.js'
                 this.apiHost=CONFIG[__ENV__].apiHost;
 				let postData=this.getRegisterData();
 				 this.axios.post(this.apiHost+'/globalmate/rest/user/add',postData).then((res)=>{
+                     this.$router.push({
+     					path: 'personalFile',
+     					query: {
+     						'title': '个人资料',
+     					}
+     				});
                      if(res.data){
                          window.history.go(-1);
                      }

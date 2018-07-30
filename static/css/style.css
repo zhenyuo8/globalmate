@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?i0d1jp');
-  src:  url('fonts/icomoon.eot?i0d1jp#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?i0d1jp') format('truetype'),
-    url('fonts/icomoon.woff?i0d1jp') format('woff'),
-    url('fonts/icomoon.svg?i0d1jp#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?ce8o5l');
+  src:  url('fonts/icomoon.eot?ce8o5l#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?ce8o5l') format('truetype'),
+    url('fonts/icomoon.woff?ce8o5l') format('woff'),
+    url('fonts/icomoon.svg?ce8o5l#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,56 +24,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-chat:before {
-  content: "\e962";
+.icon-heart2:before {
+  content: "\e95f";
 }
-.icon-heart3:before {
-  content: "\e960";
+.icon-user:before {
+  content: "\e957";
 }
-.icon-pacman:before {
-  content: "\e95a";
+.icon-heart:before {
+  content: "\e95e";
 }
-.icon-game:before {
-  content: "\e95a";
+.icon-cool:before {
+  content: "\e9eb";
 }
-.icon-book:before {
-  content: "\e952";
+.icon-office:before {
+  content: "\e95b";
 }
-.icon-book2:before {
-  content: "\e953";
+.icon-coin-yen:before {
+  content: "\e95c";
 }
-.icon-pen:before {
-  content: "\e954";
-}
-.icon-tools:before {
-  content: "\e955";
-}
-.icon-map-location:before {
-  content: "\e956";
-}
-.icon-messages:before {
-  content: "\e961";
-}
-.icon-more-horizontal:before {
-  content: "\e958";
-}
-.icon-flight_takeoff:before {
-  content: "\e959";
-}
-.icon-local_hospital:before {
-  content: "\e950";
-}
-.icon-map-pin2:before {
-  content: "\e951";
-}
-.icon-arrow_right_samll:before {
-  content: "\e901";
-}
-.icon-dengji:before {
-  content: "\e947";
-}
-.icon-add:before {
-  content: "\e948";
+.icon-checkbox:before {
+  content: "\ea52";
 }
 .icon-global-im:before {
   content: "\e95d";
@@ -323,21 +293,42 @@
 .icon-Document_zhengwenmuban:before {
   content: "\e94f";
 }
-.icon-heart:before {
-  content: "\e95e";
+.icon-more-horizontal:before {
+  content: "\e958";
 }
-.icon-cool:before {
-  content: "\e9eb";
+.icon-flight_takeoff:before {
+  content: "\e959";
 }
-.icon-office:before {
-  content: "\e95b";
+.icon-local_hospital:before {
+  content: "\e950";
 }
-.icon-coin-yen:before {
-  content: "\e95c";
+.icon-map-pin2:before {
+  content: "\e951";
 }
-.icon-heart2:before {
-  content: "\e95f";
+.icon-arrow_right_samll:before {
+  content: "\e901";
 }
-.icon-user:before {
-  content: "\e957";
+.icon-heart3:before {
+  content: "\e960";
+}
+.icon-pacman:before {
+  content: "\e95a";
+}
+.icon-game:before {
+  content: "\e95a";
+}
+.icon-book:before {
+  content: "\e952";
+}
+.icon-book2:before {
+  content: "\e953";
+}
+.icon-pen:before {
+  content: "\e954";
+}
+.icon-tools:before {
+  content: "\e955";
+}
+.icon-map-location:before {
+  content: "\e956";
 }
