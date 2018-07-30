@@ -88,12 +88,12 @@ import CONFIG from '../config/config'
 export default {
     data(){
         return{
-			list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
-			selectFlag:false,
-			type_list:[],
-			hasSelect_list:[],
-			selectHelpTypeValue:''
-
+            list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
+            selectFlag:false,
+            type_list:[],
+            hasSelect_list:[],
+            selectHelpTypeValue:'',
+            headerImgae:''
         }
     },
 	methods:{
@@ -126,7 +126,6 @@ export default {
 		cancel(){
 			this.selectFlag=false;
 			if(this.type_list.length>0){
-				let len=this.hasSelect_list.length;
 				for(var i=0;i<this.hasSelect_list.length;i++){
 					$($('.list_ul li')[this.hasSelect_list[i]]).removeClass('select');
 				}
@@ -139,6 +138,7 @@ export default {
 			this.selectFlag=false;
 		},
 		submit(){
+      this.apiHost=CONFIG[__ENV__].apiHost;
 			let postData={
 				name:'',
 				nikename:'',
@@ -155,6 +155,13 @@ export default {
 			postData.city=this.$el.querySelector('#citysignup').value;
 			postData.hobby=this.$el.querySelector('#hobbysignup').value;
 			postData.helpAvailable=this.type_list.join(',');
+			postData.pic=this.headerImgae||'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg';
+			this.axios.post(this.apiHost+'/globalmate/rest/user/update'+'?token='+this.$route.query.token,postData).then((res)=>{
+      console.log(res);
+      }).catch((e)=>{
+
+      })
+
 		},
 		initUploader(){
             let _this=this;
@@ -214,7 +221,7 @@ export default {
                })
            });
            this.fileUploader.bind('FileUploaded',function(up,file,info){
-               _this.filesHasUpload.push(ossMap.host+'/'+_this.multipart_params.key);
+               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
            });
            this.fileUploader.init();
         },
@@ -384,7 +391,7 @@ export default {
 		padding: 0 .2rem;
 	}
 	.list_ul .select .icon-checkbox{
-		color: red
+		color: rgb(41, 182, 246);
 	}
 	.list_ul li .list_item{
 		float: left;

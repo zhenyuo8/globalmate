@@ -10,8 +10,6 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-
     // Various Dev Server settings
     host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
@@ -37,7 +35,8 @@ module.exports = {
     proxyTable: {
         '/api': {
             // 我要请求的地址
-            target: 'http://10.4.111.23:9090/globalmate/index.jsp',
+            target: 'http://13ede50d.ngrok.io/globalmate/index.jsp',
+            // target: 'http://10.4.111.23:9090/globalmate/index.jsp',
             //是否跨域
             changeOrigin: true,
             // 重写地址

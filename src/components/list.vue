@@ -96,6 +96,9 @@ input {
         background: #66fd66!important;
         border-color: #66fd66!important
     }
+  .mint-radio-core{
+    display: none!important;
+  }
 </style>
 
 <template>

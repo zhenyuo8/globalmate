@@ -1,5 +1,5 @@
 <template>
-    <div class="tips" v-show="showTipsText" @click='wrapClick'>
+    <div class="tips" @click='wrapClick'>
 		<i>{{showTipsText}}</i>
     </div>
 </template>
@@ -30,11 +30,7 @@
 
 		},
 		created(){
-            console.log(this.showTipsText);
-            // this.showTipsText=this.showTipsText
-			setTimeout(()=>{
-				this.showTipsText='';
-			},4000);
+
 		}
 	}
 </script>
@@ -52,12 +48,12 @@
 		max-width: 5.4rem;
 	    font-size: 16px;
 		line-height: 32px;
-		padding: 15px .4rem;
+		padding: 8px .4rem;
 		border-radius: 6px;
 	    color: #333;
 		max-height: 120px;
 	    display: inline-block;
-	    margin: 60% auto;
+	    margin: 70% auto;
 	    background: #fff;
 		overflow: hidden;
 		overflow-y: auto;

@@ -17,7 +17,7 @@
 				<a href="javascript:;" class="to_register" @click='goRegister'> 注册 </a>
 			</p>
 		</form>
-		<tips :showTips='showTips' :showTipsText='showTipsText'></tips>
+		<tips v-if="showTipsText" :showTipsText='showTipsText'></tips>
     </div>
 </template>
 
@@ -39,22 +39,20 @@
 				let postData=this.getRegisterData();
                 this.apiHost=CONFIG[__ENV__].apiHost;
 				let url=this.apiHost+'/globalmate/rest/user/login/'+postData.phone+'/'+postData.password;
-				 this.axios.get(url,{
-
-                 }).then((res)=>{
-                     if(res.data.success){
-                          window.localStorage.setItem('TOKEN',res.data.data);
-                          window.localStorage.setItem('USERPHONE',postData.phone);
-                          this.token=res.data.data;
-     					 setTimeout(()=>{
-     						 window.history.go(-1);
-     					 },1000);
-                     }else {
-                         this.showTipsText='网络异常,请稍后再试!'
-                     }
-                 }).catch((e)=>{
-					 this.showTipsText='网络异常,请稍后再试!'
-                 })
+				 this.axios.get(url,{}).then((res)=>{
+           if(res.data.success){
+          window.localStorage.setItem('TOKEN',res.data.data);
+          window.localStorage.setItem('USERPHONE',postData.phone);
+          this.token=res.data.data;
+          setTimeout(()=>{
+            window.history.go(-1);
+        },1000);
+        }else {
+          this.showTipsText='网络异常,请稍后再试!'
+        }
+      }).catch((e)=>{
+          this.showTipsText='网络异常,请稍后再试!'
+         })
 			},
 			getRegisterData(){
 				let postData={

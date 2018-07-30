@@ -150,16 +150,16 @@ export default {
            let postData=this.getListData();
            switch (this.key) {
                case 'buy':
-                   this.submitUrl='/globalmate/rest/need/buy/add'
+                   this.submitUrl='/globalmate/rest/need/buy/add';
                    break;
                case 'accompany':
-                    this.submitUrl='/globalmate/rest/need/accompany/add'
+                    this.submitUrl='/globalmate/rest/need/accompany/add';
                     break;
                case 'carryAssist':
-                    this.submitUrl='/globalmate/rest/need/carry/add'
+                    this.submitUrl='/globalmate/rest/need/carry/add';
                     break;
                case 'learnco':
-                    this.submitUrl='/globalmate/rest/need/learnco/add'
+                    this.submitUrl='/globalmate/rest/need/learnco/add';
                     break;
                case 'other':
                     this.submitUrl='/globalmate/rest/need/carry/add';
@@ -184,21 +184,41 @@ export default {
             let _this=this;
             if(!item.type){
                 if(item.key==='date'){
-                    if(!this.calendar){
-                        this.calendar = new datePicker();
-                        this.calendar.init({
-                        	'trigger': '#arrive', /*按钮选择器，用于触发弹出插件*/
-                        	'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
-                        	'minDate':'1900-1-1',/*最小日期*/
-                        	'maxDate':'2100-12-31',/*最大日期*/
-                        	'onSubmit':function(){/*确认时触发事件*/
-                        		var theSelectData=this.value;
-                                _this.selectCallBack(theSelectData,item);
-                        	},
-                        	'onClose':function(){/*取消时触发事件*/
-                        	}
-                        })
+                    console.log(item)
+                  if(item.componentKey==='endTime'){
+                    if(!this.calendar1){
+                      this.calendar1 = new datePicker();
+                      this.calendar1.init({
+                        'trigger': '#'+item.componentKey, /*按钮选择器，用于触发弹出插件*/
+                        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+                        'minDate':'1900-1-1',/*最小日期*/
+                        'maxDate':'2100-12-31',/*最大日期*/
+                        'onSubmit':function(){/*确认时触发事件*/
+                          var theSelectData=this.value;
+                          _this.selectCallBack(theSelectData,item);
+                        },
+                        'onClose':function(){/*取消时触发事件*/
+                        }
+                      })
                     }
+                  }else{
+                    if(!this.calendar){
+                      this.calendar = new datePicker();
+                      this.calendar.init({
+                        'trigger': '#'+item.componentKey, /*按钮选择器，用于触发弹出插件*/
+                        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+                        'minDate':'1900-1-1',/*最小日期*/
+                        'maxDate':'2100-12-31',/*最大日期*/
+                        'onSubmit':function(){/*确认时触发事件*/
+                          var theSelectData=this.value;
+                          _this.selectCallBack(theSelectData,item);
+                        },
+                        'onClose':function(){/*取消时触发事件*/
+                        }
+                      })
+                    }
+                  }
+
 
                 }else{
                    this.show=true;
@@ -606,6 +626,7 @@ export default {
         }
     },
     created(){
+        this.listRepeatProcess();
         setTimeout(()=>{
            this.initUploader();
        },1000);

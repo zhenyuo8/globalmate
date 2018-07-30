@@ -310,11 +310,11 @@
     <div class="mineInformation_line">
 
     </div>
-    <div class="mineInformation_history_action">
-        <div class="" v-for="(item,index) in historyAction">
-            <ActionList :historyActionItem="item"></ActionList>
-        </div>
-    </div>
+    <!--<div class="mineInformation_history_action">-->
+        <!--<div class="" v-for="(item,index) in historyAction">-->
+            <!--<ActionList :historyActionItem="item"></ActionList>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
 
 </template>
@@ -384,11 +384,10 @@ export default {
     methods:{
         goEditMineInfo(){
             this.$router.push({
-                path: 'mineInformationEdit',
+                path: 'personalFile',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
+                    'token': this.token,
+                    'title': '个人资料',
                 }
             });
         },

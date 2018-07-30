@@ -75,11 +75,11 @@
         </div>
         <div class="buttom_action">
             <ul>
-                <li class="need_help">寻求帮助</li>
+                <li class="need_help" @click="seekHelp">寻求帮助</li>
                 <li @click='offer'>提供帮助</li>
             </ul>
         </div>
-        <tips :showTipsText='showTipsText'></tips>
+        <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
     </div>
 </template>
 
@@ -196,19 +196,23 @@
             publish(item){
                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
-                    // alert('请先登入')
-                    // return;
+                    this.showTipsText='请先登入...';
+                    setTimeout(()=>{
+                        this.showTipsText='';
+                    },1500);
+                }else {
+                    this.$router.push({
+                        path: item.type,
+                        query: {
+                            'token': this.token,
+                            'title': item.title,
+                            'type': item.type,
+                            'form': item.form,
+                            'key':item.key
+                        }
+                    });
                 }
-                this.$router.push({
-                    path: item.type,
-                    query: {
-                        'token': this.token,
-                        'title': item.title,
-                        'type': item.type,
-                        'form': item.form,
-                        'key':item.key
-                    }
-                });
+
             },
             showPersonalInf(){
                 this.showPersonal=!this.showPersonal;
@@ -216,18 +220,20 @@
             goPersonalCenter(){
                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token){
-                    alert('请先登入..')
-                    // this.showTipsText='请先登入...';
-                    return
+                    this.showTipsText='请先登入...';
+                    setTimeout(()=>{
+                        this.showTipsText='';
+                    },1500);
+                }else{
+                    this.showPersonal=!this.showPersonal;
+                    this.$router.push({
+                        path: 'mine',
+                        query: {
+                          'token': this.token,
+                          'title': '个人中心',
+                        }
+                    });
                 }
-                this.showPersonal=!this.showPersonal;
-                this.$router.push({
-                    path: 'mine',
-                    query: {
-                        'token': this.token,
-                        'title': '个人中心',
-                    }
-                });
             },
             login(){
                 this.showPersonal=!this.showPersonal;
@@ -239,9 +245,7 @@
                 });
             },
             register(){
-                this.token=window.localStorage.getItem('TOKEN');
                 this.showPersonal=!this.showPersonal;
-                if(!this.token) return
                 this.$router.push({
                     path: 'register',
                     query: {
@@ -251,47 +255,83 @@
             },
             offer(){
                 this.token=window.localStorage.getItem('TOKEN');
-                 if(!this.token) return
-                this.$router.push({
-                    path: 'seekHelpList',
-                    query: {
-                        'token':this.token,
-                        'title': '求助列表',
-                    }
-                });
+                 if(!this.token) {
+                     this.showTipsText='请先登入...';
+                     setTimeout(()=>{
+                       this.showTipsText='';
+                     },1500);
+                 }else{
+                     this.$router.push({
+                         path: 'seekHelpList',
+                         query: {
+                           'token':this.token,
+                           'title': '求助列表',
+                         }
+                     });
+                 }
+            },
+            seekHelp(){
+                if(!this.token) {
+                    this.showTipsText='请先登入...';
+                    setTimeout(()=>{
+                      this.showTipsText='';
+                    },1500);
+                }else{
+                    this.$router.push({
+                        path: 'myAssist',
+                        query: {
+                          'token':this.token,
+                          'title': '求助列表',
+                        }
+                    });
+                }
             },
             toSOS(){
-                this.token=window.localStorage.getItem('TOKEN');
+              if(!this.token) {
+                this.showTipsText='请先登入...';
+                setTimeout(()=>{
+                  this.showTipsText='';
+                },1500);
+              }else{
                 this.$router.push({
-                    path: 'myAssist',
-                    query: {
-                        'token':this.token,
-                        'title': 'SOS',
-                    }
+                  path: 'myAssist',
+                  query: {
+                    'token':this.token,
+                    'title': 'SOS',
+                  }
                 });
+              }
             },
             toMessage(){
                 alert('消息列表')
             },
             goRankAll(key){
-                this.$router.push({
-                    path: 'rankAll',
-                    query: {
-                        'token': this.token,
-                        'title': '榜单',
-                        'type': key,
-                    }
-                });
-            }
+                this.token=window.localStorage.getItem('TOKEN');
+                if(!this.token) {
+                    this.showTipsText='请先登入...';
+                    setTimeout(()=>{
+                        this.showTipsText='';
+                    },1500);
+                }else{
+                    this.$router.push({
+                        path: 'rankAll',
+                        query: {
+                          'token': this.token,
+                          'title': '榜单',
+                          'type': key,
+                        }
+                    });
+                }
+            },
 		},
         activated(){
             this.token=window.localStorage.getItem('TOKEN');
+            if(this.token){
+            }
         },
 
         created(){
             window.localStorage.removeItem('TOKEN');
-            console.log(plupload);
-           
             let _this=this;
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
@@ -358,7 +398,6 @@
     }
     .sos i{
         padding: 1px;
-        font-weight: 500;
         color: red;
         font-weight: 600;
         font-size: 16px;
@@ -565,6 +604,11 @@
      .school_star{
          margin-bottom: 46px;
      }
+     .school_star ul li a, .service_star ul li a{
+       width: 1.4rem;
+       height: 1.4rem;
+     }
+
      .buttom_action{
          position: fixed;
          bottom: -1px;
