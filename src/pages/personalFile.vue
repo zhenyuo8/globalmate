@@ -29,9 +29,15 @@
 			</div>
         </form>
 		<div class="personalFile_school">
-			<div class="personalFile_school_add">
+			<div class="personalFile_school_add" @click='fillEducation'>
+                <ul>
+                    <li v-for="(item,index) in educationValue" @click='showEducationDetail(item)'>
+                        <span class="fl">{{item.schoolname}}</span>
+                        <span class="fr icon-arrow_right_samll">{{item.schooldate}}</span>
+                    </li>
+                </ul>
 				<!-- <span style="font-size:20px;">+</span> -->
-				<span> + 教育经历</span>
+				<span style="color:#26a2ff"> + 教育经历</span>
 			</div>
 		</div>
 		<div class="personalFile_hobby">
@@ -60,24 +66,27 @@
 				<span class="confirm" @click='confirm'>确定</span>
 			</div>
 		</div>
-		<div class="fillin_education">
+		<div class="fillin_education" :class="educationFlag?'education_in':'education_out'" @click="hideThisModule($event)">
 			<form class="" action="" method="post" onsubmit='return false'>
 				<p>
 					<label for="schoolsignup" class="schoolname" data-icon="u">学校名称</label>&nbsp:&nbsp&nbsp
-					<input id="schoolsignup" name="schoolsignup" required="required" type="text" placeholder="" />
+					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p>
 					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
-					<input id="schooldatesignup" name="schooldatesignup" required="required" type="text" placeholder="" />
+					<input id="schooldatesignup" name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' @click='choseSchoolDate'/>
 				</p>
 				<p>
 					<label for="schoolprofessionalsignup" class="professional" data-icon="u">所在专业</label>&nbsp:&nbsp&nbsp
-					<input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" placeholder="" />
+					<input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p>
 					<label for="schoolgradesignup" class="grade" data-icon="u">所在班级</label>&nbsp:&nbsp&nbsp
-					<input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text" placeholder="" />
+					<input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
+                <p class="confirm_add" v-if="!showEducationValue">
+                    <input type="button" value="确定" @click='addOneEducation()' />
+                </p>
 			</form>
 		</div>
     </div>
@@ -93,7 +102,11 @@ export default {
             type_list:[],
             hasSelect_list:[],
             selectHelpTypeValue:'',
-            headerImgae:''
+            headerImgae:'',
+            educationFlag:false,
+            educationValue:[],
+            showEducationValue:false
+
         }
     },
 	methods:{
@@ -137,27 +150,77 @@ export default {
 			this.selectHelpTypeValue=this.type_list.join('、');
 			this.selectFlag=false;
 		},
+        fillEducation(){
+            this.educationFlag=true;
+        },
+        addOneEducation(){
+            this.educationFlag=false;
+            let education={
+                'schoolname':this.$el.querySelector('#schoolsignup').value,
+                'schooldate':this.$el.querySelector('#schooldatesignup').value,
+                'professional':this.$el.querySelector('#schoolprofessionalsignup').value,
+                'grade':this.$el.querySelector('#schoolgradesignup').value,
+            }
+            this.$el.querySelector('#schoolsignup').value='';
+            this.$el.querySelector('#schooldatesignup').value='';
+            this.$el.querySelector('#schoolprofessionalsignup').value='';
+            this.$el.querySelector('#schoolgradesignup').value='';
+            this.educationValue.push(education);
+        },
+        hideThisModule(e){
+            if(e.target.className.indexOf('fillin_education')>-1){
+                this.educationFlag=false;
+                this.showEducationValue=false;
+                this.$el.querySelector('#schoolsignup').value='';
+                this.$el.querySelector('#schooldatesignup').value='';
+                this.$el.querySelector('#schoolprofessionalsignup').value='';
+                this.$el.querySelector('#schoolgradesignup').value='';
+            }
+        },
+        showEducationDetail(item){
+            this.showEducationValue=item;
+            this.$el.querySelector('#schoolsignup').value=item.schoolname;
+            this.$el.querySelector('#schooldatesignup').value=item.schooldate;
+            this.$el.querySelector('#schoolprofessionalsignup').value=item.professional;
+            this.$el.querySelector('#schoolgradesignup').value=item.grade;
+        },
+        choseSchoolDate(){
+            if(!this.calendar2&&!this.showEducationValue){
+              this.calendar2 = new datePicker();
+              this.calendar2.init({
+                'trigger': '#schooldatesignup', /*按钮选择器，用于触发弹出插件*/
+                'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
+                'minDate':'1900-1-1',/*最小日期*/
+                'maxDate':'2100-12-31',/*最大日期*/
+                'onSubmit':function(){/*确认时触发事件*/
+                  var theSelectData=this.value;
+                },
+                'onClose':function(){/*取消时触发事件*/
+                }
+              })
+            }
+        },
 		submit(){
-      this.apiHost=CONFIG[__ENV__].apiHost;
-			let postData={
-				name:'',
-				nikename:'',
-				country:'',
-				city:'',
-				pic:'',
-				school:'',
-				hobby:'',
-				helpAvailable:''
-			};
+            this.apiHost=CONFIG[__ENV__].apiHost;
+    	    let postData={
+                name:'',
+                nikename:'',
+                country:'',
+                city:'',
+                pic:'',
+                school:'',
+                hobby:'',
+                helpAvailable:''
+            };
 			postData.nickname=this.$el.querySelector('#nicknamesignup').value;
 			postData.name=this.$el.querySelector('#truenamesignup').value;
 			postData.country=this.$el.querySelector('#countrysignup').value;
 			postData.city=this.$el.querySelector('#citysignup').value;
 			postData.hobby=this.$el.querySelector('#hobbysignup').value;
+			postData.school=JSON.stringify(this.educationValue);
 			postData.helpAvailable=this.type_list.join(',');
 			postData.pic=this.headerImgae||'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg';
 			this.axios.post(this.apiHost+'/globalmate/rest/user/update'+'?token='+this.$route.query.token,postData).then((res)=>{
-      console.log(res);
       }).catch((e)=>{
 
       })
@@ -297,16 +360,27 @@ export default {
 		margin-top: 10px;
 		height: auto;
 		background: #fff;
-		height: 36px;
+		/*height: 36px;*/
 		line-height: 36px;
 	}
 	.personalFile_school_add{
-		width: 80%;
+		width: 90%;
 		margin: auto;
 	}
-	.personalFile_school_add span{
-		color: #26a2ff;
-	}
+    .personalFile_school_add ul li{
+        position: relative;
+        height: 36px;
+        color: #333;
+        border-bottom: 1px solid #eee;
+
+    }
+    .icon-arrow_right_samll{
+        line-height: 36px;
+    }
+    .icon-arrow_right_samll::before{
+        float: right;
+        color: #54698D;
+    }
 	.personalFile_hobby{
 		margin-top: 10px;
 		height: auto;
@@ -381,6 +455,64 @@ export default {
         transition: all .3s ease-in;
 		background: #fff;
 	}
+    .education_out{
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 100%;
+		-webkit-transition: all .2s ease-out;
+        -moz-transition: all .2s ease-out;
+       	transition: all .2s ease-out;
+	}
+	.education_in{
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		top: 0;
+		-webkit-transition: all .3s ease-in;
+        -moz-transition: all .3s ease-in;
+        transition: all .3s ease-in;
+		background: rgba(153,153,153,0.8);
+	}
+    .icon-arrow_right_samll::before{
+        font-size: 24px;
+
+    }
+    .fillin_education form p{
+        height: 36px;
+        line-height: 36px;
+        margin-top: 10px;
+    }
+    .fillin_education form p:last-child{
+
+        margin-bottom: 10px;
+    }
+    .fillin_education form p input{
+        height: 36px;
+        line-height: 36px;
+        box-sizing: border-box;
+        border: 1px solid #eee;
+        padding: 0 10px;
+    }
+    .fillin_education form{
+        width: 90%;
+        background: #fff;
+        /*margin: auto;*/
+        position: absolute;
+        top: 30%;
+        left: 5%;
+        border-radius: 6px;
+    }
+    .confirm_add input{
+        width: 87%;
+        background: #26a2ff;
+        color: #fff;
+        border: none;
+        font-size: 16px;
+        border-radius: 5px;
+    }
 	.list_ul{
 		padding: 0 0.2rem;
 	}

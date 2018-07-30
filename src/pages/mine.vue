@@ -215,6 +215,16 @@ export default {
                         }
                     });
                     break;
+                case 'sos':
+                    this.$router.push({
+                        path: 'myAssist',
+                        query: {
+                            'token': this.token,
+                            'title': 'SOS',
+                            'id': 'sos',
+                        }
+                    });
+                    break;
                 default:
 
             }
