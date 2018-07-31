@@ -95,7 +95,7 @@
     <div class="mine_body">
         <div class="mine_detail">
             <div class="mine_image" @click='toMineInformation'>
-                <img :src="userInfo.pic" alt="">
+                <img src="../assets/images/icon.png" alt="">
             </div>
             <div class="mine_information" @click='toMineInformation'>
                 <div class="mine_top">
@@ -260,7 +260,7 @@ export default {
                     this.userInfo.username=data.nikename;
                     this.userInfo.country=data.country;
                     this.userInfo.call=data.enable;
-                    this.userInfo.pic=data.pic||'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg';
+                    this.userInfo.pic=data.pic||'../assets/images/icon.png';
                 }
 
             }).catch((e)=>{

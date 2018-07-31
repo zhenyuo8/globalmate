@@ -2,7 +2,7 @@
     <div class="evaluate" id='evaluate'>
 		<div class="top">
 			<div class="top_img">
-				<img src="../assets/images/3.jpg" alt="">
+				<img src="../assets/images/icon.png" alt="">
 			</div>
 			<div class="evaluate_score">
 				<div class="evaluate_title">

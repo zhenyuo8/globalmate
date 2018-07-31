@@ -22,7 +22,7 @@
 			</div>
 			<div class="image">
 				<div class="" id="uploader_header">
-					<img class="icon-user image_span" src='../assets/images/2.jpeg' />
+					<img class="icon-user image_span" src='../assets/images/icon.png' />
 					<!-- <span class="icon-user image_span"></span> -->
 					<button type="button" name="button">上传头像</button>
 				</div>
@@ -48,7 +48,7 @@
 			</p>
 			<p id=''>
 				<label for="">愿意提供的帮助:</label>
-				<input type="text" name="" :value="selectHelpTypeValue" placeholder='请选择' readonly='readonly' @click='selectHelpType' style='text-align:center'>
+				<input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' @click='selectHelpType' style='text-align:center'>
 			</p>
 		</div>
 		<div class="submitbtn" @click='submit'>
@@ -306,6 +306,28 @@ export default {
               if(res.data.success){
                   let data=res.data.data;
                   this.userId=data.id;
+                  if(data.school){
+                      this.educationValue=JSON.parse(data.school)
+                  }
+                  if(data.name){
+                      this.$el.querySelector('#truenamesignup').value=data.name;
+                  }
+                  if(data.country){
+                      this.$el.querySelector('#countrysignup').value=data.country;
+                  }
+                  if(data.city){
+                      this.$el.querySelector('#citysignup').value=data.city;
+                  }
+                  if(data.nickname){
+                      this.$el.querySelector('#nicknamesignup').value=data.nickname;
+                  }
+                  if(data.hobby){
+                      this.$el.querySelector('#hobbysignup').value=data.hobby;
+                  }
+                  if(data.helpAvailable){
+                      this.selectHelpTypeValue=data.helpAvailable;
+                  }
+
               }
 
           }).catch((e)=>{

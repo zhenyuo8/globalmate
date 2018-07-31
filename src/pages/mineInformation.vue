@@ -38,6 +38,7 @@
     left: 0.68rem;
     top: -30px;
     z-index: 12;
+    background: #fff;
     border-radius: 50%;
     border: 1px solid rgba(151, 151, 151, 1);
 }
@@ -216,12 +217,13 @@
         <Header :hearderParas='hearderParas'></Header>
     </div> -->
     <div class="mineInformation_user_image">
-        <img src="../assets/images/secondimage.jpg" alt="">
+        <!-- <span class="icon-image_default"></span> -->
+        <img src="../assets/images/stanfu.jpeg" alt="">
     </div>
     <div class="mineInformation_info">
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
-                <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg" alt="">
+                <img src="../assets/images/icon.png" alt="">
             </div>
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
@@ -293,12 +295,8 @@
                 别人眼中的我
             </div>
             <div class="mineInformation_comment_content">
-                <span class="">诚实</span>
-                <span>守时，靠谱</span>
-                <span>年轻思维活跃</span>
-                <span>家有萌娃</span>
-                <span>实力派+偶像派</span>
-                <span>坑货</span>
+                <p v-if="tipInOther.length==0">暂无评价</p>
+                <span v-for='item in tipInOther'>{{item}}</span>
             </div>
         </div>
     </div>
@@ -378,7 +376,8 @@ export default {
                         'rewardContent':'悬赏内容'
                     }
                 }
-            ]
+            ],
+            tipInOther:[]
         }
     },
     methods:{
