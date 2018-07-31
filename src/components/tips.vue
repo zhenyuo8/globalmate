@@ -42,19 +42,20 @@
 	    left: 0;
 	    right: 0;
 	    bottom: 0;
-	    background: rgba(153,153,153,0.2);
+	    /*background: rgba(153,153,153,0.2);*/
 	}
 	.tips i{
 		max-width: 5.4rem;
-	    font-size: 16px;
+	    font-size: 14px;
 		line-height: 32px;
 		padding: 8px .4rem;
 		border-radius: 6px;
-	    color: #333;
+        font-weight: 600;
+	    color: #fff;
 		max-height: 120px;
 	    display: inline-block;
 	    margin: 70% auto;
-	    background: #fff;
+	    background: rgba(0,0,0,0.6);
 		overflow: hidden;
 		overflow-y: auto;
 	}
