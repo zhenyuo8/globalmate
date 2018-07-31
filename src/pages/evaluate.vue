@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import CONFIG from '../config/config.js'
 	export default {
 		components:{
 
@@ -45,8 +46,26 @@
 				}
 			},
 			evaluateSubmit(){
-				console.log(this.textareaVal);
-				console.log(this.score);
+                let postData={
+                    uEvaluatorId:'',
+                    uEvluatorName:'',
+                    uTargeterId:'',
+                    uTargeterName:'',
+                    needId:'',
+                    score:this.score%2,
+                    content:this.textareaVal||'',
+                    evaExt1:'',
+                    evaExt2:'',
+                    evaExt1:''
+                }
+                this.apiHost=CONFIG[__ENV__].apiHost;
+				this.axios.post(this.apiHost+'/globalmate/rest/evaluate/add',postData).then((res)=>{
+                    if(res.data.success){
+
+                    }
+                }).catch((e)=>{
+                  console.log(e);
+                })
 			}
 		},
 		created(){

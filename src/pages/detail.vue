@@ -23,6 +23,7 @@
 
 .detail_first .detail_first_left {
     text-align: left;
+    flex: 2
 }
 
 .detail_first_left img {
@@ -56,7 +57,8 @@
 
 
 .detail_content{
-    height: 250px;
+    min-height: 80px;
+    /*height: 250px;*/
     padding: 0 0.36rem;
 }
 .detail_content_title{
@@ -80,6 +82,12 @@
 }
 .detail_image > div{
     margin-top: 9px;
+}
+.detail_message{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 .detail_image > div > img{
     width: 100%;
@@ -157,16 +165,16 @@
     <div class="detail_first">
         <div class="detail_first_left">
             <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg" alt="" class="bottom_left_userimage">
-            <span class="bottom_left_username">圈圈*</span>
-            <span class="bottom_left_time">2018-09-99</span>
+            <span class="bottom_left_username">{{detail.userName}}</span>
+            <span class="bottom_left_time">{{timestampToTime(detail.createTime)}}</span>
         </div>
         <div class="detail_first_right">
-            来自 火星
+            来自 {{country}}
         </div>
     </div>
     <div class="detail_second">
         <span class="detail_second_left">
-            !!! 我是标题
+            {{detail.title}}
         </span>
         <span class="detail_second_right">
             帮代 icon
@@ -177,21 +185,18 @@
             悬赏内容
         </div>
         <div class="detail_content_text">
-            <p>司法岛事件结束后，在七水之都休整完的草帽一伙即将出航，大家都在等待乌索普的归队，路飞甚至焦躁不安地要主动去接乌索普，但索隆阻止了他，因为他认为船员擅自离开而又随便归队的话对团队来说是不能接受的。最后，在索隆的坚持下，大家没有去接乌索普，而是登上新船阳光万里号起航。就在船离岸、船上的人望眼欲穿的时候，乌索普终于出现了，他流着泪道歉并表示想归队，这个时候索隆和大家都笑了，而路飞则一把鼻涕一把泪地把手伸得老长，把乌索普一把拉了上船。司法岛事件结束后，在七水之都休整完的草帽一伙即将出航，大家都在等待乌索普的归队，路飞甚至焦躁不安地要主动去接乌索普，但索隆阻止了他，因为他认为船员擅自离开而又随便归队的话对团队来说是不能接受的。最后，在索隆的坚持下，大家没有去接乌索普，而是登上新船阳光万里号起航。就在船离岸、船上的人望眼欲穿的时候，乌索普终于出现了，他流着泪道歉并表示想归队，这个时候索隆和大家都笑了，而路飞则一把鼻涕一把泪地把手伸得老长，把乌索普一把拉了上船。司法岛事件结束后，在七水之都休整完的草帽一伙即将出航，大家都在等待乌索普的归队，路飞甚至焦躁不安地要主动去接乌索普，但索隆阻止了他，因为他认为船员擅自离开而又随便归队的话对团队来说是不能接受的。最后，在索隆的坚持下，大家没有去接乌索普，而是登上新船阳光万里号起航。就在船离岸、船上的人望眼欲穿的时候，乌索普终于出现了，他流着泪道歉并表示想归队，这个时候索隆和大家都笑了，而路飞则一把鼻涕一把泪地把手伸得老长，把乌索普一把拉了上船。</p>
+            <p>
+                {{detail.description}}
+            </p>
         </div>
     </div>
     <div class="detail_image">
         <div class="">
-            <img src="../assets/images/1.jpeg" alt="">
+
         </div>
-        <div class="">
-            <img src="../assets/images/2.jpeg" alt="">
-        </div>
-        <div class="">
-            <img src="../assets/images/3.jpg" alt="">
-        </div>
+
     </div>
-    <div class="detail_list">
+    <!-- <div class="detail_list">
         <div class="detail_list_repeat">
             <div class="detail_list_image">
                 <div class="">
@@ -237,8 +242,8 @@
                 ¥ 777
             </div>
         </div>
-    </div>
-    <div class="detail_message">
+    </div> -->
+    <div class="detail_message" v-if="id===userId">
         <div class="detail_message_leave">
             留言
         </div>
@@ -251,7 +256,7 @@
 </template>
 
 <script>
-
+import CONFIG from '../config/config.js'
 export default {
     'name': 'detail',
     components: {
@@ -259,10 +264,62 @@ export default {
     },
     data() {
         return {
-
+            id:'',
+            userId:'',
+            detailId:'',
+            show:false,
+            country:'',
+            detail:{
+                'title':'',
+                'description':''
+            }
         }
     },
+    activated(){
+        this.id=this.$route.query.id;
+        this.apiHost=CONFIG[__ENV__].apiHost;
+        this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+
+        }).then((res)=>{
+            if(res.data.success){
+                let data=res.data.data;
+                this.userId=data.id;
+                this.country=data.country;
+                this.loadData();
+            }
+
+        }).catch((e)=>{
+            console.log(e);
+        })
+
+    },
     methods:{
+        loadData(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+                onlyCurrentUser:true
+            }).then((res)=>{
+                if(res.data.success){
+                     let data=res.data.data;
+                     this.detail=data;
+                     setTimeout(()=>{
+                         this.show=true;
+                     },500)
+                     for(var key in data.conceretNeed){
+                         this.detail[key]=data.conceretNeed[key]
+                     }
+                     for(var key in data.need){
+                         this.detail[key]=data.need[key]
+                     }
+                     this.detailId=data.need.id;
+
+                }else{
+
+                }
+            }).catch((e)=>{
+                console.log(e);
+            })
+        },
         goChart(){
             this.$router.push({
                 path: 'im',
@@ -270,7 +327,17 @@ export default {
                     'token': this.token,
                     'title': 'im',               }
             });
-        }
+        },
+        timestampToTime(time){
+            let date = new Date(time);
+            let Y = date.getFullYear() + '-';
+            let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            let D = date.getDate() + '';
+            let h = date.getHours() + ':';
+            let m = date.getMinutes() + ':';
+            let s = date.getSeconds();
+            return Y+M+D;
+        },
     }
 
 }

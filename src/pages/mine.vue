@@ -218,7 +218,7 @@ export default {
                     break;
                 case 'sos':
                     this.$router.push({
-                        path: 'myAssist',
+                        path: 'seekHelpList',
                         query: {
                             'token': this.token,
                             'title': 'SOS',

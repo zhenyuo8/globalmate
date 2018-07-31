@@ -105,7 +105,8 @@ export default {
             headerImgae:'',
             educationFlag:false,
             educationValue:[],
-            showEducationValue:false
+            showEducationValue:false,
+            userId:'',
 
         }
     },
@@ -210,7 +211,8 @@ export default {
                 pic:'',
                 school:'',
                 hobby:'',
-                helpAvailable:''
+                helpAvailable:'',
+                id:this.userId
             };
 			postData.nickname=this.$el.querySelector('#nicknamesignup').value;
 			postData.name=this.$el.querySelector('#truenamesignup').value;
@@ -219,11 +221,14 @@ export default {
 			postData.hobby=this.$el.querySelector('#hobbysignup').value;
 			postData.school=JSON.stringify(this.educationValue);
 			postData.helpAvailable=this.type_list.join(',');
-			postData.pic=this.headerImgae||'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg';
-			this.axios.post(this.apiHost+'/globalmate/rest/user/update'+'?token='+this.$route.query.token,postData).then((res)=>{
-      }).catch((e)=>{
+			postData.pic=this.headerImgae||'';
+			this.axios.put(this.apiHost+'/globalmate/rest/user/update/'+'?token='+this.$route.query.token,postData).then((res)=>{
+                if(res.data.success){
+                    window.history.back(-1);
+                }
+              }).catch((e)=>{
 
-      })
+              })
 
 		},
 		initUploader(){
@@ -292,6 +297,20 @@ export default {
 	},
     components:{
 
+    },
+    activated(){
+          this.apiHost=CONFIG[__ENV__].apiHost;
+          this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+
+          }).then((res)=>{
+              if(res.data.success){
+                  let data=res.data.data;
+                  this.userId=data.id;
+              }
+
+          }).catch((e)=>{
+              console.log(e);
+          })
     },
 	created(){
 		this.selectFlag=false;

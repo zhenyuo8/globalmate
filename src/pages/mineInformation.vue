@@ -225,8 +225,8 @@
             </div>
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
-                    <span class="mineInformation_username">圈圈</span>
-                    <span class="mineInformation_call">好人值 101</span>
+                    <span class="mineInformation_username">{{information.nikename||information.name}}</span>
+                    <span class="mineInformation_call">好人值 0</span>
                     <img src="../assets/images/mine-identify.jpg" alt="">
                 </div>
             </div>
@@ -234,15 +234,15 @@
         <div class="mineInformation_interaction">
             <div class="mineInformation_interaction_sub">
                 <div class="mineInformation_foucs">
-                    <span class="mineInformation_foucs_amount">123</span>
+                    <span class="mineInformation_foucs_amount">0</span>
                     <span class="mineInformation_foucs_text">关注</span>
                 </div>
                 <div class="mineInformation_fans">
-                    <span class="mineInformation_fans_amount">9999</span>
+                    <span class="mineInformation_fans_amount">0</span>
                     <span class="mineInformation_fans_text">粉丝</span>
                 </div>
                 <div class="mineInformation_praise">
-                    <span class="mineInformation_praise_amount">87988</span>
+                    <span class="mineInformation_praise_amount">0</span>
                     <span class="mineInformation_praise_text">赞</span>
                 </div>
             </div>
@@ -253,8 +253,8 @@
                 <span class="icon-chat">联系她/他</span>
             </div> -->
         </div>
-        <div class="mineInformation_recommend">
-            <p>Facebook（脸书）是美国的一个社交网络服务网站 ，创立于2004年2月4日，总部位于美国加利福尼亚州帕拉阿图，2012年3月6日发布Windows版桌面聊天软件Facebook Messenger</p>
+        <div class="mineInformation_recommend" v-if="information.decription">
+            <p></p>
         </div>
         <div class="mineInformation_line">
 
@@ -264,18 +264,13 @@
                 我的圈子
             </div>
             <div class="mineInformation_school_content">
-                <div class="mineInformation_school_content_repeat">
-                    <span class="scholl_name">南开大学</span>
-                    <span class="scholl_time">2006-09-01</span>
-                    <span class="scholl_professional">中文历史</span>
-                    <span class="scholl_grade">1</span>
+                <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
+                    <span class="scholl_name">{{item.schoolname}}</span>
+                    <span class="scholl_time">{{item.schooldate}}</span>
+                    <span class="scholl_professional">{{item.professional}}</span>
+                    <span class="scholl_grade">{{item.grade}}</span>
                 </div>
-                <div class="mineInformation_school_content_repeat">
-                    <span class="scholl_name">临川中学</span>
-                    <span class="scholl_time">2003-09-01</span>
-                    <span class="scholl_professional">高中理科</span>
-                    <span class="scholl_grade">1</span>
-                </div>
+
             </div>
         </div>
         <div class="mineInformation_hobby">
@@ -285,11 +280,11 @@
             <div class="mineInformation_hobby_content">
                 <div class="mineInformation_hobby_love">
                     <span class="title">兴趣爱好 ：</span>
-                    <span class="content">喜欢打篮球，游泳</span>
+                    <span class="content">{{hobby}}</span>
                 </div>
                 <div class="mineInformation_hobby_offer">
                     <span class="title">愿意提供的帮助 ：</span>
-                    <span class="content">帮带／陪伴</span>
+                    <span class="content">{{helpAvailable}}</span>
                 </div>
             </div>
         </div>
@@ -324,6 +319,7 @@
 import Header from '../components/header.vue'
 import List from '../components/list.vue'
 import ActionList from '../components/actionList.vue'
+import CONFIG from '../config/config'
 export default {
     'name': 'mine',
     data() {
@@ -351,6 +347,10 @@ export default {
                     icon: '../assets/logo.png'
                 }
             },
+            school:[],
+            hobby:'',
+            helpAvailable:'',
+            information:{},
             historyAction:[
                 {
                     'time':'今天',
@@ -386,7 +386,7 @@ export default {
             this.$router.push({
                 path: 'personalFile',
                 query: {
-                    'token': this.token,
+                    'token': this.$route.query.token,
                     'title': '个人资料',
                 }
             });
@@ -395,12 +395,34 @@ export default {
             this.$router.push({
                 path: 'im',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
+                    'token': this.$route.query.token,
+                    'title': 'im',
+                    'id': 'im',
                 }
             });
+        },
+        loadInfo(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+
+            }).then((res)=>{
+                if(res.data.success){
+                    let data=res.data.data;
+                    this.information=data;
+                    this.userId=data.id;
+                    this.hobby=data.hobby;
+                    this.helpAvailable=data.helpAvailable;
+                    this.school=JSON.parse(data.school);
+                    console.log(this.school);
+                }
+
+            }).catch((e)=>{
+                console.log(e);
+            })
         }
+    },
+    activated(){
+        this.loadInfo()
     },
     components: {
         Header,

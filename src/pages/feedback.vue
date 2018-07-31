@@ -6,11 +6,12 @@
 		<div class="middle">
 			<textarea  placeholder='请输入您的宝贵意见' v-model='textareaVal'></textarea>
 		</div>
-		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>提交</button>
+		<button type="submit" name="button" class="evaluate_submit" @click='feedbackClick'>提交</button>
     </div>
 </template>
 
 <script>
+import CONFIG from '../config/config.js'
 	export default {
 		components:{
 
@@ -22,8 +23,27 @@
 		},
 		methods:{
 
-			evaluateSubmit(){
-				console.log(this.textareaVal);
+			feedbackClick(){
+				this.apiHost=CONFIG[__ENV__].apiHost;
+        	    let postData={
+                    uEvaluatorId:'',
+                    uEvluatorName:'',
+                    uTargeterId:'',
+                    uTargeterName:'',
+                    needId:'',
+                    score:'',
+                    content:this.textareaVal,
+                    evaExt1:'',
+                    evaExt2:''
+                };
+
+    			this.axios.put(this.apiHost+'/globalmate/rest/evaluate/add/sys'+'?token='+this.$route.query.token,postData).then((res)=>{
+                    if(res.data.success){
+                        window.history.back(-1);
+                    }
+                  }).catch((e)=>{
+
+                  })
 
 			}
 		},

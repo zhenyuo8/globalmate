@@ -124,7 +124,7 @@ input {
         </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-         <input type="text" :disabled='itemRepeat.componentKey==="rewardAmount"&& !value' name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
+         <input :type="itemRepeat.componentKey==='rewardAmount'?'number':'text'" :disabled='itemRepeat.componentKey==="rewardAmount"&& !value' name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
     </div>
 </div>
 

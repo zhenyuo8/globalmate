@@ -244,7 +244,7 @@ export default {
 		}
     },
     created(){
-		this.init();
+		// this.init();
     }
 }
 </script>

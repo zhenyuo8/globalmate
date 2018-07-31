@@ -141,3 +141,34 @@
     color: #fff;
     background: #007aff;
 }
+
+.yy_nodata_class{
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    position: fixed;
+    top: 46px;
+    left: 0;
+    right: 0;
+    bottom: 46px;
+    background: #fff;
+    .yy_icon_img{
+        position: absolute;
+        width: 80px;height: 80px;margin:auto;
+        top: 35%;
+        left: 0;
+        right: 0;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .yy_nodata_text{
+        width: 80px;
+        margin-top: 10px;
+        display: inline-block;
+        max-height: 200px;
+        overflow: hidden;
+        overflow-y: auto;
+    }
+}

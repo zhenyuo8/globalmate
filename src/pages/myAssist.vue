@@ -1,6 +1,39 @@
 <style scoped>
 @import '../assets/css/list.css';
 </style>
+<style media="screen" lang="less">
+    .yy_nodata_class{
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        .yy_icon_img{
+            position: absolute;
+            width: 80px;height: 80px;margin:auto;
+            top: 35%;
+            left: 0;
+            right: 0;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .yy_nodata_text{
+            width: 80px;
+            margin-top: 10px;
+            display: inline-block;
+            max-height: 200px;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+    }
+
+</style>
 
 <template>
 
@@ -31,7 +64,7 @@
                 <span @click='finished($event,item)'>完成</span>
             </div>
             <div class="comment">
-                <span>评价</span>
+                <span @click='evaluate($event,item)'>评价</span>
             </div>
         </div>
         <div class="bottom">
@@ -45,6 +78,12 @@
             </div>
         </div>
     </div>
+    <div v-if="nodataFlag" class="yy_nodata_class" style="">
+        <div class="yy_icon_img">
+            <img src="../assets/images/business_nodata.png" alt="">
+            <span class="yy_nodata_text">{{noDataTips}}</span>
+        </div>
+   </div>
 </div>
 
 </template>
@@ -63,7 +102,9 @@ export default {
               'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180050&di=0d2ee92eead284e8133d6df07535d75a&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads1%2Fsc%2Fjpgs%2F1512%2Fapic16988_sc115.com.jpg',
               'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg',
               'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
-            ]
+          ],
+          nodataFlag:false,
+          noDataTips:''
         }
     },
     methods:{
@@ -81,15 +122,25 @@ export default {
             })
 
         },
+        evaluate(e,item){
+            e.preventDefault();
+            e.cancelBubble=true;
+            this.$router.push({
+                path: 'evaluate',
+                query: {
+                    'token': this.token,
+                    'title': '评价',
+                    'id': 'evaluate',
+                }
+            });
+        },
         showDetail(item){
-            console.log(item);
-            return
             this.$router.push({
                 path: 'detail',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
+                    'token': this.$route.query.token,
+                    'title': item.conceretNeed.title,
+                    'id': item.need.id,
                 }
             });
         },
@@ -105,9 +156,12 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-
-            this.axios.get(this.apiHost+'/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
-                onlyCurrentUser:''
+            let url='/globalmate/rest/need/list'
+            if(this.$route.query.id==='solove'){
+                 url='/globalmate/rest//assist/listService'
+            }
+            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+                onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
@@ -119,7 +173,15 @@ export default {
                                 //  data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                              }
                              this.myAssistList.push(data[i])
+                            //  console.log(this.myAssistList);
                          }
+                     }
+                     if(this.myAssistList.length===0){
+
+                         setTimeout(()=>{
+                             this.nodataFlag=true;
+                         },500)
+                         this.noDataTips='暂无相关内容';
                      }
                 }else{
 
@@ -129,9 +191,15 @@ export default {
             })
         }
     },
-    created(){
-        this.loadData();
-    }
+   activated(){
+       this.myAssistList=[];
+       this.nodataFlag=false;
+       this.noDataTips='';
+       this.loadData();
+   },
+   created(){
+
+   }
 
 }
 

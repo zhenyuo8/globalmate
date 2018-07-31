@@ -4,7 +4,39 @@
     margin-top: 0
 }
 </style>
+<style media="screen" lang="less">
+    .yy_nodata_class{
+        text-align: center;
+        color: #999;
+        font-size: 13px;
+        position: fixed;
+        top: 46px;
+        left: 0;
+        right: 0;
+        bottom: 46px;
+        background: #fff;
+        .yy_icon_img{
+            position: absolute;
+            width: 80px;height: 80px;margin:auto;
+            top: 35%;
+            left: 0;
+            right: 0;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .yy_nodata_text{
+            width: 80px;
+            margin-top: 10px;
+            display: inline-block;
+            max-height: 200px;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+    }
 
+</style>
 <template>
 
 <div class="myAssist">
@@ -44,6 +76,12 @@
             </div>
         </div>
     </div>
+    <div v-if="nodataFlag" class="yy_nodata_class" style="">
+        <div class="yy_icon_img">
+            <img src="../assets/images/business_nodata.png" alt="">
+            <span class="yy_nodata_text">{{noDataTips}}</span>
+        </div>
+   </div>
 </div>
 
 </template>
@@ -65,7 +103,9 @@ export default {
               'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
           ],
           searchVal:'',
-          msg:false
+          msg:false,
+          nodataFlag:false,
+          noDataTips:''
 
         }
     },
@@ -113,7 +153,13 @@ export default {
         },
         getUserInfo(userId,callback){
           this.apiHost=CONFIG[__ENV__].apiHost;
-          this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'/?token='+this.$route.query.token,{}).then(res=>{
+          let url='';
+          if(this.$route.query.id==='sos'){
+              url='/globalmate/rest/assist/listSOS'
+          }else{
+              url='/globalmate/rest/user/list/'+userId
+          }
+          this.axios.get(this.apiHost+url+'/?token='+this.$route.query.token,{}).then(res=>{
               if(res.data&&res.data.success){
                   callback(res.data.data);
               }
@@ -149,7 +195,7 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/assist/listSOS'+'?token='+this.$route.query.token,{
                 onlyCurrentUser:''
             }).then((res)=>{
                 if(res.data.success){
@@ -160,6 +206,12 @@ export default {
                              data[i].conceretNeed.url=this.imagesList[i]
                              this.myAssistList.push(data[i])
                          }
+                     }
+                     if(this.myAssistList.length===0){
+                         setTimeout(()=>{
+                             this.nodataFlag=true;
+                         },500)
+                         this.noDataTips='暂无相关内容';
                      }
                 }else{
 

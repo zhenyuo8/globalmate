@@ -73,7 +73,7 @@
 			}
 		},
 		created(){
-
+            console.log(YYIMChat);
 		}
 	}
 </script>
