@@ -194,6 +194,7 @@ export default {
         },
         clickCallBack(item) {
             let type=item.mineType;
+            console.log(item);
             switch (type) {
                 case 'publish':
                     this.$router.push({
@@ -225,6 +226,16 @@ export default {
                         }
                     });
                     break;
+                 case "solove":
+                     this.$router.push({
+                         path: 'myAssist',
+                         query: {
+                             'token': this.token,
+                             'title': '我解决的',
+                             'id': 'solove',
+                         }
+                     });
+                     break;
                 default:
 
             }

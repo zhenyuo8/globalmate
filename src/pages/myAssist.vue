@@ -5,7 +5,7 @@
 <template>
 
 <div class="myAssist">
-    <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail'>
+    <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
         <div class="top">
             <span class="top_left">
                 {{item.conceretNeed.title}}
@@ -68,7 +68,7 @@ export default {
     },
     methods:{
         finished(e,item){
-            this.apiHost=CONFIG[__ENV__];
+            this.apiHost=CONFIG[__ENV__].apiHost;
             e.preventDefault();
             e.cancelBubble=true;
             this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
@@ -79,9 +79,11 @@ export default {
             }).catch(e=>{
                 console.log(e);
             })
-            console.log(item);
+
         },
-        showDetail(){
+        showDetail(item){
+            console.log(item);
+            return
             this.$router.push({
                 path: 'detail',
                 query: {
@@ -102,7 +104,9 @@ export default {
             return Y+M+D;
         },
         loadData(){
-            this.axios.get('http://10.4.111.31:9090/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
+            this.apiHost=CONFIG[__ENV__].apiHost;
+
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list'+'?token='+this.$route.query.token,{
                 onlyCurrentUser:''
             }).then((res)=>{
                 if(res.data.success){

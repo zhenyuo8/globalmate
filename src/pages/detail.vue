@@ -125,26 +125,29 @@
 .detail_message {
     display: flex;
     flex-direction: row;
-    height: 66px;
-    line-height: 66px;
+    padding: .2rem;
+    /*height: 66px;
+    line-height: 66px;*/
     border-top: 1px solid rgba(151, 151, 151, 0.5);
 }
 .detail_message > div {
     flex: 1;
-
+    line-height: 36px;
 }
 .detail_message_leave{
     text-align: left;
 }
 .detail_message_chart{
     text-align: right;
+    height: 36px;
 }
 .detail_message_chart span{
-    /*width: 1.32rem;
-    height: 26px;*/
-    padding: 4px .24rem;
+    padding: 0 .4rem;
     background: #F1F1F1;
-    border: 1px solid rgba(151, 151, 151,1);
+    border-radius: 4px;
+    background: #26a2ff;
+    color: #fff;
+    font-weight: bold;
 }
 </style>
 
@@ -262,12 +265,10 @@ export default {
     methods:{
         goChart(){
             this.$router.push({
-                path: 'chart',
+                path: 'im',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
-                }
+                    'token': this.token,
+                    'title': 'im',               }
             });
         }
     }

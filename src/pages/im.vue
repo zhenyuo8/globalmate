@@ -14,7 +14,16 @@
                 </div>
                 <div class="chart_main_content_action">
                     <div class="">
-                        <span></span>
+                        <!-- <span class='show_evaluate' @click="doAction('show_evaluate')">查看评价</span>
+                        <span class='do_evaluate' @click="doAction('do_evaluate')">去评价</span>
+                        <span class='do_reject' @click="doAction('do_reject')">谢绝</span>
+                        <span class='do_answer' @click="doAction('do_answer')">去回应</span>
+                        <span class='evaluate_each' @click="doAction('evaluate_each')">去互评</span>
+                        <span class='rejected' @click="doAction('rejected')">被谢绝</span>
+                        <span class='wait_evaluate' @click="doAction('wait_evaluate')">等待评价</span>
+                        <span class='wait_answer' @click="doAction('wait_answer')">待回应</span>
+                        <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
+                        <span class='do_help' @click="doAction('do_help')">我来帮你</span>
                     </div>
                 </div>
             </div>
@@ -48,6 +57,44 @@ export default {
         }
     },
     methods:{
+		doAction(type){
+			let url='';
+			switch (type) {
+				case 'do_help':
+
+					break;
+				case 'do_cancel':
+
+					break;
+				case 'wait_answer':
+
+					break;
+				case 'wait_evaluate':
+
+					break;
+				case 'rejected':
+
+					break;
+				case 'evaluate_each':
+
+					break;
+				case 'do_answer':
+
+					break;
+				case 'do_evaluate':
+
+					break;
+				case 'do_reject':
+
+					break;
+				case 'show_evaluate':
+
+					break;
+				default:
+
+			}
+		},
+
 		createUserTalk(arg) {
 			let headerPath = "../assets/images/icon.png";
 			console.log(this.$route.query);
@@ -209,7 +256,7 @@ export default {
 }
 
 .chart_main_content{
-	height: 72px;
+	/*height: 72px;*/
 	font-size: 14px;
 	margin: 10px auto;
 	width: 80%;
@@ -220,7 +267,7 @@ export default {
 	display: flex;
 }
 .chart_main_content > div{
-	flex: 1
+	/*flex: 1*/
 }
 .chart_main_content_image > div{
 	width: 1.44rem;
@@ -231,7 +278,8 @@ export default {
 	height: 100%;
 }
 .chart_main_content_decription{
-	padding: 15px 0;
+	/*padding: 15px 0;*/
+	margin-left: 18px;
 }
 .chart_main_content_decription span{
 	line-height: 20px;
@@ -242,5 +290,31 @@ export default {
 	text-align: right;
 	font-size: 18px;
 	line-height: 72px;
+}
+
+
+/*
+*评价css
+ */
+.chart_main_content_action{
+	position: relative;
+	width: 4.2rem;
+}
+.chart_main_content_action>div{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+
+}
+.chart_main_content_action>div span{
+	padding: .12rem;
+	left: 286px;
+	background-color: rgba(241, 241, 241, 1);
+	border: 1px solid rgba(151, 151, 151, 1);
+	border-radius: 2px;
+	color: #666;
+}
+.do_evaluate{
+
 }
 </style>
