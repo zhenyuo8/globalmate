@@ -6,7 +6,7 @@
     height: 13.34rem;
     overflow-y: auto;
 }
-.select_out{
+.myAssist .select_out{
     position: fixed;
     left: 1rem;
     right: 0;
@@ -18,7 +18,7 @@
     transition: all .2s ease-out;
     background: #eee;
 }
-.select_in{
+ .myAssist .select_in{
     position: fixed;
     left: 1rem;
     right: 0;
@@ -29,32 +29,32 @@
     transition: all .3s ease-in;
     background: #eee;
 }
-.list_ul{
+.myAssist .list_ul{
     padding: 0 0.2rem;
     background: #fff;
 }
-.list_ul li{
+.myAssist .list_ul li{
     height: 36px;
     line-height: 36px;
     border-bottom: 1px solid #eee;
     padding: 0 .2rem;
 }
-.list_ul li:last-child{
+.myAssist .list_ul li:last-child{
     border: none;
 }
-.list_ul .select .icon-checkbox{
+.myAssist .list_ul .select .icon-checkbox{
     color: rgb(41, 182, 246);
 }
-.list_ul li .list_item{
+.myAssist .list_ul li .list_item{
     float: left;
 }
-.list_ul li .icon-checkbox{
+.myAssist .list_ul li .icon-checkbox{
     float: right;
     line-height: 36px;
     color: #999;
     font-size: 16px;
 }
-.buttom_action{
+.myAssist .buttom_action{
     height: 46px;
     background: #fff;
     line-height: 46px;
@@ -63,7 +63,7 @@
     right: 0;
     bottom: 0;
 }
-.buttom_action span{
+.myAssist .buttom_action span{
     display: inline-block;
     width: 40%;
     height: 36px;
@@ -72,10 +72,10 @@
     border-radius: 5px;
     color: #fff;
 }
-.buttom_action .cancel{
+.myAssist .buttom_action .cancel{
     background: rgb(153, 153, 153);
 }
-.buttom_action .confirm{
+.myAssist .buttom_action .confirm{
     background: rgb(41, 182, 246);
 }
 </style>
@@ -150,13 +150,13 @@
     	.rightIn_form .name{
     		margin-right: .4rem;
     	}
-    	.rightIn_form .name p{
+    	 .rightIn_form .name p{
     		display: flex;
     		height: 32px;
     		line-height: 32px;
     		margin-top: 10px;
     	}
-    	.rightIn_form .name p label{
+    	 .rightIn_form .name p label{
     		width: 1rem;
     		text-align: justify;
     		text-justify:inter-ideograph;
@@ -168,7 +168,7 @@
     		border: 1px solid #eee;
     		padding: 0 0.2rem;
         }
-        .slide_in .action{
+        .myAssist .slide_in .action{
             position: absolute;
             bottom: 0;
             display: flex;
@@ -176,17 +176,17 @@
             height: 46px;
             line-height: 46px;
         }
-        .slide_in .action span{
+        .myAssist .slide_in .action span{
             flex:1;
             text-align:center;
             font-size:16px;
 
         }
-        .cancel{
+       .myAssist .cancel{
             background:#ddd;
             color:#333;
         }
-        .confirm{
+       .myAssist .confirm{
             background:#007aff;
             color:#fff;
         }
@@ -251,9 +251,9 @@
 					<label for="citysearch" class="city" data-icon="u">城市</label>&nbsp:&nbsp&nbsp
 					<input id="citysearch" name="citysearch" required="required" type="text" placeholder="城市" />
 				</p>
-                <p>
+                <p @click='selectHelpType'>
                     <label for="typesearch" class="type" data-icon="u">类型</label>&nbsp:&nbsp&nbsp
-					<input id="typesearch" name="typesearch" required="required" type="text"  placeholder='请选择' readonly='readonly' @click='selectHelpType' :value="selectHelpTypeValue" />
+					<input id="typesearch" name="typesearch" required="required" type="text"  placeholder='请选择' readonly='readonly' disabled='disabled'  :value="selectHelpTypeValue" />
                 </p>
 			</div>
         </form>

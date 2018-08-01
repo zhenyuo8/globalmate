@@ -46,9 +46,9 @@
 				<label for="">兴趣爱好:</label>
 				<input id="hobbysignup" type="text" name="" value="" placeholder='请输入'>
 			</p>
-			<p id=''>
+			<p id='' @click='selectHelpType'>
 				<label for="">愿意提供的帮助:</label>
-				<input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' @click='selectHelpType' style='text-align:center'>
+				<input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled'  style='text-align:center'>
 			</p>
 		</div>
 		<div class="submitbtn" @click='submit'>
@@ -484,7 +484,7 @@ export default {
 		border-radius: 4px;
 		font-size: 16px;
 	}
-	.select_out{
+	.personalFile .select_out{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -494,7 +494,7 @@ export default {
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;
 	}
-	.select_in{
+	.personalFile .select_in{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -505,7 +505,7 @@ export default {
         transition: all .3s ease-in;
 		background: #fff;
 	}
-    .education_out{
+   .personalFile .education_out{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -516,7 +516,7 @@ export default {
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;
 	}
-	.education_in{
+	.personalFile .education_in{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -531,23 +531,23 @@ export default {
         font-size: 24px;
 
     }
-    .fillin_education form p{
+    .personalFile .fillin_education form p{
         height: 36px;
         line-height: 36px;
         margin-top: 10px;
     }
-    .fillin_education form p:last-child{
+    .personalFile .fillin_education form p:last-child{
 
         margin-bottom: 10px;
     }
-    .fillin_education form p input{
+    .personalFile .fillin_education form p input{
         height: 36px;
         line-height: 36px;
         box-sizing: border-box;
         border: 1px solid #eee;
         padding: 0 10px;
     }
-    .fillin_education form{
+    .personalFile .fillin_education form{
         width: 90%;
         background: #fff;
         /*margin: auto;*/
@@ -556,7 +556,7 @@ export default {
         left: 5%;
         border-radius: 6px;
     }
-    .confirm_add input{
+    .personalFile .confirm_add input{
         width: 87%;
         background: #26a2ff;
         color: #fff;
@@ -564,33 +564,33 @@ export default {
         font-size: 16px;
         border-radius: 5px;
     }
-	.list_ul{
+	.personalFile .list_ul{
 		padding: 0 0.2rem;
 	}
-	.list_ul li{
+	.personalFile .list_ul li{
 		height: 36px;
 		line-height: 36px;
 		border-bottom: 1px solid #eee;
 		padding: 0 .2rem;
 	}
-	.list_ul .select .icon-checkbox{
+	.personalFile .list_ul .select .icon-checkbox{
 		color: rgb(41, 182, 246);
 	}
-	.list_ul li .list_item{
+	.personalFile .list_ul li .list_item{
 		float: left;
 	}
-	.list_ul li .icon-checkbox{
+	.personalFile .list_ul li .icon-checkbox{
 		float: right;
 		line-height: 36px;
 		color: #999;
 		font-size: 16px;
 	}
-	.buttom_action{
+	.personalFile .buttom_action{
 		height: 46px;
 		background: #fff;
 		line-height: 46px;
 	}
-	.buttom_action span{
+	.personalFile .buttom_action span{
 		display: inline-block;
 		width: 40%;
 		height: 36px;
@@ -599,10 +599,10 @@ export default {
 		border-radius: 5px;
 		color: #fff;
 	}
-	.buttom_action .cancel{
+	.personalFile .buttom_action .cancel{
 		background: rgb(153, 153, 153);
 	}
-	.buttom_action .confirm{
+	.personalFile .buttom_action .confirm{
 		background: rgb(41, 182, 246);
 	}
 </style>

@@ -111,7 +111,6 @@ export default {
             }
         },
         editchange(){
-            console.log(22);
             if(this.defaultValue!==arguments[0].target.value){
                 this.hasChanged=true;
                 this.editvalue.text=arguments[0].target.value;
@@ -128,6 +127,7 @@ export default {
     },
     activated(){
         this.loadInfo();
+        this.editFlag=false;
         document.title=this.$route.query.title;
     },
 
@@ -147,7 +147,7 @@ export default {
         overflow-y: auto;
     }
 
-    .select_out{
+    .mineInformationEdit .select_out{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -157,7 +157,7 @@ export default {
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;
 	}
-	.select_in{
+	.mineInformationEdit .select_in{
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -169,39 +169,39 @@ export default {
 		background: #fff;
 	}
 
-    .edit_action{
+    .mineInformationEdit .edit_action{
         height: 36px;
         line-height: 36px;
         padding: 0 .4rem;
         background: #333;
     }
-    .edit_action .cancel{
+    .mineInformationEdit .edit_action .cancel{
         float: left;
         color: #fff;
     }
-    .edit_action .confirm{
+    .mineInformationEdit .edit_action .confirm{
         float: right;
         color: #3ca53c;
 
     }
-    .edit_action .changed{
+   .mineInformationEdit .edit_action .changed{
          float: right;
          color: #05f505
     }
-    .edit_input{
+    .mineInformationEdit .edit_input{
         margin-top: 10px;
         height: 36px;
         border-top:1px solid #eee ;
         border-bottom:1px solid #eee;
         position: relative;
     }
-    .edit_input input{
+   .mineInformationEdit .edit_input input{
         display: inline-block;
         height: 100%;
         width: 6.7rem;
         padding: 0 .4rem;
     }
-    .icon-icon-delete{
+    .mineInformationEdit .icon-icon-delete{
         position: absolute;
         top: 50%;
         right: 0.4rem;

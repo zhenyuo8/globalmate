@@ -730,7 +730,7 @@
        height: 1.4rem;
      }
 
-     .buttom_action{
+    #index .buttom_action{
          position: fixed;
          bottom: -1px;
          left: 0;
@@ -738,11 +738,11 @@
          background:rgba(250,250,250,0.9);
          box-shadow:0px 1px 0px 0px rgba(178,178,178,1);
      }
-     .buttom_action ul{
+    #index .buttom_action ul{
          height: 24px;
          padding: 10px 0;
      }
-     .buttom_action ul li{
+     #index .buttom_action ul li{
          display: inline-block;
          width: 50%;
          font-size: 16px;
