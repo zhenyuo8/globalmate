@@ -447,6 +447,7 @@
             authorization(){
                 let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://dee45034.ngrok.io/#/';
                 this.axios.get(url,{}).then((res)=>{
+                    window.localStorage.setItem('AUTHORIZATION','true')
                     window.location.href=res.data.data
                 })
 			},
@@ -455,15 +456,15 @@
                 this.axios.get(url,{}).then((res)=>{
                     if(res.data.success){
                         window.localStorage.removeItem('TOKEN');
-                        this.token=res.data.data.token;
-                        this.userid=res.data.data.user.id;
-                        this.openid=res.data.data.user.openid;
-                        window.localStorage.selectItem('TOKEN',res.data.data.token);
-                        window.localStorage.selectItem('USERID',res.data.data.user.id);
-                        window.localStorage.selectItem('OPENID',res.data.data.user.openid);
-                        alert(this.token);
-                        alert(this.userid);
-                        alert(this.openid);
+                        // window.localStorage.removeItem('AUTHORIZATION');
+                        // this.token=res.data.data.token;
+                        // this.userid=res.data.data.user.id;
+                        // this.openid=res.data.data.user.openid;
+                        // window.localStorage.selectItem('TOKEN',res.data.data.token);
+                        // window.localStorage.selectItem('USERID',res.data.data.user.id);
+                        // window.localStorage.selectItem('OPENID',res.data.data.user.openid);
+                        alert(JSON.stringify(res.data.data.user));
+                        alert(JSON.stringify(res.data.data));
                     }
                 })
 			},
@@ -475,20 +476,24 @@
                 for(var i=0;i<queryArr.length;i++){
                     if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
                         this.code=queryArr[i].split('=')[1];
-                        this.codeToToken(this.code)
+                        this.codeToToken(this.code);
                     }
                 }
             }
-            // this.token=window.localStorage.getItem('TOKEN')||"";
+            this.token=window.localStorage.getItem('TOKEN')||"";
+            this.AUTHORIZATION=window.localStorage.getItem('AUTHORIZATION')||"";
+            if(!this.AUTHORIZATION){
+                this.authorization();
+            }
+
             if(this.token){
                 this.initIM();
-            }else{
-                this.authorization();
             }
         },
 
         created(){
             // this.authorization();
+            // window.localStorage.removeItem('AUTHORIZATION');
             let _this=this;
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
