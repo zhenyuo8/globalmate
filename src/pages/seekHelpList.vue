@@ -3,8 +3,79 @@
 .myAssist{
     margin-top: 0
 }
+.select_out{
+    position: fixed;
+    left: 1rem;
+    right: 0;
+    bottom: 0;
+    top: 100%;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    background: #eee;
+}
+.select_in{
+    position: fixed;
+    left: 1rem;
+    right: 0;
+    bottom: 0;
+    top: 44px;
+    -webkit-transition: all .3s ease-in;
+    -moz-transition: all .3s ease-in;
+    transition: all .3s ease-in;
+    background: #eee;
+}
+.list_ul{
+    padding: 0 0.2rem;
+    background: #fff;
+}
+.list_ul li{
+    height: 36px;
+    line-height: 36px;
+    border-bottom: 1px solid #eee;
+    padding: 0 .2rem;
+}
+.list_ul li:last-child{
+    border: none;
+}
+.list_ul .select .icon-checkbox{
+    color: rgb(41, 182, 246);
+}
+.list_ul li .list_item{
+    float: left;
+}
+.list_ul li .icon-checkbox{
+    float: right;
+    line-height: 36px;
+    color: #999;
+    font-size: 16px;
+}
+.buttom_action{
+    height: 46px;
+    background: #fff;
+    line-height: 46px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+.buttom_action span{
+    display: inline-block;
+    width: 40%;
+    height: 36px;
+    margin-left: .2rem;
+    line-height: 36px;
+    border-radius: 5px;
+    color: #fff;
+}
+.buttom_action .cancel{
+    background: rgb(153, 153, 153);
+}
+.buttom_action .confirm{
+    background: rgb(41, 182, 246);
+}
 </style>
-<style media="screen" lang="less">
+<style  lang="less">
     .yy_nodata_class{
         text-align: center;
         color: #999;
@@ -35,6 +106,86 @@
             overflow-y: auto;
         }
     }
+    .slide_in{
+        position: fixed;
+        right:0;
+        top:44px;
+        bottom:0;
+        width:6.5rem;
+        background:#f5f5f5;
+       -webkit-transition: all .2s ease-in;
+       -moz-transition: all .2s ease-in;
+       transition: all .2s ease-in;
+       background:#eee;
+    }
+    .slide_out{
+        position: fixed;
+        right: -6.5rem;
+         top:44px;
+         bottom:0;
+        width:6.5rem;
+         background:#fff;
+        -webkit-transition: all .2s ease-out;
+        -moz-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+    }
+    .mask{
+        position:absolute;
+        left:0;
+        right:0;
+        top:44px;
+        bottom:0;
+        background:rgba(153,153,153,0.9)
+    }
+    	.rightIn_form{
+    		display: flex;
+    		background: #fff;
+    		margin-top: 10px;
+    		padding: 0 .3rem .2rem;
+    	}
+    	.rightIn_form .name{
+    		margin-right: .4rem;
+    	}
+    	.rightIn_form .name p{
+    		display: flex;
+    		height: 32px;
+    		line-height: 32px;
+    		margin-top: 10px;
+    	}
+    	.rightIn_form .name p label{
+    		width: 1rem;
+    		text-align: justify;
+    		text-justify:inter-ideograph;
+    		text-align-last:justify;
+    		line-height: 32px;
+    	}
+        .rightIn_form .name p input{
+    		width: 4rem;
+    		border: 1px solid #eee;
+    		padding: 0 0.2rem;
+        }
+        .slide_in .action{
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            width: 100%;
+            height: 46px;
+            line-height: 46px;
+        }
+        .slide_in .action span{
+            flex:1;
+            text-align:center;
+            font-size:16px;
+
+        }
+        .cancel{
+            background:#ddd;
+            color:#333;
+        }
+        .confirm{
+            background:#007aff;
+            color:#fff;
+        }
 
 </style>
 <template>
@@ -42,7 +193,7 @@
 <div class="myAssist">
     <!--搜索框-->
         <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal"></searchInput>
-    <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail'>
+    <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
         <div class="top">
             <span class="top_left">
                         {{item.conceretNeed.title}}
@@ -82,6 +233,43 @@
             <span class="yy_nodata_text">{{noDataTips}}</span>
         </div>
    </div>
+   <div class="mask" v-show="rightIn" @click="hideMask">
+
+   </div>
+   <div :class="rightIn?'slide_in':'slide_out'">
+        <form class="rightIn_form" action="" method="post" onsubmit='return false'>
+			<div class="name">
+				<p>
+					<label for="countrysearch" class="country" data-icon="u">国家</label>&nbsp:&nbsp&nbsp
+					<input id="countrysearch" name="countrysearch" required="required" type="text" placeholder="国家" />
+				</p>
+				<p>
+					<label for="citysearch" class="city" data-icon="u">城市</label>&nbsp:&nbsp&nbsp
+					<input id="citysearch" name="citysearch" required="required" type="text" placeholder="城市" />
+				</p>
+                <p>
+                    <label for="typesearch" class="type" data-icon="u">类型</label>&nbsp:&nbsp&nbsp
+					<input id="typesearch" name="typesearch" required="required" type="text"  placeholder='请选择' readonly='readonly' @click='selectHelpType' :value="selectHelpTypeValue" />
+                </p>
+			</div>
+        </form>
+        <div class="action">
+            <span class="cancel" @click='hideMask'>取消</span>
+            <span class="confirm" @click='confirmSearch'>确认</span>
+        </div>
+        <div :class="selectFlag?'select_in':'select_out'">
+			<ul class="list_ul">
+				<li v-for="(item,index) in list" @click='selectItemType(item,index)'>
+					<span class="list_item">{{item}}</span>
+					<span class="icon-checkbox"></span>
+				</li>
+			</ul>
+			<div class="buttom_action" v-show="selectFlag">
+				<span  class="cancel" @click='cancel'>取消</span>
+				<span class="confirm" @click='confirm1'>确定</span>
+			</div>
+		</div>
+   </div>
 </div>
 
 </template>
@@ -105,7 +293,13 @@ export default {
           searchVal:'',
           msg:false,
           nodataFlag:false,
-          noDataTips:''
+          noDataTips:'',
+          rightIn:false,
+          selectFlag:false,
+          selectHelpTypeValue:'',
+          type_list:[],
+          hasSelect_list:[],
+          list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
 
         }
     },
@@ -123,13 +317,13 @@ export default {
                 console.log(e);
             })
         },
-        showDetail(){
+        showDetail(item){
             this.$router.push({
                 path: 'detail',
                 query: {
-                    'token': '22223',
-                    'title': '哈哈',
-                    'id': 'fffff',
+                    'token': this.$route.query.token,
+                    'title': item.conceretNeed.title,
+                    'id': item.need.id,
                 }
             });
         },
@@ -169,7 +363,58 @@ export default {
         },
         searchCallBack(data){
             this.msg=!this.msg;
+            this.rightIn=!this.rightIn;
         },
+        hideMask(){
+            this.rightIn=!this.rightIn;
+            this.selectFlag=false;
+        },
+        confirmSearch(){
+            this.rightIn=!this.rightIn;
+            let searchContent={};
+
+        },
+        selectHelpType(){
+            this.selectFlag=true;
+        },
+        selectItemType(item,index){
+			if($($('.list_ul li')[index]).hasClass('select')){
+				$($('.list_ul li')[index]).removeClass('select');
+			}else{
+				$($('.list_ul li')[index]).addClass('select');
+			}
+			let someType=this.type_list.some(function (itm,inx) {
+				return itm===item;
+			})
+			if(someType){
+				for(var i=0;i<this.type_list.length;i++){
+					if (this.type_list[i]===item) {
+						this.type_list.splice(i,1);
+					}
+					if (this.hasSelect_list[i]===index) {
+						this.hasSelect_list.splice(i,1);
+					}
+				}
+			}else{
+				this.type_list.push(item);
+				this.hasSelect_list.push(index);
+			}
+		},
+        cancel(){
+			this.selectFlag=false;
+			if(this.type_list.length>0){
+				for(var i=0;i<this.hasSelect_list.length;i++){
+					$($('.list_ul li')[this.hasSelect_list[i]]).removeClass('select');
+				}
+			}
+			this.selectHelpTypeValue=''
+			this.type_list=[];
+		},
+		confirm1(){
+			this.selectHelpTypeValue=this.type_list.join('、');
+			this.selectFlag=false;
+		},
+
         keyWordsSearch(keywords){
                 this.searchVal=keywords;
                 if(!keywords){
@@ -222,7 +467,7 @@ export default {
         },
     },
     activated(){
-      console.log(11111111)
+
     },
     created(){
         this.token=this.$route.query.token;

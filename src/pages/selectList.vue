@@ -30,7 +30,7 @@
 .mint-radiolist-label{
 	display: flex;
 	padding: 0 .2rem;
-	border-bottom: 1px solid #eee;
+	border-bottom: none!important;
 }
 .mint-radio-label{
 	line-height: 44px;

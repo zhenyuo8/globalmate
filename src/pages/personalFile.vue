@@ -299,6 +299,9 @@ export default {
 
     },
     activated(){
+          this.selectFlag=false;
+          this.educationFlag=false;
+          this.showEducationValue=false;
           this.apiHost=CONFIG[__ENV__].apiHost;
           this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
 
@@ -335,6 +338,9 @@ export default {
           })
     },
 	created(){
+        this.selectFlag=false;
+        this.educationFlag=false;
+        this.showEducationValue=false;
 		this.selectFlag=false;
 		setTimeout(()=>{
 			this.initUploader()
@@ -502,6 +508,7 @@ export default {
 		right: 0;
 		bottom: 0;
 		top: 100%;
+        display: none;
 		-webkit-transition: all .2s ease-out;
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;

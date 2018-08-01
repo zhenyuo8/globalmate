@@ -603,6 +603,7 @@ export default {
 
     },
     activated(){
+        this.show=false;
         this.listRepeatProcess();
     },
     computed:{

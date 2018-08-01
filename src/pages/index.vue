@@ -306,7 +306,7 @@
                 alert('消息列表')
             },
             goRankAll(key){
-                this.token=window.localStorage.getItem('TOKEN');
+                // this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -442,7 +442,7 @@
             }
 		},
         activated(){
-            this.token=window.localStorage.getItem('TOKEN')||"a1885ad415414e468868be1567e49b5f";
+            this.token=window.localStorage.getItem('TOKEN')||"";
             if(this.token){
                 this.initIM();
             }
