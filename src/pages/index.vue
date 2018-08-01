@@ -454,6 +454,7 @@
             codeToToken(code){
                 let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
                 this.axios.get(url,{}).then((res)=>{
+                    alert(JSON.stringify(res.data))
                     if(res.data.success){
                         window.localStorage.removeItem('TOKEN');
                         // window.localStorage.removeItem('AUTHORIZATION');
@@ -463,8 +464,9 @@
                         // window.localStorage.selectItem('TOKEN',res.data.data.token);
                         // window.localStorage.selectItem('USERID',res.data.data.user.id);
                         // window.localStorage.selectItem('OPENID',res.data.data.user.openid);
-                        alert(JSON.stringify(res.data.data.user));
-                        alert(JSON.stringify(res.data.data));
+                        alert(JSON.stringify(res.data.data.user.id));
+                        alert(JSON.stringify(res.data.data.user.openid));
+                        alert(JSON.stringify(res.data.data.token));
                     }
                 })
 			},
@@ -476,8 +478,10 @@
                 for(var i=0;i<queryArr.length;i++){
                     if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
                         this.code=queryArr[i].split('=')[1];
-                        this.codeToToken(this.code);
                     }
+                }
+                if(this.code){
+                    this.codeToToken(this.code);
                 }
             }
             this.token=window.localStorage.getItem('TOKEN')||"";
@@ -492,7 +496,7 @@
         },
 
         created(){
-            // this.authorization();
+            this.authorization();
             // window.localStorage.removeItem('AUTHORIZATION');
             let _this=this;
             $('body').on('click',function (e) {
