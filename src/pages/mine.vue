@@ -95,7 +95,7 @@
     <div class="mine_body">
         <div class="mine_detail">
             <div class="mine_image" @click='toMineInformation'>
-                <img src="../assets/images/icon.png" alt="">
+                <img :src="userInfo.pic" alt="">
             </div>
             <div class="mine_information" @click='toMineInformation'>
                 <div class="mine_top">

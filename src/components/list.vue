@@ -116,7 +116,7 @@ input {
             </div>
             <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
                 <div class="repeate_content_text_image" style="width:32px;height:32px">
-                    <img v-if="itemRepeat.url" src="" :src="itemRepeat.url" alt="">
+                    <img v-if="itemRepeat.url"  :src="itemRepeat.url" alt="">
                     <img v-if="!itemRepeat.url" src="../assets/images/icon.png" alt="">
                 </div>
             </div>

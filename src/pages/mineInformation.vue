@@ -223,7 +223,7 @@
     <div class="mineInformation_info">
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
-                <img src="../assets/images/icon.png" alt="">
+                <img :src='information.pic' alt="">
             </div>
             <div class="mineInformation_information">
                 <div class="mineInformation_top">

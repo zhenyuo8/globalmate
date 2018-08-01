@@ -22,7 +22,8 @@
 			</div>
 			<div class="image">
 				<div class="" id="uploader_header">
-					<img class="icon-user image_span" src='../assets/images/icon.png' />
+					<img v-if="!headerImgae" class="icon-user image_span" src='../assets/images/icon.png' />
+                    <img v-if="headerImgae" class='image_span' :src="headerImgae" alt="">
 					<!-- <span class="icon-user image_span"></span> -->
 					<button type="button" name="button">上传头像</button>
 				</div>
@@ -107,6 +108,7 @@ export default {
             educationValue:[],
             showEducationValue:false,
             userId:'',
+            headerImgae:''
 
         }
     },
@@ -214,7 +216,7 @@ export default {
                 helpAvailable:'',
                 id:this.userId
             };
-			postData.nickname=this.$el.querySelector('#nicknamesignup').value;
+			postData.nikename=this.$el.querySelector('#nicknamesignup').value;
 			postData.name=this.$el.querySelector('#truenamesignup').value;
 			postData.country=this.$el.querySelector('#countrysignup').value;
 			postData.city=this.$el.querySelector('#citysignup').value;
@@ -231,6 +233,28 @@ export default {
               })
 
 		},
+        previewImage(file,callback){
+            if(!file || !/image\//.test(file.type)) return;
+        if(file.type=='image/gif'){
+            var fr = new mOxie.FileReader();
+            fr.onload = function(){
+                callback(fr.result);
+                fr.destroy();
+                fr = null;
+            }
+            fr.readAsDataURL(file.getSource());
+        }else{
+            var preloader = new mOxie.Image();
+            preloader.onload = function() {
+                preloader.downsize( 100, 100 );
+                var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
+                callback && callback(imgsrc);
+                preloader.destroy();
+                preloader = null;
+            };
+            preloader.load( file.getSource() );
+        }
+        },
 		initUploader(){
             let _this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -267,8 +291,7 @@ export default {
                     var file_name=files[i].name;
                     !function(i){
                         _this.previewImage(files[i],function(imgsrc){
-                            // let con=$('<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="'+imgsrc+'"/></div>');
-                            // $('.hide_space').append(con);
+                            $('#uploader_header').find('img').attr('src',imgsrc);
                         });
                     }(i);
                 }
@@ -290,6 +313,7 @@ export default {
            });
            this.fileUploader.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
+
            });
            this.fileUploader.init();
         },
@@ -322,14 +346,17 @@ export default {
                   if(data.city){
                       this.$el.querySelector('#citysignup').value=data.city;
                   }
-                  if(data.nickname){
-                      this.$el.querySelector('#nicknamesignup').value=data.nickname;
+                  if(data.nikename){
+                      this.$el.querySelector('#nicknamesignup').value=data.nikename;
                   }
                   if(data.hobby){
                       this.$el.querySelector('#hobbysignup').value=data.hobby;
                   }
                   if(data.helpAvailable){
                       this.selectHelpTypeValue=data.helpAvailable;
+                  }
+                  if(data.pic){
+                      this.headerImgae=data.pic;
                   }
 
               }

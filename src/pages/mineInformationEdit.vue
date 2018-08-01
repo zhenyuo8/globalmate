@@ -69,6 +69,7 @@ export default {
                     this.userId=data.id;
                     this.listRepeat[1].text=data.nikename||data.name
                     this.listRepeat[2].text=data.city||data.country
+                    this.listRepeat[0].url=data.pic||''
                 }
 
             }).catch((e)=>{
