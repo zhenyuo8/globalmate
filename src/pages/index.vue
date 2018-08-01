@@ -181,7 +181,8 @@
                 ],
                 showPersonal:false,
                 showTipsText:'',
-                token:''
+                token:'',
+                code:'',
 			}
 		},
         computed: {
@@ -386,6 +387,7 @@
     					//好友信息更改
     				},
     				onMessage: function(arg) {
+                        console.log(arg)
     					_this.createUserTalk(arg)
     					//收到消息,包括收到他人给自己发的消息和所有的群消息
     				},
@@ -441,18 +443,42 @@
     		            console.log(arg);
     		        }
     		    });
-            }
+            },
+            authorization(){
+                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://dee45034.ngrok.io/#/';
+                this.axios.get(url,{}).then((res)=>{
+                    window.location.href=res.data.data
+                })
+			},
+            codeToToken(code){
+                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
+                this.axios.get(url,{}).then((res)=>{
+                    alert(JSON.stringify(res.data));
+                })
+			},
 		},
         activated(){
             document.title='globalmate';
-            this.token=window.localStorage.getItem('TOKEN')||"";
+            alert(window.location.href)
+            if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
+                let queryArr=window.location.href.split('?')[1].split('&');
+                for(var i=0;i<queryArr.length;i++){
+                    if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
+                        this.code=queryArr[i].split('=')[1];
+                        this.codeToToken(this.code)
+                    }
+                }
+            }
+            // this.token=window.localStorage.getItem('TOKEN')||"";
             if(this.token){
                 this.initIM();
+            }else{
+                 this.authorization();
             }
         },
 
         created(){
-            // window.localStorage.removeItem('TOKEN');
+            // this.authorization();
             let _this=this;
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){

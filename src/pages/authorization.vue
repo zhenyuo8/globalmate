@@ -28,7 +28,7 @@ import Loading from '../components/loading'
 		},
 		methods:{
 			authorization(){
-                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect=https://13ede50d.ngrok.io/globalmate/index.jsp';
+                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://dee45034.ngrok.io/#/authorization';
                 this.axios.get(url,{}).then((res)=>{
                     window.location.href=res.data.data
                 })
