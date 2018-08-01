@@ -304,6 +304,10 @@ export default {
           type_list:[],
           hasSelect_list:[],
           list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
+          searchContent:{
+              type:'',
+              where:'',
+          }
 
         }
     },
@@ -375,7 +379,12 @@ export default {
         },
         confirmSearch(){
             this.rightIn=!this.rightIn;
-            let searchContent={};
+            this.searchContent={};
+            this.searchContent['type']=this.$el.querySelector('#typesearch').value
+            this.searchContent['where']=this.$el.querySelector('#countrysearch').value+'_'+this.$el.querySelector('#citysearch').value;
+            this.loadData();
+            console.log(this.searchContent);
+
 
         },
         selectHelpType(){
@@ -444,9 +453,16 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/assist/listSOS'+'?token='+this.$route.query.token,{
+            let url='/globalmate/rest/assist/listSOS';
+            let postData={
                 onlyCurrentUser:''
-            }).then((res)=>{
+            }
+            if(this.$route.query.id==='offer'){
+                url='/globalmate/rest/need/query';
+                postData['type']=this.searchContent.type||''
+                postData['where']=this.searchContent.where||''
+            }
+            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&type='+this.searchContent.type+'&where='+this.searchContent.where,JSON.stringify(postData)).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
                      this.listm=[];

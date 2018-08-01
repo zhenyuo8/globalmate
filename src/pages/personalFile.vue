@@ -511,7 +511,7 @@ export default {
 		right: 0;
 		bottom: 0;
 		top: 100%;
-        display: none;
+        /*display: none;*/
 		-webkit-transition: all .2s ease-out;
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;

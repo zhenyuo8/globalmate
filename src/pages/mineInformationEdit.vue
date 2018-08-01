@@ -117,7 +117,6 @@ export default {
                 this.editvalue.text=arguments[0].target.value;
                 this.needSaveValue=arguments[0].target.value;
             }else{
-                console.log(999999)
                 this.hasChanged=false;
                 this.editvalue.text=arguments[0].target.value;
                 this.needSaveValue='';
@@ -131,7 +130,7 @@ export default {
         this.loadInfo();
         document.title=this.$route.query.title;
     },
-    
+
     created(){
 
     },
@@ -143,6 +142,9 @@ export default {
         margin-top: 32px;
         font-size: 14px;
         border-bottom: 1px solid rgba(241, 241, 241, 1);
+        width:7.5rem;
+        height: 13.34rem;
+        overflow-y: auto;
     }
 
     .select_out{

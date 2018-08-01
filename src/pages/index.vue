@@ -266,6 +266,7 @@
                          query: {
                            'token':this.token,
                            'title': '求助列表',
+                           'id':'offer'
                          }
                      });
                  }
