@@ -257,7 +257,7 @@ export default {
             }).then((res)=>{
                 if(res.data.success){
                     let data=res.data.data;
-                    this.userInfo.username=data.nikename;
+                    this.userInfo.username=data.nikename||data.name;
                     this.userInfo.country=data.country;
                     this.userInfo.call=data.enable;
                     this.userInfo.pic=data.pic||'../assets/images/icon.png';

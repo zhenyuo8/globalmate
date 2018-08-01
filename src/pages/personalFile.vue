@@ -354,7 +354,9 @@ export default {
     .personalFile{
     	font-size: 14px;
 		background: #eee;
-
+        width:7.5rem;
+        height: 13.34rem;
+        overflow-y: auto;
     }
 	.personalFile h3{
 		background: #fff;
