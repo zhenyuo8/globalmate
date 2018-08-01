@@ -46,7 +46,7 @@
                 <div class="left">
                     服务之星榜单
                 </div>
-                <div class="right" @click='goRankAll("service")'>
+                <div class="right icon-arrow_right_samll" @click='goRankAll("service")'>
                     查看榜单
                 </div>
 
@@ -62,7 +62,7 @@
                 <div class="left">
                     校园龙虎榜
                 </div>
-                <div class="right" @click='goRankAll("school")'>
+                <div class="right icon-arrow_right_samll" @click='goRankAll("school")'>
                     查看榜单
                 </div>
 
@@ -756,5 +756,13 @@
          box-sizing: border-box;
          border-right: 2px solid #979797;
 
+     }
+      #index .icon-arrow_right_samll{
+          font-size: 12px;
+          color: #54698D;
+      }
+     #index .icon-arrow_right_samll::before{
+         float: right;
+         font-size: 14px;
      }
 </style>

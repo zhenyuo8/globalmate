@@ -49,11 +49,12 @@
         </div>
         <div class="middle">
             <div class="middle_left">
-                <p class="middle_decription">{{item.conceretNeed.descrition}}</p>
+                <p class="middle_decription">{{item.conceretNeed.description}}</p>
                 <p class="middle_from">来自 {{item.conceretNeed.country}}</p>
             </div>
             <div class="middle_right">
-                <img :src='imagesList[index%3]' alt="">
+                <img v-if="item.conceretNeed.pic" :src='item.conceretNeed.pic' alt="">
+                <img v-if="!item.conceretNeed.pic" :src='imagesList[index%3]' alt="">
             </div>
         </div>
         <div class="action_list">
@@ -170,7 +171,7 @@ export default {
                          if(data[i].conceretNeed&&data[i].conceretNeed.title){
                              data[i].conceretNeed.url=this.imagesList[i]
                              if(data[i].conceretNeed.pic){
-                                //  data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                                 data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                              }
                              this.myAssistList.push(data[i])
                             //  console.log(this.myAssistList);

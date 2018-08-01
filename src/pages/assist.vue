@@ -148,7 +148,7 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
-           switch (this.key) {
+           switch (this.$route.query.key) {
                case 'buy':
                    this.submitUrl='/globalmate/rest/need/buy/add';
                    break;
@@ -161,8 +161,11 @@ export default {
                case 'learnco':
                     this.submitUrl='/globalmate/rest/need/learnco/add';
                     break;
-               case 'other':
+               case 'carry':
                     this.submitUrl='/globalmate/rest/need/carry/add';
+                    break;
+               case 'other':
+                    this.submitUrl='/globalmate/rest/need/other/add';
                     break;
                default:
                     this.submitUrl='/globalmate/rest/need/other/add';
@@ -184,7 +187,6 @@ export default {
             let _this=this;
             if(!item.type){
                 if(item.key==='date'){
-                    console.log(item)
                   if(item.componentKey==='endTime'){
                     if(!this.calendar1){
                       this.calendar1 = new datePicker();
@@ -291,6 +293,7 @@ export default {
             }
             if(this.$el.querySelector('.main_decription_area textarea')){
                 postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
+                postData['descrition']=this.$el.querySelector('.main_decription_area textarea').value;
             }
             if(this.filesHasUpload.length!==0){
                 postData['pic']=this.filesHasUpload.join(';')
@@ -425,7 +428,7 @@ export default {
                         key:'country',
                         isRequire:true,
                         isPlacehold:true,
-                        componentKey:'country'
+                        componentKey:'from'
                     }, {
                         title: '到哪里',
                         text: '请输入',
@@ -434,7 +437,7 @@ export default {
                         key:'country',
                         isRequire:true,
                         isPlacehold:true,
-                        componentKey:'country'
+                        componentKey:'to'
                     },{
                         title: '到达时间',
                         text: '请选择',

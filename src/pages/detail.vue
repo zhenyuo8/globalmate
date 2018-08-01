@@ -191,8 +191,8 @@
         </div>
     </div>
     <div class="detail_image">
-        <div class="">
-
+        <div class="" v-for='item in imageArr'>
+            <img :src="item" alt="">
         </div>
 
     </div>
@@ -272,7 +272,8 @@ export default {
             detail:{
                 'title':'',
                 'description':''
-            }
+            },
+            imageArr:[]
         }
     },
     activated(){
@@ -306,7 +307,12 @@ export default {
                          this.show=true;
                      },500)
                      for(var key in data.conceretNeed){
-                         this.detail[key]=data.conceretNeed[key]
+                         this.detail[key]=data.conceretNeed[key];
+                         if(key==='pic'){
+                             if(data.conceretNeed[key]){
+                                 this.imageArr=data.conceretNeed[key].split(';')
+                             }
+                         }
                      }
                      for(var key in data.need){
                          this.detail[key]=data.need[key]

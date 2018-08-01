@@ -214,7 +214,8 @@ export default {
 					//好友信息更改
 				},
 				onMessage: function(arg) {
-					_this.createUserTalk(arg)
+					console.log(arg,9999999);
+					// _this.createUserTalk(arg)
 					//收到消息,包括收到他人给自己发的消息和所有的群消息
 				},
 				onGroupUpdate: function(arg) {

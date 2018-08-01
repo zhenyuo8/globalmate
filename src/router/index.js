@@ -21,6 +21,7 @@ import evaluate from '@/pages/evaluate'//求助详情页
 import feedback from '@/pages/feedback'//意见反馈
 import rankAll from '@/pages/rankAll'//意见反馈
 import personalFile from '@/pages/personalFile'//意见反馈
+import authorization from '@/pages/authorization'//意见反馈
 Vue.use(Router)
 
 export default new Router({
@@ -191,6 +192,14 @@ export default new Router({
         component: personalFile,
         meta:{
             index:18
+        }
+    },
+    {
+        path: '/authorization',
+        name: 'authorization',
+        component: authorization,
+        meta:{
+            index:19
         }
     },
   ]
