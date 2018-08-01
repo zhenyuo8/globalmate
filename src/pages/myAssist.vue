@@ -192,6 +192,7 @@ export default {
         }
     },
    activated(){
+       document.title=this.$route.query.title;
        this.myAssistList=[];
        this.nodataFlag=false;
        this.noDataTips='';

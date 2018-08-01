@@ -1,7 +1,10 @@
 <style scoped>
 @import '../assets/css/list.css';
 .myAssist{
-    margin-top: 0
+    margin-top: 0;
+    width:7.5rem;
+    height: 13.34rem;
+    overflow-y: auto;
 }
 .select_out{
     position: fixed;
@@ -9,6 +12,7 @@
     right: 0;
     bottom: 0;
     top: 100%;
+    /*display: none;*/
     -webkit-transition: all .2s ease-out;
     -moz-transition: all .2s ease-out;
     transition: all .2s ease-out;
@@ -467,9 +471,12 @@ export default {
         },
     },
     activated(){
-
+        this.rightIn=false;
+        this.selectFlag=false;
     },
     created(){
+        this.rightIn=false;
+        this.selectFlag=false;
         this.token=this.$route.query.token;
         this.loadData();
     }

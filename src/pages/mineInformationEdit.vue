@@ -128,8 +128,10 @@ export default {
         }
     },
     activated(){
-        this.loadInfo()
+        this.loadInfo();
+        document.title=this.$route.query.title;
     },
+    
     created(){
 
     },

@@ -194,7 +194,7 @@
         },
 		methods:{
             publish(item){
-                this.token=window.localStorage.getItem('TOKEN')||'a1885ad415414e468868be1567e49b5f';
+                // this.token=window.localStorage.getItem('TOKEN')||'a1885ad415414e468868be1567e49b5f';
                 if(!this.token) {
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -294,11 +294,12 @@
                 },1500);
               }else{
                 this.$router.push({
-                  path: 'myAssist',
-                  query: {
-                    'token':this.token,
-                    'title': 'SOS',
-                  }
+                    path: 'seekHelpList',
+                    query: {
+                        'token': this.token,
+                        'title': 'SOS',
+                        'id': 'sos',
+                    }
                 });
               }
             },
@@ -442,6 +443,7 @@
             }
 		},
         activated(){
+            document.title='globalmate';
             this.token=window.localStorage.getItem('TOKEN')||"";
             if(this.token){
                 this.initIM();
@@ -449,7 +451,7 @@
         },
 
         created(){
-            window.localStorage.removeItem('TOKEN');
+            // window.localStorage.removeItem('TOKEN');
             let _this=this;
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){

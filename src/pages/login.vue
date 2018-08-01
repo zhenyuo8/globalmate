@@ -72,6 +72,9 @@
 				});
 			}
 		},
+        activated(){
+            document.title=this.$route.query.title;
+        },
 		created(){
             console.log(YYIMChat);
 		}

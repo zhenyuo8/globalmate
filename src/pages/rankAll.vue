@@ -118,7 +118,7 @@
 
 <style scoped>
 .main_img{
-	width: 100%;
+	width: 7.5rem;
 	height: 100px;
 
 }

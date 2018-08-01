@@ -47,6 +47,9 @@ import CONFIG from '../config/config.js'
 
 			}
 		},
+        activated(){
+            document.title=this.$route.query.title;
+        },
 		created(){
 
 		}

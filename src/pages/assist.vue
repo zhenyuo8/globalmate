@@ -604,6 +604,7 @@ export default {
     },
     activated(){
         this.show=false;
+        document.title=this.$route.query.title;
         this.listRepeatProcess();
     },
     computed:{
