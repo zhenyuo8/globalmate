@@ -453,13 +453,23 @@
             codeToToken(code){
                 let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
                 this.axios.get(url,{}).then((res)=>{
-                    alert(JSON.stringify(res.data));
+                    if(res.data.success){
+                        window.localStorage.removeItem('TOKEN');
+                        this.token=res.data.data.token;
+                        this.userid=res.data.data.user.id;
+                        this.openid=res.data.data.user.openid;
+                        window.localStorage.selectItem('TOKEN',res.data.data.token);
+                        window.localStorage.selectItem('USERID',res.data.data.user.id);
+                        window.localStorage.selectItem('OPENID',res.data.data.user.openid);
+                        alert(this.token);
+                        alert(this.userid);
+                        alert(this.openid);
+                    }
                 })
 			},
 		},
         activated(){
             document.title='globalmate';
-            alert(window.location.href)
             if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
                 let queryArr=window.location.href.split('?')[1].split('&');
                 for(var i=0;i<queryArr.length;i++){
@@ -473,7 +483,7 @@
             if(this.token){
                 this.initIM();
             }else{
-                 this.authorization();
+                this.authorization();
             }
         },
 
