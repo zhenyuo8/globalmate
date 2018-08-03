@@ -186,11 +186,14 @@
 			}
 		},
         computed: {
+            // console.log('computed');
             swiper() {
+                console.log('computed');
               return this.$refs.mySwiper.swiper;
             }
         },
         mounted () {
+            console.log('mounted');
             this.swiper.slideTo(0, 0, false);
         },
 		methods:{
@@ -452,10 +455,12 @@
                 })
 			},
             codeToToken(code){
+                alert(4)
                 let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
                 this.axios.get(url,{}).then((res)=>{
                     alert(JSON.stringify(res.data))
                     if(res.data.success){
+                        alert(5)
                         window.localStorage.removeItem('TOKEN');
                         // window.localStorage.removeItem('AUTHORIZATION');
                         // this.token=res.data.data.token;
@@ -472,31 +477,33 @@
 			},
 		},
         activated(){
+
             document.title='globalmate';
             if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
                 let queryArr=window.location.href.split('?')[1].split('&');
                 for(var i=0;i<queryArr.length;i++){
                     if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
+                        alert(2);
                         this.code=queryArr[i].split('=')[1];
                     }
                 }
                 if(this.code){
+                    alert(3)
                     this.codeToToken(this.code);
                 }
             }
             this.token=window.localStorage.getItem('TOKEN')||"";
-            this.AUTHORIZATION=window.localStorage.getItem('AUTHORIZATION')||"";
-            if(!this.AUTHORIZATION){
-                this.authorization();
-            }
-
             if(this.token){
                 this.initIM();
             }
         },
 
         created(){
-            this.authorization();
+            if(!window.localStorage.getItem('AUTHORIZATION')){
+                alert(1);
+                this.authorization();
+            }
+
             // window.localStorage.removeItem('AUTHORIZATION');
             let _this=this;
             $('body').on('click',function (e) {
