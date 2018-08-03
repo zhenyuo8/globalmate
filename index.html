@@ -18,11 +18,14 @@
       (function () {
         window.code='';
         let authorization=function(redirecturl){
+
           let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect='+redirecturl;
+          let temUrl='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect= http://f5c22029.ngrok.io'
           $.ajax({
               url:url,
               type:'GET',
               success:function (result) {
+                  alert(22)
                   window.location.href=result.data;
                   window.localStorage.setItem('AUTHORIZATION','true');
               }
@@ -46,7 +49,7 @@
 
 //        window.localStorage.removeItem('TOKEN');
 //        window.localStorage.removeItem('AUTHORIZATION');
-        if(!window.localStorage.getItem('AUTHORIZATION')&&window.location.href.indexOf('127.0.0.1')==-1){
+        if(!window.localStorage.getItem('AUTHORIZATION')){
           authorization(window.location.href);
         }
         if(window.location.href.indexOf('code=')>-1){

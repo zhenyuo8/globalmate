@@ -449,64 +449,24 @@
     		        }
     		    });
             },
-            authorization(){
-                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://dee45034.ngrok.io/#/';
-                this.axios.get(url,{}).then((res)=>{
-                    window.localStorage.setItem('AUTHORIZATION','true')
-                    window.location.href=res.data.data
-                })
-			      },
-            codeToToken(code){
-                let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
-                this.axios.get(url,{}).then((res)=>{
-                    if(res.data.success){
-                        window.localStorage.removeItem('TOKEN');
-                        this.token=res.data.data.token;
-                        this.userid=res.data.data.user.id;
-                        this.openid=res.data.data.user.openid;
-                        window.localStorage.setItem('TOKEN',res.data.data.token);
-                        window.localStorage.setItem('USERID',res.data.data.user.id);
-                        window.localStorage.setItem('OPENID',res.data.data.user.openid);
-                    }
-                })
-			      },
-		},
+		    },
         activated(){
             document.title='globalmate';
-          if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
-            let queryArr=window.location.href.split('?')[1].split('&');
-            for(var i=0;i<queryArr.length;i++){
-              if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
-                this.code=queryArr[i].split('=')[1];
-              }
-            }
-            if(this.code){
-//              this.codeToToken(this.code);
-//              window.localStorage.removeItem('AUTHORIZATION');
-            }
-          }
-
             this.token=window.localStorage.getItem('TOKEN')||"";
-
             if(this.token){
                 this.initIM();
             }
         },
 
         created(){
-
-//          window.localStorage.removeItem('TOKEN');
-//
-            if(!window.localStorage.getItem('AUTHORIZATION')){
-//                this.authorization();
-            }
-//          window.localStorage.removeItem('AUTHORIZATION');
-            let _this=this;
-            $('body').on('click',function (e) {
-                if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
-                    _this.showPersonal=false;
-                }
-            })
+//            window.localStorage.removeItem('TOKEN');
+//            window.localStorage.removeItem('AUTHORIZATION');
+                let _this=this;
+                $('body').on('click',function (e) {
+                    if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
+                        _this.showPersonal=false;
+                    }
+                })
         }
 	}
 </script>
