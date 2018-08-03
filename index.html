@@ -19,12 +19,11 @@
         window.code='';
         let authorization=function(redirecturl){
           let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect='+redirecturl;
-          let temUrl='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect= http://f5c22029.ngrok.io/#/'
+          let temUrl='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://f5c22029.ngrok.io';
           $.ajax({
               url:temUrl,
               type:'GET',
               success:function (result) {
-                  alert(22)
                   window.location.href=result.data;
                   window.localStorage.setItem('AUTHORIZATION','true');
               }
