@@ -172,16 +172,19 @@ export default {
                     break;
            }
            this.apiHost=CONFIG[__ENV__].apiHost;
-           this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
+           if(postData){
+             this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
                if(res.data.success){
-                   window.history.go(-1);
-               }else{
-                   alert('请确认后再提交')
-               }
+               window.history.go(-1);
+             }else{
+               alert('请确认后再提交')
+             }
 
            }).catch((e)=>{
                console.log(e);
            });
+           }
+
         },
         clickCallBack(item,e) {
             let _this=this;
@@ -279,7 +282,7 @@ export default {
                     postData[item.componentKey]=item.text;
                 }else {
                     alert(item.title+'为必填项')
-                    return;
+                    return false;
                 }
             })
             if(!this.payStyle.isPlacehold){

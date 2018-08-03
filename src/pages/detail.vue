@@ -277,6 +277,13 @@ export default {
         }
     },
     activated(){
+        this.imageArr=[];
+        this.detail={
+        'title':'',
+          'description':''
+        };
+        this.country='';
+        this.show=false;
         this.id=this.$route.query.id;
         this.apiHost=CONFIG[__ENV__].apiHost;
         this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
@@ -344,7 +351,8 @@ export default {
             let s = date.getSeconds();
             return Y+M+D;
         },
-    }
+    },
+
 
 }
 

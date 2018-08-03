@@ -127,3 +127,6 @@ textarea::-webkit-input-placeholder {
     border-top: 1px solid #F2F2F2;
     /*box-shadow: 0 0px 1px 0;*/
 }
+.gearDate{
+  font-size: 14px!important;
+}

@@ -81,6 +81,16 @@ export default {
                 this.editFlag=true;
                 this.editvalue=item;
                 this.defaultValue=item.text;
+            }else if(item.itype=='identify'){
+                console,log(item)
+              this.$router.push({
+                path: 'identify',
+                query: {
+                  'token': this.token,
+                  'title': '身份验证',
+                  'id': 'identify',
+                }
+              });
             }
         },
         cancel(){

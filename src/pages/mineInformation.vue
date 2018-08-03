@@ -9,6 +9,9 @@
     z-index: 11;
     height: 33px;
 }
+.mineInformation{
+  background: #fff;
+}
 .mineInformation_user_image {
     width: 100%;
     height: 186px;

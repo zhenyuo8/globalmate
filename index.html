@@ -14,5 +14,55 @@
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      (function () {
+        window.code='';
+        let authorization=function(redirecturl){
+          let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthUrl?redirect='+redirecturl;
+          $.ajax({
+              url:url,
+              type:'GET',
+              success:function (result) {
+                  window.location.href=result.data;
+                  window.localStorage.setItem('AUTHORIZATION','true');
+              }
+          })
+        };
+        let codeToToken=function(code){
+          let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code;
+          $.ajax({
+            url:url,
+            type:'GET',
+            success:function (result) {
+              window.localStorage.removeItem('TOKEN');
+              window.localStorage.setItem('TOKEN',result.data.token);
+              window.localStorage.setItem('USERID',result.data.user.id);
+              window.localStorage.setItem('OPENID',result.data.user.openid);
+            }
+          })
+        }
+//        alert(window.location.href)
+//        authorization(window.location.href);
+
+//        window.localStorage.removeItem('TOKEN');
+//        window.localStorage.removeItem('AUTHORIZATION');
+        if(!window.localStorage.getItem('AUTHORIZATION')&&window.location.href.indexOf('127.0.0.1')==-1){
+          authorization(window.location.href);
+        }
+        if(window.location.href.indexOf('code=')>-1){
+          let queryArr=window.location.href.split('?')[1].split('&');
+          for(var i=0;i<queryArr.length;i++){
+            if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
+              window.code=queryArr[i].split('=')[1];
+            }
+          }
+          if(window.code){
+              codeToToken(window.code);
+          }
+        }
+      })();
+
+
+    </script>
   </body>
 </html>

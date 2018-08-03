@@ -216,23 +216,23 @@ export default {
                 helpAvailable:'',
                 id:this.userId
             };
-			postData.nikename=this.$el.querySelector('#nicknamesignup').value;
-			postData.name=this.$el.querySelector('#truenamesignup').value;
-			postData.country=this.$el.querySelector('#countrysignup').value;
-			postData.city=this.$el.querySelector('#citysignup').value;
-			postData.hobby=this.$el.querySelector('#hobbysignup').value;
-			postData.school=JSON.stringify(this.educationValue);
-			postData.helpAvailable=this.type_list.join(',');
-			postData.pic=this.headerImgae||'';
-			this.axios.put(this.apiHost+'/globalmate/rest/user/update/'+'?token='+this.$route.query.token,postData).then((res)=>{
-                if(res.data.success){
-                    window.history.back(-1);
-                }
-              }).catch((e)=>{
+                postData.nikename=this.$el.querySelector('#nicknamesignup').value;
+                postData.name=this.$el.querySelector('#truenamesignup').value;
+                postData.country=this.$el.querySelector('#countrysignup').value;
+                postData.city=this.$el.querySelector('#citysignup').value;
+                postData.hobby=this.$el.querySelector('#hobbysignup').value;
+                postData.school=JSON.stringify(this.educationValue);
+                postData.helpAvailable=this.type_list.join(',');
+                postData.pic=this.headerImgae||'';
+                this.axios.put(this.apiHost+'/globalmate/rest/user/update/'+'?token='+this.$route.query.token,postData).then((res)=>{
+                          if(res.data.success){
+                              window.history.back(-1);
+                          }
+                        }).catch((e)=>{
 
-              })
+                        })
 
-		},
+        },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
         if(file.type=='image/gif'){
@@ -472,7 +472,7 @@ export default {
 	.personalFile_hobby p label{
 		width: 2.4rem;
 		margin-right: .1rem;
-		text-align: left;
+		/*text-align: left;*/
 		text-align: justify;
 		text-justify:inter-ideograph;
 		text-align-last:justify;
@@ -486,7 +486,7 @@ export default {
 
 	}
 	.personalFile_hobby .personalFile_hobby_title{
-		text-align: left;
+		/*text-align: left;*/
 		font-size: 14px;
 		display: inline-block;
 		height: 34px;
@@ -521,12 +521,16 @@ export default {
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;
 	}
+    .personalFile .form .image{
+        z-index: 1;
+    }
 	.personalFile .select_in{
 		position: fixed;
 		left: 0;
 		right: 0;
 		bottom: 0;
 		top: 0;
+    z-index: 2;
 		-webkit-transition: all .3s ease-in;
         -moz-transition: all .3s ease-in;
         transition: all .3s ease-in;
@@ -537,6 +541,7 @@ export default {
 		left: 0;
 		right: 0;
 		bottom: 0;
+     z-index: 3;
 		top: 100%;
         /*display: none;*/
 		-webkit-transition: all .2s ease-out;

@@ -198,7 +198,7 @@
         },
 		methods:{
             publish(item){
-                // this.token=window.localStorage.getItem('TOKEN')||'a1885ad415414e468868be1567e49b5f';
+                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -222,7 +222,7 @@
                 this.showPersonal=!this.showPersonal;
             },
             goPersonalCenter(){
-                // this.token=window.localStorage.getItem('TOKEN');
+                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token){
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -258,7 +258,7 @@
                 });
             },
             offer(){
-                // this.token=window.localStorage.getItem('TOKEN');
+                 this.token=window.localStorage.getItem('TOKEN');
                  if(!this.token) {
                      this.showTipsText='请先登入...';
                      setTimeout(()=>{
@@ -276,6 +276,7 @@
                  }
             },
             seekHelp(){
+              this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -292,6 +293,7 @@
                 }
             },
             toSOS(){
+              this.token=window.localStorage.getItem('TOKEN');
               if(!this.token) {
                 this.showTipsText='请先登入...';
                 setTimeout(()=>{
@@ -312,7 +314,7 @@
                 alert('消息列表')
             },
             goRankAll(key){
-                // this.token=window.localStorage.getItem('TOKEN');
+                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     this.showTipsText='请先登入...';
                     setTimeout(()=>{
@@ -334,88 +336,88 @@
             },
             initIM(){
                 let _this=this;
-    			YYIMChat.initSDK({
-    	        	app: 'globalmate_test', //appId应用id
-    	        	etp: 'zxy_test', //etpId企业id
-    		        wsurl: 'stellar.yyuap.com', //websocket Url
-    		        wsport: 5227, //websocket port 5227/5222/5225
-    		        servlet: 'https://im.yyuap.com/', //rest Url
-    		        hbport: 7075, //httpbind  port 7075/7070
-    		        flash_swf_url: 'xxx/x/Moxie.swf', //flash 上传 swf文件位置
-    		        logEnable: true, //client log
-    		        clientMark: 'web', //client mark 'web' or 'pc'
-    		        apiKey: '',
-    	        });
-    			YYIMChat.init({
-    				onOpened: function() {
-    					// 登录成功
-    					YYIMChat.getVCard({
-    						success:function(res){
+                YYIMChat.initSDK({
+                      app: 'globalmate_test', //appId应用id
+                      etp: 'zxy_test', //etpId企业id
+                      wsurl: 'stellar.yyuap.com', //websocket Url
+                      wsport: 5227, //websocket port 5227/5222/5225
+                      servlet: 'https://im.yyuap.com/', //rest Url
+                      hbport: 7075, //httpbind  port 7075/7070
+                      flash_swf_url: 'xxx/x/Moxie.swf', //flash 上传 swf文件位置
+                      logEnable: true, //client log
+                      clientMark: 'web', //client mark 'web' or 'pc'
+                      apiKey: '',
+                    });
+                YYIMChat.init({
+                  onOpened: function() {
+                    // 登录成功
+                    YYIMChat.getVCard({
+                      success:function(res){
 
-    						}
-    					})
-    				},
-    				onExpiration: function(callback) {
-    					//自动更新token
-    					//callback(token, expiration);
-    				},
-    				onClosed: function(arg) {
-    					//连接关闭
-    				},
-    				onConflicted: function(arg) {
-    					//登陆冲突
-    				},
-    				onClientKickout: function(arg) {
-    					//被他端踢掉
-    				},
-    				onUpdatePassword: function(arg) {
-    					//更改密码，被踢掉
-    				},
-    				onAuthError: function(arg) {
-    					//登陆认证失败
-    				},
-    				onConnectError: function(arg) {
-    					//连接失败
-    				},
-    				onReceipts: function(arg) {
-    					//消息回执
-    				},
-    				onSubscribe: function(arg) {
-    					//发生订阅
-    				},
-    				onRosterFavorited: function(arg) {
-    					//被收藏
-    				},
-    				onRosterUpdateded: function(arg) {
-    					//好友信息更改
-    				},
-    				onMessage: function(arg) {
-                        console.log(arg)
-    					_this.createUserTalk(arg)
-    					//收到消息,包括收到他人给自己发的消息和所有的群消息
-    				},
-    				onGroupUpdate: function(arg) {
-    					//群组更新
-    				},
-    				onKickedOutGroup: function(arg) {
-    					//群成员被群主提出
-    				},
-    				onTransferGroupOwner: function(arg){
-    					//群主转让
-    				},
-    				onPresence: function(arg) {
-    					//好友presence改变
-    				},
-    				onRosterDeleted: function(arg) {
-    					//好友被删除
-    				},
-    				onPubaccountUpdate: function(pubaccounts) {
-    					//公共号信息更新
-    				},
-    				onTransparentMessage: function(arg) {
-    					//透传业务消息
-    				},
-    			});
+                      }
+                    })
+                  },
+                  onExpiration: function(callback) {
+                    //自动更新token
+                    //callback(token, expiration);
+                  },
+                  onClosed: function(arg) {
+                    //连接关闭
+                  },
+                  onConflicted: function(arg) {
+                    //登陆冲突
+                  },
+                  onClientKickout: function(arg) {
+                    //被他端踢掉
+                  },
+                  onUpdatePassword: function(arg) {
+                    //更改密码，被踢掉
+                  },
+                  onAuthError: function(arg) {
+                    //登陆认证失败
+                  },
+                  onConnectError: function(arg) {
+                    //连接失败
+                  },
+                  onReceipts: function(arg) {
+                    //消息回执
+                  },
+                  onSubscribe: function(arg) {
+                    //发生订阅
+                  },
+                  onRosterFavorited: function(arg) {
+                    //被收藏
+                  },
+                  onRosterUpdateded: function(arg) {
+                    //好友信息更改
+                  },
+                  onMessage: function(arg) {
+                              console.log(arg)
+                    _this.createUserTalk(arg)
+                    //收到消息,包括收到他人给自己发的消息和所有的群消息
+                  },
+                  onGroupUpdate: function(arg) {
+                    //群组更新
+                  },
+                  onKickedOutGroup: function(arg) {
+                    //群成员被群主提出
+                  },
+                  onTransferGroupOwner: function(arg){
+                    //群主转让
+                  },
+                  onPresence: function(arg) {
+                    //好友presence改变
+                  },
+                  onRosterDeleted: function(arg) {
+                    //好友被删除
+                  },
+                  onPubaccountUpdate: function(pubaccounts) {
+                    //公共号信息更新
+                  },
+                  onTransparentMessage: function(arg) {
+                    //透传业务消息
+                  },
+                });
                 this.loginIM();
                 YYIMChat.onMessage();
             },
@@ -453,58 +455,52 @@
                     window.localStorage.setItem('AUTHORIZATION','true')
                     window.location.href=res.data.data
                 })
-			},
+			      },
             codeToToken(code){
-                alert(4)
                 let url='https://13ede50d.ngrok.io/globalmate/rest/wechat/oauth/oauthCb?code='+code||this.code;
                 this.axios.get(url,{}).then((res)=>{
-                    alert(JSON.stringify(res.data))
                     if(res.data.success){
-                        alert(5)
                         window.localStorage.removeItem('TOKEN');
-                        // window.localStorage.removeItem('AUTHORIZATION');
-                        // this.token=res.data.data.token;
-                        // this.userid=res.data.data.user.id;
-                        // this.openid=res.data.data.user.openid;
-                        // window.localStorage.selectItem('TOKEN',res.data.data.token);
-                        // window.localStorage.selectItem('USERID',res.data.data.user.id);
-                        // window.localStorage.selectItem('OPENID',res.data.data.user.openid);
-                        alert(JSON.stringify(res.data.data.user.id));
-                        alert(JSON.stringify(res.data.data.user.openid));
-                        alert(JSON.stringify(res.data.data.token));
+                        this.token=res.data.data.token;
+                        this.userid=res.data.data.user.id;
+                        this.openid=res.data.data.user.openid;
+                        window.localStorage.setItem('TOKEN',res.data.data.token);
+                        window.localStorage.setItem('USERID',res.data.data.user.id);
+                        window.localStorage.setItem('OPENID',res.data.data.user.openid);
                     }
                 })
-			},
+			      },
 		},
         activated(){
-
             document.title='globalmate';
-            if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
-                let queryArr=window.location.href.split('?')[1].split('&');
-                for(var i=0;i<queryArr.length;i++){
-                    if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
-                        alert(2);
-                        this.code=queryArr[i].split('=')[1];
-                    }
-                }
-                if(this.code){
-                    alert(3)
-                    this.codeToToken(this.code);
-                }
+          if(window.location.href.indexOf('code=')>-1&&(!this.code||!this.token)){
+            let queryArr=window.location.href.split('?')[1].split('&');
+            for(var i=0;i<queryArr.length;i++){
+              if(queryArr[i]&&queryArr[i].split('=')[0]==='code'){
+                this.code=queryArr[i].split('=')[1];
+              }
             }
+            if(this.code){
+//              this.codeToToken(this.code);
+//              window.localStorage.removeItem('AUTHORIZATION');
+            }
+          }
+
             this.token=window.localStorage.getItem('TOKEN')||"";
+
             if(this.token){
                 this.initIM();
             }
         },
 
         created(){
-            if(!window.localStorage.getItem('AUTHORIZATION')){
-                alert(1);
-                this.authorization();
-            }
 
-            // window.localStorage.removeItem('AUTHORIZATION');
+//          window.localStorage.removeItem('TOKEN');
+//
+            if(!window.localStorage.getItem('AUTHORIZATION')){
+//                this.authorization();
+            }
+//          window.localStorage.removeItem('AUTHORIZATION');
             let _this=this;
             $('body').on('click',function (e) {
                 if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){

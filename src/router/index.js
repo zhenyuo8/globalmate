@@ -12,16 +12,17 @@ import other from '@/pages/other'//其他
 import myAssist from '@/pages/myAssist'//我发布的
 import seekHelpList from '@/pages/seekHelpList'//求助列表
 import chart from '@/pages/chart'//聊天页面
-import detail from '@/pages/detail'//求助详情页
-import selectList from '@/pages/selectList'//求助详情页
-import register from '@/pages/register'//求助详情页
-import login from '@/pages/login'//求助详情页
-import im from '@/pages/im'//求助详情页
+import detail from '@/pages/detail'//详情页
+import selectList from '@/pages/selectList'//选择列表
+import register from '@/pages/register'//注册
+import login from '@/pages/login'//登陆
+import im from '@/pages/im'//聊天
 import evaluate from '@/pages/evaluate'//求助详情页
 import feedback from '@/pages/feedback'//意见反馈
-import rankAll from '@/pages/rankAll'//意见反馈
-import personalFile from '@/pages/personalFile'//意见反馈
-import authorization from '@/pages/authorization'//意见反馈
+import rankAll from '@/pages/rankAll'//排名
+import personalFile from '@/pages/personalFile'//个人资料
+import authorization from '@/pages/authorization'//授权
+import identify from '@/pages/identify' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -198,6 +199,13 @@ export default new Router({
         path: '/authorization',
         name: 'authorization',
         component: authorization,
+        meta:{
+            index:19
+        }
+    },{
+        path: '/identify',
+        name: 'identify',
+        component: identify,
         meta:{
             index:19
         }

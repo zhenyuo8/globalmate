@@ -252,10 +252,12 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
-
-            }).then((res)=>{
+            if(window.localStorage.getItem('TOKEN')){
+                this.token=window.localStorage.getItem('TOKEN');
+            }
+            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{}).then((res)=>{
                 if(res.data.success){
+
                     let data=res.data.data;
                     this.userInfo.username=data.nikename||data.name;
                     this.userInfo.country=data.country;
