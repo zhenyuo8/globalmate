@@ -55,7 +55,7 @@
 		max-height: 120px;
 	    display: inline-block;
 	    margin: 70% auto;
-	    background: rgba(0,0,0,0.6);
+	    background: rgba(0,0,0,0.8);
 		overflow: hidden;
 		overflow-y: auto;
 	}

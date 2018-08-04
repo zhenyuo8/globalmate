@@ -313,6 +313,7 @@ export default {
            });
            this.fileUploader.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
+               console.log(_this.headerImgae);
 
            });
            this.fileUploader.init();

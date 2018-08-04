@@ -48,7 +48,7 @@
 //        window.localStorage.removeItem('TOKEN');
 //        window.localStorage.removeItem('AUTHORIZATION');
         if(!window.localStorage.getItem('AUTHORIZATION')){
-          authorization(window.location.href);
+        //   authorization(window.location.href);
         }
         if(window.location.href.indexOf('code=')>-1){
           let queryArr=window.location.href.split('?')[1].split('&');
@@ -58,7 +58,7 @@
             }
           }
           if(window.code){
-              codeToToken(window.code);
+            //   codeToToken(window.code);
           }
         }
       })();

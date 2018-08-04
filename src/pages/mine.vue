@@ -177,9 +177,9 @@ export default {
         selectList
     },
     computed:{
-        'token':function () {
-            return this.$route.query.token;
-        }
+        // 'token':function () {
+        //     return this.$route.query.token;
+        // }
     },
     methods: {
         toMineInformation() {
@@ -194,7 +194,6 @@ export default {
         },
         clickCallBack(item) {
             let type=item.mineType;
-            console.log(item);
             switch (type) {
                 case 'publish':
                     this.$router.push({
@@ -274,13 +273,15 @@ export default {
     activated(){
 
     },
+
     watch:{
         'title':function (val,old) {
             document.title=val
         }
     },
     created(){
-        console.log(this.$route);
+        this.token=this.$route.query.token
+
         this.loadData();
         this.title=this.$route.query.title;
     }

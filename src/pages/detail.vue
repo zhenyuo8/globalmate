@@ -243,7 +243,8 @@
             </div>
         </div>
     </div> -->
-    <div class="detail_message" v-if="id===userId">
+    <!-- <div class="detail_message" v-if="id===userId"> -->
+    <div class="detail_message">
         <div class="detail_message_leave">
             留言
         </div>

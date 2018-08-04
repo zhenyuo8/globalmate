@@ -97,7 +97,6 @@ export default {
 
 		createUserTalk(arg) {
 			let headerPath = "../assets/images/icon.png";
-			console.log(this.$route.query);
 			if(!arg){
 				if(!this.chartValue) return;
 				YYIMChat.sendTextMessage({
@@ -127,6 +126,30 @@ export default {
 		},
 		createOnMessage(){
 
+		},
+		getHistory(){
+			var _this=this;
+			YYIMChat.getHistoryMessage({
+				id:'18470186126',
+				type:'chat',
+				contentType: 2,
+			   start: 0,
+			   size: 150,
+			   startVersion: 0,
+			   endVersion: 100,
+			   success:function(data){
+				   if(data.result&&data.result.length!=0){
+					   var result=data.result;
+					   for(var i=0;i<result.length;i++){
+						   _this.createUserTalk(result[i])
+					   }
+				   }
+			   	console.log(data);
+			   },
+			   error:function(err){
+			   	console.log(err);
+			   }
+			})
 		},
 		getToken(){
 			let username=window.localStorage.getItem('USERPHONE');
@@ -215,7 +238,7 @@ export default {
 				},
 				onMessage: function(arg) {
 					console.log(arg,9999999);
-					// _this.createUserTalk(arg)
+					_this.createUserTalk(arg)
 					//收到消息,包括收到他人给自己发的消息和所有的群消息
 				},
 				onGroupUpdate: function(arg) {
@@ -242,10 +265,15 @@ export default {
 			});
 			YYIMChat.onMessage();
 			this.getToken();
+			setTimeout(()=>{
+				this.getHistory();
+			},500)
 		}
     },
     created(){
-		// this.init();
+		// YYIMChat.onMessage();
+		this.init();
+		console.log(YYIMChat);
     }
 }
 </script>

@@ -434,6 +434,7 @@
     		            "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
     		        }),
     		        success: function (result) {
+                        console.log(result);
     		            let clientIdentify = "pc" + String(new Date().getTime());
     		            //登陆YYIMSDK
     		            YYIMChat.login({
@@ -443,6 +444,9 @@
     		                "appType": 4,
     		                "identify": clientIdentify
     		            });
+                        setTimeout(()=>{
+                            // YYIMChat.onMessage()
+                        },1000)
     		        },
     		        error: function (arg) {
     		            console.log(arg);
@@ -454,11 +458,12 @@
             document.title='globalmate';
             this.token=window.localStorage.getItem('TOKEN')||"";
             if(this.token){
-                this.initIM();
+                this.loginIM();
             }
         },
 
         created(){
+            console.log(YYIMChat);
 //            window.localStorage.removeItem('TOKEN');
 //            window.localStorage.removeItem('AUTHORIZATION');
                 let _this=this;

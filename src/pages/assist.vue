@@ -41,6 +41,13 @@
         height: 100%;
         display: inline-block;
     }
+    .date_btn_box{
+        font-size: 14px!important;
+    }
+    .date_grid{
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
 
 </style>
 
@@ -148,6 +155,8 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
+           console.log(postData);
+           return;
            switch (this.$route.query.key) {
                case 'buy':
                    this.submitUrl='/globalmate/rest/need/buy/add';
@@ -188,6 +197,7 @@ export default {
         },
         clickCallBack(item,e) {
             let _this=this;
+            console.log(item);
             if(!item.type){
                 if(item.key==='date'){
                   if(item.componentKey==='endTime'){
@@ -428,7 +438,7 @@ export default {
                         text: '请输入',
                         arrow: false,
                         type: 'input',
-                        key:'country',
+                        key:'from_country',
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'from'
@@ -437,7 +447,7 @@ export default {
                         text: '请输入',
                         arrow: false,
                         type: 'input',
-                        key:'country',
+                        key:'to_country',
                         isRequire:true,
                         isPlacehold:true,
                         componentKey:'to'

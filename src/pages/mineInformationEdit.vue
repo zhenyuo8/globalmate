@@ -82,7 +82,7 @@ export default {
                 this.editvalue=item;
                 this.defaultValue=item.text;
             }else if(item.itype=='identify'){
-                console,log(item)
+                console.log(item)
               this.$router.push({
                 path: 'identify',
                 query: {

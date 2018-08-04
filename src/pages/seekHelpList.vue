@@ -469,25 +469,41 @@ export default {
                 if(res.data.success){
                      let data=res.data.data;
                      this.listm=[];
-                     for(var i=0;i<data.length;i++){
-                         if(data[i].conceretNeed&&data[i].conceretNeed.title){
-                             data[i].conceretNeed.url=this.imagesList[i];
-                             if(data[i].conceretNeed.pic){
-                                 data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                     if(data){
+                         for(var i=0;i<data.length;i++){
+                             if(data[i].conceretNeed&&data[i].conceretNeed.title){
+                                 data[i].conceretNeed.url=this.imagesList[i];
+                                 if(data[i].conceretNeed.pic){
+                                     data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                                 }
+                                 this.myAssistList.push(data[i])
                              }
-                             this.myAssistList.push(data[i])
+                         }
+                     }else{
+                         if(this.myAssistList.length===0){
+                             setTimeout(()=>{
+                                 this.nodataFlag=true;
+                             },500)
+                             this.noDataTips='暂无相关数据';
                          }
                      }
-                     if(this.myAssistList.length===0){
-                         setTimeout(()=>{
-                             this.nodataFlag=true;
-                         },500)
-                         this.noDataTips='暂无相关内容';
-                     }
-                }else{
 
+
+                }else{
+                    if(this.myAssistList.length===0){
+                        setTimeout(()=>{
+                            this.nodataFlag=true;
+                        },500)
+                        this.noDataTips='暂无相关数据';
+                    }
                 }
             }).catch((e)=>{
+                if(this.myAssistList.length===0){
+                    setTimeout(()=>{
+                        this.nodataFlag=true;
+                    },500)
+                    this.noDataTips='暂无相关数据';
+                }
                 console.log(e);
             })
         },
