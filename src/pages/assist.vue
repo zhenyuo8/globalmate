@@ -48,6 +48,12 @@
         border-top: 1px solid #eee;
         border-bottom: 1px solid #eee;
     }
+    .date_grid>div{
+        display: none!important;
+    }
+    .date_roll>div:nth-child(3) .gear{
+        text-indent: 0!important
+    }
 
 </style>
 
@@ -155,8 +161,6 @@ export default {
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
-           console.log(postData);
-           return;
            switch (this.$route.query.key) {
                case 'buy':
                    this.submitUrl='/globalmate/rest/need/buy/add';

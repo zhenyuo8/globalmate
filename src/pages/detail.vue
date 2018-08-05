@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-size: 14px;
     color: #9B9B9B;
+    padding-bottom: 54px;
 }
 
 .detail_first {
@@ -88,6 +89,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    background: #fff;
 }
 .detail_image > div > img{
     width: 100%;
@@ -163,10 +165,10 @@
 
 <div class="detail">
     <div class="detail_first">
-        <div class="detail_first_left">
+        <div class="detail_first_left" @click='goPersonalFile'>
             <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg" alt="" class="bottom_left_userimage">
             <span class="bottom_left_username">{{detail.userName}}</span>
-            <span class="bottom_left_time">{{timestampToTime(detail.createTime)}}</span>
+            <span class="bottom_left_time">{{detail.createTime}}</span>
         </div>
         <div class="detail_first_right">
             来自 {{country}}
@@ -272,7 +274,8 @@ export default {
             country:'',
             detail:{
                 'title':'',
-                'description':''
+                'description':'',
+                'createTime':''
             },
             imageArr:[]
         }
@@ -321,9 +324,13 @@ export default {
                                  this.imageArr=data.conceretNeed[key].split(';')
                              }
                          }
+
                      }
                      for(var key in data.need){
-                         this.detail[key]=data.need[key]
+                         this.detail[key]=data.need[key];
+                         if(key==='createTime'){
+                             this.detail[key]=this.timestampToTime(data.need[key])
+                         }
                      }
                      this.detailId=data.need.id;
 
@@ -352,6 +359,9 @@ export default {
             let s = date.getSeconds();
             return Y+M+D;
         },
+        goPersonalFile(){
+            console.log(this.userId);
+        }
     },
 
 

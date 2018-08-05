@@ -251,12 +251,12 @@
                     <span class="mineInformation_praise_text">赞</span>
                 </div>
             </div>
-            <div class="mineInformation_edit_button" @click='goEditMineInfo'>
+            <div class="mineInformation_edit_button" @click='goEditMineInfo' v-if="!isOthers">
                 <span>编辑信息</span>
             </div>
-            <!-- <div class="mineInformation_chart_button" @click='chartWith'>
+            <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
                 <span class="icon-chat">联系她/他</span>
-            </div> -->
+            </div>
         </div>
         <div class="mineInformation_recommend" v-if="information.decription">
             <p></p>
@@ -380,7 +380,8 @@ export default {
                     }
                 }
             ],
-            tipInOther:[]
+            tipInOther:[],
+            isOthers:false,
         }
     },
     methods:{
@@ -405,7 +406,11 @@ export default {
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+            let url='/globalmate/rest/user/getUserByToken'
+            if(this.$route.query.userId){
+                url='/globalmate/rest/user/list/'+this.$route.query.userId
+            }
+            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
                 if(res.data.success){
@@ -415,7 +420,6 @@ export default {
                     this.hobby=data.hobby;
                     this.helpAvailable=data.helpAvailable;
                     this.school=JSON.parse(data.school);
-                    console.log(this.school);
                 }
 
             }).catch((e)=>{
@@ -424,7 +428,10 @@ export default {
         }
     },
     activated(){
-        this.loadInfo()
+        this.loadInfo();
+        if(this.$route.query.userId){
+            this.isOthers=true;
+        }
     },
     components: {
         Header,

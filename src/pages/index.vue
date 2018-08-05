@@ -28,19 +28,23 @@
                 <div class="swiper-pagination" slot="pagination"></div>
             </swiper>
         </div>
-        <ul class="mainmenu">
-            <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
-            <!-- <li><a href="/#/assist" ><b><img src="images/tb01.png" /></b><span>学习互助</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb02.png" /></b><span>教材</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb03.png" /></b><span>办手续</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb04.png" /></b><span>换汇</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb05.png" /></b><span>就医</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>帮带</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>租赁</span></a></li>
-            <li><a href="/#/accompany" ><b><img src="images/tb07.png" /></b><span>陪玩</span></a></li>
-            <li><a href="/#/assist" ><b><img src="images/tb08.png" /></b><span>代购</span></a></li>
-            <li><a href="/#/other" ><b><img src="images/tb08.png" /></b><span>其他</span></a></li> -->
-        </ul>
+        <div class="">
+            <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
+             <ul class="mainmenu">
+                 <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
+                 <!-- <li><a href="/#/assist" ><b><img src="images/tb01.png" /></b><span>学习互助</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb02.png" /></b><span>教材</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb03.png" /></b><span>办手续</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb04.png" /></b><span>换汇</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb05.png" /></b><span>就医</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>帮带</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>租赁</span></a></li>
+                 <li><a href="/#/accompany" ><b><img src="images/tb07.png" /></b><span>陪玩</span></a></li>
+                 <li><a href="/#/assist" ><b><img src="images/tb08.png" /></b><span>代购</span></a></li>
+                 <li><a href="/#/other" ><b><img src="images/tb08.png" /></b><span>其他</span></a></li> -->
+             </ul>
+        </div>
+
         <div class="rank service_star">
             <div class="rank_title service_star_title">
                 <div class="left">
@@ -75,7 +79,7 @@
         </div>
         <div class="buttom_action">
             <ul>
-                <li class="need_help" @click="seekHelp">寻求帮助</li>
+                <li class="need_help" @click="seekHelp">我发布的</li>
                 <li @click='offer'>提供帮助</li>
             </ul>
         </div>
@@ -777,5 +781,17 @@
      #index .icon-arrow_right_samll::before{
          float: right;
          font-size: 14px;
+     }
+     #index .index_notice{
+         color: #f59d0b;
+         height: 20px;
+         line-height: 20px;
+         text-align: left;
+         background: #f9f8f4;
+         padding-left: 20px;
+         font-size: 12px;
+     }
+     #index .icon-exclamation::before{
+         margin-right: .04rem
      }
 </style>

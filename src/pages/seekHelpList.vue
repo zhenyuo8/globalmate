@@ -223,7 +223,7 @@
             </div>
         </div>
         <div class="bottom">
-            <div class="bottom_left">
+            <div class="bottom_left" @click='goDetail($event,item)'>
                 <img :src='imagesList[index%3]' alt="" class="bottom_left_userimage">
                 <span class="bottom_left_username">{{item.need.userName}}</span>
                 <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
@@ -336,6 +336,20 @@ export default {
                     'id': item.need.id,
                 }
             });
+        },
+        goDetail(e,item){
+             e.preventDefault;
+             e.cancelBubble=true;
+             console.log(item)
+             this.$router.push({
+                 path: 'mineInformation',
+                 query: {
+                     'token': this.token,
+                     'title': item.need.userName,
+                     'userId':item.need.userId
+                 }
+             });
+
         },
         goHelp(e,item){
             e.preventDefault;
