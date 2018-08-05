@@ -394,6 +394,9 @@ export default {
             this.selectFlag=false;
         },
         confirmSearch(){
+            this.nodataFlag=false;
+            this.myAssistList=[];
+            this.noDataTips='';
             this.rightIn=!this.rightIn;
             this.searchContent={};
             this.searchContent['type']=this.$el.querySelector('#typesearch').value

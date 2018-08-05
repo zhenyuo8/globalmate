@@ -3,12 +3,10 @@
 		<div class="um-content p5" id="content">
 			<div class="im_top_fix">
 				<div class="chart_main_content">
-					<div class="">
-
-					</div>
 	                <div class="chart_main_content_image">
 	                    <div class="">
-	                        <img src="../assets/images/1.jpeg" alt="">
+	                        <img src="../assets/images/1.jpeg" v-if="imageArr.length==0" alt="">
+	                        <img :src='imageArr[0]' v-if="imageArr.length!=0" alt="">
 	                    </div>
 	                </div>
 	                <div class="chart_main_content_decription">
@@ -33,7 +31,7 @@
 	                </div>
 	            </div>
 			</div>
-			<div id="convo">
+			<div id="convo" class="convo">
 				<ul class="chat-thread" id="chat-thread">
 
 				</ul>
@@ -381,7 +379,7 @@ export default {
 	left: 0;
 }
 .convo{
-	margin-top: 60px!important;
+	margin-top: 90px!important;
 	margin-bottom: 10px;
 }
 .chart_main_content{

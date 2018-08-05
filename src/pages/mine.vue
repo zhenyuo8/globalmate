@@ -135,12 +135,7 @@ export default {
                 text: '',
                 arrow: true,
                 mineType: 'publish'
-            }, {
-                title: '我解决的',
-                text: '',
-                arrow: true,
-                mineType: 'solove'
-            }, {
+            },  {
                 title: 'SOS',
                 text: '',
                 arrow: true,
@@ -225,16 +220,6 @@ export default {
                         }
                     });
                     break;
-                 case "solove":
-                     this.$router.push({
-                         path: 'myAssist',
-                         query: {
-                             'token': this.token,
-                             'title': '我解决的',
-                             'id': 'solove',
-                         }
-                     });
-                     break;
                 default:
 
             }
