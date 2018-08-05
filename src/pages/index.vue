@@ -10,7 +10,7 @@
                     <i>sos</i>
                 </div>
                 <div class="icon-global-im" @click='toMessage()'>
-
+                    <i class="message_tips" v-if="hasReceiveMessage"></i>
                 </div>
                 <div class="icon-user" @click='showPersonalInf()' :class="token?'login_yes':'login_no'">
 
@@ -187,18 +187,18 @@
                 showTipsText:'',
                 token:'',
                 code:'',
+                hasReceiveMessage:false,
+                messageList:[]
 			}
 		},
         computed: {
-            // console.log('computed');
             swiper() {
-                console.log('computed');
               return this.$refs.mySwiper.swiper;
             }
         },
         mounted () {
-            console.log('mounted');
             this.swiper.slideTo(0, 0, false);
+            this.initIM();
         },
 		methods:{
             publish(item){
@@ -315,7 +315,15 @@
               }
             },
             toMessage(){
-                alert('消息列表')
+                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList))
+                this.$router.push({
+                    path: 'messageList',
+                    query: {
+                        'token': this.token,
+                        'title': '消息列表',
+                        'id': 'message',
+                    }
+                });
             },
             goRankAll(key){
                  this.token=window.localStorage.getItem('TOKEN');
@@ -335,8 +343,11 @@
                     });
                 }
             },
-            createUserTalk(arg){
-
+            dealMessage(message){
+                if(message){
+                    this.hasReceiveMessage=true;
+                    this.messageList.push(message);
+                }
             },
             initIM(){
                 let _this=this;
@@ -396,8 +407,7 @@
                     //好友信息更改
                   },
                   onMessage: function(arg) {
-                              console.log(arg)
-                    _this.createUserTalk(arg)
+                    _this.dealMessage(arg)
                     //收到消息,包括收到他人给自己发的消息和所有的群消息
                   },
                   onGroupUpdate: function(arg) {
@@ -461,13 +471,21 @@
         activated(){
             document.title='globalmate';
             this.token=window.localStorage.getItem('TOKEN')||"";
+
             if(this.token){
                 this.loginIM();
             }
+            // setTimeout(()=>{
+            //     let message=YYIMChat.onMessage();
+            //     if(message){
+            //         this.hasReceiveMessage=true
+            //        console.log(message);
+            //     }
+            // },500)
         },
 
         created(){
-            console.log(YYIMChat);
+            // console.log(YYIMChat);
 //            window.localStorage.removeItem('TOKEN');
 //            window.localStorage.removeItem('AUTHORIZATION');
                 let _this=this;
@@ -518,12 +536,18 @@
     .icon-global-im{
         width: .76rem;
         margin-left: 0.2rem;
+        position: relative;
     }
-    .icon-global-im::after{
-        width: .1rem;
-        height: .1rem;
+    .message_tips{
+        width: .15rem;
+        height: .15rem;
         background: red;
         border-radius: 50%;
+        position: absolute;
+        top: 8px;
+        right: .04rem;
+        border: 1px solid #fff;
+        display: inline-table;
     }
     .icon-global-im::before{
         color: #bfbfbf;

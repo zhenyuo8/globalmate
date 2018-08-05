@@ -1,32 +1,38 @@
 <template>
 	<div class="um-win um-page" id="main">
 		<div class="um-content p5" id="content">
-			<div class="chart_main_content">
-                <div class="chart_main_content_image">
-                    <div class="">
-                        <img src="../assets/images/1.jpeg" alt="">
-                    </div>
-                </div>
-                <div class="chart_main_content_decription">
-                    <span class="detail_name">火影忍</span>
-                    <span class="detail_type">cool</span>
-                    <span class="detail_brand">japan</span>
-                </div>
-                <div class="chart_main_content_action">
-                    <div class="">
-                        <!-- <span class='show_evaluate' @click="doAction('show_evaluate')">查看评价</span>
-                        <span class='do_evaluate' @click="doAction('do_evaluate')">去评价</span>
-                        <span class='do_reject' @click="doAction('do_reject')">谢绝</span>
-                        <span class='do_answer' @click="doAction('do_answer')">去回应</span>
-                        <span class='evaluate_each' @click="doAction('evaluate_each')">去互评</span>
-                        <span class='rejected' @click="doAction('rejected')">被谢绝</span>
-                        <span class='wait_evaluate' @click="doAction('wait_evaluate')">等待评价</span>
-                        <span class='wait_answer' @click="doAction('wait_answer')">待回应</span>
-                        <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
-                        <span class='do_help' @click="doAction('do_help')">我来帮你</span>
-                    </div>
-                </div>
-            </div>
+			<div class="im_top_fix">
+				<div class="chart_main_content">
+					<div class="">
+
+					</div>
+	                <div class="chart_main_content_image">
+	                    <div class="">
+	                        <img src="../assets/images/1.jpeg" alt="">
+	                    </div>
+	                </div>
+	                <div class="chart_main_content_decription">
+	                    <span class="detail_name">{{detail.title}}</span>
+	                    <span class="detail_type">{{detail.type}}</span>
+	                    <span class="detail_brand">{{detail.where}}</span>
+	                </div>
+	                <div class="chart_main_content_action">
+	                    <div class="">
+	                        <!-- <span class='show_evaluate' @click="doAction('show_evaluate')">查看评价</span> -->
+	                        <!-- <span class='do_evaluate' @click="doAction('do_evaluate')">去评价</span> -->
+	                        <span class='do_agree' @click="doAction('do_agree')" v-if="i_do_help">同意</span>
+	                        <!-- <span class='do_reject' @click="doAction('do_reject')">谢绝</span> -->
+	                        <!-- <span class='do_answer' @click="doAction('do_answer')">去回应</span> -->
+	                        <!-- <span class='evaluate_each' @click="doAction('evaluate_each')">去互评</span> -->
+	                        <!-- <span class='rejected' @click="doAction('rejected')">被谢绝</span> -->
+	                        <!-- <span class='wait_evaluate' @click="doAction('wait_evaluate')">等待评价</span> -->
+	                        <!-- <span class='wait_answer' @click="doAction('wait_answer')">待回应</span> -->
+	                        <!-- <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
+	                        <span class='do_help' @click="doAction('do_help')">我来帮你</span>
+	                    </div>
+	                </div>
+	            </div>
+			</div>
 			<div id="convo">
 				<ul class="chat-thread" id="chat-thread">
 
@@ -49,10 +55,22 @@
 </template>
 
 <script>
+import CONFIG from '../config/config'
 export default {
     data(){
         return{
 			chartValue:'',
+			id:'',
+			taskId:'',
+			toChartId:'',
+			detail:{
+				'title':'',
+				'type':'',
+				'where':''
+			},
+			imageArr:[],
+			i_do_help:false,
+			status_type:['i_do_help','i_do_cancel','i_wait_answer','i_wait_evaluate','i_rejected','i_evaluate_each','i_do_answer','i_do_evaluate','i_do_reject','i_show_evaluate']
 
         }
     },
@@ -61,7 +79,18 @@ export default {
 			let url='';
 			switch (type) {
 				case 'do_help':
-
+					YYIMChat.sendTextMessage({
+						to: this.$route.query.toChartId+'',
+						type: 'chat',
+						content: 'i_do_help',
+						body: {},
+						success:function(data){
+							console.log(data,111111);
+						},
+						error:function(err){
+							console.log(err);
+						}
+					})
 					break;
 				case 'do_cancel':
 
@@ -105,7 +134,7 @@ export default {
 					content: this.chartValue,
 					body: {},
 					success:function(data){
-						console.log(data);
+						console.log(data,111111);
 					},
 					error:function(err){
 						console.log(err);
@@ -114,8 +143,7 @@ export default {
 			    let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
 				 $('#chat-thread').append($li);
 			}else {
-				if(!arg) return;
-				let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+				let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
 				 $('#chat-thread').append($li);
 			}
 			this.chartValue=''
@@ -124,13 +152,56 @@ export default {
 		        scrollTop: top
 		    }, 100);
 		},
-		createOnMessage(){
-
+		createOnMessage(arg){
+			let headerPath = "../assets/images/icon.png";
+			if(!arg) return;
+			let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+			 $('#chat-thread').append($li);
+			 let top = $('#convo').height();
+ 		    $('#content').animate({
+ 		        scrollTop: top
+ 		    }, 100);
 		},
+		loadData(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+                onlyCurrentUser:true
+            }).then((res)=>{
+                if(res.data.success){
+                     let data=res.data.data;
+					 console.log(data);
+                    //  this.detail=data;
+                     setTimeout(()=>{
+                        //  this.show=true;
+                     },500)
+                     for(var key in data.conceretNeed){
+                        //  this.detail[key]=data.conceretNeed[key];
+                         if(key==='pic'){
+                             if(data.conceretNeed[key]){
+                                 this.imageArr=data.conceretNeed[key].split(';')
+                             }
+                         }
+						 if(key==='title'){
+							 this.detail[key]=data.conceretNeed[key];
+                         }
+                     }
+                     for(var key in data.need){
+                         this.detail[key]=data.need[key];
+                     }
+					 console.log(this.detail);
+                     this.detailId=data.need.id;
+
+                }else{
+
+                }
+            }).catch((e)=>{
+                console.log(e);
+            })
+        },
 		getHistory(){
 			var _this=this;
 			YYIMChat.getHistoryMessage({
-				id:'18470186126',
+				id:_this.$route.query.toChartId,
 				type:'chat',
 				contentType: 2,
 			   start: 0,
@@ -140,11 +211,15 @@ export default {
 			   success:function(data){
 				   if(data.result&&data.result.length!=0){
 					   var result=data.result;
-					   for(var i=0;i<result.length;i++){
-						   _this.createUserTalk(result[i])
+					   var len=result.length-1;
+					   for(var i=len;i>=0;i--){
+						   if(result[i].from&&result[i].from==_this.$route.query.toChartId){
+							   _this.createOnMessage(result[i])
+						   }else{
+							   _this.createUserTalk(result[i])
+						   }
 					   }
 				   }
-			   	console.log(data);
 			   },
 			   error:function(err){
 			   	console.log(err);
@@ -153,6 +228,9 @@ export default {
 		},
 		getToken(){
 			let username=window.localStorage.getItem('USERPHONE');
+			if(this.$route.query.senderDId){
+				username=this.$route.query.senderDId;
+			}
 			 $.ajax({
 		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
 		        type: 'POST',
@@ -237,8 +315,13 @@ export default {
 					//好友信息更改
 				},
 				onMessage: function(arg) {
-					console.log(arg,9999999);
-					_this.createUserTalk(arg)
+					if(arg&&_this.status_type.includes(arg.data.content)){
+						_this[arg.data.content]=true;
+
+					}else{
+						_this.createOnMessage(arg)
+					}
+
 					//收到消息,包括收到他人给自己发的消息和所有的群消息
 				},
 				onGroupUpdate: function(arg) {
@@ -270,10 +353,16 @@ export default {
 			},500)
 		}
     },
-    created(){
-		// YYIMChat.onMessage();
+	activated(){
+		this.id=this.$route.query.id;
+		this.toChartId=this.$route.query.toChartId;
 		this.init();
-		console.log(YYIMChat);
+		this.loadData()
+	},
+    created(){
+		this.id=this.$route.query.id;
+		this.toChartId=this.$route.query.toChartId;
+
     }
 }
 </script>
@@ -283,21 +372,28 @@ export default {
 #main{
 	background-color:#f4f4f4
 }
-
+.im_top_fix{
+	position: fixed;
+	z-index: 1;
+	background: #f4f4f4;
+	width: 100%;
+	right: 0;
+	left: 0;
+}
+.convo{
+	margin-top: 60px!important;
+	margin-bottom: 10px;
+}
 .chart_main_content{
-	/*height: 72px;*/
 	font-size: 14px;
 	margin: 10px auto;
 	width: 80%;
 	padding: 12px .32rem;
 	border-radius: 14px;
 	background: #fff;
-	margin-bottom: 9px;
 	display: flex;
 }
-.chart_main_content > div{
-	/*flex: 1*/
-}
+
 .chart_main_content_image > div{
 	width: 1.44rem;
 	height: 1.44rem;
@@ -307,13 +403,18 @@ export default {
 	height: 100%;
 }
 .chart_main_content_decription{
-	/*padding: 15px 0;*/
 	margin-left: 18px;
+	overflow: hidden;
 }
 .chart_main_content_decription span{
 	line-height: 20px;
 	float: left;
 	margin-right: .2rem;
+	text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 2.4rem;
+	overflow: hidden;
 }
 .detail_list_price{
 	text-align: right;

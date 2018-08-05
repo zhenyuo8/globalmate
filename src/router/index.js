@@ -23,6 +23,7 @@ import rankAll from '@/pages/rankAll'//排名
 import personalFile from '@/pages/personalFile'//个人资料
 import authorization from '@/pages/authorization'//授权
 import identify from '@/pages/identify' //身份验证
+import messageList from '@/pages/messageList' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -208,6 +209,13 @@ export default new Router({
         component: identify,
         meta:{
             index:19
+        }
+    },{
+        path: '/messageList',
+        name: 'messageList',
+        component: messageList,
+        meta:{
+            index:4
         }
     },
   ]

@@ -340,7 +340,6 @@ export default {
         goDetail(e,item){
              e.preventDefault;
              e.cancelBubble=true;
-             console.log(item)
              this.$router.push({
                  path: 'mineInformation',
                  query: {
@@ -361,9 +360,10 @@ export default {
                     query: {
                         'token': _this.token,
                         'title': data.nikename,
-                        'id': 'fffff',
+                        'id': item.need.id,
                         'toChartUser':data.nikename,
-                        'toChartId':data.phone
+                        'toChartId':data.phone,
+                        'whoNeedHelf':item.need.userId,
                     }
                 });
             })
@@ -525,12 +525,16 @@ export default {
     activated(){
         this.rightIn=false;
         this.selectFlag=false;
+        this.nodataFlag=false;
+        this.myAssistList=[];
+        this.noDataTips='';
+        this.loadData();
     },
     created(){
         this.rightIn=false;
         this.selectFlag=false;
         this.token=this.$route.query.token;
-        this.loadData();
+
     }
 
 }
