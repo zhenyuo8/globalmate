@@ -26,7 +26,7 @@
               type:'GET',
               success:function (result) {
                   window.location.href=result.data;
-                  window.localStorage.setItem('AUTHORIZATION','true');
+                  window.localStorage.setItem('AUTHORIZATION_MY','true');
               }
           })
         };
@@ -47,8 +47,8 @@
 //        authorization(window.location.href);
 
 //        window.localStorage.removeItem('TOKEN');
-//        window.localStorage.removeItem('AUTHORIZATION');
-        if(!window.localStorage.getItem('AUTHORIZATION')){
+           window.localStorage.removeItem('AUTHORIZATION');
+        if(!window.localStorage.getItem('AUTHORIZATION_MY')){
            authorization(window.location.href);
         }
         if(window.location.href.indexOf('code=')>-1){
