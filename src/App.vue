@@ -21,54 +21,6 @@ export default {
             var rem = width / 7.5;
             docEl.style.fontSize = rem + 'px';
         },
-        Authorization(){
-            let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://www.czw567.com/dist/index.html#/';
-            $.ajax({
-                url:url,
-                type:'GET',
-                success:function (result) {
-                    window.location.href=result.data;
-                }
-            })
-        },
-        codeToToken(code){
-            let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code='+code;
-            $.ajax({
-              url:url,
-              type:'GET',
-              success:function (result) {
-                  if(result.data&&result.data.token){
-                       window.localStorage.removeItem('TOKEN');
-                       window.localStorage.setItem('GLOBALMATE_WX_ACCESS_TOKEN',JSON.stringify({
-                           'value':result.data.token,
-                           'expires':new Date().setTime(new Date().getTime()+2*60*60*1000)
-                       }));
-                       window.localStorage.setItem('TOKEN',result.data.token);
-                       window.localStorage.setItem('USERID',result.data.user.id);
-                       window.localStorage.setItem('OPENID',result.data.user.openid);
-                  }
-              }
-            })
-        },
-        wxAuthorization(){
-            window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN')
-            let ACCESS_TOKEN=window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
-            if(ACCESS_TOKEN){
-                ACCESS_TOKEN=JSON.parse(ACCESS_TOKEN);
-                if(ACCESS_TOKEN.expires<new Date().getTime()){
-                    window.localStorage.setItem('TOKEN',ACCESS_TOKEN.value);
-                }else{
-                    this.Authorization()
-                }
-            }else{
-                if(this.$utils.getQuery('code')){
-                    let code=this.$utils.getQuery('code')
-                     this.codeToToken(code);
-                }else{
-                    this.Authorization();
-                }
-            }
-        }
     },
     mounted () {
         this.setrem();
@@ -94,7 +46,6 @@ export default {
             }
     },
     created(){
-        // this.wxAuthorization()
     }
 }
 </script>
