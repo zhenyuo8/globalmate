@@ -10,10 +10,17 @@ import '../static/css/datePicker.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from'mint-ui'
 import'mint-ui/lib/style.css'
+import utils from './libs/js/util.js'
+import VueLazyLoad from 'vue-lazyload'
+Vue.use(VueLazyLoad,{
+    error:'./static/error.png',
+    loading:'./static/loading.png'
+})
 Vue.use(Mint);
 Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
 Vue.prototype.qs = qs
+Vue.prototype.$utils = utils
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

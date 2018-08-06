@@ -445,6 +445,7 @@
             },
             loginIM(){
                 let username=window.localStorage.getItem('USERPHONE');
+                if(!username) return
     			 $.ajax({
     		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
     		        type: 'POST',
@@ -486,14 +487,12 @@
         },
 
         created(){
-//            window.localStorage.removeItem('TOKEN');
-//            window.localStorage.removeItem('AUTHORIZATION');
-                let _this=this;
-                $('body').on('click',function (e) {
-                    if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
-                        _this.showPersonal=false;
-                    }
-                })
+            let _this=this;
+            $('body').on('click',function (e) {
+                if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
+                    _this.showPersonal=false;
+                }
+            })
         }
 	}
 </script>
