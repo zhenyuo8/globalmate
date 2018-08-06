@@ -45,7 +45,7 @@
 	    /*background: rgba(153,153,153,0.2);*/
 	}
 	.tips i{
-		max-width: 5.4rem;
+		max-width: 3.4rem;
 	    font-size: 14px;
 		line-height: 32px;
 		padding: 8px .4rem;

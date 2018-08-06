@@ -1,23 +1,25 @@
 <template>
-	<div class="spinner">
-		  <div class="spinner-container container1">
-		    <div class="circle1"></div>
-		    <div class="circle2"></div>
-		    <div class="circle3"></div>
-		    <div class="circle4"></div>
-		  </div>
-		  <div class="spinner-container container2">
-		    <div class="circle1"></div>
-		    <div class="circle2"></div>
-		    <div class="circle3"></div>
-		    <div class="circle4"></div>
-		  </div>
-		  <div class="spinner-container container3">
-		    <div class="circle1"></div>
-		    <div class="circle2"></div>
-		    <div class="circle3"></div>
-		    <div class="circle4"></div>
-		  </div>
+	<div class="spinner_warp">
+		<div class="spinner">
+			  <div class="spinner-container container1">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+			  </div>
+			  <div class="spinner-container container2">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+			  </div>
+			  <div class="spinner-container container3">
+			    <div class="circle1"></div>
+			    <div class="circle2"></div>
+			    <div class="circle3"></div>
+			    <div class="circle4"></div>
+			  </div>
+		</div>
 	</div>
 </template>
 
@@ -57,15 +59,16 @@
 
 <style  lang="less">
 	.spinner {
-  width: 20px;
-  height: 20px;
-  position: relative;
-}
+	  width: 20px;
+	  height: 20px;
+	  position: relative;
+	  margin:auto;
+	}
 
 .container1 > div, .container2 > div, .container3 > div {
   width: 6px;
   height: 6px;
-  background-color: #999;
+  background-color: red;
 
   border-radius: 100%;
   position: absolute;
@@ -165,6 +168,14 @@
     -webkit-transform: scale(1.0);
   }
 }
-
+.spinner_warp{
+	width: 80px;
+    padding: 30px 0;
+    margin: auto;
+    z-index: 1111;
+	margin-top:60%;
+	border-radius:6px;
+	background: rgba(153,153,153,0.8);
+}
 
 </style>

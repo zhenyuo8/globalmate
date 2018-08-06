@@ -83,6 +83,9 @@
                 <li @click='offer'>提供帮助</li>
             </ul>
         </div>
+        <!-- <div class="defindloadig" v-if="loadingShow">
+            <loading></loading>
+        </div> -->
         <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
     </div>
 </template>
@@ -90,12 +93,13 @@
 <script>
     import { swipe, SwipeItem } from 'vue-awesome-swiper'
     import tips from '../components/tips.vue'
+    import loading from '../components/loading.vue'
     import CONFIG from '../config/config.js'
     require('swiper/dist/css/swiper.css')
 	export default {
         'name':'index',
         components:{
-            swipe, SwipeItem,tips
+            swipe, SwipeItem,tips,loading
         },
 		data(){
 			return{
@@ -189,6 +193,7 @@
                 code:'',
                 hasReceiveMessage:false,
                 messageList:[],
+                loadingShow:true
 			}
 		},
         computed: {
@@ -212,7 +217,7 @@
                      this.showTipsText='对不起，该功能暂未上线，敬请关注...';
                      setTimeout(()=>{
                          this.showTipsText='';
-                     },3000);
+                     },2000);
                  }else{
                      if(!this.token) {
                          this.showTipsText='请先登入...';
@@ -484,7 +489,9 @@
 		    },
         activated(){
             document.title='globalmate';
-
+            setTimeout(()=>{
+                this.loadingShow=false;
+            },3000);
         },
 
         created(){
@@ -817,5 +824,13 @@
      }
      #index .icon-exclamation::before{
          margin-right: .04rem
+     }
+     .defindloadig{
+     	position: fixed;
+        z-index: 11;
+         left: 0;
+         top: 0;
+         right: 0;
+         bottom: 0;
      }
 </style>
