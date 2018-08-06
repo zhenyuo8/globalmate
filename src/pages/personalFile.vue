@@ -75,7 +75,7 @@
 				</p>
 				<p>
 					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
-					<input id="schooldatesignup" name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' @click='choseSchoolDate'/>
+					<input id="schooldatesignup" name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly'  @click='choseSchoolDate($event)'/>
 				</p>
 				<p>
 					<label for="schoolprofessionalsignup" class="professional" data-icon="u">所在专业</label>&nbsp:&nbsp&nbsp
@@ -187,7 +187,8 @@ export default {
             this.$el.querySelector('#schoolprofessionalsignup').value=item.professional;
             this.$el.querySelector('#schoolgradesignup').value=item.grade;
         },
-        choseSchoolDate(){
+        choseSchoolDate(e){
+            console.log(e);
             if(!this.calendar2&&!this.showEducationValue){
               this.calendar2 = new datePicker();
               this.calendar2.init({
@@ -585,7 +586,7 @@ export default {
         background: #fff;
         /*margin: auto;*/
         position: absolute;
-        top: 30%;
+        top: 26%;
         left: 5%;
         border-radius: 6px;
     }
@@ -638,4 +639,20 @@ export default {
 	.personalFile .buttom_action .confirm{
 		background: rgb(41, 182, 246);
 	}
+
+</style>
+<style media="screen">
+    .date_btn_box{
+        font-size: 14px!important;
+    }
+    .date_grid{
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+    .date_grid>div{
+        display: none!important;
+    }
+    .date_roll>div:nth-child(3) .gear{
+        text-indent: 0!important
+    }
 </style>

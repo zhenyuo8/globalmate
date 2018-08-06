@@ -203,23 +203,31 @@
 		methods:{
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
-                if(!this.token) {
-                    this.showTipsText='请先登入...';
-                    setTimeout(()=>{
-                        this.showTipsText='';
-                    },1500);
-                }else {
-                    this.$router.push({
-                        path: item.type,
-                        query: {
-                            'token': this.token,
-                            'title': item.title,
-                            'type': item.type,
-                            'form': item.form,
-                            'key':item.key
-                        }
-                    });
-                }
+                 if(item.key=='carry'){
+                     this.showTipsText='对不起，该功能暂未上线，敬请关注...';
+                     setTimeout(()=>{
+                         this.showTipsText='';
+                     },3000);
+                 }else{
+                     if(!this.token) {
+                         this.showTipsText='请先登入...';
+                         setTimeout(()=>{
+                             this.showTipsText='';
+                         },1500);
+                     }else {
+                         this.$router.push({
+                             path: item.type,
+                             query: {
+                                 'token': this.token,
+                                 'title': item.title,
+                                 'type': item.type,
+                                 'form': item.form,
+                                 'key':item.key
+                             }
+                         });
+                     }
+                 }
+
 
             },
             showPersonalInf(){
@@ -475,17 +483,9 @@
             if(this.token){
                 this.loginIM();
             }
-            // setTimeout(()=>{
-            //     let message=YYIMChat.onMessage();
-            //     if(message){
-            //         this.hasReceiveMessage=true
-            //        console.log(message);
-            //     }
-            // },500)
         },
 
         created(){
-            // console.log(YYIMChat);
 //            window.localStorage.removeItem('TOKEN');
 //            window.localStorage.removeItem('AUTHORIZATION');
                 let _this=this;
