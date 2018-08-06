@@ -1,19 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/pages/Home'
 import index from '@/pages/index'
 import assist from '@/pages/assist'//帮代
-import carryAssist from '@/pages/carryAssist'//帮代
-import accompany from '@/pages/accompany'//帮代
 import mine from '@/pages/mine'//我的
 import mineInformation from '@/pages/mineInformation'//个人信息
 import mineInformationEdit from '@/pages/mineInformationEdit'//个人资料编辑
-import other from '@/pages/other'//其他
 import myAssist from '@/pages/myAssist'//我发布的
 import seekHelpList from '@/pages/seekHelpList'//求助列表
-import chart from '@/pages/chart'//聊天页面
 import detail from '@/pages/detail'//详情页
-import selectList from '@/pages/selectList'//选择列表
 import register from '@/pages/register'//注册
 import login from '@/pages/login'//登陆
 import im from '@/pages/im'//聊天
@@ -37,35 +31,11 @@ export default new Router({
       }
     },
     {
-        path: '/Home',
-        name: 'Home',
-        component: Home,
-        meta:{
-            index:2
-        }
-    },
-    {
         path: '/assist',
         name: 'assist',
         component: assist,
         meta:{
             index:3
-        }
-    },
-    {
-        path: '/carryAssist',
-        name: 'carryAssist',
-        component: carryAssist,
-        meta:{
-            index:4
-        }
-    },
-    {
-        path: '/accompany',
-        name: 'accompany',
-        component: accompany,
-        meta:{
-            index:5
         }
     },
     {
@@ -93,14 +63,6 @@ export default new Router({
         }
     },
     {
-        path: '/other',
-        name: 'other',
-        component: other,
-        meta:{
-            index:9
-        }
-    },
-    {
         path: '/myAssist',
         name: 'myAssist',
         component: myAssist,
@@ -117,35 +79,11 @@ export default new Router({
         }
     },
     {
-        path: '/chart',
-        name: 'chart',
-        component: chart,
-        meta:{
-            index:12
-        }
-    },
-    {
         path: '/detail',
         name: 'detail',
         component: detail,
         meta:{
             index:13
-        }
-    },
-    {
-        path: '/selectList',
-        name: 'selectList',
-        component: selectList,
-        meta:{
-            index:14
-        }
-    },
-    {
-        path: '/register',
-        name: 'register',
-        component: register,
-        meta:{
-            index:15
         }
     },
     {

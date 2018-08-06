@@ -13,8 +13,8 @@ import'mint-ui/lib/style.css'
 import utils from './libs/js/util.js'
 import VueLazyLoad from 'vue-lazyload'
 Vue.use(VueLazyLoad,{
-    error:'./static/error.png',
-    loading:'./static/loading.png'
+    error:'./assets/images/icon.png',
+    loading:'./assets/images/loading.gif'
 })
 Vue.use(Mint);
 Vue.use(VueAwesomeSwiper)

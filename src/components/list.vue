@@ -5,7 +5,7 @@
     display: flex;
     color: #4A4A4A;
     position: relative;
-    padding: 0 .2rem;
+    padding: 0 0.1rem 0 0.3rem;
     font-family: 'PingFangSC-Regular'
 }
 

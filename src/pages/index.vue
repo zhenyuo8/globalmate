@@ -56,9 +56,9 @@
 
             </div>
             <ul>
-                <li><a href="javascript:;"><img src="../assets/images/1.jpeg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/2.jpeg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/3.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
             </ul>
         </div>
         <div class="rank school_star">
@@ -72,9 +72,9 @@
 
             </div>
             <ul>
-                <li><a href="javascript:;"><img src="../assets/images/11.jpeg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/12.jpeg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/13.jpeg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/11.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/2.jpg" alt=""></a></li>
+                <li><a href="javascript:;"><img src="../assets/images/3.jpg" alt=""></a></li>
             </ul>
         </div>
         <div class="buttom_action">
@@ -188,7 +188,7 @@
                 token:'',
                 code:'',
                 hasReceiveMessage:false,
-                messageList:[]
+                messageList:[],
 			}
 		},
         computed: {
@@ -198,7 +198,12 @@
         },
         mounted () {
             this.swiper.slideTo(0, 0, false);
-            this.initIM();
+            setTimeout(()=>{
+                 this.token=window.localStorage.getItem('TOKEN')||"";
+                if(this.token){
+                    this.initIM();
+                }
+            },1000);
         },
 		methods:{
             publish(item){
@@ -479,11 +484,7 @@
 		    },
         activated(){
             document.title='globalmate';
-            this.token=window.localStorage.getItem('TOKEN')||"";
 
-            if(this.token){
-                this.loginIM();
-            }
         },
 
         created(){
@@ -728,7 +729,7 @@
          color: #999;
      }
      .rank ul{
-         padding:0 .6rem 16px;
+         padding:6px .6rem 16px;
      }
      .rank ul li{
          display: inline-block;
