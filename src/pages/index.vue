@@ -61,7 +61,7 @@
                 <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
             </ul>
         </div>
-        <div class="rank school_star">
+        <!-- <div class="rank school_star">
             <div class="rank_title school_star_title">
                 <div class="left">
                     校园龙虎榜
@@ -76,7 +76,7 @@
                 <li><a href="javascript:;"><img src="../assets/images/2.jpg" alt=""></a></li>
                 <li><a href="javascript:;"><img src="../assets/images/3.jpg" alt=""></a></li>
             </ul>
-        </div>
+        </div> -->
         <div class="buttom_action">
             <ul>
                 <li class="need_help" @click="seekHelp">我发布的</li>

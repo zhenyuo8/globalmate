@@ -237,7 +237,7 @@
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
-                    <span class="mineInformation_call">好人值 0</span>
+                    <span class="mineInformation_call">服务值 0</span>
                     <img src="../assets/images/mine-identify.jpg" alt="">
                 </div>
             </div>

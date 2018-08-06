@@ -196,7 +196,7 @@
 
 <div class="myAssist">
     <!--搜索框-->
-        <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal"></searchInput>
+        <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
     <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
         <div class="top">
             <span class="top_left">
@@ -309,7 +309,8 @@ export default {
           searchContent:{
               type:'',
               where:'',
-          }
+          },
+          isSOS:false,
 
         }
     },
@@ -473,6 +474,11 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
+            if(this.$route.query.id.toLocaleLowerCase()=='sos'){
+                this.isSOS=true;
+            }else{
+                this.isSOS=false;
+            }
             let url='/globalmate/rest/assist/listSOS';
             let postData={
                 onlyCurrentUser:''
@@ -530,6 +536,7 @@ export default {
         this.selectFlag=false;
         this.nodataFlag=false;
         this.myAssistList=[];
+        this.isSOS=[];
         this.noDataTips='';
         this.loadData();
     },
@@ -537,6 +544,7 @@ export default {
         this.rightIn=false;
         this.selectFlag=false;
         this.token=this.$route.query.token;
+
 
     }
 

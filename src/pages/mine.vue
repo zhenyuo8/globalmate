@@ -100,7 +100,7 @@
             <div class="mine_information" @click='toMineInformation'>
                 <div class="mine_top">
                     <span class="mine_username">{{userInfo.username}}</span>
-                    <span class="mine_call">好人值 {{userInfo.call}}</span>
+                    <!-- <span class="mine_call">好人值 {{userInfo.call}}</span> -->
                 </div>
                 <div class="mine_location">
                     <span class="">{{userInfo.country}}</span>
