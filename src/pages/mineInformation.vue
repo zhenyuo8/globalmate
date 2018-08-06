@@ -190,6 +190,12 @@
     height: 32px;
     line-height: 32px;
     color: #333;
+    font-size: 13px;
+    margin-left: .12rem;
+    text-align: left;
+}
+.mineInformation_school_content_repeat, .mineInformation_hobby_offer, .mineInformation_hobby_love{
+    text-align: left;
 }
 .mineInformation_comment_content{
     overflow: hidden;
@@ -251,9 +257,9 @@
                     <span class="mineInformation_praise_text">赞</span>
                 </div>
             </div>
-            <div class="mineInformation_edit_button" @click='goEditMineInfo' v-if="!isOthers">
+            <!-- <div class="mineInformation_edit_button" @click='goEditMineInfo' v-if="!isOthers">
                 <span>编辑信息</span>
-            </div>
+            </div> -->
             <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
                 <span class="icon-chat">联系她/他</span>
             </div>

@@ -1,10 +1,10 @@
 <template>
     <div class="index" id='index'>
         <div class="header">
-            <div class="location left">
+            <!-- <div class="location left">
                 <div class="icon-map-location"></div>
                 <div class="name">北京</div>
-            </div>
+            </div> -->
             <div class="min right">
                 <div class="sos" @click='toSOS()'>
                     <i>sos</i>
@@ -12,15 +12,15 @@
                 <div class="icon-global-im" @click='toMessage()'>
                     <i class="message_tips" v-if="hasReceiveMessage"></i>
                 </div>
-                <div class="icon-user" @click='showPersonalInf()' :class="token?'login_yes':'login_no'">
+                <div class="icon-user" @click='goPersonalCenter()' :class="token?'login_yes':'login_no'">
 
                 </div>
             </div>
-            <div class="user_wrap" v-show="showPersonal">
+            <!-- <div class="user_wrap" v-show="showPersonal">
                 <span @click='goPersonalCenter'>个人中心</span>
                 <span @click='login'>登入</span>
                 <span @click='register'>注册</span>
-            </div>
+            </div> -->
         </div>
         <div class="swpier_container" >
             <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
@@ -488,7 +488,7 @@
             },
 		    },
         activated(){
-            document.title='globalmate';
+            document.title='Global Mate';
             setTimeout(()=>{
                 this.loadingShow=false;
             },3000);

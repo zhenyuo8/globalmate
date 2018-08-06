@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="mine_settings" @click='goEditMineInfo'>
-                设置
+                编辑
             </div>
         </div>
     </div>
@@ -226,11 +226,11 @@ export default {
         },
         goEditMineInfo(){
             this.$router.push({
-                path: 'mineInformationEdit',
+                path: 'personalFile',
                 query: {
                     'token': this.token,
-                    'title': '编辑',
-                    'id': 'mineInformationEdit',
+                    'title': '个人资料编辑',
+                    'id': 'personalFile',
                 }
             });
         },
