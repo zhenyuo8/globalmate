@@ -7,15 +7,22 @@
       padding: 0.4rem;
   }
   .identify_body{
-      width: 70%;
+      width: 80%;
       margin: auto;
   }
   .identify_body>div{
-      height: 140px;
-      line-height: 140px;
+      height: 120px;
+      /*line-height: 140px;*/
       background: #fff;
       margin-top: 20px;
       border-radius: 4px;
+      padding: 10px 0;
+      border: 2px solid #02b2bb;
+      border-radius: 4px;
+  }
+  .icon-drivers-license-o{
+      font-size: 86px;
+      display: inherit;
   }
 
 </style>
@@ -25,7 +32,9 @@
 <div class="identify" id="identify">
     <div class="identify_body">
         <div class="identify_face_page">
-          身份证正面
+            <span class=""></span>
+            <span>身份证正面</span>
+
         </div>
         <div class="identify_opposite_page">
           身份证反面

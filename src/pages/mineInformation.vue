@@ -121,21 +121,22 @@
     line-height: 32px;
 }
 .mineInformation_chart_button{
-    font-size: 14px;
+    font-size: 12px;
     color: #fff;
     width: 40%;
     text-align: center;
-    height: 32px;
+    /*height: 32px;*/
 }
  .mineInformation_chart_button span{
     width: auto!important;
     margin-left: 0!important;
-    padding: 0 .08rem;
+    /*padding: 0 .08rem;*/
     display: inline-block;
     background: #007aff;
-    height: 32px;
+    padding: 6px 0.08rem;
+    /*height: 32px;*/
     border-radius: 4px;
-    line-height: 32px;
+    /*line-height: 32px;*/
 }
  .mineInformation_chart_button .icon-chat::before{
      margin-right: .08rem;
@@ -261,7 +262,7 @@
                 <span>编辑信息</span>
             </div> -->
             <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
-                <span class="icon-chat">联系她/他</span>
+                <span class="icon-chat">联系TA</span>
             </div>
         </div>
         <div class="mineInformation_recommend" v-if="information.decription">

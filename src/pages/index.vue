@@ -32,16 +32,6 @@
             <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
              <ul class="mainmenu">
                  <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
-                 <!-- <li><a href="/#/assist" ><b><img src="images/tb01.png" /></b><span>学习互助</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb02.png" /></b><span>教材</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb03.png" /></b><span>办手续</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb04.png" /></b><span>换汇</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb05.png" /></b><span>就医</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>帮带</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb06.png" /></b><span>租赁</span></a></li>
-                 <li><a href="/#/accompany" ><b><img src="images/tb07.png" /></b><span>陪玩</span></a></li>
-                 <li><a href="/#/assist" ><b><img src="images/tb08.png" /></b><span>代购</span></a></li>
-                 <li><a href="/#/other" ><b><img src="images/tb08.png" /></b><span>其他</span></a></li> -->
              </ul>
         </div>
 
@@ -53,7 +43,6 @@
                 <div class="right icon-arrow_right_samll" @click='goRankAll("service")'>
                     查看榜单
                 </div>
-
             </div>
             <ul>
                 <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>

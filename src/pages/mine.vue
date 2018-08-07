@@ -131,6 +131,11 @@ export default {
     data() {
         return {
             listRepeat: [{
+                title: '身份认证',
+                text: '',
+                arrow: true,
+                mineType: 'identify'
+            },{
                 title: '我发布的',
                 text: '',
                 arrow: true,
@@ -220,6 +225,16 @@ export default {
                         }
                     });
                     break;
+                 case 'identify':
+                     this.$router.push({
+                         path: 'identify',
+                         query: {
+                             'token': this.token,
+                             'title': '身份认证',
+                             'id': 'identify',
+                         }
+                     });
+                     break;
                 default:
 
             }
