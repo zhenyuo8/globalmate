@@ -167,13 +167,7 @@ export default {
             }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
-					 console.log(data);
-                    //  this.detail=data;
-                     setTimeout(()=>{
-                        //  this.show=true;
-                     },500)
                      for(var key in data.conceretNeed){
-                        //  this.detail[key]=data.conceretNeed[key];
                          if(key==='pic'){
                              if(data.conceretNeed[key]){
                                  this.imageArr=data.conceretNeed[key].split(';')
@@ -186,9 +180,7 @@ export default {
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
                      }
-					 console.log(this.detail);
                      this.detailId=data.need.id;
-
                 }else{
 
                 }
@@ -225,7 +217,7 @@ export default {
 			})
 		},
 		getToken(){
-			let username=window.localStorage.getItem('USERPHONE');
+			let username=window.localStorage.getItem('USERID');
 			if(this.$route.query.senderDId){
 				username=this.$route.query.senderDId;
 			}

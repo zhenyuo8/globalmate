@@ -102,12 +102,11 @@
     line-height: 32px;
 }
 .mineInformation_chart_button{
-    font-size: 12px;
+    font-size: 14px;
     color: #fff;
-    position: absolute;
-    right: 0.4rem;
-    top: 8px;
-    text-align: center;
+    margin-top: 6px;
+    margin-right:.6rem;
+    text-align: right;
 }
  .mineInformation_chart_button span{
     width: auto!important;
@@ -221,9 +220,9 @@
                     <!-- <img src="../assets/images/mine-identify.jpg" alt=""> -->
                 </div>
             </div>
-            <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
-                <span class="icon-chat">联系TA</span>
-            </div>
+        </div>
+        <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
+            <span class="icon-chat">联系TA</span>
         </div>
         <div class="mineInformation_recommend" v-if="information.decription">
             <p></p>
@@ -366,8 +365,10 @@ export default {
                 path: 'im',
                 query: {
                     'token': this.$route.query.token,
-                    'title': 'im',
-                    'id': 'im',
+                    'title': this.information.nikename,
+                    'id': this.$route.query.id,
+                    'toChartUser':this.information.nikename,
+                    'toChartId':this.userId,
                 }
             });
         },

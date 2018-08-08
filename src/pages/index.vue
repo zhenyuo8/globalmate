@@ -460,7 +460,7 @@
                 YYIMChat.onMessage();
             },
             loginIM(){
-                let username=window.localStorage.getItem('USERPHONE');
+                let username=window.localStorage.getItem('USERID');
                 if(!username) return
     			 $.ajax({
     		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
@@ -473,7 +473,6 @@
     		            "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
     		        }),
     		        success: function (result) {
-                        console.log(result);
     		            let clientIdentify = "pc" + String(new Date().getTime());
     		            //登陆YYIMSDK
     		            YYIMChat.login({
@@ -483,9 +482,6 @@
     		                "appType": 4,
     		                "identify": clientIdentify
     		            });
-                        setTimeout(()=>{
-                            // YYIMChat.onMessage()
-                        },1000)
     		        },
     		        error: function (arg) {
     		            console.log(arg);

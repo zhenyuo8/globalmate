@@ -346,7 +346,8 @@ export default {
                  query: {
                      'token': this.token,
                      'title': item.need.userName,
-                     'userId':item.need.userId
+                     'userId':item.need.userId,
+                     'id': item.need.id,
                  }
              });
 
@@ -363,12 +364,11 @@ export default {
                         'title': data.nikename,
                         'id': item.need.id,
                         'toChartUser':data.nikename,
-                        'toChartId':data.phone,
+                        'toChartId':item.need.userId,
                         'whoNeedHelf':item.need.userId,
                     }
                 });
             })
-
         },
         getUserInfo(userId,callback){
           this.apiHost=CONFIG[__ENV__].apiHost;

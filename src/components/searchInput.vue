@@ -17,7 +17,7 @@
         <div class="search_delete" @click="cleanVal()" :class="this.searchVal!==''?'':'hide'">
             <img src="../assets/images/search_delete@2x.png" alt="">
         </div>
-        <div class="select_icon" @click='showCondition()' >
+        <div class="select_icon" @click='showCondition()' v-if="!hideFilter">
             <img src="../assets/images/filter_icon@2x.png" alt="">
         </div>
     </div>
@@ -49,6 +49,10 @@
                 default: '搜索'
             },
             disabled: {
+                type: Boolean,
+                default: false
+            },
+            hideFilter:{
                 type: Boolean,
                 default: false
             }
