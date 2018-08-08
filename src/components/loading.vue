@@ -20,6 +20,7 @@
 			    <div class="circle4"></div>
 			  </div>
 		</div>
+		<p>加载中...</p>
 	</div>
 </template>
 
@@ -68,7 +69,7 @@
 .container1 > div, .container2 > div, .container3 > div {
   width: 6px;
   height: 6px;
-  background-color: red;
+  background-color: #fff;
 
   border-radius: 100%;
   position: absolute;
@@ -170,12 +171,17 @@
 }
 .spinner_warp{
 	width: 80px;
-    padding: 30px 0;
+    padding: 20px 0 15px 0;
     margin: auto;
     z-index: 1111;
-	margin-top:60%;
+	margin-top:66%;
 	border-radius:6px;
-	background: rgba(153,153,153,0.8);
+	background: rgba(0,0,0,0.8);
+}
+.spinner_warp p{
+	font-size:14px;
+	margin-top:15px;
+	color:#fff
 }
 
 </style>

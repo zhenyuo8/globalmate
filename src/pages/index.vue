@@ -50,31 +50,15 @@
                 <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
             </ul>
         </div>
-        <!-- <div class="rank school_star">
-            <div class="rank_title school_star_title">
-                <div class="left">
-                    校园龙虎榜
-                </div>
-                <div class="right icon-arrow_right_samll" @click='goRankAll("school")'>
-                    查看榜单
-                </div>
-
-            </div>
-            <ul>
-                <li><a href="javascript:;"><img src="../assets/images/11.jpg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/2.jpg" alt=""></a></li>
-                <li><a href="javascript:;"><img src="../assets/images/3.jpg" alt=""></a></li>
-            </ul>
-        </div> -->
-        <div class="buttom_action">
+        <div class="buttom_action" v-show="onload">
             <ul>
                 <li class="need_help" @click="seekHelp">我发布的</li>
                 <li @click='offer'>提供帮助</li>
             </ul>
         </div>
-        <!-- <div class="defindloadig" v-if="loadingShow">
+        <div class="defindloadig" v-if="loadingShow">
             <loading></loading>
-        </div> -->
+        </div>
         <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
     </div>
 </template>
@@ -176,13 +160,13 @@
                          'icon':'icon-more-horizontal'
                     }
                 ],
-                showPersonal:false,
                 showTipsText:'',
                 token:'',
                 code:'',
                 hasReceiveMessage:false,
                 messageList:[],
-                loadingShow:true
+                loadingShow:true,
+                onload:false,
 			}
 		},
         computed: {
@@ -200,8 +184,33 @@
             },1000);
         },
 		methods:{
+            getToken(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                let userId=window.localStorage.getItem('USERID');
+                let openid=window.localStorage.getItem('OPENID');
+                if(userId){
+                    this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+                        if(res.data.success){
+                            this.token=res.data.data;
+                            window.localStorage.setItem('TOKEN',res.data.data);
+                        }
+                    }).catch((e)=>{
+                        console.log(e);
+                    })
+                }else if(openid){
+                    this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
+                        if(res.data.success){
+                            this.token=res.data.data;
+                            window.localStorage.setItem('TOKEN',res.data.data);
+                        }
+                    }).catch((e)=>{
+                        console.log(e);
+                    })
+                }
+            },
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
+                 this.loadingShow=true;
                  if(item.key=='carry'){
                      this.showTipsText='对不起，该功能暂未上线，敬请关注...';
                      setTimeout(()=>{
@@ -214,23 +223,31 @@
                              this.showTipsText='';
                          },1500);
                      }else {
-                         this.$router.push({
-                             path: item.type,
-                             query: {
-                                 'token': this.token,
-                                 'title': item.title,
-                                 'type': item.type,
-                                 'form': item.form,
-                                 'key':item.key
-                             }
-                         });
+                         setTimeout(()=>{
+                             this.loadingShow=false;
+                             this.$router.push({
+                                 path: item.type,
+                                 query: {
+                                     'token': this.token,
+                                     'title': item.title,
+                                     'type': item.type,
+                                     'form': item.form,
+                                     'key':item.key
+                                 }
+                             });
+                         },500)
                      }
                  }
 
 
             },
-            showPersonalInf(){
-                this.showPersonal=!this.showPersonal;
+            /**
+             * [getServiceRank 服务之星数据获取]
+             * @return {[type]} [description]
+             */
+            getServiceRank(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+
             },
             goPersonalCenter(){
                  this.token=window.localStorage.getItem('TOKEN');
@@ -478,9 +495,13 @@
 		    },
         activated(){
             document.title='Global Mate';
+            this.getToken();
             setTimeout(()=>{
                 this.loadingShow=false;
-            },3000);
+            },2000);
+            setTimeout(()=>{
+                this.onload=true;
+            },500);
         },
 
         created(){
@@ -498,12 +519,27 @@
     #index{
         background: #efefef;
         overflow: hidden;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        overflow-y: scroll;
+        padding-bottom: 44px;
     }
     .header{
         height: 44px;
         font-size: 14px;
-        /*padding: 0 .4rem;*/
         overflow: hidden;
+        position: fixed;
+        z-index: 111;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: rgba(250,250,250,0.8);
+    }
+    .swpier_container{
+        margin-top: 44px;
     }
     .header > div{
         /*line-height: 44px;*/
@@ -578,7 +614,7 @@
         position: relative;
         font-size:20px;
         color:#9f9f9f;
-        margin-left: .1rem;
+        margin-right: .1rem;
         width: .88rem;
     }
     .login_yes{

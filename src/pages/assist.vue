@@ -55,6 +55,14 @@
     .date_roll>div:nth-child(3) .gear{
         text-indent: 0!important
     }
+    .defindloadig{
+       position: fixed;
+       z-index: 11;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
 
 </style>
 
@@ -92,6 +100,9 @@
         发布
     </div>
      <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
+     <div class="defindloadig" v-if="loadingShow">
+         <loading></loading>
+     </div>
      <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
 </div>
 
@@ -104,6 +115,7 @@ import selectList from '../components/selectList.vue'
 import indexList from '../components/indexList.vue'
 import CONFIG from '../config/config'
 import tips from '../components/tips.vue'
+import loading from '../components/loading.vue'
 let pinyin=require('pinyin')
 import { Toast} from 'mint-ui';
 export default {
@@ -139,11 +151,12 @@ export default {
             listType:'',
             country:'',
             showTipsText:'',
+            loadingShow:true
         }
 
     },
     components: {
-        List,selectList,Toast,indexList,tips
+        List,selectList,Toast,indexList,tips,loading
     },
     methods:{
         // 点击发布按钮逻辑
@@ -174,16 +187,23 @@ export default {
            }
            this.apiHost=CONFIG[__ENV__].apiHost;
            if(postData){
-             this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
-               if(res.data.success){
-               window.history.go(-1);
-             }else{
-               alert('请确认后再提交')
-             }
-
-           }).catch((e)=>{
-               console.log(e);
-           });
+               this.loadingShow=true;
+               this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
+                   if(res.data.success){
+                       setTimeout(()=>{
+                           this.loadingShow=true;
+                           window.history.go(-1);
+                       },1500);
+                   }else{
+                       this.showTipsText=e.msg||"发布失败";
+                    }
+               }).catch((e)=>{
+                   console.log(e);
+               });
+           }else{
+               setTimeout(()=>{
+                   this.showTipsText='';
+               },1500);
            }
 
         },
@@ -285,7 +305,6 @@ export default {
             let url='',_this=this,postData={};
             if(key=='city'&&this.country){
                 url='/globalmate/rest/user/city';
-                postData['countryregion']='中国';
                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
                     if(res.data.success){
                         let result=res.data.data,resultArr=[];
@@ -357,23 +376,28 @@ export default {
         // 获取发布所需要的数据
         getListData(){
             let listRepeat=this.listRepeat;
-            let postData={};
-            listRepeat.forEach(function (item,index) {
-                if(item.isPlacehold&&!item.isRequire){
-                    postData[item.componentKey]='';
-                }else if(!item.isPlacehold){
-                    postData[item.componentKey]=item.text;
-                }else {
-                    alert(item.title+'为必填项')
+            let postData={},hasParaRequired=false;
+            for(var i=0;i<listRepeat.length;i++){
+                if(listRepeat[i].isPlacehold&&listRepeat[i].isRequire){
+                    postData[listRepeat[i].componentKey]='';
+                    hasParaRequired=true;
+                    this.showTipsText=listRepeat[i].title+'为必填项';
                     return false;
+                }else if(!listRepeat[i].isPlacehold){
+                    postData[listRepeat[i].componentKey]=listRepeat[i].text;
                 }
-            })
-
+            }
             if(!this.myReward.isPlacehold){
                  postData[this.myReward.componentKey]=this.myReward.text;
+            }else{
+                hasParaRequired=true;
             }
             if(!this.title.isPlacehold){
                  postData[this.title.componentKey]=this.title.text;
+
+            }else{
+                this.showTipsText=this.title.title+'为必填项';
+                return false;
             }
             if(this.$el.querySelector('.main_decription_area textarea')){
                 // postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
@@ -546,6 +570,9 @@ export default {
         this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
         this.listRepeatProcess();
+        setTimeout(()=>{
+            this.loadingShow=false;
+        },500)
     },
     computed:{
         form: function() {

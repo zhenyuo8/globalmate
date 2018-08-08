@@ -25,6 +25,7 @@ time, mark, audio, video {
 }
 label,input{
 	-webkit-tap-highlight-color: transparent;
+	caret-color:red
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
