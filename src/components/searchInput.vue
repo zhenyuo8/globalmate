@@ -100,7 +100,7 @@
             position:absolute!important;
             height:16px;
             top: 15px;
-            left:10px;
+            left:.3rem;
             img{
                 width:15px;
                 vertical-align: middle;
@@ -147,7 +147,7 @@
         }
         .search_delete{
             position:absolute;
-            right:0.9rem;
+            right:1.1rem;
             height:18px;
             padding:6px 0;
             background: #fff;

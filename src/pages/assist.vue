@@ -15,6 +15,7 @@
        -webkit-transition: all .2s ease-in;
        -moz-transition: all .2s ease-in;
        transition: all .2s ease-in;
+       overflow: scroll;
     }
     .list_hide{
         position: fixed;
@@ -90,7 +91,8 @@
     <div class="assist_bottom" @click='publish'>
         发布
     </div>
-     <selectList :class="show?'list_show':'list_hide'" :selectCallBack='selectCallBack' :selectItem='selectItem'></selectList>
+     <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
+     <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
 </div>
 
 </template>
@@ -99,24 +101,16 @@
 
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
+import indexList from '../components/indexList.vue'
 import CONFIG from '../config/config'
-
+import tips from '../components/tips.vue'
+let pinyin=require('pinyin')
 import { Toast} from 'mint-ui';
 export default {
     'name': 'assist',
     data() {
         return {
             listRepeat: [],
-            payStyle: {
-                title: '交收方式',
-                text: '请选择',
-                arrow: true,
-                key:'delivery',
-                isRequire:true,
-                isPlacehold:true,
-                componentKey:'deliveryWay'
-
-            },
             myReward: {
                 title: '我的悬赏',
                 text: '请输入',
@@ -133,20 +127,23 @@ export default {
                 type: 'input',
                 arrow: false,
                 key:'title',
-                isRequire:false,
+                isRequire:true,
                 isPlacehold:true,
                 componentKey:'title'
             },
             publishData:[],
             show:false,
-            selectItem:{},
+            selectItem:[],
             filesHasUpload:[],
-            formTitle:this.$route.query.title
+            formTitle:this.$route.query.title,
+            listType:'',
+            country:'',
+            showTipsText:'',
         }
 
     },
     components: {
-        List,selectList,Toast
+        List,selectList,Toast,indexList,tips
     },
     methods:{
         // 点击发布按钮逻辑
@@ -269,24 +266,93 @@ export default {
                     break;
             }
         },
+        countrySityCallBack(items,value){
+            this.show=false;
+            if(value){
+                if(items=='country'){
+                    this.country=value;
+                }
+                this.listRepeat.forEach(function (item,index) {
+                    if(item.componentKey==items){
+                        item.text=value;
+                        item.isPlacehold=false;
+                    }
+                })
+            }
+        },
         getSelectItem(key){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            let url='';
-            if(key=='city'){
+            let url='',_this=this,postData={};
+            if(key=='city'&&this.country){
                 url='/globalmate/rest/user/city';
-            }else{
+                postData['countryregion']='中国';
+                this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                    if(res.data.success){
+                        let result=res.data.data,resultArr=[];
+                        result.forEach(function (item,index) {
+                            resultArr.push(item.city);
+                        });
+                        _this.buildItem(resultArr,key);
+                    }
+                }).catch(e=>{
+                    this.showTipsText=e.msg;
+                    setTimeout(()=>{
+                        this.showTipsText=''
+                    },2000);
+                })
+            }else if(key=='country'){
                 url='/globalmate/rest/user/country';
+                this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                    if(res.data.success){
+                        _this.buildItem(res.data.data,key);
+                    }
+                }).catch(e=>{
+                    this.showTipsText=e.msg;
+                    setTimeout(()=>{
+                        this.showTipsText=''
+                    },2000);
+                })
+            }else{
+                this.showTipsText='请先选择国家！';
+                setTimeout(()=>{
+                    this.showTipsText=''
+                },2000);
             }
-            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
-                if(res.data.success){
-                    //    this.show=true;
-                    //    this.selectItem=item;
-                                    
-                    console.log(res.data);
-                }
-            }).catch(e=>{
 
-            })
+        },
+        buildItem(data,key){
+            let letter=this.buildLetter();
+            let _this = this;
+            for (let i = 0; i < 26; i++) {
+              letter[i].citylist = []
+            }
+            for (let i = 0; i < data.length; i++) {
+              let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65)
+              if (_index >= 0 && _index < 26) {
+                letter[_index].citylist.push(data[i])
+              }
+            }
+            let showCity = letter.filter(function (value) {
+              let len = value.citylist.length
+              return len > 0
+            });
+            this.show=true;
+            this.listType=key;
+            this.selectItem=showCity;
+            window.localStorage.setItem('LIST',JSON.stringify(this.selectItem))
+        },
+        buildLetter(){
+            let letter = [];
+            for (let i = 0; i < 26; i++) {
+              let obj = {}
+              obj.letter = String.fromCharCode((65 + i))
+              obj.citylist = []
+              letter.push(obj)
+            }
+            return letter;
+        },
+        getFirstLetter(str){
+            return pinyin(str)[0][0].charAt(0).toUpperCase()
         },
         // 获取发布所需要的数据
         getListData(){
@@ -302,9 +368,7 @@ export default {
                     return false;
                 }
             })
-            if(!this.payStyle.isPlacehold){
-                 postData[this.payStyle.componentKey]=this.payStyle.text;
-            }
+
             if(!this.myReward.isPlacehold){
                  postData[this.myReward.componentKey]=this.myReward.text;
             }
@@ -312,7 +376,7 @@ export default {
                  postData[this.title.componentKey]=this.title.text;
             }
             if(this.$el.querySelector('.main_decription_area textarea')){
-                postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
+                // postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
                 postData['descrition']=this.$el.querySelector('.main_decription_area textarea').value;
             }
             if(this.filesHasUpload.length!==0){
@@ -323,6 +387,26 @@ export default {
         // 发布页面显示字段根据form显示不同字段
         listRepeatProcess(){
             let form=this.$route.query.form;
+            this.myReward={
+                title: '我的悬赏',
+                text: '请输入',
+                type: 'input',
+                arrow: false,
+                key:'reward',
+                isRequire:false,
+                isPlacehold:true,
+                componentKey:'rewardAmount'
+            };
+            this.title={
+                title: '标题',
+                text: '简单说下求助内容',
+                type: 'input',
+                arrow: false,
+                key:'title',
+                isRequire:true,
+                isPlacehold:true,
+                componentKey:'title'
+            }
             this.listRepeat=[{
                 title: '方式',
                 text: this.$route.query.title,
@@ -364,215 +448,6 @@ export default {
                 isPlacehold:true,
                 componentKey:'city'
             }];
-            // switch (form) {
-            //     case 'assist':
-            //         this.listRepeat=[{
-            //             title: '方式',
-            //             text: this.$route.query.title,
-            //             arrow: true,
-            //             key:'style',
-            //             isRequire:false,
-            //             isPlacehold:false,
-            //             componentKey:'businessType'
-            //         }, {
-            //             title: '国家',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'country',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'country'
-            //         }, {
-            //             title: '物品类型',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'type',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'type'
-            //         } , {
-            //             title: '品牌',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'brand',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'brand'
-            //         }, {
-            //             title: '商品名称',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'goodsName',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'goodsName'
-            //         },{
-            //             title: '紧急程度',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'emergency',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'emergency'
-            //         }];
-            //         this.payStyle={
-            //             title: '交收方式',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'delivery',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'deliveryWay'
-            //         };
-            //         break;
-            //     case 'accompany':
-            //         this.listRepeat=[{
-            //             title: '方式',
-            //             text: this.$route.query.title,
-            //             arrow: true,
-            //             key:'style',
-            //             isRequire:false,
-            //             isPlacehold:false,
-            //             componentKey:'businessType'
-            //         }, {
-            //             title: '目的地',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'country',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'country'
-            //         },{
-            //             title: '开始时间',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'date',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'startTime'
-            //         },{
-            //             title: '结束时间',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'date',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'endTime'
-            //         }, {
-            //             title: '紧急程度',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'emergency',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'emergency'
-            //         }];
-            //         this.payStyle=false;
-            //         break;
-            //     case 'carryAssist':
-            //         this.listRepeat=[{
-            //             title: '方式',
-            //             text: this.$route.query.title,
-            //             arrow: true,
-            //             key:'style',
-            //             isRequire:false,
-            //             isPlacehold:false,
-            //             componentKey:'businessType'
-            //         }, {
-            //             title: '从哪里',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'from_country',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'from'
-            //         }, {
-            //             title: '到哪里',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'to_country',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'to'
-            //         },{
-            //             title: '到达时间',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'date',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'arrive'
-            //         },{
-            //             title: '物品类型',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'type',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'type'
-            //         } , {
-            //             title: '品牌',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'brand',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'brand'
-            //         }, {
-            //             title: '商品名称',
-            //             text: '请输入',
-            //             arrow: false,
-            //             type: 'input',
-            //             key:'goodsName',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'goodsName'
-            //         },{
-            //             title: '紧急程度',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'emergency',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'emergency'
-            //         }];
-            //         this.payStyle={
-            //             title: '交收方式',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'delivery',
-            //             isRequire:true,
-            //             isPlacehold:true,
-            //             componentKey:'deliveryWay'
-            //
-            //         };
-            //         break;
-            //     default:
-            //         this.listRepeat=[{
-            //             title: '紧急程度',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'emergency',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'emergency'
-            //         },{
-            //             title: '日期',
-            //             text: '请选择',
-            //             arrow: true,
-            //             key:'date',
-            //             isRequire:false,
-            //             isPlacehold:true,
-            //             componentKey:'date'
-            //         }];
-            //         this.payStyle=false;
-            //         break;
-            // }
         },
         removeFile(e){
             if(e.target.className==='prev_imgae'){
@@ -582,25 +457,25 @@ export default {
         },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
-        if(file.type=='image/gif'){
-            var fr = new mOxie.FileReader();
-            fr.onload = function(){
-                callback(fr.result);
-                fr.destroy();
-                fr = null;
+            if(file.type=='image/gif'){
+                var fr = new mOxie.FileReader();
+                fr.onload = function(){
+                    callback(fr.result);
+                    fr.destroy();
+                    fr = null;
+                }
+                fr.readAsDataURL(file.getSource());
+            }else{
+                var preloader = new mOxie.Image();
+                preloader.onload = function() {
+                    preloader.downsize( 100, 100 );
+                    var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
+                    callback && callback(imgsrc);
+                    preloader.destroy();
+                    preloader = null;
+                };
+                preloader.load( file.getSource() );
             }
-            fr.readAsDataURL(file.getSource());
-        }else{
-            var preloader = new mOxie.Image();
-            preloader.onload = function() {
-                preloader.downsize( 100, 100 );
-                var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
-                callback && callback(imgsrc);
-                preloader.destroy();
-                preloader = null;
-            };
-            preloader.load( file.getSource() );
-        }
         },
         initUploader(){
             let _this=this;

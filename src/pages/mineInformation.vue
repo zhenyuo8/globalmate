@@ -30,7 +30,7 @@
 
 .mineInformation_detail {
     overflow: hidden;
-    height: 60px;
+    height: 36px;
     /*position: relative;*/
 }
 
@@ -85,25 +85,6 @@
     width: 16px;
 }
 
-.mineInformation_interaction{
-    display: flex;
-}
-
-.mineInformation_interaction_sub{
-    display: flex;
-    font-size: 14px;
-    width: 60%;
-    color: #9B9B9B;
-}
-.mineInformation_interaction_sub > div{
-    flex: 1;
-    flex-direction: column;
-    display: flex;
-    height: 36px;
-}
-.mineInformation_interaction_sub > div > span{
-    flex: 1;
-}
 .mineInformation_edit_button{
     font-size: 14px;
     color: #fff;
@@ -123,20 +104,18 @@
 .mineInformation_chart_button{
     font-size: 12px;
     color: #fff;
-    width: 40%;
+    position: absolute;
+    right: 0.4rem;
+    top: 8px;
     text-align: center;
-    /*height: 32px;*/
 }
  .mineInformation_chart_button span{
     width: auto!important;
     margin-left: 0!important;
-    /*padding: 0 .08rem;*/
     display: inline-block;
     background: #007aff;
-    padding: 6px 0.08rem;
-    /*height: 32px;*/
+    padding: 8px 0.1rem;
     border-radius: 4px;
-    /*line-height: 32px;*/
 }
  .mineInformation_chart_button .icon-chat::before{
      margin-right: .08rem;
@@ -239,28 +218,9 @@
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
                     <span class="mineInformation_call">服务值 0</span>
-                    <img src="../assets/images/mine-identify.jpg" alt="">
+                    <!-- <img src="../assets/images/mine-identify.jpg" alt=""> -->
                 </div>
             </div>
-        </div>
-        <div class="mineInformation_interaction">
-            <div class="mineInformation_interaction_sub">
-                <div class="mineInformation_foucs">
-                    <span class="mineInformation_foucs_amount">0</span>
-                    <span class="mineInformation_foucs_text">关注</span>
-                </div>
-                <div class="mineInformation_fans">
-                    <span class="mineInformation_fans_amount">0</span>
-                    <span class="mineInformation_fans_text">粉丝</span>
-                </div>
-                <div class="mineInformation_praise">
-                    <span class="mineInformation_praise_amount">0</span>
-                    <span class="mineInformation_praise_text">赞</span>
-                </div>
-            </div>
-            <!-- <div class="mineInformation_edit_button" @click='goEditMineInfo' v-if="!isOthers">
-                <span>编辑信息</span>
-            </div> -->
             <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
                 <span class="icon-chat">联系TA</span>
             </div>
@@ -282,7 +242,7 @@
                     <span class="scholl_professional">{{item.professional}}</span>
                     <span class="scholl_grade">{{item.grade}}</span>
                 </div>
-
+                <p v-if="school.length==0">暂未添加圈子</p>
             </div>
         </div>
         <div class="mineInformation_hobby">

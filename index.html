@@ -56,11 +56,11 @@
                 let ACCESS_TOKEN=window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
                 if(ACCESS_TOKEN){
                     ACCESS_TOKEN=JSON.parse(ACCESS_TOKEN);
-                    if(ACCESS_TOKEN.expires<new Date().getTime()){
-                        window.localStorage.setItem('TOKEN',ACCESS_TOKEN.value);
+                    if(ACCESS_TOKEN.expires>new Date().getTime()){
+                         window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN');
+                         Authorization();
                     }else{
-                        window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN');
-                        Authorization();
+                       window.localStorage.setItem('TOKEN',ACCESS_TOKEN.value);
                     }
                 }else{
                     if(getQuery('code')){
