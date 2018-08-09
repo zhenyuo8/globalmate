@@ -30,7 +30,7 @@
 
 .mineInformation_detail {
     overflow: hidden;
-    height: 36px;
+    /*height: 36px;*/
     /*position: relative;*/
 }
 
@@ -76,10 +76,15 @@
 
 .mineInformation_top {
     margin-top: 6px;
+    max-width: 3rem;
+    white-space: nowrap;
+}
+.mineInformation_top span{
+    display: block;
 }
 
 .mineInformation_call {
-    margin-left: .14rem;
+    margin-top: .14rem;
 }
 .mineInformation_top img{
     width: 16px;
@@ -102,23 +107,24 @@
     line-height: 32px;
 }
 .mineInformation_chart_button{
-    font-size: 14px;
-    color: #fff;
-    margin-top: 6px;
-    margin-right:.6rem;
+    font-size: 30px;
+    margin-top: 8px;
+    margin-right:.4rem;
     text-align: right;
 }
  .mineInformation_chart_button span{
     width: auto!important;
     margin-left: 0!important;
     display: inline-block;
-    background: #007aff;
-    padding: 8px 0.1rem;
+    background: #eee;
+    padding:0.1rem;
     border-radius: 4px;
+    color: #007aff;
+    border-radius: 50%;
+    margin-right: .2rem;
 }
- .mineInformation_chart_button .icon-chat::before{
-     margin-right: .08rem;
-     font-weight: bold;
+ .mineInformation_chart_button .icon-wechat::before{
+     color: #0bbb0b;
  }
 
 .mineInformation_recommend{
@@ -141,7 +147,7 @@
 .mineInformation_hobby, .mineInformation_school, .mineInformation_comment{
      font-size: 14px;
      color: #999;
-     width: 80%;
+     width: 86%;
      padding: 16px 0;
      margin: auto;
      margin-top: 20px;
@@ -166,7 +172,7 @@
     /*display: flex;*/
 }
 .mineInformation_school_content_repeat span, .mineInformation_hobby_offer span, .mineInformation_hobby_love span{
-    height: 32px;
+    /*height: 32px;*/
     line-height: 32px;
     color: #333;
     font-size: 13px;
@@ -196,6 +202,14 @@
 .mineInformation_comment_content span:nth-child(3n+3){
     background: blue;
 }
+.defindloadig{
+   position: fixed;
+   z-index: 11;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
 </style>
 
 <template>
@@ -220,10 +234,12 @@
                     <!-- <img src="../assets/images/mine-identify.jpg" alt=""> -->
                 </div>
             </div>
+            <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
+                <span class="icon-wechat"></span>
+                <span class="icon-user-add"></span>
+            </div>
         </div>
-        <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
-            <span class="icon-chat">联系TA</span>
-        </div>
+
         <div class="mineInformation_recommend" v-if="information.decription">
             <p></p>
         </div>
@@ -269,6 +285,9 @@
             </div>
         </div>
     </div>
+    <div class="defindloadig" v-if="loadingShow">
+        <loading></loading>
+    </div>
     <div class="mineInformation_line">
 
     </div>
@@ -287,8 +306,15 @@ import Header from '../components/header.vue'
 import List from '../components/list.vue'
 import ActionList from '../components/actionList.vue'
 import CONFIG from '../config/config'
+import loading from '../components/loading.vue'
 export default {
     'name': 'mine',
+    components: {
+        Header,
+        List,
+        ActionList,
+        loading
+    },
     data() {
         return {
             hearderParas: {
@@ -348,6 +374,7 @@ export default {
             ],
             tipInOther:[],
             isOthers:false,
+            loadingShow:true
         }
     },
     methods:{
@@ -387,10 +414,17 @@ export default {
                     this.userId=data.id;
                     this.hobby=data.hobby;
                     this.helpAvailable=data.helpAvailable;
-                    this.school=JSON.parse(data.school);
+                    this.loadingShow=false;
+                    if(data.school){
+                        this.school=JSON.parse(data.school);
+                    }
+
+                }else {
+                    this.loadingShow=false;
                 }
 
             }).catch((e)=>{
+                this.loadingShow=false;
                 console.log(e);
             })
         }
@@ -401,11 +435,7 @@ export default {
             this.isOthers=true;
         }
     },
-    components: {
-        Header,
-        List,
-        ActionList
-    },
+
 }
 
 </script>

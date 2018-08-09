@@ -1,10 +1,6 @@
 <template>
     <div class="index" id='index'>
         <div class="header">
-            <!-- <div class="location left">
-                <div class="icon-map-location"></div>
-                <div class="name">北京</div>
-            </div> -->
             <div class="min right">
                 <div class="sos" @click='toSOS()'>
                     <i>sos</i>
@@ -210,13 +206,13 @@
             },
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
-                 this.loadingShow=true;
                  if(item.key=='carry'){
                      this.showTipsText='对不起，该功能暂未上线，敬请关注...';
                      setTimeout(()=>{
                          this.showTipsText='';
                      },2000);
                  }else{
+                     this.loadingShow=true;
                      if(!this.token) {
                          this.showTipsText='请先登入...';
                          setTimeout(()=>{
@@ -238,8 +234,6 @@
                          },500)
                      }
                  }
-
-
             },
             /**
              * [getServiceRank 服务之星数据获取]
@@ -461,7 +455,10 @@
             },
             loginIM(){
                 let username=window.localStorage.getItem('USERID');
-                if(!username) return
+                if(!username){
+                    username=window.localStorage.getItem('PHONE');
+                }
+                if(!username) return;
     			 $.ajax({
     		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
     		        type: 'POST',

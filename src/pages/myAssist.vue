@@ -32,6 +32,14 @@
             overflow-y: auto;
         }
     }
+    .defindloadig{
+       position: fixed;
+       z-index: 11;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
 
 </style>
 
@@ -85,16 +93,20 @@
             <span class="yy_nodata_text">{{noDataTips}}</span>
         </div>
    </div>
+   <div class="defindloadig" v-if="loadingShow">
+       <loading></loading>
+   </div>
 </div>
 
 </template>
 
 <script>
 import CONFIG from '../config/config.js'
+import loading from '../components/loading.vue'
 export default {
     'name': 'myAssist',
     components: {
-
+        loading
     },
     data() {
         return {
@@ -105,7 +117,8 @@ export default {
               'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
           ],
           nodataFlag:false,
-          noDataTips:''
+          noDataTips:'',
+          loadingShow:true
         }
     },
     methods:{
@@ -177,21 +190,25 @@ export default {
                                  this.myAssistList.push(data[i])
                              }
                          }
+                         this.loadingShow=false;
                      }else{
                          setTimeout(()=>{
                              this.nodataFlag=true;
+                             this.loadingShow=false;
                          },500)
                          this.noDataTips='暂无相关数据';
                      }
                 }else{
                     setTimeout(()=>{
                         this.nodataFlag=true;
+                        this.loadingShow=false;
                     },500)
                     this.noDataTips='暂无相关数据';
                 }
             }).catch((e)=>{
                 setTimeout(()=>{
                     this.nodataFlag=true;
+                    this.loadingShow=false;
                 },500)
                 this.noDataTips='暂无相关数据';
             })

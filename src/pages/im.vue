@@ -218,6 +218,9 @@ export default {
 		},
 		getToken(){
 			let username=window.localStorage.getItem('USERID');
+			if(!username){
+				username=window.localStorage.getItem('PHONE');
+			}
 			if(this.$route.query.senderDId){
 				username=this.$route.query.senderDId;
 			}

@@ -78,6 +78,14 @@
 .myAssist .buttom_action .confirm{
     background: rgb(41, 182, 246);
 }
+.defindloadig{
+   position: fixed;
+   z-index: 11;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
 </style>
 <style  lang="less">
     .yy_nodata_class{
@@ -242,6 +250,9 @@
    <div class="mask" v-show="rightIn" @click="hideMask">
 
    </div>
+   <div class="defindloadig" v-if="loadingShow">
+       <loading></loading>
+   </div>
    <div :class="rightIn?'slide_in':'slide_out'">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
@@ -283,10 +294,11 @@
 <script>
 import searchInput from '../components/searchInput.vue'
 import CONFIG from '../config/config'
+import loading from '../components/loading.vue'
 export default {
     'name': 'myAssist',
     components: {
-        searchInput
+        searchInput,loading
     },
     data() {
         return {
@@ -311,6 +323,7 @@ export default {
               where:'',
           },
           isSOS:false,
+          loadingShow:true
 
         }
     },
@@ -404,9 +417,6 @@ export default {
             this.searchContent['where']=this.$el.querySelector('#countrysearch').value+'_'+this.$el.querySelector('#citysearch').value;
             this.myAssistList=[];
             this.loadData();
-            console.log(this.searchContent);
-
-
         },
         selectHelpType(){
             this.selectFlag=true;
@@ -502,9 +512,11 @@ export default {
                                  this.myAssistList.push(data[i])
                              }
                          }
+                         this.loadingShow=false;
                      }else{
                          if(this.myAssistList.length===0){
                              setTimeout(()=>{
+                                 this.loadingShow=false;
                                  this.nodataFlag=true;
                              },500)
                              this.noDataTips='暂无相关数据';
@@ -516,6 +528,7 @@ export default {
                     if(this.myAssistList.length===0){
                         setTimeout(()=>{
                             this.nodataFlag=true;
+                            this.loadingShow=false;
                         },500)
                         this.noDataTips='暂无相关数据';
                     }
@@ -524,6 +537,7 @@ export default {
                 if(this.myAssistList.length===0){
                     setTimeout(()=>{
                         this.nodataFlag=true;
+                        this.loadingShow=false;
                     },500)
                     this.noDataTips='暂无相关数据';
                 }

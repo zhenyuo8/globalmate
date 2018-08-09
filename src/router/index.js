@@ -51,7 +51,7 @@ export default new Router({
         name: 'mineInformation',
         component: mineInformation,
         meta:{
-            index:7
+            index:16
         }
     },
     {
@@ -59,7 +59,7 @@ export default new Router({
         name: 'mineInformationEdit',
         component: mineInformationEdit,
         meta:{
-            index:8
+            index:17
         }
     },
     {
