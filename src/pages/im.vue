@@ -126,6 +126,7 @@ export default {
 			let headerPath = "../assets/images/icon.png";
 			if(!arg){
 				if(!this.chartValue) return;
+				let charUser=this.loadChatPerson(this.$route.query.toChartId);
 				YYIMChat.sendTextMessage({
 					to: this.$route.query.toChartId+'',
 					type: 'chat',
@@ -188,6 +189,15 @@ export default {
                 console.log(e);
             })
         },
+		loadChatPerson(userId){
+			this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+				if(res.data.success){
+					console.log(res.data);
+				}
+			}).catch((e)=>{
+				console.log(e);
+			})
+		},
 		getHistory(){
 			var _this=this;
 			YYIMChat.getHistoryMessage({
@@ -219,7 +229,7 @@ export default {
 		getToken(){
 			let username=window.localStorage.getItem('USERID');
 			if(!username){
-				username=window.localStorage.getItem('PHONE');
+				username=window.localStorage.getItem('USERPHONE');
 			}
 			if(this.$route.query.senderDId){
 				username=this.$route.query.senderDId;

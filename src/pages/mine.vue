@@ -15,7 +15,6 @@
 }
 
 .mine_body {
-    /*margin-top: 33px;*/
     padding: 21px 0.4rem;
     overflow: hidden;
 }
@@ -42,9 +41,7 @@
 
 .mine_information {
     float: left;
-    /*width: 76%;*/
     height: 60px;
-    /*background: red;*/
     margin-left: 0.4rem;
     display: flex;
     flex-direction: column;
@@ -100,7 +97,6 @@
             <div class="mine_information" @click='toMineInformation'>
                 <div class="mine_top">
                     <span class="mine_username">{{userInfo.username}}</span>
-                    <!-- <span class="mine_call">好人值 {{userInfo.call}}</span> -->
                 </div>
                 <div class="mine_location">
                     <span class="">{{userInfo.country}}</span>
@@ -141,7 +137,7 @@ export default {
                 arrow: true,
                 mineType: 'publish'
             },  {
-                title: 'SOS',
+                title: '我收到的',
                 text: '',
                 arrow: true,
                 mineType: 'sos'

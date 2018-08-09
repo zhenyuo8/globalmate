@@ -307,7 +307,7 @@ export default {
                 url='/globalmate/rest/user/city';
                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
                     if(res.data.success){
-                        let result=res.data.data,resultArr=[];
+                        let result=res.data.data,resultArr=['北京','天津','上海','重庆'];
                         result.forEach(function (item,index) {
                             resultArr.push(item.city);
                         });
@@ -434,7 +434,7 @@ export default {
             this.listRepeat=[{
                 title: '方式',
                 text: this.$route.query.title,
-                arrow: true,
+                arrow: false,
                 key:'style',
                 isRequire:false,
                 isPlacehold:false,

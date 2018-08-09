@@ -58,6 +58,12 @@ input {
     width: 84%;
     float: left;
 }
+.repeate_content_text_item_fixed{
+    width: 100%;
+}
+.repeate_content_text_item_fixed span{
+    margin-right: .2rem;
+}
 .repeate_content_text_image{
     width: .64rem;
     height: .64rem;
@@ -111,16 +117,16 @@ input {
     </div>
     <div class="repeat_content" v-if="!itemRepeat.type">
         <div class="repeate_content_text">
-            <div class="repeate_content_text_item" v-if="!itemRepeat.mintType">
+            <div class="repeate_content_text_item" v-if="!itemRepeat.mintType" :class="itemRepeat.arrow?'':'repeate_content_text_item_fixed'">
                 <span :id='itemRepeat.componentKey' :name='itemRepeat.componentKey'>{{itemRepeat.text}}</span>
             </div>
-            <div class="repeate_content_text_item" v-if="itemRepeat.mintType">
+            <div class="repeate_content_text_item" v-if="itemRepeat.mintType" :class="itemRepeat.arrow?'':'repeate_content_text_item_fixed'">
                 <div class="repeate_content_text_image" style="width:32px;height:32px">
                     <img v-if="itemRepeat.url"  :src="itemRepeat.url" alt="">
                     <img v-if="!itemRepeat.url" src="../assets/images/icon.png" alt="">
                 </div>
             </div>
-            <div class="" :class="itemRepeat.arrow?'icon-arrow_right_samll':''">
+            <div class="" v-if="itemRepeat.arrow" :class="itemRepeat.arrow?'icon-arrow_right_samll':''">
             </div>
         </div>
     </div>

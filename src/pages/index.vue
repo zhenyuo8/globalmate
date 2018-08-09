@@ -2,9 +2,6 @@
     <div class="index" id='index'>
         <div class="header">
             <div class="min right">
-                <div class="sos" @click='toSOS()'>
-                    <i>sos</i>
-                </div>
                 <div class="icon-global-im" @click='toMessage()'>
                     <i class="message_tips" v-if="hasReceiveMessage"></i>
                 </div>
@@ -12,11 +9,6 @@
 
                 </div>
             </div>
-            <!-- <div class="user_wrap" v-show="showPersonal">
-                <span @click='goPersonalCenter'>个人中心</span>
-                <span @click='login'>登入</span>
-                <span @click='register'>注册</span>
-            </div> -->
         </div>
         <div class="swpier_container" >
             <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
@@ -251,7 +243,6 @@
                         this.showTipsText='';
                     },1500);
                 }else{
-                    this.showPersonal=!this.showPersonal;
                     this.$router.push({
                         path: 'mine',
                         query: {
@@ -260,24 +251,6 @@
                         }
                     });
                 }
-            },
-            login(){
-                this.showPersonal=!this.showPersonal;
-                this.$router.push({
-                    path: 'login',
-                    query: {
-                        'title': '登陆',
-                    }
-                });
-            },
-            register(){
-                this.showPersonal=!this.showPersonal;
-                this.$router.push({
-                    path: 'register',
-                    query: {
-                        'title': '注册',
-                    }
-                });
             },
             offer(){
                  this.token=window.localStorage.getItem('TOKEN');
@@ -313,24 +286,6 @@
                         }
                     });
                 }
-            },
-            toSOS(){
-              this.token=window.localStorage.getItem('TOKEN');
-              if(!this.token) {
-                this.showTipsText='请先登入...';
-                setTimeout(()=>{
-                  this.showTipsText='';
-                },1500);
-              }else{
-                this.$router.push({
-                    path: 'seekHelpList',
-                    query: {
-                        'token': this.token,
-                        'title': 'SOS',
-                        'id': 'sos',
-                    }
-                });
-              }
             },
             toMessage(){
                 window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList))
@@ -456,7 +411,7 @@
             loginIM(){
                 let username=window.localStorage.getItem('USERID');
                 if(!username){
-                    username=window.localStorage.getItem('PHONE');
+                    username=window.localStorage.getItem('USERPHONE');
                 }
                 if(!username) return;
     			 $.ajax({
@@ -580,21 +535,6 @@
         font-size: 32px;
         line-height: 44px;
     }
-    .sos{
-        line-height: 44px;
-    }
-    .sos i{
-        padding: 1px;
-        color: red;
-        font-weight: 600;
-        font-size: 16px;
-        border: 2px solid red;
-        border-radius: 50%;
-        display: inline-block;
-        height: .5rem;
-        width: .8rem;
-        line-height: .5rem;
-    }
     .icon-user::before{
         /*color: #bfbfbf;*/
         font-size: 26px;
@@ -630,13 +570,13 @@
         border-radius: 4px;
     }
     .user_wrap::after{
-            -webkit-transform: rotate(45deg);
-            transform: rotate(45deg);
-            right: 8px;
-            background: rgba(255,255,255,0.8);
-            border-color: #89a8e0 #89a8e0 transparent transparent;
-            -webkit-border-radius: 3px;
-            border-radius: 3px;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+        right: 8px;
+        background: rgba(255,255,255,0.8);
+        border-color: #89a8e0 #89a8e0 transparent transparent;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
         position: absolute;
         top: -5px;
         content: '';

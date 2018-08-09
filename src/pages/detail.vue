@@ -286,11 +286,12 @@ export default {
         'title':'',
           'description':''
         };
+        this.getToken();
         this.country='';
         this.show=false;
         this.id=this.$route.query.id;
         this.apiHost=CONFIG[__ENV__].apiHost;
-        this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.$route.query.token,{
+        this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{
 
         }).then((res)=>{
             if(res.data.success){
@@ -306,6 +307,30 @@ export default {
 
     },
     methods:{
+        getToken(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let userId=window.localStorage.getItem('USERID');
+            let openid=window.localStorage.getItem('OPENID');
+            if(userId){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }else if(openid){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }
+        },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
             this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
@@ -346,7 +371,8 @@ export default {
                 path: 'im',
                 query: {
                     'token': this.token,
-                    'title': 'im',               }
+                    'title': 'im',
+                }
             });
         },
         goPersonalFile(){
