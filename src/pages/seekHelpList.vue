@@ -6,7 +6,7 @@
     height: 13.34rem;
     overflow-y: auto;
 }
-.myAssist .select_out{
+.filter_right>.select_out{
     position: fixed;
     left: 1rem;
     right: 0;
@@ -18,7 +18,7 @@
     transition: all .2s ease-out;
     background: #eee;
 }
- .myAssist .select_in{
+ .filter_right>.select_in{
     position: fixed;
     left: 1rem;
     right: 0;
@@ -118,7 +118,7 @@
             overflow-y: auto;
         }
     }
-    .slide_in{
+    .slide_in_one{
         position: fixed;
         right:0;
         top:44px;
@@ -130,11 +130,12 @@
        transition: all .2s ease-in;
        background:#eee;
     }
-    .slide_out{
+    .slide_out_one{
         position: fixed;
         right: -6.5rem;
          top:44px;
          bottom:0;
+         display:none;
         width:6.5rem;
          background:#fff;
         -webkit-transition: all .2s ease-out;
@@ -176,7 +177,7 @@
     		border: 1px solid #eee;
     		padding: 0 0.2rem;
         }
-        .myAssist .slide_in .action{
+        .myAssist .slide_in_one .action{
             position: absolute;
             bottom: 0;
             display: flex;
@@ -184,7 +185,7 @@
             height: 46px;
             line-height: 46px;
         }
-        .myAssist .slide_in .action span{
+        .myAssist .slide_in_one .action span{
             flex:1;
             text-align:center;
             font-size:16px;
@@ -232,7 +233,7 @@
         </div>
         <div class="bottom">
             <div class="bottom_left" @click='goDetail($event,item)'>
-                <img :src='imagesList[index%3]' alt="" class="bottom_left_userimage">
+                <img :src='item.need.pic' alt="" class="bottom_left_userimage">
                 <span class="bottom_left_username">{{item.need.userName}}</span>
                 <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
             </div>
@@ -253,7 +254,7 @@
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
-   <div :class="rightIn?'slide_in':'slide_out'">
+   <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p>
@@ -489,6 +490,7 @@ export default {
             }else{
                 this.isSOS=false;
             }
+            let _this=this;
             let url='/globalmate/rest/assist/listSOS';
             let postData={
                 onlyCurrentUser:''
@@ -509,7 +511,11 @@ export default {
                                  if(data[i].conceretNeed.pic){
                                      data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                                  }
-                                 this.myAssistList.push(data[i])
+                                 if(data[i]&&data[i].need){
+                                     this.getEveryItemPic(data[i],function (result) {
+                                         _this.myAssistList.push(result)
+                                     });
+                                 }
                              }
                          }
                          this.loadingShow=false;
@@ -522,8 +528,6 @@ export default {
                              this.noDataTips='暂无相关数据';
                          }
                      }
-
-
                 }else{
                     if(this.myAssistList.length===0){
                         setTimeout(()=>{
@@ -544,11 +548,24 @@ export default {
                 console.log(e);
             })
         },
+        getEveryItemPic(data,callback){
+            let data1=data;
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.need.userId+'?token='+this.$route.query.token,{
+
+            }).then((res)=>{
+                data1.need.pic=res.data.data.pic||'../assets/images/icon.png';
+                callback&&callback(data1)
+            }).catch((e)=>{
+                console.log(e);
+            })
+
+        }
     },
     activated(){
         this.rightIn=false;
         this.selectFlag=false;
         this.nodataFlag=false;
+        this.loadingShow=true;
         this.myAssistList=[];
         this.isSOS=[];
         this.noDataTips='';

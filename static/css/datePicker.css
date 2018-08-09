@@ -1,9 +1,9 @@
     .ym_roll, .date_roll, .datetime_roll, .time_roll{
-        font-size: 14px;
-        font-weight: normal;
+        /*font-size: 14px;*/
+        font-weight: 300;
     }
     .ym_roll>div, .date_roll>div, .datetime_roll>div, .time_roll>div{
-        font-size: 1.2em!important;
+        font-size: 15px!important;
     }
     .date_roll>div{
         height: 180px!important;

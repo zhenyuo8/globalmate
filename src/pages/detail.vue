@@ -166,12 +166,12 @@
 <div class="detail">
     <div class="detail_first">
         <div class="detail_first_left" @click='goPersonalFile'>
-            <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1529843567270&di=7d4461aad4d2e95deacf7b85c6669387&imgtype=0&src=http%3A%2F%2Fpic.qiantucdn.com%2F58pic%2F17%2F86%2F88%2F55a09df24b97e_1024.jpg" alt="" class="bottom_left_userimage">
+            <img :src='othersImage' alt="" class="bottom_left_userimage">
             <span class="bottom_left_username">{{detail.userName}}</span>
             <span class="bottom_left_time">{{detail.createTime}}</span>
         </div>
         <div class="detail_first_right">
-            来自 {{country}}
+            来自 {{detail.country}}
         </div>
     </div>
     <div class="detail_second">
@@ -179,7 +179,7 @@
             {{detail.title}}
         </span>
         <span class="detail_second_right">
-            帮代 icon
+            {{detail.type}}
         </span>
     </div>
     <div class="detail_content">
@@ -245,7 +245,7 @@
             </div>
         </div>
     </div> -->
-    <div class="detail_message" v-if="id===userId">
+    <div class="detail_message">
     <!-- <div class="detail_message"> -->
         <div class="detail_message_leave">
             留言
@@ -277,37 +277,41 @@ export default {
                 'description':'',
                 'createTime':''
             },
-            imageArr:[]
+            imageArr:[],
+            othersImage:''
         }
     },
     activated(){
         this.imageArr=[];
         this.detail={
-        'title':'',
-          'description':''
+            'title':'',
+            'country':'',
+            'description':'',
+            'type':''
         };
-        this.getToken();
         this.country='';
         this.show=false;
         this.id=this.$route.query.id;
         this.apiHost=CONFIG[__ENV__].apiHost;
-        this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{
+        let _this=this;
+        this.getToken(function () {
+            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{
 
-        }).then((res)=>{
-            if(res.data.success){
-                let data=res.data.data;
-                this.userId=data.id;
-                this.country=data.country;
-                this.loadData();
-            }
+            }).then((res)=>{
+                if(res.data.success){
+                    let data=res.data.data;
+                    _this.userId=data.id;
+                    _this.country=data.country;
+                    _this.loadData();
+                }
 
-        }).catch((e)=>{
-            console.log(e);
-        })
-
+            }).catch((e)=>{
+                console.log(e);
+            })
+        });
     },
     methods:{
-        getToken(){
+        getToken(callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let userId=window.localStorage.getItem('USERID');
             let openid=window.localStorage.getItem('OPENID');
@@ -316,6 +320,7 @@ export default {
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
+                        callback&&callback()
                     }
                 }).catch((e)=>{
                     console.log(e);
@@ -325,10 +330,13 @@ export default {
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
+                        callback&&callback()
                     }
                 }).catch((e)=>{
                     console.log(e);
                 })
+            }else {
+                callback&&callback()
             }
         },
         loadData(){
@@ -338,6 +346,7 @@ export default {
             }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
+                     this.getOthersInfo(data.need.userId);
                      this.detail=data;
                      setTimeout(()=>{
                          this.show=true;
@@ -349,7 +358,6 @@ export default {
                                  this.imageArr=data.conceretNeed[key].split(';')
                              }
                          }
-
                      }
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
@@ -358,7 +366,6 @@ export default {
                          }
                      }
                      this.detailId=data.need.id;
-
                 }else{
 
                 }
@@ -370,15 +377,33 @@ export default {
             this.$router.push({
                 path: 'im',
                 query: {
-                    'token': this.token,
-                    'title': 'im',
+                    'token': this.$route.query.token,
+                    'title': this.othersInfo.nikename,
+                    'id': this.$route.query.id,
+                    'toChartUser':this.othersInfo.nikename,
+                    'toChartId':this.othersInfo.userId,
                 }
             });
         },
+        getOthersInfo(userId){
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.$route.query.token,{
+
+            }).then((res)=>{
+                this.othersImage=res.data.data.pic||'../assets/images/icon.png';
+                this.detail.country=res.data.data.country;
+                this.othersInfo=res.data.data
+            }).catch((e)=>{
+                console.log(e);
+            })
+        },
+
         goPersonalFile(){
             console.log(this.userId);
         }
     },
+    created(){
+        console.log(this.$route);
+    }
 
 
 }

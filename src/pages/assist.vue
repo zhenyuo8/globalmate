@@ -307,7 +307,10 @@ export default {
                 url='/globalmate/rest/user/city';
                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
                     if(res.data.success){
-                        let result=res.data.data,resultArr=['北京','天津','上海','重庆'];
+                        let result=res.data.data,resultArr=[];
+                        if(this.country=='中国'){
+                            resultArr=['北京','天津','上海','重庆'];
+                        }
                         result.forEach(function (item,index) {
                             resultArr.push(item.city);
                         });

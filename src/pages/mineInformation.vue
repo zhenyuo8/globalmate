@@ -30,7 +30,7 @@
 
 .mineInformation_detail {
     overflow: hidden;
-    /*height: 36px;*/
+    height: 48px;
     /*position: relative;*/
 }
 
@@ -138,7 +138,7 @@
 }
 .mineInformation_line{
     width: 84%;
-    margin: 21px auto;
+    margin: 12px auto;
     border-bottom: 1px solid rgba(151,151,151,0.34);
 }
 .mineInformation_history_action{
@@ -155,8 +155,8 @@
      border-radius: 6px;
      position: relative;
 }
-.mineInformation_school{
-
+.mineInformation_hobby_content{
+    padding: .04rem;
 }
 .mineInformation_school_title, .mineInformation_hobby_title, .mineInformation_comment_title{
     height: 32px;
@@ -266,12 +266,12 @@
             </div>
             <div class="mineInformation_hobby_content">
                 <div class="mineInformation_hobby_love">
-                    <span class="title">兴趣爱好 ：</span>
-                    <span class="content">{{hobby}}</span>
+                    <span class="title">兴趣爱好 ：{{hobby}}</span>
+                    <!-- <span class="content">{{hobby}}</span> -->
                 </div>
                 <div class="mineInformation_hobby_offer">
-                    <span class="title">愿意提供的帮助 ：</span>
-                    <span class="content">{{helpAvailable}}</span>
+                    <span class="title">愿意提供的帮助 ：{{helpAvailable}}</span>
+                    <!-- <span class="content">{{helpAvailable}}</span> -->
                 </div>
             </div>
         </div>
@@ -288,9 +288,7 @@
     <div class="defindloadig" v-if="loadingShow">
         <loading></loading>
     </div>
-    <div class="mineInformation_line">
 
-    </div>
     <!--<div class="mineInformation_history_action">-->
         <!--<div class="" v-for="(item,index) in historyAction">-->
             <!--<ActionList :historyActionItem="item"></ActionList>-->
