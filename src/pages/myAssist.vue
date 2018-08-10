@@ -78,7 +78,7 @@
         </div>
         <div class="bottom">
             <div class="bottom_left">
-                <img :src='imagesList[index%3]' alt="" class="bottom_left_userimage">
+                <img :src='currentUserImgae' alt="" class="bottom_left_userimage">
                 <span class="bottom_left_username">{{item.need.userName}}</span>
                 <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
             </div>
@@ -118,7 +118,8 @@ export default {
           ],
           nodataFlag:false,
           noDataTips:'',
-          loadingShow:true
+          loadingShow:true,
+          currentUserImgae:'',
         }
     },
     methods:{
@@ -222,6 +223,7 @@ export default {
        this.loadData();
    },
    created(){
+       this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
 
    }
 

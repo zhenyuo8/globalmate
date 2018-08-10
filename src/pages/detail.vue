@@ -7,6 +7,7 @@
     font-size: 14px;
     color: #9B9B9B;
     padding-bottom: 54px;
+    min-height: 13.1rem;
 }
 
 .detail_first {
@@ -179,7 +180,7 @@
             {{detail.title}}
         </span>
         <span class="detail_second_right">
-            {{detail.type}}
+            {{detail.tag}}
         </span>
     </div>
     <div class="detail_content">
@@ -245,12 +246,12 @@
             </div>
         </div>
     </div> -->
-    <div class="detail_message">
+    <div class="detail_message" v-show="currentUserId!=otherUserId">
     <!-- <div class="detail_message"> -->
         <div class="detail_message_leave">
             留言
         </div>
-        <div class="detail_message_chart">
+        <div class="detail_message_chart" >
             <span @click='goChart'>聊一下</span>
         </div>
     </div>
@@ -280,6 +281,8 @@ export default {
             imageArr:[],
             othersImage:'',
             token:'',
+            currentUserId:'',
+            otherUserId:'',
         }
     },
     activated(){
@@ -293,6 +296,7 @@ export default {
         this.country='';
         this.show=false;
         this.id=this.$route.query.id;
+        this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
         this.getToken(function () {
@@ -388,7 +392,7 @@ export default {
                     'title': this.othersInfo.nikename,
                     'id': this.$route.query.id,
                     'toChartUser':this.othersInfo.nikename,
-                    'toChartId':this.othersInfo.userId,
+                    'toChartId':this.othersInfo.id,
                 }
             });
         },
@@ -409,10 +413,8 @@ export default {
         }
     },
     created(){
-        console.log(this.$route);
+        this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
     }
-
-
 }
 
 </script>

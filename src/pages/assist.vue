@@ -288,16 +288,28 @@ export default {
         },
         countrySityCallBack(items,value){
             this.show=false;
+            this.selectItem=[];
             if(value){
                 if(items=='country'){
                     this.country=value;
+                    this.listRepeat.forEach(function (item,index) {
+                        if(item.componentKey=='city'){
+                            item.text="请选择";
+                            item.isPlacehold=true;
+                        }else if(item.componentKey==items) {
+                            item.text=value;
+                            item.isPlacehold=false;
+                        }
+                    })
+                }else{
+                   this.listRepeat.forEach(function (item,index) {
+                       if(item.componentKey==items){
+                           item.text=value;
+                           item.isPlacehold=false;
+                       }
+                   })
                 }
-                this.listRepeat.forEach(function (item,index) {
-                    if(item.componentKey==items){
-                        item.text=value;
-                        item.isPlacehold=false;
-                    }
-                })
+
             }
         },
         getSelectItem(key){

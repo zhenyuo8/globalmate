@@ -78,6 +78,9 @@
 .myAssist .buttom_action .confirm{
     background: rgb(41, 182, 246);
 }
+.bottom_right{
+    color: #0400ff
+}
 .defindloadig{
    position: fixed;
    z-index: 11;
@@ -182,8 +185,8 @@
             bottom: 0;
             display: flex;
             width: 100%;
-            height: 46px;
-            line-height: 46px;
+            height: 36px;
+            line-height: 36px;
         }
         .myAssist .slide_in_one .action span{
             flex:1;
@@ -212,7 +215,7 @@
                         {{item.conceretNeed.title}}
                     </span>
             <span class="top_right">
-                        {{item.conceretNeed.type}}
+                        {{item.conceretNeed.type||item.conceretNeed.tag}}
                     </span>
         </div>
         <div class="middle">
@@ -222,8 +225,6 @@
             </div>
             <div class="middle_right">
                 <img v-if="item.conceretNeed.pic" :src='item.conceretNeed.pic' alt="">
-                <img v-if="!item.conceretNeed.pic" :src='imagesList[index%3]' alt="">
-                <!-- <img :src='imagesList[index%3]' alt=""> -->
             </div>
         </div>
         <div class="action_list_help">
@@ -238,7 +239,7 @@
                 <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
             </div>
             <div class="bottom_right">
-                {{item.conceretNeed.rewardAmount}}
+                悬赏金额 {{item.conceretNeed.rewardAmount}}
             </div>
         </div>
     </div>
@@ -303,12 +304,7 @@ export default {
     },
     data() {
         return {
-            myAssistList: [],
-            imagesList:[
-              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180050&di=0d2ee92eead284e8133d6df07535d75a&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads1%2Fsc%2Fjpgs%2F1512%2Fapic16988_sc115.com.jpg',
-              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg',
-              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
-          ],
+          myAssistList: [],
           searchVal:'',
           msg:false,
           nodataFlag:false,
@@ -349,6 +345,7 @@ export default {
                     'token': this.$route.query.token,
                     'title': item.conceretNeed.title,
                     'id': item.need.id,
+                    'otherUserId':item.need.userId
                 }
             });
         },
@@ -360,7 +357,7 @@ export default {
                  query: {
                      'token': this.token,
                      'title': item.need.userName,
-                     'userId':item.need.userId,
+                     'otherUserId':item.need.userId,
                      'id': item.need.id,
                  }
              });
@@ -507,7 +504,6 @@ export default {
                      if(data){
                          for(var i=0;i<data.length;i++){
                              if(data[i].conceretNeed&&data[i].conceretNeed.title){
-                                 data[i].conceretNeed.url=this.imagesList[i];
                                  if(data[i].conceretNeed.pic){
                                      data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                                  }

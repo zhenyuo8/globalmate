@@ -5,7 +5,8 @@
 				<div class="chart_main_content">
 	                <div class="chart_main_content_image">
 	                    <div class="">
-	                        <img src="../assets/images/1.jpeg" v-if="imageArr.length==0" alt="">
+							<span class="icon-image_default" v-if="imageArr.length==0"></span>
+	                        <!-- <img src="../assets/images/1.jpeg" v-if="imageArr.length==0" alt=""> -->
 	                        <img :src='imageArr[0]' v-if="imageArr.length!=0" alt="">
 	                    </div>
 	                </div>
@@ -199,31 +200,32 @@ export default {
 			})
 		},
 		getHistory(){
+			console.log(this.$route.query);
 			var _this=this;
 			YYIMChat.getHistoryMessage({
 				id:_this.$route.query.toChartId,
 				type:'chat',
 				contentType: 2,
-			   start: 0,
-			   size: 150,
-			   startVersion: 0,
-			   endVersion: 100,
-			   success:function(data){
-				   if(data.result&&data.result.length!=0){
-					   var result=data.result;
-					   var len=result.length-1;
-					   for(var i=len;i>=0;i--){
-						   if(result[i].from&&result[i].from==_this.$route.query.toChartId){
-							   _this.createOnMessage(result[i])
-						   }else{
-							   _this.createUserTalk(result[i])
-						   }
-					   }
-				   }
-			   },
-			   error:function(err){
-			   	console.log(err);
-			   }
+			   	start: 0,
+			   	size: 150,
+			   	startVersion: 0,
+			   	endVersion: 100,
+			   	success:function(data){
+				   	if(data.result&&data.result.length!=0){
+					   	var result=data.result;
+					   	var len=result.length-1;
+					   	for(var i=len;i>=0;i--){
+						   	if(result[i].from&&result[i].from==_this.$route.query.toChartId){
+							   	_this.createOnMessage(result[i])
+						   	}else{
+							   	_this.createUserTalk(result[i])
+						   	}
+					   	}
+				   	}
+			   	},
+			   	error:function(err){
+			   		console.log(err);
+			   	}
 			})
 		},
 		getToken(){
@@ -234,6 +236,10 @@ export default {
 			if(this.$route.query.senderDId){
 				username=this.$route.query.senderDId;
 			}
+			if(window.localStorage.getItem('CURRENTUSER')){
+				username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+			}
+
 			 $.ajax({
 		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
 		        type: 'POST',
@@ -357,6 +363,7 @@ export default {
 		}
     },
 	activated(){
+		$('#chat-thread').empty();
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
 		this.init();
@@ -374,6 +381,10 @@ export default {
 @import "../assets/css/im.css";
 #main{
 	background-color:#f4f4f4
+}
+.icon-image_default::before{
+	font-size: 58px;
+	color: #999;
 }
 .im_top_fix{
 	position: fixed;
@@ -446,6 +457,8 @@ export default {
 	border: 1px solid rgba(151, 151, 151, 1);
 	border-radius: 2px;
 	color: #666;
+	white-space: nowrap;
+	overflow: hidden;
 }
 .do_evaluate{
 

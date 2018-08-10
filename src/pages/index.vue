@@ -172,7 +172,7 @@
             },1000);
         },
 		methods:{
-            getToken(){
+            getToken(callback){
                 this.apiHost=CONFIG[__ENV__].apiHost;
                 let userId=window.localStorage.getItem('USERID');
                 let openid=window.localStorage.getItem('OPENID');
@@ -195,6 +195,20 @@
                         console.log(e);
                     })
                 }
+                callback&&callback(this.token)
+            },
+            getCurrentUser(token){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                if(!token){
+                    token=window.localStorage.getItem('TOKEN');
+                }
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{}).then((res)=>{
+                    if(res.data.success){
+                        window.localStorage.setItem('CURRENTUSER',JSON.stringify(res.data.data))
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
             },
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
@@ -413,6 +427,10 @@
                 if(!username){
                     username=window.localStorage.getItem('USERPHONE');
                 }
+                if(window.localStorage.getItem('CURRENTUSER')){
+                    username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+                }
+
                 if(!username) return;
     			 $.ajax({
     		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
@@ -443,10 +461,10 @@
 		    },
         activated(){
             document.title='Global Mate';
-            this.getToken();
+            this.getToken(this.getCurrentUser);
             setTimeout(()=>{
                 this.loadingShow=false;
-            },2000);
+            },1500);
             setTimeout(()=>{
                 this.onload=true;
             },500);
@@ -476,7 +494,6 @@
         padding-bottom: 44px;
     }
     .header{
-        height: 44px;
         font-size: 14px;
         overflow: hidden;
         position: fixed;
@@ -487,24 +504,15 @@
         background: rgba(250,250,250,0.8);
     }
     .swpier_container{
-        margin-top: 44px;
+        margin-top: 36px;
     }
     .header > div{
-        /*line-height: 44px;*/
         color: #bfbfbf;
     }
     .location > div {
         float: left;
     }
-    .header .location .name{
-        line-height: 44px;
-        color: #333;
-        /*margin-left: .2rem*/
-    }
-    .icon-map-location::before{
-        font-size: 26px;
-        line-height: 44px;
-    }
+
     .header .left{
         float: left;
     }
@@ -533,12 +541,12 @@
         color: #bfbfbf;
 
         font-size: 32px;
-        line-height: 44px;
+        line-height: 36px;
     }
     .icon-user::before{
         /*color: #bfbfbf;*/
         font-size: 26px;
-        line-height: 44px;
+        line-height: 36px;
     }
     .icon-map-location{
         width: 0.88rem;

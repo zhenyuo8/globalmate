@@ -23,7 +23,6 @@
 }
 
 .mineInformation_info {
-    /*height: 190px;*/
     position: relative;
 }
 
@@ -31,7 +30,6 @@
 .mineInformation_detail {
     overflow: hidden;
     height: 48px;
-    /*position: relative;*/
 }
 
 .mineInformation_image {
@@ -43,7 +41,7 @@
     z-index: 12;
     background: #fff;
     border-radius: 50%;
-    border: 1px solid rgba(151, 151, 151, 1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .mineInformation_image img {
@@ -168,11 +166,7 @@
     left: 6%;
 
 }
-.mineInformation_school_content_repeat{
-    /*display: flex;*/
-}
 .mineInformation_school_content_repeat span, .mineInformation_hobby_offer span, .mineInformation_hobby_love span{
-    /*height: 32px;*/
     line-height: 32px;
     color: #333;
     font-size: 13px;
@@ -215,11 +209,7 @@
 <template>
 
 <div class="mineInformation">
-    <!-- <div class="header">
-        <Header :hearderParas='hearderParas'></Header>
-    </div> -->
     <div class="mineInformation_user_image">
-        <!-- <span class="icon-image_default"></span> -->
         <img src="../assets/images/stanfu.jpeg" alt="">
     </div>
     <div class="mineInformation_info">
@@ -231,10 +221,9 @@
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
                     <span class="mineInformation_call">服务值 0</span>
-                    <!-- <img src="../assets/images/mine-identify.jpg" alt=""> -->
                 </div>
             </div>
-            <div class="mineInformation_chart_button" @click='chartWith' v-if="isOthers">
+            <div class="mineInformation_chart_button" @click='chartWith' v-show="isOthers">
                 <span class="icon-wechat"></span>
                 <span class="icon-user-add"></span>
             </div>
@@ -267,11 +256,9 @@
             <div class="mineInformation_hobby_content">
                 <div class="mineInformation_hobby_love">
                     <span class="title">兴趣爱好 ：{{hobby}}</span>
-                    <!-- <span class="content">{{hobby}}</span> -->
                 </div>
                 <div class="mineInformation_hobby_offer">
                     <span class="title">愿意提供的帮助 ：{{helpAvailable}}</span>
-                    <!-- <span class="content">{{helpAvailable}}</span> -->
                 </div>
             </div>
         </div>
@@ -289,18 +276,11 @@
         <loading></loading>
     </div>
 
-    <!--<div class="mineInformation_history_action">-->
-        <!--<div class="" v-for="(item,index) in historyAction">-->
-            <!--<ActionList :historyActionItem="item"></ActionList>-->
-        <!--</div>-->
-    <!--</div>-->
 </div>
 
 </template>
 
 <script>
-
-import Header from '../components/header.vue'
 import List from '../components/list.vue'
 import ActionList from '../components/actionList.vue'
 import CONFIG from '../config/config'
@@ -308,71 +288,22 @@ import loading from '../components/loading.vue'
 export default {
     'name': 'mine',
     components: {
-        Header,
         List,
         ActionList,
         loading
     },
     data() {
         return {
-            hearderParas: {
-                title: '个人资料',
-                right: {
-                    text: '',
-                    icon: '../assets/logo.png'
-                }
-            },
-            listRepeat: [{
-                title: '我发布的',
-                text: 2,
-                arrow: true
-            }, {
-                title: '我解决的',
-                text: 223,
-                arrow: true
-            }],
-            mineInformation: {
-                title: '我的',
-                right: {
-                    text: '',
-                    icon: '../assets/logo.png'
-                }
-            },
             school:[],
             hobby:'',
             helpAvailable:'',
             information:{},
-            historyAction:[
-                {
-                    'time':'今天',
-                    'data':{
-                        'top':{
-                            'title':'!!! 标题',
-                            'type':'陪伴',
-                        },
-                        'decription':'我要去环游世界我要去环游世界我要去环游世界我要去环游世界我要去环游世界我要去环游世界我要去环游世界我要去环游世界我要去环游世',
-                        'url':'',
-                        'from':'夏威夷群岛',
-                        'rewardContent':'悬赏内容'
-                    }
-                },
-                {
-                    'time':'昨天',
-                    'data':{
-                        'top':{
-                            'title':'### 标题',
-                            'type':'代购',
-                        },
-                        'decription':'我要购买特斯拉,白宫劳斯莱斯加长我要购买特斯拉,白宫劳斯莱斯加长我要购买特斯拉,白宫劳斯莱斯加长',
-                        'url':'',
-                        'from':'北极',
-                        'rewardContent':'悬赏内容'
-                    }
-                }
-            ],
             tipInOther:[],
-            isOthers:false,
-            loadingShow:true
+            isOthers:true,
+            loadingShow:true,
+            otherUserId:'',
+            currentUserId:'',
+
         }
     },
     methods:{
@@ -393,15 +324,15 @@ export default {
                     'title': this.information.nikename,
                     'id': this.$route.query.id,
                     'toChartUser':this.information.nikename,
-                    'toChartId':this.userId,
+                    'toChartId':this.otherUserId,
                 }
             });
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let url='/globalmate/rest/user/getUserByToken'
-            if(this.$route.query.userId){
-                url='/globalmate/rest/user/list/'+this.$route.query.userId
+            if(this.$route.query.otherUserId){
+                url='/globalmate/rest/user/list/'+this.$route.query.otherUserId
             }
             this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,{
 
@@ -429,10 +360,15 @@ export default {
     },
     activated(){
         this.loadInfo();
-        if(this.$route.query.userId){
-            this.isOthers=true;
+        this.isOthers=true;
+        this.otherUserId=this.$route.query.otherUserId;
+        if(!this.otherUserId||(this.otherUserId==this.currentUserId)){
+            this.isOthers=false;
         }
     },
+    created(){
+        this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+    }
 
 }
 
