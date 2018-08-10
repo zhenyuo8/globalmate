@@ -10,7 +10,6 @@
   .identify_body>div{
       background: #fff;
       border-radius: 4px;
-      /*padding: 10px 0;*/
       flex: 1;
       height: 80px;
       border: 1px solid #00adff;
@@ -114,21 +113,21 @@
     <div class="identify_type">
         <h3>请选择认证方式</h3>
         <div class="identify_type_select">
-            <span class="icon-checkbox select_class" @click='selectType($event)' :key=''>身份证</span>
-            <span class="icon-checkbox" @click='selectType($event)' :key=''>学生证</span>
-            <span class="icon-checkbox" @click='selectType($event)' :key=''>护照</span>
+            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>身份证</span>
+            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>学生证</span>
+            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>护照</span>
+            <!-- <span class="icon-checkbox" @click="selectType($event,'ALIPAYID')" :key=''>支付宝</span> -->
         </div>
     </div>
     <div class="identify_warp">
         <div class="">
-            <div class="identify_body">
+            <div class="identify_body IDCARD">
                 <div class="identify_face_page" id='id_face' @click="uploaderInit('id_face')">
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
-
                 </div>
                 <div class="identify_opposite_page" id='id_opposite' @click="uploaderInit('id_opposite')">
                     <img src="" alt="">
@@ -143,14 +142,13 @@
         <div class="line_separeat">
         </div>
         <div class="">
-            <div class="identify_body">
+            <div class="identify_body STUDENTID">
                 <div class="identify_face_page" id='id_student' @click="uploaderInit('id_student')">
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
-
                 </div>
                 <div class="identify_opposite_page" id='id_student_opposite' @click="uploaderInit('id_student_opposite')">
                     <img src="" alt="">
@@ -158,7 +156,6 @@
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传文字面</span>
                     </div>
-
                 </div>
             </div>
             <p>学生证</p>
@@ -167,7 +164,7 @@
 
         </div>
         <div class="">
-            <div class="identify_body">
+            <div class="identify_body PASSPORT">
                 <div class="identify_face_page" id='id_passport' @click="uploaderInit('id_passport')">
                     <img src="" alt="">
                     <div class="" style="margin:auto">
@@ -193,7 +190,7 @@
 
     </div>
 
-    <button type="button" name="button" class='submitbtn'>提交</button>
+    <button type="button" name="button" class='submitbtn' @click='submitData' v-show="onloadYet">提交</button>
 </div>
 
 </template>
@@ -205,7 +202,8 @@ export default {
     data() {
         return {
             title:'',
-            identifyType:[]
+            identifyType:['IDCARD'],
+            onloadYet:false
         }
     },
     components: {
@@ -227,10 +225,14 @@ export default {
 
         },
 
-        selectType(e){
+        selectType(e,type){
             if($(e.target).hasClass('select_class')){
+                this.identifyType=this.identifyType.filter((item,index)=>{
+                    return item!=type;
+                })
                  $(e.target).removeClass('select_class')
             }else{
+                this.identifyType.push(type);
                  $(e.target).addClass('select_class')
             }
         },
@@ -324,6 +326,39 @@ export default {
            });
            this.fileUploader.init();
         },
+        submitData(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let postData=[];
+
+            for(var i=0;i<this.identifyType.length;i++){
+                var obj={
+                    'cetifyType':'',
+                    'certifyPhoto':[],
+                }
+                obj.cetifyType=this.identifyType[i];
+                let img=$('.'+this.identifyType[i]).find('img');
+                if(img.length!==0){
+                    for(var j=0;j<img.length;j++){
+                        obj.certifyPhoto.push(img[j].src);
+
+                    }
+                }
+                postData.push(obj);
+            }
+            return;
+            this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,{}).then((res)=>{
+                if(res.data.success){
+                    setTimeout(()=>{
+                        this.loadingShow=true;
+                        window.history.go(-1);
+                    },1500);
+                }else{
+                    this.showTipsText=e.msg||"";
+                 }
+            }).catch((e)=>{
+                console.log(e);
+            });
+        }
 
     },
     activated(){
@@ -335,10 +370,10 @@ export default {
         }
     },
     created(){
-        this.loadData();
         setTimeout(()=>{
-			// this.initUploader()
-		},500)
+            this.onloadYet=true;
+        },1000);
+        this.loadData();
         this.title=this.$route.query.title;
     }
 }

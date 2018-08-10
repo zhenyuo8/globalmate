@@ -278,7 +278,8 @@ export default {
                 'createTime':''
             },
             imageArr:[],
-            othersImage:''
+            othersImage:'',
+            token:'',
         }
     },
     activated(){
@@ -295,7 +296,13 @@ export default {
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
         this.getToken(function () {
-            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{
+            let token='';
+            if(_this.token){
+                token=_this.token;
+            }else{
+                token=_this.$route.query.token;
+            }
+            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{
 
             }).then((res)=>{
                 if(res.data.success){
