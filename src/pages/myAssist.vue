@@ -66,7 +66,7 @@
             </div>
         </div>
         <div class="action_list">
-            <div class="re_edit">
+            <div class="re_edit" @click='editForm($event,item)'>
                 <span>重新编辑</span>
             </div>
             <div class="done">
@@ -123,6 +123,20 @@ export default {
         }
     },
     methods:{
+        editForm(e,item){
+            console.log(item);
+            e.preventDefault();
+            e.cancelBubble=true;
+            this.$router.push({
+                path: 'assist',
+                query: {
+                    'token': this.$route.query.token,
+                    'title': item.conceretNeed.tag,
+                    'id': item.need.id,
+                    'mode':'MODIFY'
+                }
+            });
+        },
         finished(e,item){
             this.apiHost=CONFIG[__ENV__].apiHost;
             e.preventDefault();

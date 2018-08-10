@@ -488,6 +488,42 @@ export default {
                 componentKey:'city'
             }];
         },
+        //获取编辑表单数据
+        loadDataEdit(id){
+            let _this=this;
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+                onlyCurrentUser:true
+            }).then((res)=>{
+                if(res.data.success){
+                    let data=res.data.data;
+                    this.myReward.text=data.conceretNeed.rewardAmount;
+                    this.title.text=data.conceretNeed.title;
+                    this.listRepeat.forEach(function (item,index) {
+                        if(item.componentKey=='country'&&data.conceretNeed.country){
+                            item.text=data.conceretNeed.country;
+                            _this.country=data.conceretNeed.country;
+                        }
+                        if(item.componentKey=='city'&&data.conceretNeed.city){
+                            item.text=data.conceretNeed.city;
+                        }
+                        if(item.componentKey=='startTime'&&data.conceretNeed.startTime){
+                            item.text=_this.$utils.timestampToTime(data.conceretNeed.startTime);
+                        }
+                        if(item.componentKey=='endTime'&&data.conceretNeed.endTime){
+                            item.text=_this.$utils.timestampToTime(data.conceretNeed.endTime);
+                        }
+                        if(data.conceretNeed.description){
+                            _this.$el.querySelector('.main_decription_area textarea').value=data.conceretNeed.description;
+                        }
+                    })
+                }else{
+
+                }
+            }).catch((e)=>{
+                console.log(e);
+            })
+        },
         removeFile(e){
             if(e.target.className==='prev_imgae'){
                 $(e.target.parentNode).remove();
@@ -584,7 +620,12 @@ export default {
         this.show=false;
         this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
-        this.listRepeatProcess();
+        if(this.$route.query.mode&&this.$route.query.mode=='MODIFY'){
+            this.loadDataEdit(this.$route.query.id);
+        }else{
+             this.listRepeatProcess();
+        }
+
         setTimeout(()=>{
             this.loadingShow=false;
         },500)

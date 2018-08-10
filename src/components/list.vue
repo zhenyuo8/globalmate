@@ -37,7 +37,10 @@
     text-align: right;
     position: relative;
 }
-
+.repeat_content input {
+    text-align: right;
+    padding-right: .2rem;
+}
 .repeate_content_text span {
     /*margin-right: .4rem;*/
     color: #9B9B9B;

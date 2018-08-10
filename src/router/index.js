@@ -36,7 +36,7 @@ export default new Router({
         name: 'assist',
         component: assist,
         meta:{
-            index:3
+            index:31
         }
     },
     {
