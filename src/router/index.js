@@ -18,6 +18,7 @@ import personalFile from '@/pages/personalFile'//个人资料
 import authorization from '@/pages/authorization'//授权
 import identify from '@/pages/identify' //身份验证
 import messageList from '@/pages/messageList' //身份验证
+import list from '@/pages/list' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -66,6 +67,14 @@ export default new Router({
         path: '/myAssist',
         name: 'myAssist',
         component: myAssist,
+        meta:{
+            index:10
+        }
+    },
+    {
+        path: '/list',
+        name: 'list',
+        component: list,
         meta:{
             index:10
         }

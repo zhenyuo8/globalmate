@@ -275,7 +275,8 @@
                      },1500);
                  }else{
                      this.$router.push({
-                         path: 'seekHelpList',
+                        //  path: 'seekHelpList',
+                         path: 'list',
                          query: {
                            'token':this.token,
                            'title': '求助列表',
