@@ -1,10 +1,11 @@
 <style scoped>
-@import '../assets/css/list.css';
+/*@import '../assets/css/list.css';*/
 .myAssist{
     margin-top: 0;
     width:7.5rem;
     height: 13.34rem;
     overflow-y: auto;
+    font-size: 14px;
 }
 .filter_right>.select_out{
     position: fixed;
@@ -12,6 +13,7 @@
     right: 0;
     bottom: 0;
     top: 100%;
+    opacity: 0;
     /*display: none;*/
     -webkit-transition: all .2s ease-out;
     -moz-transition: all .2s ease-out;
@@ -23,7 +25,8 @@
     left: 1rem;
     right: 0;
     bottom: 0;
-    top: 44px;
+    top: 43px;
+    opacity: 1;
     -webkit-transition: all .3s ease-in;
     -moz-transition: all .3s ease-in;
     transition: all .3s ease-in;
@@ -124,8 +127,9 @@
     .slide_in_one{
         position: fixed;
         right:0;
-        top:44px;
+        top:43px;
         bottom:0;
+        opacity:1;
         width:6.5rem;
         background:#f5f5f5;
        -webkit-transition: all .2s ease-in;
@@ -138,8 +142,8 @@
         right: -6.5rem;
          top:44px;
          bottom:0;
-         display:none;
-        width:6.5rem;
+         opacity:0;
+         width:6.5rem;
          background:#fff;
         -webkit-transition: all .2s ease-out;
         -moz-transition: all .2s ease-out;
@@ -213,26 +217,31 @@
 <style media="screen" lang='less'>
 	.list_wrap{
 		background: #f7f5f3;
-		/*height: 13rem;*/
 		.list_repeat{
 			background: #fff;
 			padding: .2rem 0.4rem;
 			margin: auto;
 			margin-bottom: 10px;
+            position: relative;
 			&>div{
 				margin-top: 10px;
 			}
 			.list_repeat_title{
 				text-align: left;
 				margin-top: 10px;
-				font-size: 16px;
+                margin-bottom: 6px;
+				font-size: 15px;
+                color: #333;
 				font-weight: 500;
 			}
 			.list_repeat_action{
 				text-align: right;
+                position: absolute;
+                right: 0.4rem;
+                bottom: 0.2rem;
 				span{
 					width: 1rem;
-					padding: 6px .1rem;
+					padding: 6px .15rem;
 					background: #2361ea;
 					border-radius: 4px;
 					color: #fff;
@@ -241,8 +250,10 @@
 			.list_repeat_user{
 				display: flex;
 				.image_user{
-					width: 1.4rem;
-					height: 1.4rem;
+					width: 1.2rem;
+					height: 1.2rem;
+                    border-radius: 50%;
+                    overflow: hidden;
 					border: 1px solid #eee;
 					img{
 						display: inline-block;
@@ -258,11 +269,13 @@
     				margin-left: .24rem;
 					span{
 						&.name{
-							font-size: 16px;
+							font-size: 14px;
 							color: #333;
 						}
 						&.type{
-							margin-top: .7rem;
+						    font-size: 13px;
+                            color: #888;
+							margin-top: .4rem;
 						}
 					}
 				}
@@ -272,7 +285,26 @@
 						font-size: 16px;
 					}
 				}
+                .status_close{
+                    span{
+                        color: red!important;
+                    }
+                }
 			}
+            .list_repeat_img{
+                display: flex;
+                .list_content_img{
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    margin-right: .2rem;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                        display: inline-block;
+                    }
+
+                }
+            }
 		}
 	}
 </style>
@@ -283,29 +315,28 @@
     <!--搜索框-->
 	<searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
 	<div class="list_wrap">
-		<div class="list_repeat" v-for="(item,index) in myAssistList">
+		<div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
 			<div class="list_repeat_user">
-				<div class="image_user">
-					<img src="../assets/images/1.jpeg" alt="">
+				<div class="image_user" @click='goDetail($event,item)'>
+					<img :src="item.need.pic" alt="">
 				</div>
 				<div class="name_user">
-					<span class="name">黄振宇</span>
-					<span class="type">学习互助</span>
+					<span class="name">{{item.need.userName}}</span>
+					<span class="type">{{item.conceretNeed.tag}}</span>
 				</div>
-				<div class="status_user">
-					<span>open</span>
+				<div class="status_user" :class="item.conceretNeed.status=='Closed'?'status_close':''">
+					<span>{{item.conceretNeed.status}}</span>
 				</div>
 			</div>
-			<p class="list_repeat_title">标题：我是一滴远方孤星的泪水</p>
-			<!-- <div class="list_repeat_img">
-
-			</div> -->
-			<div class="list_repeat_action">
-				<span>去帮助</span>
+			<p class="list_repeat_title">标题：{{item.conceretNeed.title}}</p>
+			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
+                <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
+                    <img :src="items" alt="" v-if="indexs<3">
+                </div>
 			</div>
-		</div>
-		<div class="list_repeat">
-
+			<div class="list_repeat_action" v-if="item.conceretNeed.status!='Closed'">
+				<span @click='goHelp($event,item)'>去帮助</span>
+			</div>
 		</div>
 	</div>
 
@@ -316,12 +347,15 @@
             <span class="yy_nodata_text">{{noDataTips}}</span>
         </div>
    </div>
+
    <div class="mask" v-show="rightIn" @click="hideMask">
 
    </div>
+
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
+
    <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
@@ -569,10 +603,19 @@ export default {
                      let data=res.data.data;
                      this.listm=[];
                      if(data){
+                         let ClosedArr=[];
+                         let normalArr=[];
                          for(var i=0;i<data.length;i++){
                              if(data[i].conceretNeed&&data[i].conceretNeed.title){
-                                 if(data[i].conceretNeed.pic){
-                                     data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                                 if(data[i].conceretNeed.pic&&data[i].conceretNeed.pic.indexOf('aliyuncs')>-1){
+                                     data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';');
+                                 }else{
+                                     data[i].conceretNeed.pic=''
+                                 }
+                                 if(data[i].conceretNeed.endTime&&data[i].conceretNeed.endTime<new Date().getTime()){
+                                     data[i].conceretNeed.status='Closed'
+                                 }else{
+                                     data[i].conceretNeed.status='Open'
                                  }
                                  if(data[i]&&data[i].need){
                                      this.getEveryItemPic(data[i],function (result) {
@@ -621,14 +664,13 @@ export default {
             }).catch((e)=>{
                 console.log(e);
             })
-
         }
     },
     activated(){
         this.rightIn=false;
         this.selectFlag=false;
         this.nodataFlag=false;
-        this.loadingShow=false;
+        this.loadingShow=true;
         this.myAssistList=[];
         this.isSOS=[];
         this.noDataTips='';
@@ -638,8 +680,6 @@ export default {
         this.rightIn=false;
         this.selectFlag=false;
         this.token=this.$route.query.token;
-
-
     }
 
 }

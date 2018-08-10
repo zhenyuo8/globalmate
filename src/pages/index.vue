@@ -275,8 +275,7 @@
                      },1500);
                  }else{
                      this.$router.push({
-                        //  path: 'seekHelpList',
-                         path: 'list',
+                         path: 'seekHelpList',
                          query: {
                            'token':this.token,
                            'title': '求助列表',
@@ -295,9 +294,11 @@
                 }else{
                     this.$router.push({
                         path: 'myAssist',
+                        //  path: 'list',
                         query: {
                           'token':this.token,
                           'title': '求助列表',
+                          'id':'seek'
                         }
                     });
                 }
