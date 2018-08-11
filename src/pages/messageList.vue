@@ -58,7 +58,7 @@
 					</div>
 					<div class="content_chat">
 						<span class="name_chat">{{item.userName}}</span>
-						<span class="detail_chat">{{item.data.content}}</span>
+						<span class="detail_chat">{{item.data.content.chatContent}}</span>
 						<span class="time_chat">{{item.dateline}}</span>
 					</div>
 				</li>
@@ -88,7 +88,9 @@ export default {
 					'token': this.$route.query.token,
 					'title': item.nikename,
 					'senderDId':item.to ,
-					'toChartId':item.from
+					'toChartId':item.from,
+					'chatItemId':item.data.content.item,
+					'id':item.data.content.item
 				}
 			});
 		},
@@ -112,7 +114,9 @@ export default {
 					if(res.data.success){
 						temp.userName=res.data.data.nikename;
 		                temp.pic=res.data.data.pic;
-						temp.dateline=this.$utils.timestampToTime(temp.dateline)
+						temp.dateline=this.$utils.timestampToTime(temp.dateline);
+						console.log(temp,1111111111111);
+						temp.data.content=JSON.parse(temp.data.content);
 						this.messageList.push(temp);
 					}
 	            }).catch((e)=>{

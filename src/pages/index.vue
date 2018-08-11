@@ -333,7 +333,6 @@
                 }
             },
             dealMessage(message){
-                console.log(message,33333333333333);
                 if(message){
                     this.hasReceiveMessage=true;
                     if(this.messageList.length!=0){

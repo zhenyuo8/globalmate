@@ -10,9 +10,36 @@
     <script src="./static/js/YYIMSDK.min.js" async></script>
     <script src="./static/js/datePicker.js" async></script>
     <script src="./static/plupload/plupload.full.min.js" async></script>
+    <style media="screen">
+        .authorization_totast{
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            z-index: 111;
+        }
+        .authorization_totast>div{
+            display: inline-block;
+            margin: auto;
+            font-size: 14px;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 4px;
+            position: absolute;
+            left: 35%;
+            top: 40%;
+        }
+    </style>
   </head>
   <body>
     <div id="app"></div>
+    <div class="authorization_totast">
+        <div class="">
+            登入中...
+        </div>
+    </div>
     <script>
         (function(){
             let getQuery=function(name){
@@ -70,7 +97,10 @@
                         Authorization();
                     }
                 }
+
             };
+
+            $('.authorization_totast').css('display','none');
             wxAuthorization();
         })()
     </script>

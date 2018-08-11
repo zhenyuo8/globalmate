@@ -3,14 +3,14 @@
 		<div class="um-content p5" id="content">
 			<div class="im_top_fix">
 				<div class="chart_main_content">
-	                <div class="chart_main_content_image">
+	                <div class="chart_main_content_image" @click='showDetail(detail)'>
 	                    <div class="">
 							<span class="icon-image_default" v-if="imageArr.length==0"></span>
 	                        <!-- <img src="../assets/images/1.jpeg" v-if="imageArr.length==0" alt=""> -->
 	                        <img :src="imageArr[0]+'?x-oss-process=image/resize,m_fixed,h_65,w_95'" v-if="imageArr.length!=0" alt="">
 	                    </div>
 	                </div>
-	                <div class="chart_main_content_decription">
+	                <div class="chart_main_content_decription" @click='showDetail(detail)'>
 	                    <span class="detail_name">{{detail.title}}</span>
 	                    <span class="detail_type">{{detail.tag}}</span>
 	                    <span class="detail_brand">{{detail.where}}</span>
@@ -19,15 +19,16 @@
 	                    <div class="">
 	                        <!-- <span class='show_evaluate' @click="doAction('show_evaluate')">查看评价</span> -->
 	                        <!-- <span class='do_evaluate' @click="doAction('do_evaluate')">去评价</span> -->
-	                        <span class='do_agree' @click="doAction('do_agree')" v-if="i_do_help">同意</span>
-	                        <!-- <span class='do_reject' @click="doAction('do_reject')">谢绝</span> -->
+	                        <!-- <span class='do_agree' @click="doAction('do_agree')" v-if="i_do_help">同意</span> -->
+	                        <!-- <span class='do_reject' @click="doAction('do_reject')" v-if="i_do_help">谢绝</span> -->
 	                        <!-- <span class='do_answer' @click="doAction('do_answer')">去回应</span> -->
 	                        <!-- <span class='evaluate_each' @click="doAction('evaluate_each')">去互评</span> -->
 	                        <!-- <span class='rejected' @click="doAction('rejected')">被谢绝</span> -->
-	                        <!-- <span class='wait_evaluate' @click="doAction('wait_evaluate')">等待评价</span> -->
-	                        <!-- <span class='wait_answer' @click="doAction('wait_answer')">待回应</span> -->
+	                        <span class='wait_evaluate' @click="doAction('wait_evaluate')" v-if="wait_evaluate">等待评价</span>
+	                        <span class='wait_answer' @click="doAction('wait_answer')" v-if="wait_answer">待回应</span>
 	                        <!-- <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
-	                        <span class='do_help' @click="doAction('do_help')">我来帮你</span>
+	                        <!-- <span class='do_help' @click="doAction('do_help')" v-if="others">我来帮你</span> -->
+	                        <span class='do_help' @click="doAction('do_help')">选择Ta</span>
 	                    </div>
 	                </div>
 	            </div>
@@ -68,7 +69,10 @@ export default {
 				'where':''
 			},
 			imageArr:[],
+			others:false,
 			i_do_help:false,
+			wait_answer:false,
+			wait_evaluate:false,
 			status_type:['i_do_help','i_do_cancel','i_wait_answer','i_wait_evaluate','i_rejected','i_evaluate_each','i_do_answer','i_do_evaluate','i_do_reject','i_show_evaluate']
 
         }
@@ -78,10 +82,15 @@ export default {
 			let url='';
 			switch (type) {
 				case 'do_help':
+					let content={
+						'item':this.$route.query.id,
+						'chatContent':'',
+						'chatType':'i_do_help',
+					}
 					YYIMChat.sendTextMessage({
 						to: this.$route.query.toChartId+'',
 						type: 'chat',
-						content: 'i_do_help',
+						content: JSON.stringify(content),
 						body: {},
 						success:function(data){
 						},
@@ -121,19 +130,59 @@ export default {
 
 			}
 		},
-
+		showDetail(detail){
+			console.log(this.othersInfo);
+			console.log(this.toChartId);
+			return
+			this.$router.push({
+                path: 'detail',
+                query: {
+                    'token': this.$route.query.token,
+                    'title': detail.title,
+                    'id': this.id,
+                    'otherUserId':''
+                }
+            });
+		},
+		showPersonal(){
+			this.$router.push({
+				path: 'mineInformation',
+				query: {
+					'token': this.$route.query.token,
+					'title': this.othersInfo.name,
+					'otherUserId':this.othersInfo.id,
+					'id': this.othersInfo.id,
+				}
+			});
+		},
+		showMySelf(){
+			this.$router.push({
+				path: 'mineInformation',
+				query: {
+					'token': this.$route.query.token,
+					'title': this.CURRENTUSER.name,
+					'otherUserId':this.CURRENTUSER.id,
+					'id': this.CURRENTUSER.id,
+				}
+			});
+		},
 		createUserTalk(arg) {
 			let headerPath = require("../assets/images/icon.png");
 			if(!this.currentUserImgae){
 				this.currentUserImgae=headerPath;
 			}
+			let $li,_this=this;
 			if(!arg){
 				if(!this.chartValue) return;
-				let charUser=this.loadChatPerson(this.$route.query.toChartId);
+				let content={
+					'item':this.$route.query.id,
+					'chatContent':this.chartValue,
+					'chatType':'',
+				}
 				YYIMChat.sendTextMessage({
 					to: this.$route.query.toChartId+'',
 					type: 'chat',
-					content: this.chartValue,
+					content: JSON.stringify(content),
 					body: {},
 					success:function(data){
 					},
@@ -141,12 +190,29 @@ export default {
 						console.log(err);
 					}
 				})
-			    let $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
-				 $('#chat-thread').append($li);
+			     $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
 			}else {
-				let $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
-				 $('#chat-thread').append($li);
+
+				try{
+					let content=JSON.parse(arg.data.content);
+					if(content&&content.chatType&&!content.chatContent){
+
+					}else{
+						$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + content.chatContent + '</div> </li>');
+					}
+				}catch(e){
+					$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
+				}
+
 			}
+			if($li){
+				$li.on('click',function (e) {
+					if(e.target.tagName=='IMG'){
+						_this.showMySelf()
+					}
+				});
+			}
+			 $('#chat-thread').append($li);
 			this.chartValue=''
 		    let top = $('#convo').height();
 		    $('#content').animate({
@@ -155,16 +221,70 @@ export default {
 		},
 		createOnMessage(arg){
 			let headerPath = require("../assets/images/icon.png");
-			if(!arg.pic){
+			if(arg&&!arg.pic){
 				arg.pic=headerPath;
 			}
 			if(!arg) return;
-			let $li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+			let $li,_this=this;
+			try{
+				let content=JSON.parse(arg.data.content);
+				if(content&&content.chatType&&!content.chatContent){
+					this.processChatType(content.chatType);
+				}else{
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
+				}
+			}catch(e){
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+			}
+			if($li){
+				$li.on('click',function (e) {
+					if(e.target.tagName=='IMG'){
+						_this.showPersonal()
+					}
+				});
+			}
+
 			 $('#chat-thread').append($li);
 			 let top = $('#convo').height();
  		    $('#content').animate({
  		        scrollTop: top
  		    }, 100);
+		},
+		processChatType(str){
+			switch (str) {
+				case 'i_do_help':
+					this.i_do_help=true
+					break;
+				case 'do_cancel':
+
+					break;
+				case 'wait_answer':
+
+					break;
+				case 'wait_evaluate':
+
+					break;
+				case 'rejected':
+
+					break;
+				case 'evaluate_each':
+
+					break;
+				case 'do_answer':
+
+					break;
+				case 'do_evaluate':
+
+					break;
+				case 'do_reject':
+
+					break;
+				case 'show_evaluate':
+
+					break;
+				default:
+
+			}
 		},
 		loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -176,7 +296,7 @@ export default {
                      for(var key in data.conceretNeed){
                          if(key==='pic'){
                              if(data.conceretNeed[key]){
-                                 this.imageArr=data.conceretNeed[key].split(';')
+                                 this.imageArr=data.conceretNeed[key].split(';');
                              }
                          }
 						 if(key==='title'){
@@ -189,7 +309,9 @@ export default {
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
                      }
-                     this.detailId=data.need.id;
+					 if(this.CURRENTUSER.id!==res.data.data.need.userId){
+						 this.others=true;
+					 }
                 }else{
 
                 }
@@ -197,15 +319,7 @@ export default {
                 console.log(e);
             })
         },
-		loadChatPerson(userId){
-			 this.apiHost=CONFIG[__ENV__].apiHost;
-			this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
-				if(res.data.success){
-				}
-			}).catch((e)=>{
-				console.log(e);
-			})
-		},
+
 		getOthersInfo(toChartId){
 			 this.apiHost=CONFIG[__ENV__].apiHost;
 			this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+this.$route.query.toChartId+'?token='+this.$route.query.token,{}).then((res)=>{
@@ -384,7 +498,10 @@ export default {
 		$('#chat-thread').empty();
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
-		this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
+		if(window.localStorage.getItem('CURRENTUSER')){
+			this.CURRENTUSER=JSON.parse(window.localStorage.getItem('CURRENTUSER'));
+			this.currentUserImgae=this.CURRENTUSER.pic;
+		}
 		this.getOthersInfo(this.toChartId);
 		this.init();
 		this.loadData();
@@ -393,12 +510,15 @@ export default {
     created(){
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
+		$('#chat-thread').bind('click',function (e) {
+			console.log(e);
+		})
 
     }
 }
 </script>
 
-<style>
+<style lang='less'>
 @import "../assets/css/im.css";
 #main{
 	background-color:#f4f4f4
@@ -422,23 +542,24 @@ export default {
 .chart_main_content{
 	font-size: 14px;
 	margin: 10px auto;
-	width: 80%;
-	padding: 12px .32rem;
-	border-radius: 14px;
+	width: 84%;
+	padding: 12px .24rem;
+	border-radius: 8px;
 	background: #fff;
 	display: flex;
 }
 
 .chart_main_content_image > div{
-	width: 1.44rem;
-	height: 1.2rem;
+	width: 1.6rem;
+	height: 100%;
 }
 .chart_main_content_image > div > img{
 	width: 100%;
 	height: 100%;
 }
 .chart_main_content_decription{
-	margin-left: 18px;
+	flex:2;
+	margin-left: .2rem;
 	overflow: hidden;
 }
 .chart_main_content_decription span{
@@ -470,23 +591,34 @@ export default {
  */
 .chart_main_content_action{
 	position: relative;
-	width: 4.2rem;
+	flex: 1;
 }
 .chart_main_content_action>div{
-	position: absolute;
-	bottom: 0;
-	right: 0;
+	flex: 1;
+    margin-top: 36px;
+    display: flex;
+    flex-direction: row;
 
 }
 .chart_main_content_action>div span{
 	padding: .12rem;
-	left: 286px;
+	margin-left: .08rem;
 	background-color: rgba(241, 241, 241, 1);
-	border: 1px solid rgba(151, 151, 151, 1);
 	border-radius: 2px;
 	color: #666;
 	white-space: nowrap;
 	overflow: hidden;
+	color: #fff;
+	&.do_agree{
+		background: #1676ec;
+	}
+	&.do_reject{
+		background: red;
+
+	}
+	&.do_help{
+		background: #1676ec
+	}
 }
 .do_evaluate{
 
