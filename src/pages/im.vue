@@ -84,7 +84,6 @@ export default {
 						content: 'i_do_help',
 						body: {},
 						success:function(data){
-							console.log(data,111111);
 						},
 						error:function(err){
 							console.log(err);
@@ -125,7 +124,9 @@ export default {
 
 		createUserTalk(arg) {
 			let headerPath = require("../assets/images/icon.png");
-			console.log(headerPath);
+			if(!this.currentUserImgae){
+				this.currentUserImgae=headerPath;
+			}
 			if(!arg){
 				if(!this.chartValue) return;
 				let charUser=this.loadChatPerson(this.$route.query.toChartId);
@@ -135,7 +136,6 @@ export default {
 					content: this.chartValue,
 					body: {},
 					success:function(data){
-						console.log(data,111111);
 					},
 					error:function(err){
 						console.log(err);
@@ -154,7 +154,10 @@ export default {
 		    }, 100);
 		},
 		createOnMessage(arg){
-			let headerPath = "../assets/images/icon.png";
+			let headerPath = require("../assets/images/icon.png");
+			if(!arg.pic){
+				arg.pic=headerPath;
+			}
 			if(!arg) return;
 			let $li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
 			 $('#chat-thread').append($li);
@@ -198,7 +201,6 @@ export default {
 			 this.apiHost=CONFIG[__ENV__].apiHost;
 			this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
 				if(res.data.success){
-					console.log(res.data);
 				}
 			}).catch((e)=>{
 				console.log(e);
@@ -212,7 +214,6 @@ export default {
 					setTimeout(()=>{
 						this.getHistory();
 					},500)
-					console.log(res.data);
 				}
 			}).catch((e)=>{
 				console.log(e);
@@ -234,7 +235,6 @@ export default {
 					   	var len=result.length-1;
 					   	for(var i=len;i>=0;i--){
 						   	if(result[i].from&&result[i].from==_this.$route.query.toChartId){
-								console.log(_this.othersInfo);
 								result[i].pic=_this.othersInfo.pic;
 							   	_this.createOnMessage(result[i])
 						   	}else{
@@ -306,7 +306,6 @@ export default {
 					// 登录成功
 					YYIMChat.getVCard({
 						success:function(res){
-							console.log(res);
 						}
 					})
 				},

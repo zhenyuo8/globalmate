@@ -124,7 +124,6 @@ export default {
     },
     methods:{
         editForm(e,item){
-            console.log(item);
             e.preventDefault();
             e.cancelBubble=true;
             this.$router.push({
@@ -145,7 +144,6 @@ export default {
                 'needId':item.need.id,
                 'action':'coplete'
             }).then(res=>{
-                console.log(res);
             }).catch(e=>{
                 console.log(e);
             })

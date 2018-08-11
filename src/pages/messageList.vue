@@ -82,14 +82,12 @@ export default {
     },
     methods:{
 		toChatPage(item){
-			console.log(item);
 			this.$router.push({
 				path: 'im',
 				query: {
 					'token': this.$route.query.token,
 					'title': item.nikename,
 					'senderDId':item.to ,
-					'toChartUser':item.from,
 					'toChartId':item.from
 				}
 			});
