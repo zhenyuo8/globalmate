@@ -223,9 +223,9 @@
                     <span class="mineInformation_call">服务值 0</span>
                 </div>
             </div>
-            <div class="mineInformation_chart_button" @click='chartWith' v-show="isOthers">
-                <span class="icon-wechat"></span>
-                <span class="icon-user-add"></span>
+            <div class="mineInformation_chart_button"  v-show="isOthers">
+                <span class="icon-wechat" @click='chartWith'></span>
+                <span class="icon-user-add" @click='addIMFriend'></span>
             </div>
         </div>
 
@@ -327,6 +327,11 @@ export default {
                     'toChartId':this.otherUserId,
                 }
             });
+        },
+        addIMFriend(){
+            console.log(YYIMChat.addRosterItem);
+            YYIMChat.addRosterItem(this.information.id);
+            console.log(this.information);
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
