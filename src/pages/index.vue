@@ -333,8 +333,18 @@
                 }
             },
             dealMessage(message){
+                console.log(message,33333333333333);
                 if(message){
                     this.hasReceiveMessage=true;
+                    if(this.messageList.length!=0){
+                        for(var i=0;i<this.messageList.length;i++){
+                            if(this.messageList[i].from=message.from){
+                                this.messageList.splice(i,1);
+                                i--;
+
+                            }
+                        }
+                    }
                     this.messageList.push(message);
                 }
             },
@@ -432,6 +442,7 @@
                 if(window.localStorage.getItem('CURRENTUSER')){
                     username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
                 }
+                console.log(username,9999999999);
 
                 if(!username) return;
     			 $.ajax({

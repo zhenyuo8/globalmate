@@ -7,12 +7,12 @@
 	                    <div class="">
 							<span class="icon-image_default" v-if="imageArr.length==0"></span>
 	                        <!-- <img src="../assets/images/1.jpeg" v-if="imageArr.length==0" alt=""> -->
-	                        <img :src='imageArr[0]' v-if="imageArr.length!=0" alt="">
+	                        <img :src="imageArr[0]+'?x-oss-process=image/resize,m_fixed,h_65,w_95'" v-if="imageArr.length!=0" alt="">
 	                    </div>
 	                </div>
 	                <div class="chart_main_content_decription">
 	                    <span class="detail_name">{{detail.title}}</span>
-	                    <span class="detail_type">{{detail.type}}</span>
+	                    <span class="detail_type">{{detail.tag}}</span>
 	                    <span class="detail_brand">{{detail.where}}</span>
 	                </div>
 	                <div class="chart_main_content_action">
@@ -124,7 +124,8 @@ export default {
 		},
 
 		createUserTalk(arg) {
-			let headerPath = "../assets/images/icon.png";
+			let headerPath = require("../assets/images/icon.png");
+			console.log(headerPath);
 			if(!arg){
 				if(!this.chartValue) return;
 				let charUser=this.loadChatPerson(this.$route.query.toChartId);
@@ -140,10 +141,10 @@ export default {
 						console.log(err);
 					}
 				})
-			    let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
+			    let $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
 				 $('#chat-thread').append($li);
 			}else {
-				let $li = $('<li class="right-item"> <img src="../assets/images/icon.png" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
+				let $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
 				 $('#chat-thread').append($li);
 			}
 			this.chartValue=''
@@ -155,7 +156,7 @@ export default {
 		createOnMessage(arg){
 			let headerPath = "../assets/images/icon.png";
 			if(!arg) return;
-			let $li = $('<li class="left-item"> <img src="'+headerPath+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+			let $li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
 			 $('#chat-thread').append($li);
 			 let top = $('#convo').height();
  		    $('#content').animate({
@@ -178,6 +179,9 @@ export default {
 						 if(key==='title'){
 							 this.detail[key]=data.conceretNeed[key];
                          }
+						 if(key==='tag'){
+							 this.detail[key]=data.conceretNeed[key];
+                         }
                      }
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
@@ -191,6 +195,7 @@ export default {
             })
         },
 		loadChatPerson(userId){
+			 this.apiHost=CONFIG[__ENV__].apiHost;
 			this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
 				if(res.data.success){
 					console.log(res.data);
@@ -199,8 +204,21 @@ export default {
 				console.log(e);
 			})
 		},
+		getOthersInfo(toChartId){
+			 this.apiHost=CONFIG[__ENV__].apiHost;
+			this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+this.$route.query.toChartId+'?token='+this.$route.query.token,{}).then((res)=>{
+				if(res.data.success){
+					this.othersInfo=res.data.data;
+					setTimeout(()=>{
+						this.getHistory();
+					},500)
+					console.log(res.data);
+				}
+			}).catch((e)=>{
+				console.log(e);
+			})
+		},
 		getHistory(){
-			console.log(this.$route.query);
 			var _this=this;
 			YYIMChat.getHistoryMessage({
 				id:_this.$route.query.toChartId,
@@ -216,8 +234,11 @@ export default {
 					   	var len=result.length-1;
 					   	for(var i=len;i>=0;i--){
 						   	if(result[i].from&&result[i].from==_this.$route.query.toChartId){
+								console.log(_this.othersInfo);
+								result[i].pic=_this.othersInfo.pic;
 							   	_this.createOnMessage(result[i])
 						   	}else{
+								result[i].pic=_this.currentUserImgae;
 							   	_this.createUserTalk(result[i])
 						   	}
 					   	}
@@ -285,7 +306,7 @@ export default {
 					// 登录成功
 					YYIMChat.getVCard({
 						success:function(res){
-
+							console.log(res);
 						}
 					})
 				},
@@ -357,17 +378,18 @@ export default {
 			});
 			YYIMChat.onMessage();
 			this.getToken();
-			setTimeout(()=>{
-				this.getHistory();
-			},500)
+
 		}
     },
 	activated(){
 		$('#chat-thread').empty();
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
+		this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
+		this.getOthersInfo(this.toChartId);
 		this.init();
-		this.loadData()
+		this.loadData();
+
 	},
     created(){
 		this.id=this.$route.query.id;
@@ -410,7 +432,7 @@ export default {
 
 .chart_main_content_image > div{
 	width: 1.44rem;
-	height: 1.44rem;
+	height: 1.2rem;
 }
 .chart_main_content_image > div > img{
 	width: 100%;
@@ -429,11 +451,18 @@ export default {
     text-overflow: ellipsis;
     max-width: 2.4rem;
 	overflow: hidden;
+	color: #888;
+}
+.chart_main_content_decription .detail_name{
+	color: #333;
 }
 .detail_list_price{
 	text-align: right;
 	font-size: 18px;
 	line-height: 72px;
+}
+.form-control{
+	color: #333;
 }
 
 

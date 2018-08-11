@@ -54,12 +54,12 @@
 			<ul>
 				<li v-for="(item,index) in messageList" @click='toChatPage(item)'>
 					<div class="image_chat">
-						<img src="../assets/images/12.jpeg" alt="">
+						<img :src="item.pic" alt="">
 					</div>
 					<div class="content_chat">
-						<span class="name_chat">{{item.from}}</span>
+						<span class="name_chat">{{item.userName}}</span>
 						<span class="detail_chat">{{item.data.content}}</span>
-						<span class="time_chat">{{timestampToTime(item.dateline)}}</span>
+						<span class="time_chat">{{item.dateline}}</span>
 					</div>
 				</li>
 			</ul>
@@ -82,10 +82,11 @@ export default {
     },
     methods:{
 		toChatPage(item){
+			console.log(item);
 			this.$router.push({
 				path: 'im',
 				query: {
-					'token': this.token,
+					'token': this.$route.query.token,
 					'title': item.nikename,
 					'senderDId':item.to ,
 					'toChartUser':item.from,
@@ -103,11 +104,29 @@ export default {
             let s = date.getSeconds();
             return Y+M+D;
         },
+		processMessageList(messageList){
+			this.apiHost=CONFIG[__ENV__].apiHost;
+			let mess=messageList;
+			this.messageList=[];
+			for(var i=0;i<mess.length;i++){
+				let temp=mess[i];
+				this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+mess[i].from+'?token='+this.$route.query.token,{}).then((res)=>{
+					if(res.data.success){
+						temp.userName=res.data.data.nikename;
+		                temp.pic=res.data.data.pic;
+						temp.dateline=this.$utils.timestampToTime(temp.dateline)
+						this.messageList.push(temp);
+					}
+	            }).catch((e)=>{
+
+	            })
+			}
+		}
     },
     activated(){
 		if(window.localStorage.getItem('MESSAGELIST')){
-			this.messageList=JSON.parse(window.localStorage.getItem('MESSAGELIST'));
-			console.log(this.messageList);
+			let messageList=JSON.parse(window.localStorage.getItem('MESSAGELIST'));
+			 this.processMessageList(messageList)
 		}
     },
     created(){

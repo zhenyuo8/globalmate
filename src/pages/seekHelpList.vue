@@ -331,7 +331,7 @@
 			<p class="list_repeat_title">标题：{{item.conceretNeed.title}}</p>
 			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
                 <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
-                    <img :src="items" alt="" v-if="indexs<3">
+                    <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
 			<div class="list_repeat_action" v-if="item.conceretNeed.status!='Closed'">
