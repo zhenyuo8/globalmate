@@ -73,9 +73,9 @@
 					<label for="schoolsignup" class="schoolname" data-icon="u">学校名称</label>&nbsp:&nbsp&nbsp
 					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
-				<p>
+				<p @click='choseSchoolDate($event)' id="schooldatesignup">
 					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
-					<input id="schooldatesignup" name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly'  @click='choseSchoolDate($event)'/>
+					<input  name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
 				</p>
 				<p>
 					<label for="schoolprofessionalsignup" class="professional" data-icon="u">所在专业</label>&nbsp:&nbsp&nbsp
@@ -188,7 +188,6 @@ export default {
             this.$el.querySelector('#schoolgradesignup').value=item.grade;
         },
         choseSchoolDate(e){
-            console.log(e);
             if(!this.calendar2&&!this.showEducationValue){
               this.calendar2 = new datePicker();
               this.calendar2.init({

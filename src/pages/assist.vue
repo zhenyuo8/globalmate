@@ -96,8 +96,11 @@
             </div>
         </div>
     </div>
-    <div class="assist_bottom" @click='publish'>
+    <div class="assist_bottom" @click='publish' v-show="!isEditType">
         发布
+    </div>
+    <div class="assist_bottom" @click='publish' v-show="isEditType">
+        提交
     </div>
      <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
      <div class="defindloadig" v-if="loadingShow">
@@ -151,7 +154,8 @@ export default {
             listType:'',
             country:'',
             showTipsText:'',
-            loadingShow:true
+            loadingShow:true,
+            isEditType:false,
         }
 
     },
@@ -624,6 +628,9 @@ export default {
             this.loadDataEdit(this.$route.query.id);
         }else{
              this.listRepeatProcess();
+        }
+        if(this.$route.query.mode='MODIFY'){
+            this.isEditType=true;
         }
 
         setTimeout(()=>{

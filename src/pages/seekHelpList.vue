@@ -1,10 +1,5 @@
 <style scoped>
-/*@import '../assets/css/list.css';*/
-.myAssist{
-    margin-top: 0;
-    width:7.5rem;
-    height: 13.34rem;
-    overflow-y: auto;
+.gl_list{
     font-size: 14px;
 }
 .filter_right>.select_out{
@@ -14,7 +9,6 @@
     bottom: 0;
     top: 100%;
     opacity: 0;
-    /*display: none;*/
     -webkit-transition: all .2s ease-out;
     -moz-transition: all .2s ease-out;
     transition: all .2s ease-out;
@@ -30,34 +24,33 @@
     -webkit-transition: all .3s ease-in;
     -moz-transition: all .3s ease-in;
     transition: all .3s ease-in;
-    background: #eee;
 }
-.myAssist .list_ul{
+.gl_list .list_ul{
     padding: 0 0.2rem;
     background: #fff;
 }
-.myAssist .list_ul li{
+.gl_list .list_ul li{
     height: 36px;
     line-height: 36px;
     border-bottom: 1px solid #eee;
     padding: 0 .2rem;
 }
-.myAssist .list_ul li:last-child{
+.gl_list .list_ul li:last-child{
     border: none;
 }
-.myAssist .list_ul .select .icon-checkbox{
+.gl_list .list_ul .select .icon-checkbox{
     color: rgb(41, 182, 246);
 }
-.myAssist .list_ul li .list_item{
+.gl_list .list_ul li .list_item{
     float: left;
 }
-.myAssist .list_ul li .icon-checkbox{
+.gl_list .list_ul li .icon-checkbox{
     float: right;
     line-height: 36px;
     color: #999;
     font-size: 16px;
 }
-.myAssist .buttom_action{
+.gl_list .buttom_action{
     height: 46px;
     background: #fff;
     line-height: 46px;
@@ -66,7 +59,7 @@
     right: 0;
     bottom: 0;
 }
-.myAssist .buttom_action span{
+.gl_list .buttom_action span{
     display: inline-block;
     width: 40%;
     height: 36px;
@@ -75,10 +68,10 @@
     border-radius: 5px;
     color: #fff;
 }
-.myAssist .buttom_action .cancel{
+.gl_list .buttom_action .cancel{
     background: rgb(153, 153, 153);
 }
-.myAssist .buttom_action .confirm{
+.gl_list .buttom_action .confirm{
     background: rgb(41, 182, 246);
 }
 .bottom_right{
@@ -135,7 +128,7 @@
        -webkit-transition: all .2s ease-in;
        -moz-transition: all .2s ease-in;
        transition: all .2s ease-in;
-       background:#eee;
+       /*background:#eee;*/
     }
     .slide_out_one{
         position: fixed;
@@ -184,7 +177,7 @@
     		border: 1px solid #eee;
     		padding: 0 0.2rem;
         }
-        .myAssist .slide_in_one .action{
+        .gl_list .slide_in_one .action{
             position: absolute;
             bottom: 0;
             display: flex;
@@ -192,17 +185,17 @@
             height: 36px;
             line-height: 36px;
         }
-        .myAssist .slide_in_one .action span{
+        .gl_list .slide_in_one .action span{
             flex:1;
             text-align:center;
             font-size:16px;
 
         }
-       .myAssist .cancel{
+       .gl_list .cancel{
             background:#ddd;
             color:#333;
         }
-       .myAssist .confirm{
+       .gl_list .confirm{
             background:#007aff;
             color:#fff;
         }
@@ -311,7 +304,7 @@
 
 <template>
 
-<div class="myAssist">
+<div class="gl_list">
     <!--搜索框-->
 	<searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
 	<div class="list_wrap">

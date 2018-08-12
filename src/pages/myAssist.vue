@@ -1,5 +1,85 @@
-<style scoped>
-@import '../assets/css/list.css';
+<style scoped lang='less'>
+    .gl_list{
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        .list_warp{
+            background: #f7f5f3;
+            .list_repeat{
+                background: #fff;
+                margin-bottom: 10px;
+                padding: 10px .4rem;
+                position: relative;
+                .list_repeat_content{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                        &.gl_status{
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                    }
+                }
+                 .list_repeat_pushed::before{
+                    border-top: 1px solid #eee;
+                    content: '';
+                    clear: both;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                }
+                .list_repeat_pushed{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                    }
+                    .list_repeat_pushed_item{
+                        display: flex;
+
+                        div{
+                             margin-right: 10px;
+                            img{
+                                width: 1.2rem;
+                                height: 1.2rem;
+                                border-radius: 50%;
+                                display: block;
+                                margin: auto;
+                            }
+                            span{
+                                margin-top: 10px;
+                                margin:6px  auto 10px;
+                            }
+                        }
+                    }
+
+                }
+                .action_list{
+                    display: flex;
+                    margin-top: 10px;
+                    span{
+                        padding: 8px .18rem;
+                        flex: 1;
+                        background: #eee;
+                        margin-right: .2rem;
+                        border-radius: 4px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        &:last-child{
+                             margin-right: 0;
+                        }
+                    }
+                }
+                .action_list_done{
+                    position: absolute;
+                    right: 0.4rem;
+                    bottom: 10px;
+                }
+            }
+        }
+    }
 </style>
 <style media="screen" lang="less">
     .yy_nodata_class{
@@ -45,48 +125,54 @@
 
 <template>
 
-<div class="myAssist">
-    <div class="repeat_assist" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
-        <div class="top">
-            <span class="top_left">
-                {{item.conceretNeed.title}}
-            </span>
-            <span class="top_right">
-                {{item.conceretNeed.type}}
-            </span>
-        </div>
-        <div class="middle">
-            <div class="middle_left">
-                <p class="middle_decription">{{item.conceretNeed.description}}</p>
-                <p class="middle_from">来自 {{item.conceretNeed.country}}</p>
+<div class="gl_list">
+    <div class="list_warp">
+        <div class="list_repeat" v-for="(item,index) in myAssistList">
+            <div class="list_repeat_content" @click='showDetail(item)'>
+                <p>事物标签: {{item.conceretNeed.tag}}</p>
+                <p>事物地点: {{item.conceretNeed.country}}</p>
+                <p>事物内容: {{item.conceretNeed.title}}</p>
+                <p class="gl_status">{{item.conceretNeed.status}}</p>
             </div>
-            <div class="middle_right">
-                <img v-if="item.conceretNeed.pic" :src='item.conceretNeed.pic' alt="">
-                <img v-if="!item.conceretNeed.pic" :src='imagesList[index%3]' alt="">
+            <div class="list_repeat_pushed" v-if="item.conceretNeed.status!='Closed'">
+                <p>推送名单:</p>
+                <div class="list_repeat_pushed_item">
+                    <div class="">
+                        <img src="../assets/images/1.jpeg" alt="">
+                        <span>zhenyu</span>
+                    </div>
+                    <div class="">
+                        <img src="../assets/images/2.jpeg" alt="">
+                        <span>zhenyuo8</span>
+                    </div>
+                    <div class="">
+                        <img src="../assets/images/3.jpg" alt="">
+                        <span>zhenyuo8</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="action_list">
-            <div class="re_edit" @click='editForm($event,item)'>
-                <span>重新编辑</span>
+            <div class="list_repeat_pushed" v-if="item.conceretNeed.status!='Closed'">
+                <p>提供帮助方:</p>
+                <div class="list_repeat_pushed_item">
+                    <div class="">
+                        <img src="../assets/images/1.jpeg" alt="">
+                        <span>zhenyu</span>
+                    </div>
+
+                </div>
             </div>
-            <div class="done">
-                <span @click='finished($event,item)'>完成</span>
+            <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
+                <span class="re_edit" @click='editForm($event,item)'>重新编辑</span>
+                <span class="done" @click='finished($event,item)'>完成</span>
+                <span class="share" @click='evaluate($event,item)'>分享到</span>
+                <span class="comment" @click='evaluate($event,item)'>评价</span>
             </div>
-            <div class="comment">
-                <span @click='evaluate($event,item)'>评价</span>
-            </div>
-        </div>
-        <div class="bottom">
-            <div class="bottom_left">
-                <img :src='currentUserImgae' alt="" class="bottom_left_userimage">
-                <span class="bottom_left_username">{{item.need.userName}}</span>
-                <span class="bottom_left_time">{{timestampToTime(item.need.createTime)}}</span>
-            </div>
-            <div class="bottom_right">
-                {{item.conceretNeed.rewardAmount}}
+            <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
+                <span>追加评论</span>
             </div>
         </div>
     </div>
+
     <div v-if="nodataFlag" class="yy_nodata_class" style="">
         <div class="yy_icon_img">
             <img src="../assets/images/business_nodata.png" alt="">
@@ -199,6 +285,11 @@ export default {
                                  data[i].conceretNeed.url=this.imagesList[i]
                                  if(data[i].conceretNeed.pic){
                                      data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                                 }
+                                 if(data[i].conceretNeed.endTime&&data[i].conceretNeed.endTime<new Date().getTime()){
+                                     data[i].conceretNeed.status='Closed'
+                                 }else{
+                                     data[i].conceretNeed.status='Open'
                                  }
                                  this.myAssistList.push(data[i])
                              }

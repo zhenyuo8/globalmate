@@ -1,6 +1,11 @@
 <style scoped>
   #identify{
       font-size: 14px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
   }
   .identify_body{
       width: 84%;
@@ -17,6 +22,9 @@
       display: flex;
       flex-direction: column;
       position: relative;
+  }
+  .identify_warp{
+      margin-bottom: 36px;
   }
   .identify_body>div:first-child{
       margin-right: 10px;
@@ -104,6 +112,13 @@
   p{
       margin-bottom: 10px;
   }
+  .gl_totast_p{
+      color: red;
+      text-align: left;
+      font-size: 12px;
+      padding: 10px .4rem;
+      background: aliceblue
+  }
 
 </style>
 
@@ -120,7 +135,7 @@
         </div>
     </div>
     <div class="identify_warp">
-        <div class="">
+        <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
                 <div class="identify_face_page" id='id_face' @click="uploaderInit('id_face')">
                     <img src="" alt="">
@@ -139,9 +154,9 @@
             </div>
             <p>身份证</p>
         </div>
-        <div class="line_separeat">
+        <div class="line_separeat" v-show="showIDCARD">
         </div>
-        <div class="">
+        <div class="" v-show="showSTUDENTID">
             <div class="identify_body STUDENTID">
                 <div class="identify_face_page" id='id_student' @click="uploaderInit('id_student')">
                     <img src="" alt="">
@@ -160,10 +175,10 @@
             </div>
             <p>学生证</p>
         </div>
-        <div class="line_separeat">
+        <div class="line_separeat" v-show="showSTUDENTID">
 
         </div>
-        <div class="">
+        <div class="" v-show="showPASSPORT">
             <div class="identify_body PASSPORT">
                 <div class="identify_face_page" id='id_passport' @click="uploaderInit('id_passport')">
                     <img src="" alt="">
@@ -184,30 +199,36 @@
             </div>
             <p>护照</p>
         </div>
-        <div class="line_separeat">
+        <div class="line_separeat" v-show="showPASSPORT">
 
         </div>
-
     </div>
+    <p class="gl_totast_p" v-show="identifyType.length==0">请至少选择一项认证方式!</p>
 
-    <button type="button" name="button" class='submitbtn' @click='submitData' v-show="onloadYet">提交</button>
+    <button type="button" name="button" class='submitbtn' @click='submitData' >提交</button>
+    <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
 
 <script>
 import CONFIG from '../config/config'
+import tips from '../components/tips.vue'
 export default {
     'name': 'mine',
     data() {
         return {
             title:'',
             identifyType:['IDCARD'],
-            onloadYet:false
+            onloadYet:false,
+            showIDCARD:true,
+            showSTUDENTID:false,
+            showPASSPORT:false,
+            showTipsText:''
         }
     },
     components: {
-
+        tips
     },
     computed:{
 
@@ -226,12 +247,15 @@ export default {
         },
 
         selectType(e,type){
+            let _this=this;
             if($(e.target).hasClass('select_class')){
                 this.identifyType=this.identifyType.filter((item,index)=>{
                     return item!=type;
-                })
+                });
+                this['show'+type]=false;
                  $(e.target).removeClass('select_class')
             }else{
+                this['show'+type]=true;
                 this.identifyType.push(type);
                  $(e.target).addClass('select_class')
             }
@@ -301,6 +325,7 @@ export default {
                             let imgEle=document.createElement('img');
                             imgEle.src=imgsrc;
                             $('#'+id).find('img').attr('src',imgsrc);
+                            $('#'+id).find('img').attr('data-src',imgsrc);
                             $('#'+id).find('img').css('display','inline-block');
                         });
                     }(i);
@@ -329,7 +354,13 @@ export default {
         submitData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let postData=[];
-
+            if(this.identifyType.length==0){
+                this.showTipsText='请至少选择一种认证方式！谢谢...';
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500);
+                return;
+            }
             for(var i=0;i<this.identifyType.length;i++){
                 var obj={
                     'cetifyType':'',
@@ -339,13 +370,18 @@ export default {
                 let img=$('.'+this.identifyType[i]).find('img');
                 if(img.length!==0){
                     for(var j=0;j<img.length;j++){
+                        if(!img[j].getAttribute('data-src')){
+                            this.showTipsText='请确认已选认证方式图片是否上传!';
+                            setTimeout(()=>{
+                                this.showTipsText='';
+                            },2000);
+                            return
+                        }
                         obj.certifyPhoto.push(img[j].src);
-
                     }
                 }
                 postData.push(obj);
             }
-            return;
             this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,{}).then((res)=>{
                 if(res.data.success){
                     setTimeout(()=>{

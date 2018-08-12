@@ -1,15 +1,18 @@
 <template>
     <div class="feedback" id='feedback'>
-		<div class="feedback_title">
-			您的意见是我们平台发展最宝贵的助力:
-		</div>
-		<div class="middle">
-			<textarea  placeholder='请输入您的宝贵意见' v-model='textareaVal'></textarea>
-		</div>
-        <div class="defindloadig" v-if="loadingShow">
-            <loading></loading>
+        <div class="feedback_warp">
+            <div class="feedback_title">
+    			您的意见是我们平台发展最宝贵的助力:
+    		</div>
+    		<div class="middle">
+    			<textarea  placeholder='请输入您的宝贵意见!' v-model='textareaVal'></textarea>
+    		</div>
+            <div class="defindloadig" v-if="loadingShow">
+                <loading></loading>
+            </div>
+    		<button type="submit" name="button" class="evaluate_submit" @click='feedbackClick'>提交</button>
         </div>
-		<button type="submit" name="button" class="evaluate_submit" @click='feedbackClick'>提交</button>
+
     </div>
 </template>
 
@@ -70,21 +73,26 @@ import loading from '../components/loading.vue'
 
 <style scoped>
 .feedback{
-	padding: 20px 0.4rem;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+.feedback_warp{
+    width: 90%;
+    margin: auto;
 }
 .feedback_title{
-	font-size: 13px;
+	font-size: 14px;
 	color: #333;
-	height: 32px;
-	line-height: 32px;
+    padding: 10px 0;
 	text-align: left;
 }
-.middle{
-	margin-top: 20px;
-}
  .middle textarea{
-	font-size: 12px;
+	font-size: 14px;
 	padding: .1rem;
+    padding: 8px .16rem;
 	border: 2px solid #eee;
 	width: 100%;
 	height: 160px;
@@ -93,11 +101,11 @@ import loading from '../components/loading.vue'
 
 .evaluate_submit{
 	width: 100%;
-    font-size: 18px;
-    height: 44px;
+    font-size: 16px;
+    height: 36px;
     background: #007aff;
     color: #fff;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 .defindloadig{
     position: fixed;

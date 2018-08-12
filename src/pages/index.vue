@@ -293,8 +293,7 @@
                     },1500);
                 }else{
                     this.$router.push({
-                        path: 'myAssist',
-                        //  path: 'list',
+                        path: 'myAssis',
                         query: {
                           'token':this.token,
                           'title': '求助列表',
@@ -535,7 +534,7 @@
     }
     .icon-global-im{
         width: .76rem;
-        margin-left: 0.2rem;
+        margin-right: 0.2rem;
         position: relative;
     }
     .message_tips{

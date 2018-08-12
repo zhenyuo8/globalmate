@@ -1,108 +1,90 @@
-<style scoped>
-/*@import '../assets/css/list.css';*/
-.myAssist{
-    margin-top: 0;
-    width:7.5rem;
-    height: 13.34rem;
-    overflow-y: auto;
-    font-size: 14px;
-}
-.filter_right>.select_out{
-    position: fixed;
-    left: 1rem;
-    right: 0;
-    bottom: 0;
-    top: 100%;
-    opacity: 0;
-    /*display: none;*/
-    -webkit-transition: all .2s ease-out;
-    -moz-transition: all .2s ease-out;
-    transition: all .2s ease-out;
-    background: #eee;
-}
- .filter_right>.select_in{
-    position: fixed;
-    left: 1rem;
-    right: 0;
-    bottom: 0;
-    top: 43px;
-    opacity: 1;
-    -webkit-transition: all .3s ease-in;
-    -moz-transition: all .3s ease-in;
-    transition: all .3s ease-in;
-    background: #eee;
-}
-.myAssist .list_ul{
-    padding: 0 0.2rem;
-    background: #fff;
-}
-.myAssist .list_ul li{
-    height: 36px;
-    line-height: 36px;
-    border-bottom: 1px solid #eee;
-    padding: 0 .2rem;
-}
-.myAssist .list_ul li:last-child{
-    border: none;
-}
-.myAssist .list_ul .select .icon-checkbox{
-    color: rgb(41, 182, 246);
-}
-.myAssist .list_ul li .list_item{
-    float: left;
-}
-.myAssist .list_ul li .icon-checkbox{
-    float: right;
-    line-height: 36px;
-    color: #999;
-    font-size: 16px;
-}
-.myAssist .buttom_action{
-    height: 46px;
-    background: #fff;
-    line-height: 46px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-.myAssist .buttom_action span{
-    display: inline-block;
-    width: 40%;
-    height: 36px;
-    margin-left: .2rem;
-    line-height: 36px;
-    border-radius: 5px;
-    color: #fff;
-}
-.myAssist .buttom_action .cancel{
-    background: rgb(153, 153, 153);
-}
-.myAssist .buttom_action .confirm{
-    background: rgb(41, 182, 246);
-}
-.bottom_right{
-    color: #0400ff
-}
-.defindloadig{
-   position: fixed;
-   z-index: 11;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-}
+<style scoped lang='less'>
+    .gl_list{
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+        .list_warp{
+            background: #f7f5f3;
+            .list_repeat{
+                background: #fff;
+                margin-bottom: 10px;
+                padding: 10px .4rem;
+                .list_repeat_content{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                        &.gl_status{
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                    }
+                }
+                 .list_repeat_pushed::before{
+                    border-top: 1px solid #eee;
+                    content: '';
+                    clear: both;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                }
+                .list_repeat_pushed{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                    }
+                    .list_repeat_pushed_item{
+                        display: flex;
+
+                        div{
+                             margin-right: 10px;
+                            img{
+                                width: 1.2rem;
+                                height: 1.2rem;
+                                border-radius: 50%;
+                                display: block;
+                                margin: auto;
+                            }
+                            span{
+                                margin-top: 10px;
+                                margin:6px  auto 10px;
+                            }
+                        }
+                    }
+
+                }
+                .action_list{
+                    display: flex;
+                    margin-top: 10px;
+                    span{
+                        padding: 8px .18rem;
+                        flex: 1;
+                        background: #eee;
+                        margin-right: .2rem;
+                        border-radius: 4px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        &:last-child{
+                             margin-right: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
 </style>
-<style  lang="less">
+<style media="screen" lang="less">
     .yy_nodata_class{
         text-align: center;
         color: #999;
         font-size: 13px;
         position: fixed;
-        top: 46px;
+        top: 0;
         left: 0;
         right: 0;
-        bottom: 46px;
+        bottom: 0;
         background: #fff;
         .yy_icon_img{
             position: absolute;
@@ -124,320 +106,137 @@
             overflow-y: auto;
         }
     }
-    .slide_in_one{
-        position: fixed;
-        right:0;
-        top:43px;
-        bottom:0;
-        opacity:1;
-        width:6.5rem;
-        background:#f5f5f5;
-       -webkit-transition: all .2s ease-in;
-       -moz-transition: all .2s ease-in;
-       transition: all .2s ease-in;
-       background:#eee;
+    .defindloadig{
+       position: fixed;
+       z-index: 11;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
     }
-    .slide_out_one{
-        position: fixed;
-        right: -6.5rem;
-         top:44px;
-         bottom:0;
-         opacity:0;
-         width:6.5rem;
-         background:#fff;
-        -webkit-transition: all .2s ease-out;
-        -moz-transition: all .2s ease-out;
-        transition: all .2s ease-out;
-    }
-    .mask{
-        position:absolute;
-        left:0;
-        right:0;
-        top:44px;
-        bottom:0;
-        background:rgba(153,153,153,0.9)
-    }
-    	.rightIn_form{
-    		display: flex;
-    		background: #fff;
-    		margin-top: 10px;
-    		padding: 0 .3rem .2rem;
-    	}
-    	.rightIn_form .name{
-    		margin-right: .4rem;
-    	}
-    	 .rightIn_form .name p{
-    		display: flex;
-    		height: 32px;
-    		line-height: 32px;
-    		margin-top: 10px;
-    	}
-    	 .rightIn_form .name p label{
-    		width: 1rem;
-    		text-align: justify;
-    		text-justify:inter-ideograph;
-    		text-align-last:justify;
-    		line-height: 32px;
-    	}
-        .rightIn_form .name p input{
-    		width: 4rem;
-    		border: 1px solid #eee;
-    		padding: 0 0.2rem;
-        }
-        .myAssist .slide_in_one .action{
-            position: absolute;
-            bottom: 0;
-            display: flex;
-            width: 100%;
-            height: 36px;
-            line-height: 36px;
-        }
-        .myAssist .slide_in_one .action span{
-            flex:1;
-            text-align:center;
-            font-size:16px;
 
-        }
-       .myAssist .cancel{
-            background:#ddd;
-            color:#333;
-        }
-       .myAssist .confirm{
-            background:#007aff;
-            color:#fff;
-        }
-
-</style>
-
-/**
- * new list style
- * @type {String}
- */
-
-<style media="screen" lang='less'>
-	.list_wrap{
-		background: #f7f5f3;
-		.list_repeat{
-			background: #fff;
-			padding: .2rem 0.4rem;
-			margin: auto;
-			margin-bottom: 10px;
-            position: relative;
-			&>div{
-				margin-top: 10px;
-			}
-			.list_repeat_title{
-				text-align: left;
-				margin-top: 10px;
-                margin-bottom: 6px;
-				font-size: 15px;
-                color: #333;
-				font-weight: 500;
-			}
-			.list_repeat_action{
-				text-align: right;
-                position: absolute;
-                right: 0.4rem;
-                bottom: 0.2rem;
-				span{
-					width: 1rem;
-					padding: 6px .15rem;
-					background: #2361ea;
-					border-radius: 4px;
-					color: #fff;
-				}
-			}
-			.list_repeat_user{
-				display: flex;
-				.image_user{
-					width: 1.2rem;
-					height: 1.2rem;
-                    border-radius: 50%;
-                    overflow: hidden;
-					border: 1px solid #eee;
-					img{
-						display: inline-block;
-						width: 100%;
-						height: 100%;
-					}
-				}
-				.name_user{
-					display: flex;
-					flex: 2;
-    				flex-direction: column;
-    				text-align: left;
-    				margin-left: .24rem;
-					span{
-						&.name{
-							font-size: 14px;
-							color: #333;
-						}
-						&.type{
-						    font-size: 13px;
-                            color: #888;
-							margin-top: .4rem;
-						}
-					}
-				}
-				.status_user{
-					span{
-						color: blue;
-						font-size: 16px;
-					}
-				}
-                .status_close{
-                    span{
-                        color: red!important;
-                    }
-                }
-			}
-            .list_repeat_img{
-                display: flex;
-                .list_content_img{
-                    width: 1.6rem;
-                    height: 1.6rem;
-                    margin-right: .2rem;
-                    img{
-                        width: 100%;
-                        height: 100%;
-                        display: inline-block;
-                    }
-
-                }
-            }
-		}
-	}
 </style>
 
 <template>
 
-<div class="myAssist">
-    <!--搜索框-->
-	<searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
-	<div class="list_wrap">
-		<div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
-			<div class="list_repeat_user">
-				<div class="image_user" @click='goDetail($event,item)'>
-					<img :src="item.need.pic" alt="">
-				</div>
-				<div class="name_user">
-					<span class="name">{{item.need.userName}}</span>
-					<span class="type">{{item.conceretNeed.tag}}</span>
-				</div>
-				<div class="status_user" :class="item.conceretNeed.status=='Closed'?'status_close':''">
-					<span>{{item.conceretNeed.status}}</span>
-				</div>
-			</div>
-			<p class="list_repeat_title">标题：{{item.conceretNeed.title}}</p>
-			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
-                <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
-                    <img :src="items" alt="" v-if="indexs<3">
+<div class="gl_list">
+    <div class="list_warp">
+        <div class="list_repeat" v-for="(item,index) in myAssistList">
+            <div class="list_repeat_content" @click='showDetail(item)'>
+                <p>事物标签: {{item.conceretNeed.tag}}</p>
+                <p>事物地点: {{item.conceretNeed.country}}</p>
+                <p>事物内容: {{item.conceretNeed.title}}</p>
+                <p class="gl_status">求助中</p>
+            </div>
+            <div class="list_repeat_pushed">
+                <p>推送名单:</p>
+                <div class="list_repeat_pushed_item">
+                    <div class="">
+                        <img src="../assets/images/1.jpeg" alt="">
+                        <span>zhenyu</span>
+                    </div>
+                    <div class="">
+                        <img src="../assets/images/2.jpeg" alt="">
+                        <span>zhenyuo8</span>
+                    </div>
+                    <div class="">
+                        <img src="../assets/images/3.jpg" alt="">
+                        <span>zhenyuo8</span>
+                    </div>
                 </div>
-			</div>
-			<div class="list_repeat_action" v-if="item.conceretNeed.status!='Closed'">
-				<span @click='goHelp($event,item)'>去帮助</span>
-			</div>
-		</div>
-	</div>
+            </div>
+            <div class="list_repeat_pushed">
+                <p>推送名单:</p>
+                <div class="list_repeat_pushed_item">
+                    <div class="">
+                        <img src="../assets/images/1.jpeg" alt="">
+                        <span>zhenyu</span>
+                    </div>
 
+                </div>
+            </div>
+            <div class="action_list">
+                <span class="re_edit" @click='editForm($event,item)'>重新编辑</span>
+                <span class="done" @click='finished($event,item)'>完成</span>
+                <span class="share" @click='evaluate($event,item)'>分享到</span>
+                <span class="comment" @click='evaluate($event,item)'>评价</span>
+            </div>
+        </div>
+    </div>
 
-	<div v-if="nodataFlag" class="yy_nodata_class" style="">
+    <div v-if="nodataFlag" class="yy_nodata_class" style="">
         <div class="yy_icon_img">
             <img src="../assets/images/business_nodata.png" alt="">
             <span class="yy_nodata_text">{{noDataTips}}</span>
         </div>
    </div>
-
-   <div class="mask" v-show="rightIn" @click="hideMask">
-
-   </div>
-
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
-   </div>
-
-   <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
-        <form class="rightIn_form" action="" method="post" onsubmit='return false'>
-			<div class="name">
-				<p>
-					<label for="countrysearch" class="country" data-icon="u">国家</label>&nbsp:&nbsp&nbsp
-					<input id="countrysearch" name="countrysearch" required="required" type="text" placeholder="国家" />
-				</p>
-				<p>
-					<label for="citysearch" class="city" data-icon="u">城市</label>&nbsp:&nbsp&nbsp
-					<input id="citysearch" name="citysearch" required="required" type="text" placeholder="城市" />
-				</p>
-                <p @click='selectHelpType'>
-                    <label for="typesearch" class="type" data-icon="u">类型</label>&nbsp:&nbsp&nbsp
-					<input id="typesearch" name="typesearch" required="required" type="text"  placeholder='请选择' readonly='readonly' disabled='disabled'  :value="selectHelpTypeValue" />
-                </p>
-			</div>
-        </form>
-        <div class="action">
-            <span class="cancel" @click='hideMask'>取消</span>
-            <span class="confirm" @click='confirmSearch'>确认</span>
-        </div>
-        <div :class="selectFlag?'select_in':'select_out'">
-			<ul class="list_ul">
-				<li v-for="(item,index) in list" @click='selectItemType(item,index)'>
-					<span class="list_item">{{item}}</span>
-					<span class="icon-checkbox"></span>
-				</li>
-			</ul>
-			<div class="buttom_action" v-show="selectFlag">
-				<span  class="cancel" @click='cancel'>取消</span>
-				<span class="confirm" @click='confirm1'>确定</span>
-			</div>
-		</div>
    </div>
 </div>
 
 </template>
 
 <script>
-import searchInput from '../components/searchInput.vue'
-import CONFIG from '../config/config'
+import CONFIG from '../config/config.js'
 import loading from '../components/loading.vue'
 export default {
     'name': 'myAssist',
     components: {
-        searchInput,loading
+        loading
     },
     data() {
         return {
-          myAssistList: [],
-          searchVal:'',
-          msg:false,
+            myAssistList: [],
+            imagesList:[
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180050&di=0d2ee92eead284e8133d6df07535d75a&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads1%2Fsc%2Fjpgs%2F1512%2Fapic16988_sc115.com.jpg',
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg',
+              'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
+          ],
           nodataFlag:false,
           noDataTips:'',
-          rightIn:false,
-          selectFlag:false,
-          selectHelpTypeValue:'',
-          type_list:[],
-          hasSelect_list:[],
-          list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
-          searchContent:{
-              type:'',
-              where:'',
-          },
-          isSOS:false,
-          loadingShow:true
-
+          loadingShow:true,
+          currentUserImgae:'',
         }
     },
     methods:{
-        finished(e,item){
+        editForm(e,item){
             e.preventDefault();
             e.cancelBubble=true;
+            this.$router.push({
+                path: 'assist',
+                query: {
+                    'token': this.$route.query.token,
+                    'title': item.conceretNeed.tag,
+                    'id': item.need.id,
+                    'mode':'MODIFY'
+                }
+            });
+        },
+        finished(e,item){
             this.apiHost=CONFIG[__ENV__].apiHost;
+            e.preventDefault();
+            e.cancelBubble=true;
             this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
                 'needId':item.need.id,
                 'action':'coplete'
             }).then(res=>{
-                console.log(res);
             }).catch(e=>{
                 console.log(e);
             })
+
+        },
+        evaluate(e,item){
+            e.preventDefault();
+            e.cancelBubble=true;
+            this.$router.push({
+                path: 'evaluate',
+                query: {
+                    'token': this.token,
+                    'title': '评价',
+                    'id': 'evaluate',
+                }
+            });
         },
         showDetail(item){
             this.$router.push({
@@ -446,131 +245,9 @@ export default {
                     'token': this.$route.query.token,
                     'title': item.conceretNeed.title,
                     'id': item.need.id,
-                    'otherUserId':item.need.userId
                 }
             });
         },
-        goDetail(e,item){
-             e.preventDefault;
-             e.cancelBubble=true;
-             this.$router.push({
-                 path: 'mineInformation',
-                 query: {
-                     'token': this.token,
-                     'title': item.need.userName,
-                     'otherUserId':item.need.userId,
-                     'id': item.need.id,
-                 }
-             });
-
-        },
-        goHelp(e,item){
-            e.preventDefault;
-            e.cancelBubble=true;
-            let _this=this;
-            this.getUserInfo(item.need.userId,function(data){
-                _this.$router.push({
-                    path: 'im',
-                    query: {
-                        'token': _this.token,
-                        'title': data.nikename,
-                        'id': item.need.id,
-                        'toChartUser':data.nikename,
-                        'toChartId':item.need.userId,
-                        'whoNeedHelf':item.need.userId,
-                    }
-                });
-            })
-        },
-        getUserInfo(userId,callback){
-          this.apiHost=CONFIG[__ENV__].apiHost;
-          let url='';
-          if(this.$route.query.id==='sos'){
-              url='/globalmate/rest/assist/listSOS'
-          }else{
-              url='/globalmate/rest/user/list/'+userId
-          }
-          this.axios.get(this.apiHost+url+'/?token='+this.$route.query.token,{}).then(res=>{
-              if(res.data&&res.data.success){
-                  callback(res.data.data);
-              }
-          }).catch(e=>{
-
-          })
-        },
-        searchCallBack(data){
-            this.msg=!this.msg;
-            this.rightIn=!this.rightIn;
-        },
-        hideMask(){
-            this.rightIn=!this.rightIn;
-            this.selectFlag=false;
-        },
-        confirmSearch(){
-            this.nodataFlag=false;
-            this.myAssistList=[];
-            this.noDataTips='';
-            this.rightIn=!this.rightIn;
-            this.searchContent={};
-            this.searchContent['type']=this.$el.querySelector('#typesearch').value
-            this.searchContent['where']=this.$el.querySelector('#countrysearch').value+'_'+this.$el.querySelector('#citysearch').value;
-            this.myAssistList=[];
-            this.loadData();
-        },
-        selectHelpType(){
-            this.selectFlag=true;
-        },
-        selectItemType(item,index){
-			if($($('.list_ul li')[index]).hasClass('select')){
-				$($('.list_ul li')[index]).removeClass('select');
-			}else{
-				$($('.list_ul li')[index]).addClass('select');
-			}
-			let someType=this.type_list.some(function (itm,inx) {
-				return itm===item;
-			})
-			if(someType){
-				for(var i=0;i<this.type_list.length;i++){
-					if (this.type_list[i]===item) {
-						this.type_list.splice(i,1);
-					}
-					if (this.hasSelect_list[i]===index) {
-						this.hasSelect_list.splice(i,1);
-					}
-				}
-			}else{
-				this.type_list.push(item);
-				this.hasSelect_list.push(index);
-			}
-		},
-        cancel(){
-			this.selectFlag=false;
-			if(this.type_list.length>0){
-				for(var i=0;i<this.hasSelect_list.length;i++){
-					$($('.list_ul li')[this.hasSelect_list[i]]).removeClass('select');
-				}
-			}
-			this.selectHelpTypeValue=''
-			this.type_list=[];
-		},
-		confirm1(){
-			this.selectHelpTypeValue=this.type_list.join('、');
-			this.selectFlag=false;
-		},
-
-        keyWordsSearch(keywords){
-                this.searchVal=keywords;
-                if(!keywords){
-                    this.listData=this.loadData();
-                }else{
-                    var advancedSearchData=[],obj={};
-                    obj['pageNo']=1;
-                    obj['pageSize']=10000;
-                    obj['searchText']=keywords;
-                    obj['advancedSearchData']=advancedSearchData;
-                    this.listData=this.loadData(obj);
-                }
-            },
         timestampToTime(time){
             let date = new Date(time);
             let Y = date.getFullYear() + '-';
@@ -583,104 +260,62 @@ export default {
         },
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            if(this.$route.query.id.toLocaleLowerCase()=='sos'){
-                this.isSOS=true;
-            }else{
-                this.isSOS=false;
+            let url='/globalmate/rest/need/list'
+            if(this.$route.query.id==='solove'){
+                 url='/globalmate/rest//assist/listService'
             }
-            let _this=this;
-            let url='/globalmate/rest/assist/listSOS';
-            let postData={
-                onlyCurrentUser:''
-            }
-            if(this.$route.query.id==='offer'){
-                url='/globalmate/rest/need/query';
-                postData['type']=this.searchContent.type||''
-                postData['where']=this.searchContent.where||''
-            }
-            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&type='+this.searchContent.type+'&where='+this.searchContent.where,JSON.stringify(postData)).then((res)=>{
+            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+                onlyCurrentUser:true
+            }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
                      this.listm=[];
                      if(data){
-                         let ClosedArr=[];
-                         let normalArr=[];
                          for(var i=0;i<data.length;i++){
                              if(data[i].conceretNeed&&data[i].conceretNeed.title){
-                                 if(data[i].conceretNeed.pic&&data[i].conceretNeed.pic.indexOf('aliyuncs')>-1){
-                                     data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';');
-                                 }else{
-                                     data[i].conceretNeed.pic=''
+                                 data[i].conceretNeed.url=this.imagesList[i]
+                                 if(data[i].conceretNeed.pic){
+                                     data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                                  }
-                                 if(data[i].conceretNeed.endTime&&data[i].conceretNeed.endTime<new Date().getTime()){
-                                     data[i].conceretNeed.status='Closed'
-                                 }else{
-                                     data[i].conceretNeed.status='Open'
-                                 }
-                                 if(data[i]&&data[i].need){
-                                     this.getEveryItemPic(data[i],function (result) {
-                                         _this.myAssistList.push(result)
-                                     });
-                                 }
+                                 this.myAssistList.push(data[i])
                              }
                          }
+                         console.log(this.myAssistList);
                          this.loadingShow=false;
                      }else{
-                         if(this.myAssistList.length===0){
-                             setTimeout(()=>{
-                                 this.loadingShow=false;
-                                 this.nodataFlag=true;
-                             },500)
-                             this.noDataTips='暂无相关数据';
-                         }
+                         setTimeout(()=>{
+                             this.nodataFlag=true;
+                             this.loadingShow=false;
+                         },500)
+                         this.noDataTips='暂无相关数据';
                      }
                 }else{
-                    if(this.myAssistList.length===0){
-                        setTimeout(()=>{
-                            this.nodataFlag=true;
-                            this.loadingShow=false;
-                        },500)
-                        this.noDataTips='暂无相关数据';
-                    }
-                }
-            }).catch((e)=>{
-                if(this.myAssistList.length===0){
                     setTimeout(()=>{
                         this.nodataFlag=true;
                         this.loadingShow=false;
                     },500)
                     this.noDataTips='暂无相关数据';
                 }
-                console.log(e);
-            })
-        },
-        getEveryItemPic(data,callback){
-            let data1=data;
-            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.need.userId+'?token='+this.$route.query.token,{
-
-            }).then((res)=>{
-                data1.need.pic=res.data.data.pic||'../assets/images/icon.png';
-                callback&&callback(data1)
             }).catch((e)=>{
-                console.log(e);
+                setTimeout(()=>{
+                    this.nodataFlag=true;
+                    this.loadingShow=false;
+                },500)
+                this.noDataTips='暂无相关数据';
             })
         }
     },
-    activated(){
-        this.rightIn=false;
-        this.selectFlag=false;
-        this.nodataFlag=false;
-        this.loadingShow=true;
-        this.myAssistList=[];
-        this.isSOS=[];
-        this.noDataTips='';
-        this.loadData();
-    },
-    created(){
-        this.rightIn=false;
-        this.selectFlag=false;
-        this.token=this.$route.query.token;
-    }
+   activated(){
+       document.title=this.$route.query.title;
+       this.myAssistList=[];
+       this.nodataFlag=false;
+       this.noDataTips='';
+       this.loadData();
+   },
+   created(){
+       this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
+
+   }
 
 }
 
