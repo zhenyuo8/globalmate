@@ -49,8 +49,10 @@
                                 margin: auto;
                             }
                             span{
-                                margin-top: 10px;
+                                /*margin-top: 10px;*/
                                 margin:6px  auto 10px;
+                                width: 100%;
+                                text-align: center;
                             }
                         }
                     }
@@ -130,7 +132,7 @@
         <div class="list_repeat" v-for="(item,index) in myAssistList">
             <div class="list_repeat_content" @click='showDetail(item)'>
                 <p>事物标签: {{item.conceretNeed.tag}}</p>
-                <p>事物地点: {{item.conceretNeed.country}}</p>
+                <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
                 <p>事物内容: {{item.conceretNeed.title}}</p>
                 <p class="gl_status">{{item.conceretNeed.status}}</p>
             </div>
@@ -139,15 +141,15 @@
                 <div class="list_repeat_pushed_item">
                     <div class="">
                         <img src="../assets/images/1.jpeg" alt="">
-                        <span>zhenyu</span>
+                        <span>SuperMan</span>
                     </div>
                     <div class="">
                         <img src="../assets/images/2.jpeg" alt="">
-                        <span>zhenyuo8</span>
+                        <span>泰迪</span>
                     </div>
                     <div class="">
                         <img src="../assets/images/3.jpg" alt="">
-                        <span>zhenyuo8</span>
+                        <span>毛毛虫</span>
                     </div>
                 </div>
             </div>
@@ -156,7 +158,7 @@
                 <div class="list_repeat_pushed_item">
                     <div class="">
                         <img src="../assets/images/1.jpeg" alt="">
-                        <span>zhenyu</span>
+                        <span>辛巴</span>
                     </div>
 
                 </div>

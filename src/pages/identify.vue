@@ -134,6 +134,7 @@
             <!-- <span class="icon-checkbox" @click="selectType($event,'ALIPAYID')" :key=''>支付宝</span> -->
         </div>
     </div>
+    <p class="gl_totast_p" v-show="identifyType.length==0">请至少选择一项认证方式!</p>
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
@@ -203,8 +204,6 @@
 
         </div>
     </div>
-    <p class="gl_totast_p" v-show="identifyType.length==0">请至少选择一项认证方式!</p>
-
     <button type="button" name="button" class='submitbtn' @click='submitData' >提交</button>
     <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>

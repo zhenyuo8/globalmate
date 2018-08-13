@@ -293,7 +293,7 @@
                     },1500);
                 }else{
                     this.$router.push({
-                        path: 'myAssis',
+                        path: 'myAssist',
                         query: {
                           'token':this.token,
                           'title': '求助列表',
