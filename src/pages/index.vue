@@ -440,8 +440,6 @@
                 if(window.localStorage.getItem('CURRENTUSER')){
                     username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
                 }
-                console.log(username,9999999999);
-
                 if(!username) return;
     			 $.ajax({
     		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
@@ -469,7 +467,7 @@
     		        }
     		    });
             },
-		    },
+		},
         activated(){
             document.title='Global Mate';
             this.getToken(this.getCurrentUser);

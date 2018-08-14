@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import axios from 'axios';
 import qs from 'qs';
+import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
 import '../static/css/datePicker.css'
@@ -19,6 +20,7 @@ Vue.use(VueLazyLoad,{
 Vue.use(Mint);
 Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
+Vue.prototype.moment = moment
 Vue.prototype.qs = qs
 Vue.prototype.$utils = utils
 Vue.config.productionTip = false

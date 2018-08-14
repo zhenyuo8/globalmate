@@ -512,10 +512,10 @@ export default {
                             item.text=data.conceretNeed.city;
                         }
                         if(item.componentKey=='startTime'&&data.conceretNeed.startTime){
-                            item.text=_this.$utils.timestampToTime(data.conceretNeed.startTime);
+                            item.text=this.moment(data.conceretNeed.startTime).format('YYYY-MM-DD');
                         }
                         if(item.componentKey=='endTime'&&data.conceretNeed.endTime){
-                            item.text=_this.$utils.timestampToTime(data.conceretNeed.endTime);
+                            item.text=this.moment(data.conceretNeed.endTime).format('YYYY-MM-DD');
                         }
                         if(data.conceretNeed.description){
                             _this.$el.querySelector('.main_decription_area textarea').value=data.conceretNeed.description;

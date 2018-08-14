@@ -286,6 +286,7 @@ export default {
         }
     },
     activated(){
+        alert(window.location.href,111);
         this.imageArr=[];
         this.detail={
             'title':'',
@@ -373,7 +374,7 @@ export default {
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
                          if(key==='createTime'){
-                             this.detail[key]=this.$utils.timestampToTime(data.need[key])
+                             this.detail[key]=this.moment(data.need[key]).format('YYYY-MM-DD')
                          }
                      }
                      this.detailId=data.need.id;
@@ -413,6 +414,7 @@ export default {
         }
     },
     created(){
+        alert(window.location.href);
         this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
     }
 }

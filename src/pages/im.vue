@@ -35,7 +35,12 @@
 			</div>
 			<div id="convo" class="convo">
 				<ul class="chat-thread" id="chat-thread">
-
+					<li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)'>
+						<img :src="item.pic" alt="">
+						<div class="chat-item-text">
+							{{item.chatContent}}
+						</div>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -74,6 +79,7 @@ export default {
 			i_do_help:false,
 			wait_answer:false,
 			wait_evaluate:false,
+			historyList:[],
 			status_type:['i_do_help','i_do_cancel','i_wait_answer','i_wait_evaluate','i_rejected','i_evaluate_each','i_do_answer','i_do_evaluate','i_do_reject','i_show_evaluate']
 
         }
@@ -131,10 +137,14 @@ export default {
 
 			}
 		},
+		showInfo(item){
+			if(item.type){
+				this.showPersonal();
+			}else{
+				this.showMySelf();
+			}
+		},
 		showDetail(detail){
-			console.log(this.othersInfo);
-			console.log(this.toChartId);
-			return
 			this.$router.push({
                 path: 'detail',
                 query: {
@@ -192,6 +202,7 @@ export default {
 				this.currentUserImgae=headerPath;
 			}
 			let $li,_this=this;
+			let obj={};
 			if(!arg){
 				if(!this.chartValue) return;
 				let content={
@@ -211,20 +222,25 @@ export default {
 					}
 				})
 			     $li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + this.chartValue + '</div> </li>');
+				  $('#chat-thread').append($li);
 			}else {
 
 				try{
 					let content=JSON.parse(arg.data.content);
 					if(content&&content.chatType&&!content.chatContent){
-
 					}else{
-						$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + content.chatContent + '</div> </li>');
+						obj['chatContent']=content.chatContent;
 					}
 				}catch(e){
-					$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + arg.data.content + '</div> </li>');
+
+					obj['chatContent']=arg.data.content;
 				}
+				obj['pic']=this.currentUserImgae;
+				obj['type']=false;
+				this.historyList.push(obj)
 
 			}
+
 			if($li){
 				$li.on('click',function (e) {
 					if(e.target.tagName=='IMG'){
@@ -232,7 +248,7 @@ export default {
 					}
 				});
 			}
-			 $('#chat-thread').append($li);
+
 			this.chartValue=''
 		    let top = $('#convo').height();
 		    $('#content').animate({
@@ -246,16 +262,22 @@ export default {
 			}
 			if(!arg) return;
 			let $li,_this=this;
+			let obj={};
 			try{
 				let content=JSON.parse(arg.data.content);
 				if(content&&content.chatType&&!content.chatContent){
 					this.processChatType(content.chatType);
 				}else{
 					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
+					obj['chatContent']=content.chatContent;
 				}
 			}catch(e){
 					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+					obj['chatContent']=arg.data.content;
 			}
+			obj['pic']=arg.pic;
+			obj['type']=true;
+			this.historyList.push(obj);
 			if($li){
 				$li.on('click',function (e) {
 					if(e.target.tagName=='IMG'){
@@ -264,7 +286,7 @@ export default {
 				});
 			}
 
-			 $('#chat-thread').append($li);
+			//  $('#chat-thread').append($li);
 			 let top = $('#convo').height();
  		    $('#content').animate({
  		        scrollTop: top
@@ -370,7 +392,6 @@ export default {
 					   	for(var i=len;i>=0;i--){
 						   	if(result[i].from&&result[i].from==_this.$route.query.toChartId){
 								result[i].pic=_this.othersInfo.pic;
-								console.log(result[i]);
 								try{
 									_this.chatItemId=JSON.parse(result[i].data.content).item;
 									_this.id=_this.chatItemId;
@@ -378,15 +399,23 @@ export default {
 								}catch(e){
 
 								}
-
-								console.log(_this.chatItemId);
 							   	_this.createOnMessage(result[i])
 						   	}else{
-
 								result[i].pic=_this.currentUserImgae;
 							   	_this.createUserTalk(result[i])
 						   	}
 					   	}
+						$(document).ready(function () {
+							let top = $('#convo').height();
+							console.log(top);
+							$('#content').animate({
+								scrollTop: top
+							}, 100);
+						})
+
+						setTimeout(()=>{
+
+						},0)
 						_this.loadData()
 				   	}
 			   	},
@@ -537,6 +566,8 @@ export default {
 		this.getOthersInfo(this.toChartId);
 		this.init();
 		this.loadData();
+	},
+	mounted(){
 
 	},
     created(){
@@ -562,7 +593,6 @@ export default {
 .im_top_fix{
 	position: fixed;
 	z-index: 1;
-	background: #f4f4f4;
 	width: 100%;
 	right: 0;
 	left: 0;
