@@ -281,7 +281,7 @@ export default {
                 if(res.data.success){
                      let data=res.data.data;
                      this.listm=[];
-                     if(data){
+                     if(data.length!=0){
                          for(var i=0;i<data.length;i++){
                              if(data[i].conceretNeed&&data[i].conceretNeed.title){
                                  data[i].conceretNeed.url=this.imagesList[i]

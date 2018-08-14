@@ -141,6 +141,11 @@ export default {
                 text: '',
                 arrow: true,
                 mineType: 'sos'
+            },  {
+                title: '我帮助的',
+                text: '',
+                arrow: true,
+                mineType: 'solove'
             }, {
                 title: '我的评论',
                 text: '',
@@ -198,6 +203,16 @@ export default {
                             'token': this.token,
                             'title': '求助列表',
                             'id': 'myAssist',
+                        }
+                    });
+                    break;
+                case 'solove':
+                    this.$router.push({
+                        path: 'myAssist',
+                        query: {
+                            'token': this.token,
+                            'title': '我帮助的',
+                            'id': 'solove',
                         }
                     });
                     break;

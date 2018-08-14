@@ -28,7 +28,7 @@
 	                        <span class='wait_answer' @click="doAction('wait_answer')" v-if="wait_answer">待回应</span>
 	                        <!-- <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
 	                        <!-- <span class='do_help' @click="doAction('do_help')" v-if="others">我来帮你</span> -->
-	                        <span class='do_help' @click="doAction('do_help')">选择Ta</span>
+	                        <span class='do_help' @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
 	                    </div>
 	                </div>
 	            </div>
@@ -63,6 +63,7 @@ export default {
 			id:'',
 			taskId:'',
 			toChartId:'',
+			CURRENTUSER:{},
 			detail:{
 				'title':'',
 				'type':'',
@@ -165,6 +166,25 @@ export default {
 					'id': this.CURRENTUSER.id,
 				}
 			});
+		},
+		/**
+		 * 选择当前用户帮忙
+		 * @return {[type]} [description]
+		 */
+		selectWhoHelp(){
+			this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/assist/'+this.detail.id+'/agree'+'?providerId='+this.othersInfo.id+'&token='+this.$route.query.token,{
+
+            }).then((res)=>{
+                if(res.data.success){
+                     console.log(res.data);
+
+                }else{
+
+                }
+            }).catch((e)=>{
+                console.log(e);
+            })
 		},
 		createUserTalk(arg) {
 			let headerPath = require("../assets/images/icon.png");
@@ -350,12 +370,24 @@ export default {
 					   	for(var i=len;i>=0;i--){
 						   	if(result[i].from&&result[i].from==_this.$route.query.toChartId){
 								result[i].pic=_this.othersInfo.pic;
+								console.log(result[i]);
+								try{
+									_this.chatItemId=JSON.parse(result[i].data.content).item;
+									_this.id=_this.chatItemId;
+
+								}catch(e){
+
+								}
+
+								console.log(_this.chatItemId);
 							   	_this.createOnMessage(result[i])
 						   	}else{
+
 								result[i].pic=_this.currentUserImgae;
 							   	_this.createUserTalk(result[i])
 						   	}
 					   	}
+						_this.loadData()
 				   	}
 			   	},
 			   	error:function(err){
@@ -601,7 +633,7 @@ export default {
 
 }
 .chart_main_content_action>div span{
-	padding: .12rem;
+	padding: 6px .24rem;
 	margin-left: .08rem;
 	background-color: rgba(241, 241, 241, 1);
 	border-radius: 2px;

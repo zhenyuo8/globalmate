@@ -102,8 +102,8 @@ export default {
 					'title': item.nikename,
 					'senderDId':item.to ,
 					'toChartId':item.from,
-					'chatItemId':item.data.content.item,
-					'id':item.data.content.item
+					// 'chatItemId':item.data.content.item,
+					// 'id':item.data.content.item
 				}
 			});
 		},
