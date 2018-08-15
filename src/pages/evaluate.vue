@@ -1,23 +1,26 @@
 <template>
     <div class="evaluate" id='evaluate'>
-		<div class="top">
-			<div class="top_img">
-				<img src="../assets/images/icon.png" alt="">
-			</div>
-			<div class="evaluate_score">
-				<div class="evaluate_title">
-					整体评分
-				</div>
-				<div class="evaluate_star" id='evaluate_star'>
-					<span v-for=" i in 5" class="icon-heart2" :index='i' @click='evaluateStar(i)'></span>
-					<span class="evaluate_score_result">{{score}} 分</span>
-				</div>
-			</div>
-		</div>
-		<div class="middle">
-			<textarea  placeholder='对她/他的评价' v-model='textareaVal'></textarea>
-		</div>
-		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>提交</button>
+        <div class="evaluate_warp">
+            <div class="top">
+    			<div class="top_img">
+    				<img src="../assets/images/icon.png" alt="">
+    			</div>
+    			<div class="evaluate_score">
+    				<div class="evaluate_title">
+    					整体评分
+    				</div>
+    				<div class="evaluate_star" id='evaluate_star'>
+    					<span v-for=" i in 5" class="icon-heart2" :index='i' @click='evaluateStar(i)'></span>
+    					<span class="evaluate_score_result">{{score}} 分</span>
+    				</div>
+    			</div>
+    		</div>
+    		<div class="middle">
+    			<textarea  placeholder='对她/他的评价' v-model='textareaVal'></textarea>
+    		</div>
+    		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>提交</button>
+        </div>
+
     </div>
 </template>
 
@@ -79,7 +82,15 @@ import CONFIG from '../config/config.js'
 
 <style>
 #evaluate{
-	padding: 20px .4rem;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+.evaluate_warp{
+    width: 90%;
+    margin: 20px auto;
 }
 #evaluate .top{
 	display: flex;
@@ -128,7 +139,7 @@ import CONFIG from '../config/config.js'
 .evaluate_submit{
 	width: 100%;
     font-size: 18px;
-    height: 44px;
+    height: 36px;
     background: #007aff;
     color: #fff;
     border-radius: 6px;

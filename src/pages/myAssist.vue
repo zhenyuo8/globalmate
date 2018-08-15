@@ -134,11 +134,11 @@
                 <p>事物标签: {{item.conceretNeed.tag}}</p>
                 <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
                 <p>事物内容: {{item.conceretNeed.title}}</p>
-                <p class="gl_status">{{item.conceretNeed.status}}</p>
+                <p class="gl_status">{{item.need.status}}</p>
             </div>
-            <div class="list_repeat_pushed" v-if="item.conceretNeed.status!='Closed'">
+            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
                 <p>推送名单:</p>
-                <div class="list_repeat_pushed_item">
+                <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
                     <div class="">
                         <img src="../assets/images/1.jpeg" alt="">
                         <span>SuperMan</span>
@@ -153,9 +153,9 @@
                     </div>
                 </div>
             </div>
-            <div class="list_repeat_pushed" v-if="item.conceretNeed.status!='Closed'">
+            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
                 <p>提供帮助方:</p>
-                <div class="list_repeat_pushed_item">
+                <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
                     <div class="">
                         <img src="../assets/images/1.jpeg" alt="">
                         <span>辛巴</span>
@@ -256,13 +256,30 @@ export default {
                     'token': this.$route.query.token,
                     'title': item.conceretNeed.title,
                     'id': item.need.id,
+                    'userId':this.$route.query.userId
                 }
             });
+        },
+        getPushItem(data,callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.id+'?token='+this.$route.query.token,{
+
+            }).then((res)=>{
+                if(res.data.success){
+                    data.pushList=res.data.data;
+                    callback&&callback(data)
+                }else{
+                    callback&&callback(data)
+                }
+            }).catch(()=>{
+                callback&&callback(data)
+            })
         },
 
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            let url='/globalmate/rest/need/list'
+            let url='/globalmate/rest/need/list';
+            let _this=this;
             if(this.$route.query.id==='solove'){
                  url='/globalmate/rest//assist/listService'
             }
@@ -279,12 +296,36 @@ export default {
                                  if(data[i].conceretNeed.pic){
                                      data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
                                  }
-                                 if(data[i].conceretNeed.endTime&&data[i].conceretNeed.endTime<new Date().getTime()){
-                                     data[i].conceretNeed.status='Closed'
-                                 }else{
-                                     data[i].conceretNeed.status='Open'
+                                 var status=data[i].need.enable+'';
+                                 switch (status) {
+                                     case '1':
+                                         data[i].need.status='开放中';
+                                         break;
+                                     case '2':
+                                         data[i].need.status='帮助中';
+                                         break;
+                                     case '0':
+                                         data[i].need.status='关闭';
+                                         break;
+                                     case '3':
+                                         data[i].need.status='编辑中';
+                                         break;
+                                     case '4':
+                                         data[i].need.status='洽谈中';
+                                         break;
+                                     case '5':
+                                         data[i].need.status='执行中';
+                                         break;
+                                     case '6':
+                                         data[i].need.status='已完成';
+                                         break;
+                                     default:
+
                                  }
-                                 this.myAssistList.push(data[i])
+                                 this.getPushItem(data[i],function (result) {
+                                      _this.myAssistList.push(result)
+                                 })
+
                              }
                          }
                          this.loadingShow=false;

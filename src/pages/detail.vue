@@ -1,145 +1,22 @@
-<style scoped>
+<style scoped lang='less'>
 
 .detail {
-    margin-top: 10px;
-    border-top: 1px solid rgba(241, 241, 241, 1);
     box-sizing: border-box;
     font-size: 14px;
     color: #9B9B9B;
+    padding: 20px .4rem;
     padding-bottom: 54px;
-    min-height: 13.1rem;
+    position: relative;
 }
-
-.detail_first {
-    line-height: 44px;
-    display: flex;
-    height: 44px;
-    overflow: hidden;
-    padding: 0 0.36rem;
-    border-bottom: 1px solid rgba(241, 241, 241, 1);
-}
-
-.detail_first > div {
-    flex: 1
-}
-
-.detail_first .detail_first_left {
-    text-align: left;
-    flex: 2
-}
-
-.detail_first_left img {
-    width: 32px;
-    display: inline-block;
-    border-radius: 50%;
-    vertical-align: middle;
-}
-
-.detail_first_left span {
-    display: inline-block;
-}
-
-.detail_first .detail_first_right {
-    text-align: right;
-}
-
-
-.detail_second {
-    height: 45px;
-    line-height: 45px;
-    padding: 0 0.36rem;
-    border-bottom: 1px solid rgba(241, 241, 241, 1);
-}
-.detail_second .detail_second_left{
-    float: left;
-}
-.detail_second .detail_second_right{
-    float: right;
-}
-
-
-.detail_content{
-    min-height: 80px;
-    /*height: 250px;*/
-    padding: 0 0.36rem;
-}
-.detail_content_title{
-    height: 42px;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 42px;
-    text-align: left;
-}
-.detail_content_text{
-    overflow: hidden;
-    height: 83%
-}
-.detail_content_text p{
-    line-height: 20px;
-    overflow-y: scroll;
-    height: 100%
-}
-.detail_image, .detail_list, .detail_message{
-    padding: 0 0.36rem;
-}
-.detail_image > div{
-    margin-top: 9px;
-}
-.detail_message{
+.detail_message {
     position: fixed;
+    bottom: 0;
+    margin: auto;
     left: 0;
     right: 0;
-    bottom: 0;
     background: #fff;
-}
-.detail_image > div > img{
-    width: 100%;
-    height: 100%;
-}
-
-.detail_list{
-    margin-top: 14px;
-}
-.detail_list_repeat{
-    height: 72px;
-    padding: 12px .32rem;
-    border-radius: 14px;
-    background: #F1F1F1;
-    margin-bottom: 9px;
-    display: flex;
-}
-.detail_list_repeat > div{
-    flex: 1
-}
-.detail_list_image > div{
-    width: 1.44rem;
-    height: 1.44rem;
-}
-.detail_list_image > div > img{
-    width: 100%;
-    height: 100%;
-}
-.detail_list_decription{
-    padding: 15px 0;
-}
-.detail_list_decription span{
-    line-height: 20px;
-    float: left;
-    margin-right: .2rem;
-}
-.detail_list_price{
-    text-align: right;
-    font-size: 18px;
-    line-height: 72px;
-}
-
-.detail_message {
-    display: flex;
-    flex-direction: row;
-    padding: .2rem;
-    /*height: 66px;
-    line-height: 66px;*/
-    border-top: 1px solid rgba(151, 151, 151, 0.5);
+    padding: .1rem;
+    border-top: 1px solid #eee;
 }
 .detail_message > div {
     flex: 1;
@@ -149,56 +26,189 @@
     text-align: left;
 }
 .detail_message_chart{
-    text-align: right;
     height: 36px;
 }
 .detail_message_chart span{
-    padding: 0 .4rem;
+    padding: 0 .8rem;
     background: #F1F1F1;
     border-radius: 4px;
     background: #26a2ff;
     color: #fff;
     font-weight: bold;
 }
+
+    .detail_top{
+        display: flex;
+        position: relative;
+        .image_user{
+            width: 1.6rem;
+            height: 1.6rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid #eee;
+            img{
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .name_user{
+            display: flex;
+            flex: 2;
+            flex-direction: column;
+            text-align: left;
+            margin-left: .24rem;
+            span{
+                flex:1;
+                display: inline-block;
+                line-height: 36px;
+                &.name{
+                    font-size: 16px;
+                    color: #333;
+                }
+                &.type{
+                    font-size: 14px;
+                    color: #888;
+                }
+            }
+        }
+        .status_user{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            line-height: 35px;
+            span{
+                color: blue;
+                font-size: 14px;
+            }
+        }
+        .status_close{
+            span{
+                color: red!important;
+            }
+        }
+    }
+    .detail_middle{
+        text-align: left;
+        margin-top: 10px;
+        p{
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            color: #333;
+            &:last-child{
+                border-bottom:1px solid #eee;
+            }
+        }
+    }
+    .detail_image_new{
+        display: flex;
+        padding: 10px 0;
+        .detail_content_img{
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-right: .2rem;
+            img{
+                width: 100%;
+                height: 100%;
+                display: inline-block;
+            }
+
+        }
+    }
+
+    .list_repeat_pushed::before{
+       border-top: 1px solid #eee;
+       content: '';
+       clear: both;
+       position: absolute;
+       left: 0;
+       right: 0;
+   }
+   .list_repeat_pushed{
+       text-align: left;
+       position: relative;
+       p{
+           padding: 10px 0;
+       }
+       .list_repeat_pushed_item{
+           display: flex;
+
+           div{
+                margin-right: 10px;
+               img{
+                   width: 1.2rem;
+                   height: 1.2rem;
+                   border-radius: 50%;
+                   display: block;
+                   margin: auto;
+               }
+               span{
+                   margin:6px  auto 10px;
+                   width: 100%;
+                   text-align: center;
+               }
+           }
+       }
+   }
 </style>
 
 <template>
 
 <div class="detail">
-    <div class="detail_first">
-        <div class="detail_first_left" @click='goPersonalFile'>
-            <img :src='othersImage' alt="" class="bottom_left_userimage">
-            <span class="bottom_left_username">{{detail.userName}}</span>
-            <span class="bottom_left_time">{{detail.createTime}}</span>
-        </div>
-        <div class="detail_first_right">
-            来自 {{detail.country}}
-        </div>
-    </div>
-    <div class="detail_second">
-        <span class="detail_second_left">
-            {{detail.title}}
-        </span>
-        <span class="detail_second_right">
-            {{detail.tag}}
-        </span>
-    </div>
     <div class="detail_content">
-        <div class="detail_content_title">
-            悬赏内容
+        <div class="detail_top">
+            <div class="image_user">
+                <img :src="othersImage" alt="">
+            </div>
+            <div class="name_user">
+                <span class="name">{{listData.userName}}</span>
+                <span class="type">{{listData.tag}}</span>
+            </div>
+            <div class="status_user" :class="">
+                <span>{{listData.enable}}</span>
+            </div>
         </div>
-        <div class="detail_content_text">
-            <p>
-                {{detail.description}}
-            </p>
+        <div class="detail_middle">
+            <p>标题：{{listData.title}}</p>
+            <p>地点：{{listData.country}}_{{listData.city}}</p>
+            <p>时间：{{listData.startTime}} 至 {{listData.endTime}}</p>
+            <p>详细内容：{{listData.description}}</p>
         </div>
-    </div>
-    <div class="detail_image">
-        <div class="" v-for='item in imageArr'>
-            <img :src="item" alt="">
+        <div class="detail_image_new" v-if="true">
+            <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
+                <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+            </div>
         </div>
 
+        <div class="list_repeat_pushed" >
+            <p>推送名单:</p>
+            <div class="list_repeat_pushed_item">
+                <div class="">
+                    <img src="../assets/images/1.jpeg" alt="">
+                    <span>SuperMan</span>
+                </div>
+                <div class="">
+                    <img src="../assets/images/2.jpeg" alt="">
+                    <span>泰迪</span>
+                </div>
+                <div class="">
+                    <img src="../assets/images/3.jpg" alt="">
+                    <span>毛毛虫</span>
+                </div>
+            </div>
+        </div>
+        <div class="list_repeat_pushed">
+            <p>提供帮助方:</p>
+            <div class="list_repeat_pushed_item">
+                <div class="">
+                    <img src="../assets/images/1.jpeg" alt="">
+                    <span>辛巴</span>
+                </div>
+
+            </div>
+        </div>
     </div>
+
     <!-- <div class="detail_list">
         <div class="detail_list_repeat">
             <div class="detail_list_image">
@@ -246,13 +256,9 @@
             </div>
         </div>
     </div> -->
-    <div class="detail_message" v-show="currentUserId!=otherUserId">
-    <!-- <div class="detail_message"> -->
-        <div class="detail_message_leave">
-            留言
-        </div>
+    <div class="detail_message" v-show="userId!=otherUserId">
         <div class="detail_message_chart" >
-            <span @click='goChart'>聊一下</span>
+            <span @click='goChart'>去帮助</span>
         </div>
     </div>
 </div>
@@ -270,7 +276,6 @@ export default {
         return {
             id:'',
             userId:'',
-            detailId:'',
             show:false,
             country:'',
             detail:{
@@ -278,17 +283,16 @@ export default {
                 'description':'',
                 'createTime':''
             },
-            imageArr:[],
             othersImage:'',
             token:'',
             currentUserId:'',
             otherUserId:'',
+            listData:{}
         }
     },
     activated(){
-        alert(window.location.href,111);
         let url=window.location.href;
-        this.imageArr=[];
+        this.listData={};
         this.detail={
             'title':'',
             'country':'',
@@ -299,16 +303,19 @@ export default {
         this.country='';
         this.show=false;
         this.id=this.$route.query.id;
+        this.userId=this.$route.query.userId;
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
-            alert(this.userId,11111);
             window.localStorage.setItem('USERID',this.userId);
         }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
         this.getToken(function (token) {
+            if(!token){
+                token=_this.$route.query.token;
+            }
             _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{
 
             }).then((res)=>{
@@ -332,6 +339,7 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             let userId=window.localStorage.getItem('USERID');
             let openid=window.localStorage.getItem('OPENID');
+
             if(userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
@@ -347,7 +355,7 @@ export default {
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
-                        callback&&callback()
+                        callback&&callback(res.data.data);
                     }
                 }).catch((e)=>{
                     console.log(e);
@@ -357,6 +365,7 @@ export default {
             }
         },
         loadData(token){
+            let  list={},_this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
 
             this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+token+'&onlyCurrentUser=true',{
@@ -366,24 +375,64 @@ export default {
                      let data=res.data.data;
                      this.getOthersInfo(data.need.userId);
                      this.detail=data;
+                     this.otherUserId=data.need.userId;
                      setTimeout(()=>{
                          this.show=true;
                      },500)
                      for(var key in data.conceretNeed){
-                         this.detail[key]=data.conceretNeed[key];
-                         if(key==='pic'){
-                             if(data.conceretNeed[key]){
-                                 this.imageArr=data.conceretNeed[key].split(';')
+                         if(key=='tag'||key=='city'||key=='country'||key=='startTime'||key=='endTime'||key=='title'||key=='description'||key=='pic'){
+                             if(key=='startTime'||key=='endTime'){
+                                 list[key]=this.moment(data.conceretNeed[key]).format('YYYY-MM-DD');
+                             }else{
+                                 if(key=='pic'){
+                                     if(data.conceretNeed[key]){
+                                         list[key]=data.conceretNeed[key].split(';')
+                                     }else{
+                                          list[key]=[]
+                                     }
+                                 }else{
+                                     list[key]=data.conceretNeed[key]
+                                 }
                              }
                          }
                      }
                      for(var key in data.need){
-                         this.detail[key]=data.need[key];
-                         if(key==='createTime'){
-                             this.detail[key]=this.moment(data.need[key]).format('YYYY-MM-DD')
+                         if(key=='enable'||key=='userName'||key=='enable'||key=='id'){
+                             if(key=='enable'){
+                                 var status=data.need[key]+'';
+                                 switch (status) {
+                                     case '1':
+                                         list[key]='开放中';
+                                         break;
+                                     case '2':
+                                         list[key]='帮助中';
+                                         break;
+                                     case '0':
+                                         list[key]='关闭';
+                                         break;
+                                     case '3':
+                                         list[key]='编辑中';
+                                         break;
+                                     case '4':
+                                         list[key]='洽谈中';
+                                         break;
+                                     case '5':
+                                         list[key]='执行中';
+                                         break;
+                                     case '6':
+                                         list[key]='已完成';
+                                         break;
+                                     default:
+                                 }
+                             }else{
+                                list[key]=data.need[key];
+                             }
+
                          }
                      }
-                     this.detailId=data.need.id;
+                     this.getPushItem(list,function (result) {
+                         _this.listData=result;
+                     })
                 }else{
 
                 }
@@ -391,6 +440,21 @@ export default {
                 console.log(e);
             })
         },
+         getPushItem(data,callback){
+             this.apiHost=CONFIG[__ENV__].apiHost;
+             this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.id+'?token='+this.$route.query.token,{
+
+             }).then((res)=>{
+                 if(res.data.success){
+                     data.pushList=res.data.data;
+                     callback&&callback(data)
+                 }else{
+                     callback&&callback(data)
+                 }
+             }).catch(()=>{
+
+             })
+         },
         goChart(){
             this.$router.push({
                 path: 'im',
@@ -414,13 +478,13 @@ export default {
                 console.log(e);
             })
         },
-
-        goPersonalFile(){
-            console.log(this.userId);
-        }
     },
     created(){
-        this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+        if(window.localStorage.getItem('CURRENTUSER')){
+            this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+        }else{
+            this.currentUserId=this.$route.query.userId;
+        }
     }
 }
 

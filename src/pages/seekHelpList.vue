@@ -238,6 +238,7 @@
 					background: #2361ea;
 					border-radius: 4px;
 					color: #fff;
+                    text-align: center;
 				}
 			}
 			.list_repeat_user{
@@ -275,7 +276,7 @@
 				.status_user{
 					span{
 						color: blue;
-						font-size: 16px;
+						font-size: 14px;
 					}
 				}
                 .status_close{
@@ -317,8 +318,8 @@
 					<span class="name">{{item.need.userName}}</span>
 					<span class="type">{{item.conceretNeed.tag}}</span>
 				</div>
-				<div class="status_user" :class="item.conceretNeed.status=='Closed'?'status_close':''">
-					<span>{{item.conceretNeed.status}}</span>
+				<div class="status_user" :class="">
+					<span>{{item.need.status}}</span>
 				</div>
 			</div>
 			<p class="list_repeat_title">标题：{{item.conceretNeed.title}}</p>
@@ -327,7 +328,7 @@
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
-			<div class="list_repeat_action" v-if="item.conceretNeed.status!='Closed'">
+			<div class="list_repeat_action" v-if="item.need.status!='已关闭'">
 				<span @click='goHelp($event,item)'>去帮助</span>
 			</div>
 		</div>
@@ -439,7 +440,8 @@ export default {
                     'token': this.$route.query.token,
                     'title': item.conceretNeed.title,
                     'id': item.need.id,
-                    'otherUserId':item.need.userId
+                    'otherUserId':item.need.userId,
+                    'userId':this.$route.query.userId
                 }
             });
         },
@@ -471,6 +473,7 @@ export default {
                         'toChartUser':data.nikename,
                         'toChartId':item.need.userId,
                         'whoNeedHelf':item.need.userId,
+                        'userId':_this.$route.query.userId
                     }
                 });
             })
@@ -596,14 +599,36 @@ export default {
                                  }else{
                                      data[i].conceretNeed.pic=''
                                  }
-                                 if(data[i].conceretNeed.endTime&&data[i].conceretNeed.endTime<new Date().getTime()){
-                                     data[i].conceretNeed.status='Closed'
-                                 }else{
-                                     data[i].conceretNeed.status='Open'
+                                 var status=data[i].need.enable+'';
+                                 switch (status) {
+                                     case '1':
+                                         data[i].need.status='开放中';
+                                         break;
+                                     case '2':
+                                         data[i].need.status='帮助中';
+                                         break;
+                                     case '0':
+                                         data[i].need.status='关闭';
+                                         break;
+                                     case '3':
+                                         data[i].need.status='编辑中';
+                                         break;
+                                     case '4':
+                                         data[i].need.status='洽谈中';
+                                         break;
+                                     case '5':
+                                         data[i].need.status='执行中';
+                                         break;
+                                     case '6':
+                                         data[i].need.status='已完成';
+                                         break;
+                                     default:
+
                                  }
+
                                  if(data[i]&&data[i].need){
                                      this.getEveryItemPic(data[i],function (result) {
-                                         _this.myAssistList.push(result)
+                                         _this.myAssistList.push(result);
                                      });
                                  }
                              }

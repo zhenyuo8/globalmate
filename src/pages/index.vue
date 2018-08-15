@@ -268,6 +268,10 @@
             },
             offer(){
                  this.token=window.localStorage.getItem('TOKEN');
+                 this.userId=window.localStorage.getItem('USERID')
+                 if(window.localStorage.getItem('CURRENTUSER')){
+                     this.userId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+                 }
                  if(!this.token) {
                      this.showTipsText='请先登入...';
                      setTimeout(()=>{
@@ -279,7 +283,8 @@
                          query: {
                            'token':this.token,
                            'title': '求助列表',
-                           'id':'offer'
+                           'id':'offer',
+                           'userId':this.userId
                          }
                      });
                  }
@@ -297,7 +302,8 @@
                         query: {
                           'token':this.token,
                           'title': '求助列表',
-                          'id':'seek'
+                          'id':'seek',
+                          'userId':this.userId
                         }
                     });
                 }

@@ -17,17 +17,6 @@
 	                </div>
 	                <div class="chart_main_content_action">
 	                    <div class="">
-	                        <!-- <span class='show_evaluate' @click="doAction('show_evaluate')">查看评价</span> -->
-	                        <!-- <span class='do_evaluate' @click="doAction('do_evaluate')">去评价</span> -->
-	                        <!-- <span class='do_agree' @click="doAction('do_agree')" v-if="i_do_help">同意</span> -->
-	                        <!-- <span class='do_reject' @click="doAction('do_reject')" v-if="i_do_help">谢绝</span> -->
-	                        <!-- <span class='do_answer' @click="doAction('do_answer')">去回应</span> -->
-	                        <!-- <span class='evaluate_each' @click="doAction('evaluate_each')">去互评</span> -->
-	                        <!-- <span class='rejected' @click="doAction('rejected')">被谢绝</span> -->
-	                        <span class='wait_evaluate' @click="doAction('wait_evaluate')" v-if="wait_evaluate">等待评价</span>
-	                        <span class='wait_answer' @click="doAction('wait_answer')" v-if="wait_answer">待回应</span>
-	                        <!-- <span class='do_cancel' @click="doAction('do_cancel')">取消</span> -->
-	                        <!-- <span class='do_help' @click="doAction('do_help')" v-if="others">我来帮你</span> -->
 	                        <span class='do_help' @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
 	                    </div>
 	                </div>
@@ -85,58 +74,6 @@ export default {
         }
     },
     methods:{
-		doAction(type){
-			let url='';
-			switch (type) {
-				case 'do_help':
-					let content={
-						'item':this.$route.query.id,
-						'chatContent':'',
-						'chatType':'i_do_help',
-					}
-					YYIMChat.sendTextMessage({
-						to: this.$route.query.toChartId+'',
-						type: 'chat',
-						content: JSON.stringify(content),
-						body: {},
-						success:function(data){
-						},
-						error:function(err){
-							console.log(err);
-						}
-					})
-					break;
-				case 'do_cancel':
-
-					break;
-				case 'wait_answer':
-
-					break;
-				case 'wait_evaluate':
-
-					break;
-				case 'rejected':
-
-					break;
-				case 'evaluate_each':
-
-					break;
-				case 'do_answer':
-
-					break;
-				case 'do_evaluate':
-
-					break;
-				case 'do_reject':
-
-					break;
-				case 'show_evaluate':
-
-					break;
-				default:
-
-			}
-		},
 		showInfo(item){
 			if(item.type){
 				this.showPersonal();
@@ -292,42 +229,7 @@ export default {
  		        scrollTop: top
  		    }, 100);
 		},
-		processChatType(str){
-			switch (str) {
-				case 'i_do_help':
-					this.i_do_help=true
-					break;
-				case 'do_cancel':
 
-					break;
-				case 'wait_answer':
-
-					break;
-				case 'wait_evaluate':
-
-					break;
-				case 'rejected':
-
-					break;
-				case 'evaluate_each':
-
-					break;
-				case 'do_answer':
-
-					break;
-				case 'do_evaluate':
-
-					break;
-				case 'do_reject':
-
-					break;
-				case 'show_evaluate':
-
-					break;
-				default:
-
-			}
-		},
 		loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
             this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
@@ -557,6 +459,7 @@ export default {
     },
 	activated(){
 		$('#chat-thread').empty();
+		this.id='';
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
 		if(window.localStorage.getItem('CURRENTUSER')){
