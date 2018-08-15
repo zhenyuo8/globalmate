@@ -300,28 +300,25 @@ export default {
         this.show=false;
         this.id=this.$route.query.id;
         if(url.indexOf('openId=')>-1){
-            this.id=this.$utils.getQuery('id');
-            this.userId=this.$utils.getQuery('userId');
+            this.id=this.$utils.getQueryStringByName('id');
+            this.userId=this.$utils.getQueryStringByName('userId');
+            alert(this.userId,11111);
             window.localStorage.setItem('USERID',this.userId);
         }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
-        this.getToken(function () {
-            let token='';
-            if(_this.token){
-                token=_this.token;
-            }else{
-                token=_this.$route.query.token;
-            }
+        this.getToken(function (token) {
             _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{
 
             }).then((res)=>{
                 if(res.data.success){
                     let data=res.data.data;
-                    _this.userId=data.id;
+                    if(!_this.userId){
+                        _this.userId=data.id;
+                    }
                     _this.country=data.country;
-                    _this.loadData();
+                    _this.loadData(token);
 
                 }
 
@@ -340,7 +337,7 @@ export default {
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
-                        callback&&callback()
+                        callback&&callback(res.data.data)
                     }
                 }).catch((e)=>{
                     console.log(e);
@@ -359,9 +356,10 @@ export default {
                 callback&&callback()
             }
         },
-        loadData(){
+        loadData(token){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){

@@ -1,12 +1,11 @@
 let Re={
-	getQuery:function(name){
-		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-	    var r = window.location.search.substr(1).match(reg);
-	    if (r != null) {
-	        return unescape(r[2]);
-	    }
-	    return null;
-	},
+	 getQueryStringByName: function(name){
+     	var result = window.location.href.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
+     	if(result == null || result.length < 1){
+     		return "";
+     	}
+     	return result[1];
+     },
 
 	setCookie:function (name, value, times) {
 		let date = new Date();
