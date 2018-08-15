@@ -287,6 +287,7 @@ export default {
     },
     activated(){
         alert(window.location.href,111);
+        let url=window.location.href;
         this.imageArr=[];
         this.detail={
             'title':'',
@@ -294,9 +295,15 @@ export default {
             'description':'',
             'type':''
         };
+
         this.country='';
         this.show=false;
         this.id=this.$route.query.id;
+        if(url.indexOf('openId=')>-1){
+            this.id=this.$utils.getQuery('id');
+            this.userId=this.$utils.getQuery('userId');
+            window.localStorage.setItem('USERID',this.userId);
+        }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
@@ -315,6 +322,7 @@ export default {
                     _this.userId=data.id;
                     _this.country=data.country;
                     _this.loadData();
+
                 }
 
             }).catch((e)=>{
@@ -414,7 +422,6 @@ export default {
         }
     },
     created(){
-        alert(window.location.href);
         this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
     }
 }
