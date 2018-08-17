@@ -68,9 +68,23 @@
                         margin-right: .2rem;
                         border-radius: 4px;
                         white-space: nowrap;
+                        /*background: #bbb;*/
+                        opacity: 0.6;
                         text-overflow: ellipsis;
                         &:last-child{
                              margin-right: 0;
+                        }
+                        &.share{
+                            opacity: 1;
+                        }
+                        &.can_be_edit{
+                           opacity: 1;
+                        }
+                        &.can_be_done{
+                            opacity: 1;
+                        }
+                        &.can_be_evalute{
+                            opacity: 1;
                         }
                     }
                 }
@@ -81,6 +95,8 @@
                 }
             }
         }
+
+
     }
 </style>
 <style media="screen" lang="less">
@@ -164,10 +180,10 @@
                 </div>
             </div>
             <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
-                <span class="re_edit" @click='editForm($event,item)'>重新编辑</span>
-                <span class="done" @click='finished($event,item)'>完成</span>
+                <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">重新编辑</span>
+                <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">完成</span>
                 <span class="share" @click='evaluate($event,item)'>分享到</span>
-                <span class="comment" @click='evaluate($event,item)'>评价</span>
+                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6?'can_be_evalute':''">评价</span>
             </div>
             <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
                 <span>追加评论</span>
@@ -184,6 +200,7 @@
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
+   <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
@@ -191,10 +208,11 @@
 <script>
 import CONFIG from '../config/config.js'
 import loading from '../components/loading.vue'
+import tips from '../components/tips.vue'
 export default {
     'name': 'myAssist',
     components: {
-        loading
+        loading,tips
     },
     data() {
         return {
@@ -208,12 +226,47 @@ export default {
           noDataTips:'',
           loadingShow:true,
           currentUserImgae:'',
+          showTipsText:''
         }
     },
     methods:{
+        getToken(callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let userId=window.localStorage.getItem('USERID');
+            let openid=window.localStorage.getItem('OPENID');
+            if(userId){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }else if(openid){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }
+            callback&&callback(this.token)
+        },
         editForm(e,item){
+            e=e?e:window.event;
             e.preventDefault();
+            event.stopPropagation();
             e.cancelBubble=true;
+            if(item.need.enable!=1&&item.need.enable!=3){
+                this.showTipsText='当前任务正在执行中，暂不能编辑！';
+                setTimeout(()=>{
+                    this.showTipsText=''
+                },2000);
+                return;
+            }
             this.$router.push({
                 path: 'assist',
                 query: {
@@ -226,8 +279,17 @@ export default {
         },
         finished(e,item){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            e.preventDefault();
-            e.cancelBubble=true;
+            	e=e?e:window.event;
+    			e.preventDefault();
+    			event.stopPropagation();
+    			e.cancelBubble=true;
+            if(item.need.enable2=6&&item.need.enable!=5){
+                this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
+                setTimeout(()=>{
+                    this.showTipsText=''
+                },2000);
+                return;
+            }
             this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
                 'needId':item.need.id,
                 'action':'coplete'
@@ -238,8 +300,17 @@ export default {
 
         },
         evaluate(e,item){
-            e.preventDefault();
-            e.cancelBubble=true;
+            	e=e?e:window.event;
+    			e.preventDefault();
+    			event.stopPropagation();
+    			e.cancelBubble=true;
+            if(item.need.enable!=6){
+                this.showTipsText='当前任务还未完成，暂不能评价！';
+                setTimeout(()=>{
+                    this.showTipsText=''
+                },2000);
+                return;
+            }
             this.$router.push({
                 path: 'evaluate',
                 query: {
@@ -262,7 +333,7 @@ export default {
         },
         getPushItem(data,callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.id+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
                 if(res.data.success){
@@ -276,14 +347,14 @@ export default {
             })
         },
 
-        loadData(){
+        loadData(token){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let url='/globalmate/rest/need/list';
             let _this=this;
             if(this.$route.query.id==='solove'){
                  url='/globalmate/rest//assist/listService'
             }
-            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+            this.axios.get(this.apiHost+url+'?token='+token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){
@@ -322,6 +393,7 @@ export default {
                                      default:
 
                                  }
+                                 console.log(data[i]);
                                  this.getPushItem(data[i],function (result) {
                                       _this.myAssistList.push(result)
                                  })
@@ -353,11 +425,20 @@ export default {
         }
     },
    activated(){
-       document.title=this.$route.query.title;
+       document.title=this.$route.query.title||'我发布的';
        this.myAssistList=[];
        this.nodataFlag=false;
        this.noDataTips='';
-       this.loadData();
+       this.token=this.$route.query.token;
+       let url=window.location.href;
+       if(url.indexOf('openId=')>-1){
+           this.userId=this.$utils.getQueryStringByName('userId');
+           this.openId=this.$utils.getQueryStringByName('openId');
+           window.localStorage.setItem('USERID',this.userId);
+           window.localStorage.setItem('OPENID',this.openId);
+       }
+       this.getToken(this.loadData);
+    //    this.loadData();
    },
    created(){
        this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;

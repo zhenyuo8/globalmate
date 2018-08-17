@@ -178,11 +178,34 @@ export default {
         selectList
     },
     computed:{
-        // 'token':function () {
-        //     return this.$route.query.token;
-        // }
+
     },
     methods: {
+        getToken(callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let userId=window.localStorage.getItem('USERID');
+            let openid=window.localStorage.getItem('OPENID');
+            if(userId){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }else if(openid){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        window.localStorage.setItem('TOKEN',res.data.data);
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }
+            callback&&callback(this.token)
+        },
         toMineInformation() {
             this.$router.push({
                 path: 'mineInformation',
@@ -246,6 +269,16 @@ export default {
                          }
                      });
                      break;
+                 case 'friends':
+                     this.$router.push({
+                         path: 'messageList',
+                         query: {
+                             'token': this.token,
+                             'title': '我的好友',
+                             'id': 'message',
+                         }
+                     });
+                     break;
                 default:
 
             }
@@ -265,24 +298,37 @@ export default {
             if(window.localStorage.getItem('TOKEN')){
                 this.token=window.localStorage.getItem('TOKEN');
             }
-            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{}).then((res)=>{
-                if(res.data.success){
+            if(this.userId){
 
-                    let data=res.data.data;
-                    this.userInfo.username=data.nikename||data.name;
-                    this.userInfo.country=data.country;
-                    this.userInfo.call=data.enable;
-                    this.userInfo.pic=data.pic||'../assets/images/icon.png';
-                }
+            }else{
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{}).then((res)=>{
+                    if(res.data.success){
 
-            }).catch((e)=>{
-                console.log(e);
-            })
+                        let data=res.data.data;
+                        this.userInfo.username=data.nikename||data.name;
+                        this.userInfo.country=data.country;
+                        this.userInfo.call=data.enable;
+                        this.userInfo.pic=data.pic||'../assets/images/icon.png';
+                    }
+
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }
+
         }
 
     },
     activated(){
-
+        let url=window.location.href;
+        document.title=this/$route.query.title||'个人中心';
+        if(url.indexOf('openId=')>-1){
+            this.userId=this.$utils.getQueryStringByName('userId');
+            this.openId=this.$utils.getQueryStringByName('openId');
+            window.localStorage.setItem('USERID',this.userId);
+            window.localStorage.setItem('OPENID',this.openId);
+        }
+        this.getToken(this.loadData);
     },
 
     watch:{
@@ -292,8 +338,6 @@ export default {
     },
     created(){
         this.token=this.$route.query.token
-
-        this.loadData();
         this.title=this.$route.query.title;
     }
 }

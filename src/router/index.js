@@ -104,6 +104,14 @@ export default new Router({
         }
     },
     {
+        path: '/register',
+        name: 'register',
+        component: register,
+        meta:{
+            index:16
+        }
+    },
+    {
         path: '/im',
         name: 'im',
         component: im,

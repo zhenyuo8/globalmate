@@ -1,4 +1,4 @@
-<style scoped>
+<style scoped lang='less'>
 	.messageList{
 		font-size: 12px;
 		color: #999;
@@ -32,6 +32,7 @@
 		flex-direction: row;
 		padding: 10px .2rem 10px 0;
 		border-bottom: 1px solid #eee;
+		position: relative;
 	}
 	.content_chat{
 		margin-left: .2rem;
@@ -67,6 +68,24 @@
 		font-size: 14px;
 		background: #eee;
 	}
+	.request_action{
+		position: absolute;
+		right: 0.4rem;
+		top: 50%;
+	}
+	.request_action span{
+		font-size: 14px;
+		color: #fff;
+		padding: 4px .12rem;
+		border-radius: 2px;
+		margin-left: 0.2rem;
+		&.accept{
+			background: #2343de;
+		}
+		&.refuse{
+			background: red;
+		}
+	}
 
 </style>
 
@@ -77,7 +96,8 @@
 			<ul>
 				<li v-for="(item,index) in messageList" @click='toChatPage(item)'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-						<img :src="item.pic" alt="">
+						<img :src="item.pic" v-if='item.pic' alt="">
+						<img src='../assets/images/icon.png' v-if='!item.pic' alt="">
 					</div>
 					<div class="content_chat">
 						<span class="name_chat">{{item.userName}}</span>
@@ -86,28 +106,35 @@
 					</div>
 				</li>
 			</ul>
+			<p v-show="friends.length!==0">好友</p>
 			<ul>
 				<li v-for="(item,index) in friends" @click='toChatPage(item)'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-						<img :src="item.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="">
-					</div>
-					<div class="content_chat">
-						<span class="name_chat">{{item.nikename}}</span>
-						<span class="detail_chat">{{item.helpAvailable}}</span>
-						<span class="time_chat">{{item.hobby}}</span>
-					</div>
-				</li>
-			</ul>
-			<p>联系人</p>
-			<ul class="gl_contact">
-				<li v-for="(item,index) in list" @click='goIm(item)'>
-					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-						<img :src="item.users.pic" alt="">
+						<img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'"  v-if='item.users.pic' alt="">
+						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
 					</div>
 					<div class="content_chat">
 						<span class="name_chat">{{item.users.nikename}}</span>
 						<span class="detail_chat">{{item.lastMessageContent}}</span>
 						<span class="time_chat">{{item.lastContactTime}}</span>
+					</div>
+				</li>
+			</ul>
+			<p v-show="list.length!==0">联系人</p>
+			<ul class="gl_contact">
+				<li v-for="(item,index) in list" @click='goIm(item)'>
+					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
+						<img :src="item.users.pic" alt=""  v-if='item.users.pic'>
+						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
+					</div>
+					<div class="content_chat">
+						<span class="name_chat">{{item.users.nikename}}</span>
+						<span class="detail_chat">{{item.lastMessageContent}}</span>
+						<span class="time_chat">{{item.lastContactTime}}</span>
+					</div>
+					<div class="request_action" v-show="item.isAddFriends">
+						<span class="accept" @click='agreeAddFriend($event,item)'>同意</span>
+						<span class="refuse">拒绝</span>
 					</div>
 				</li>
 			</ul>
@@ -127,10 +154,25 @@ export default {
         return {
             messageList: [],
 			friends:[],
-			list:[]
+			list:[],
+			friendsIdList:[],
+			addFriedsRequestList:[]
         }
     },
     methods:{
+		/**
+		 * [agreeAddFriend description]
+		 * @param  {[event]} e    [阻止冒泡事件]
+		 * @param  {[Object]} item [gl加好友]
+		 * @return {[type]}      [description]
+		 */
+		agreeAddFriend(e,item){
+			e=e?e:window.event;
+			e.preventDefault();
+			event.stopPropagation();
+			e.cancelBubble=true;
+			console.log(item);
+		},
 		toChatPage(item){
 			this.$router.push({
 				path: 'im',
@@ -139,8 +181,6 @@ export default {
 					'title': item.nikename,
 					'senderDId':item.to ,
 					'toChartId':item.from,
-					// 'chatItemId':item.data.content.item,
-					// 'id':item.data.content.item
 				}
 			});
 		},
@@ -162,7 +202,6 @@ export default {
 					'senderDId':item.to ,
 					'toChartId':item.users.id,
 					'chatItemId':chatItemId,
-					// 'id':item.data.content.item
 				}
 			});
 
@@ -195,8 +234,9 @@ export default {
 				let temp=mess[i];
 				this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+mess[i].id+'?token='+this.$route.query.token,{}).then((res)=>{
 					if(res.data.success){
-						this.friends.push(res.data.data);
+						this.friendsIdList.push(res.data.data.id)
 					}
+					this.getContact()
 	            }).catch((e)=>{
 
 	            })
@@ -216,9 +256,41 @@ export default {
 				complete: function(){}
 			});
 		},
+		getHistory(id,callback){
+			var _this=this;
+			YYIMChat.getHistoryMessage({
+				id:id,
+				type:'chat',
+				contentType: 2,
+			   	start: 0,
+			   	size: 150,
+			   	startVersion: 0,
+			   	endVersion: 100,
+			   	success:function(data){
+				   	if(data.result&&data.result.length!=0){
+					   	var result=data.result;
+					   	var len=result.length-1;
+					   	for(var i=len;i>=0;i--){
+							if(result[i].data.content.indexOf('add_friends_request')>-1){
+								console.log(result[i]);
+								callback&&callback(false);
+								return;
+							}
+					   	}
+						callback&&callback(true);
+						return;
+				   	}
+					callback&&callback(true);
+					return;
+			   	},
+			   	error:function(err){
+			   		console.log(err);
+			   	}
+			})
+		},
 		processList(friends){
 			this.apiHost=CONFIG[__ENV__].apiHost;
-			let mess=friends;
+			let mess=friends,_this=this;
 			this.list=[];
 			for(var i=0;i<mess.length;i++){
 				let temp=mess[i];
@@ -234,7 +306,16 @@ export default {
 								}
 							}
 							temp.lastContactTime=this.moment(temp.lastContactTime).format('YYYY-MM-DD');
-							this.list.push(temp);
+							if(!this.friendsIdList.includes(temp.id)){
+								this.getHistory(temp.id,function(params){
+									if(!params){
+										temp.isAddFriends=true;
+									}
+									_this.list.push(temp);
+								})
+							}else{
+								this.friends.push(temp);
+							}
 						}
 					}
 	            }).catch((e)=>{
@@ -265,6 +346,7 @@ export default {
 				size: 100,
 				success:function(data){
 					var list=_this.processList(data.list);
+					console.log(data,1111111);
 				},
 				error:function(err){
 					console.log(err);
@@ -397,7 +479,7 @@ export default {
 		this.initIM();
 		setTimeout(()=>{
 			this.getFriendsInIM()
-			this.getContact()
+			// this.getContact()
 		},1000)
 		if(window.localStorage.getItem('MESSAGELIST')){
 			let messageList=JSON.parse(window.localStorage.getItem('MESSAGELIST'));

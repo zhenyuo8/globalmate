@@ -329,9 +329,26 @@ export default {
             });
         },
         addIMFriend(){
-            console.log(YYIMChat.addRosterItem);
-            YYIMChat.addRosterItem(this.information.id);
             console.log(this.information);
+            console.log(this.currentUserId);
+            let content={
+                'item':'',
+                'chatContent':'',
+                'chatType':'add_friends_request',
+                'request_person':this.currentUserId
+            }
+            YYIMChat.sendTextMessage({
+                to: this.information.id+'',
+                type: 'chat',
+                content: JSON.stringify(content),
+                body: {},
+                success:function(data){
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            })
+            // YYIMChat.addRosterItem(this.information.id);
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
