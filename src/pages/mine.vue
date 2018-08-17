@@ -298,30 +298,26 @@ export default {
             if(window.localStorage.getItem('TOKEN')){
                 this.token=window.localStorage.getItem('TOKEN');
             }
-            if(this.userId){
+            this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{}).then((res)=>{
+                if(res.data.success){
 
-            }else{
-                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token||this.$route.query.token,{}).then((res)=>{
-                    if(res.data.success){
+                    let data=res.data.data;
+                    this.userInfo.username=data.nikename||data.name;
+                    this.userInfo.country=data.country;
+                    this.userInfo.call=data.enable;
+                    this.userInfo.pic=data.pic||'../assets/images/icon.png';
+                }
 
-                        let data=res.data.data;
-                        this.userInfo.username=data.nikename||data.name;
-                        this.userInfo.country=data.country;
-                        this.userInfo.call=data.enable;
-                        this.userInfo.pic=data.pic||'../assets/images/icon.png';
-                    }
-
-                }).catch((e)=>{
-                    console.log(e);
-                })
-            }
+            }).catch((e)=>{
+                console.log(e);
+            })
 
         }
 
     },
     activated(){
         let url=window.location.href;
-        document.title=this/$route.query.title||'个人中心';
+        document.title=this.$route.query.title||'个人中心';
         if(url.indexOf('openId=')>-1){
             this.userId=this.$utils.getQueryStringByName('userId');
             this.openId=this.$utils.getQueryStringByName('openId');
