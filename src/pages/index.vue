@@ -214,7 +214,7 @@
                  this.token=window.localStorage.getItem('TOKEN');
                  var isIdentify=window.localStorage.getItem('IDENTIFY_YET_glohelp');
                  if(!isIdentify){
-                     this.showTipsText='身份认证之后才能发布需求,请前往个人中心进行身份认证!谢谢~~';
+                     this.showTipsText='请您先完成身份认证!';
                      setTimeout(()=>{
                          this.showTipsText='';
                      },2000);

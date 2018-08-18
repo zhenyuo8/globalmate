@@ -145,8 +145,8 @@
 .mineInformation_hobby, .mineInformation_school, .mineInformation_comment{
      font-size: 14px;
      color: #999;
-     width: 86%;
-     padding: 16px 0;
+     width: 80%;
+     padding: 16px 0.2rem;
      margin: auto;
      margin-top: 20px;
      border: 1px solid #eee;
@@ -173,8 +173,11 @@
     margin-left: .12rem;
     text-align: left;
 }
+
 .mineInformation_school_content_repeat, .mineInformation_hobby_offer, .mineInformation_hobby_love{
     text-align: left;
+    white-space: nowrap;
+    overflow-x: scroll;
 }
 .mineInformation_comment_content{
     overflow: hidden;

@@ -385,9 +385,10 @@ export default {
             if(postData.length==1){
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                     if(res.data.success){
+                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
+                        window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                         setTimeout(()=>{
-                            this.loadingShow=true;
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                           this.showTipsText='';
                             window.history.go(-1);
                         },1500);
                     }else{
@@ -397,11 +398,12 @@ export default {
                     console.log(e);
                 });
             }else{
-                this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,JSON.stringify(postData)).then((res)=>{
+                this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
+                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
+                        window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                         setTimeout(()=>{
-                            this.loadingShow=true;
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                           this.showTipsText='';
                             window.history.go(-1);
                         },1500);
                     }else{

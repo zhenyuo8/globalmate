@@ -77,7 +77,7 @@
 					<label for="schoolsignup" class="schoolname" data-icon="u">学校名称</label>&nbsp:&nbsp&nbsp
 					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
-				<p @click='choseSchoolDate($event)' id="schooldatesignup_p">
+				<p @click='openPicker' id="schooldatesignup_p">
 					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
 					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
 				</p>
@@ -95,12 +95,21 @@
 			</form>
 		</div>
          <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
+          <mt-datetime-picker
+             ref="picker"
+             type="date"
+             :startDate="startDate"
+             :endDate="endDate"
+             @confirm="handleConfirm"
+             v-model="pickerValue">
+           </mt-datetime-picker>
     </div>
 </template>
 
 <script>
 import CONFIG from '../config/config'
 import tips from '../components/tips.vue'
+import { DatetimePicker } from 'mint-ui';
 export default {
     data(){
         return{
@@ -115,11 +124,21 @@ export default {
             showEducationValue:false,
             userId:'',
             headerImgae:'',
-            showTipsText:''
+            showTipsText:'',
+            startDate: new Date('1970/01/01'),
+            endDate: new Date('2100/12/31'),
+            pickerValue:this.moment(new Date).format('YYYY-MM-DD')
 
         }
     },
 	methods:{
+         openPicker() {
+             this.$refs.picker.open();
+         },
+         handleConfirm(value){
+             value=this.moment(value).format('YYYY-MM-DD');
+             this.$el.querySelector('#schooldatesignup').value=value;
+         },
 		selectHelpType(){
 			this.selectFlag=true;
 		},
@@ -164,13 +183,43 @@ export default {
             this.educationFlag=true;
         },
         addOneEducation(){
-            this.educationFlag=false;
+
             let education={
                 'schoolname':this.$el.querySelector('#schoolsignup').value,
                 'schooldate':this.$el.querySelector('#schooldatesignup').value,
                 'professional':this.$el.querySelector('#schoolprofessionalsignup').value,
                 'grade':this.$el.querySelector('#schoolgradesignup').value,
             }
+
+            if(!education.schoolname){
+                this.showTipsText='请输入学校名称';
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500)
+                return;
+            }
+            if(!education.schooldate){
+                this.showTipsText='请选择入学年份';
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500);
+                return;
+            }
+            if(!education.professional){
+                this.showTipsText='请输入专业信息';
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500);
+                return;
+            }
+            if(!education.grade){
+                this.showTipsText='请输入所在班级';
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500);
+                return;
+            }
+            this.educationFlag=false;
             this.$el.querySelector('#schoolsignup').value='';
             this.$el.querySelector('#schooldatesignup').value='';
             this.$el.querySelector('#schoolprofessionalsignup').value='';
@@ -194,24 +243,7 @@ export default {
             this.$el.querySelector('#schoolprofessionalsignup').value=item.professional;
             this.$el.querySelector('#schoolgradesignup').value=item.grade;
         },
-        choseSchoolDate(e){
-            var _this=this;
-            if(!this.calendar2&&!this.showEducationValue){
-              this.calendar2 = new datePicker();
-              this.calendar2.init({
-                'trigger': '#schooldatesignup_p', /*按钮选择器，用于触发弹出插件*/
-                'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
-                'minDate':'1900-1-1',/*最小日期*/
-                'maxDate':'2100-12-31',/*最大日期*/
-                'onSubmit':function(){/*确认时触发事件*/
-                  var theSelectData=this.value;
-                  _this.$el.querySelector('#schooldatesignup').value=this.value;
-                },
-                'onClose':function(){/*取消时触发事件*/
-                }
-              })
-            }
-        },
+
 		submit(){
             this.apiHost=CONFIG[__ENV__].apiHost;
     	    let postData={
@@ -370,7 +402,7 @@ export default {
 
 	},
     components:{
-        tips
+        tips,DatetimePicker
     },
     activated(){
           this.selectFlag=false;
@@ -459,14 +491,17 @@ export default {
 		margin-top: 10px;
 	}
 	.personalFile_form .name p label{
-		width: 1.4rem;
+		width: 38%;
 		text-align: justify;
 		text-justify:inter-ideograph;
 		text-align-last:justify;
 		line-height: 32px;
+        white-space: nowrap;
+        /*text-overflow: ellipsis;*/
+        overflow: hidden;
 	}
 	.personalFile_form .name p input{
-		width: 2.4rem;
+		width: 60%;
 		border: 1px solid #eee;
 		padding: 0 0.2rem;
 	}
@@ -521,25 +556,25 @@ export default {
 		height: 36px;
 		line-height: 36px;
 		margin-top: 10px;
+        width: 100%;
 	}
 	.personalFile_hobby p label{
-		width: 2.4rem;
+		width: 40%;
 		margin-right: .1rem;
-		/*text-align: left;*/
 		text-align: justify;
 		text-justify:inter-ideograph;
 		text-align-last:justify;
 	}
 	.personalFile_hobby p input{
-		width: 3.8rem;
+		width: 50%;
 		height: 34px;
+        color: #333;
 		padding: 0 .2rem;
 		border: 1px solid #eee;
 		text-align: center;
 
 	}
 	.personalFile_hobby .personalFile_hobby_title{
-		/*text-align: left;*/
 		font-size: 14px;
 		display: inline-block;
 		height: 34px;
@@ -594,9 +629,8 @@ export default {
 		left: 0;
 		right: 0;
 		bottom: 0;
-     z-index: 3;
+        z-index: 3;
 		top: 100%;
-        /*display: none;*/
 		-webkit-transition: all .2s ease-out;
         -moz-transition: all .2s ease-out;
        	transition: all .2s ease-out;
@@ -626,16 +660,15 @@ export default {
         margin-bottom: 10px;
     }
     .personalFile .fillin_education form p input{
-        height: 36px;
-        line-height: 36px;
+        height: 34px;
+        line-height: 34px;
         box-sizing: border-box;
         border: 1px solid #eee;
-        padding: 0 10px;
+        padding: 0 .2rem;
     }
     .personalFile .fillin_education form{
         width: 90%;
         background: #fff;
-        /*margin: auto;*/
         position: absolute;
         top: 26%;
         left: 5%;
@@ -674,6 +707,7 @@ export default {
 		height: 46px;
 		background: #fff;
 		line-height: 46px;
+        margin-top: 10px;
 	}
 	.personalFile .buttom_action span{
 		display: inline-block;
@@ -695,19 +729,24 @@ export default {
     }
 
 
+
 </style>
 <style media="screen">
-    .date_btn_box{
-        font-size: 14px!important;
-    }
-    .date_grid{
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-    }
-    .date_grid>div{
-        display: none!important;
-    }
-    .date_roll>div:nth-child(3) .gear{
-        text-indent: 0!important
-    }
+.moxie-shim{
+    width: 1.5rem!important;
+}
+.mint-datetime .picker-slot{
+    font-size: 14px;
+}
+.mint-datetime .mint-datetime-cancel{
+    text-align: left;
+    width: auto;
+    margin-left: .2rem;
+    color: #666;
+}
+.mint-datetime .mint-datetime-confirm{
+    text-align: right;
+     width: auto;
+    margin-right: .2rem;
+}
 </style>

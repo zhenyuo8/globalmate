@@ -125,8 +125,4 @@ textarea::-webkit-input-placeholder {
     color: #007aff;
     background: #fff;
     border-top: 1px solid #F2F2F2;
-    /*box-shadow: 0 0px 1px 0;*/
-}
-.gearDate{
-  font-size: 14px!important;
 }

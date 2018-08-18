@@ -42,19 +42,6 @@
         height: 100%;
         display: inline-block;
     }
-    .date_btn_box{
-        font-size: 14px!important;
-    }
-    .date_grid{
-        border-top: 1px solid #eee;
-        border-bottom: 1px solid #eee;
-    }
-    .date_grid>div{
-        display: none!important;
-    }
-    .date_roll>div:nth-child(3) .gear{
-        text-indent: 0!important
-    }
     .defindloadig{
        position: fixed;
        z-index: 11;
@@ -62,6 +49,20 @@
         top: 0;
         right: 0;
         bottom: 0;
+    }
+    .mint-datetime .picker-slot{
+        font-size: 14px;
+    }
+   .mint-datetime .mint-datetime-cancel{
+        text-align: left;
+        width: auto;
+        margin-left: .2rem;
+        color: #666;
+    }
+   .mint-datetime .mint-datetime-confirm{
+        text-align: right;
+         width: auto;
+        margin-right: .2rem;
     }
 
 </style>
@@ -76,7 +77,6 @@
             </div>
         </div>
         <div class="main_style">
-            <!-- <List :itemRepeat='payStyle' :clickCallBack='clickCallBack' v-if="payStyle"></List> -->
             <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
         </div>
         <div class="main_decription">
@@ -107,6 +107,14 @@
          <loading></loading>
      </div>
      <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
+     <mt-datetime-picker
+        ref="picker"
+        type="date"
+        :startDate="startDate"
+        :endDate="endDate"
+        @confirm="handleConfirm"
+        v-model="pickerValue">
+      </mt-datetime-picker>
 </div>
 
 </template>
@@ -121,6 +129,7 @@ import tips from '../components/tips.vue'
 import loading from '../components/loading.vue'
 let pinyin=require('pinyin')
 import { Toast} from 'mint-ui';
+import { DatetimePicker } from 'mint-ui';
 export default {
     'name': 'assist',
     data() {
@@ -156,13 +165,24 @@ export default {
             showTipsText:'',
             loadingShow:true,
             isEditType:false,
+            startDate: new Date('1970/01/01'),
+            endDate: new Date('2100/12/31'),
+            pickerValue:this.moment(new Date).format('YYYY-MM-DD')
         }
 
     },
     components: {
-        List,selectList,Toast,indexList,tips,loading
+        List,selectList,Toast,indexList,tips,loading,DatetimePicker
     },
     methods:{
+        openPicker(item) {
+            this['datePick']=item;
+            this.$refs.picker.open();
+        },
+        handleConfirm(value){
+            value=this.moment(value).format('YYYY-MM-DD');
+            this.selectCallBack(value,this['datePick'])
+        },
         // 点击发布按钮逻辑
         publish(){
            let postData=this.getListData();
@@ -215,41 +235,9 @@ export default {
             let _this=this;
             if(!item.type){
                 if(item.key==='date'){
-                  if(item.componentKey==='endTime'){
-                    if(!this.calendar1){
-                      this.calendar1 = new datePicker();
-                      this.calendar1.init({
-                        'trigger': '#'+item.componentKey, /*按钮选择器，用于触发弹出插件*/
-                        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
-                        'minDate':'1900-1-1',/*最小日期*/
-                        'maxDate':'2100-12-31',/*最大日期*/
-                        'onSubmit':function(){/*确认时触发事件*/
-                          var theSelectData=this.value;
-                          _this.selectCallBack(theSelectData,item);
-                        },
-                        'onClose':function(){/*取消时触发事件*/
-                        }
-                      })
-                    }
-                  }else{
-                    if(!this.calendar){
-                      this.calendar = new datePicker();
-                      this.calendar.init({
-                        'trigger': '#'+item.componentKey, /*按钮选择器，用于触发弹出插件*/
-                        'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
-                        'minDate':'1900-1-1',/*最小日期*/
-                        'maxDate':'2100-12-31',/*最大日期*/
-                        'onSubmit':function(){/*确认时触发事件*/
-                          var theSelectData=this.value;
-                          _this.selectCallBack(theSelectData,item);
-                        },
-                        'onClose':function(){/*取消时触发事件*/
-                        }
-                      })
-                    }
-                  }
+                    this.openPicker(item);
                 }else{
-                   this.getSelectItem(item.key)
+                    this.getSelectItem(item.key)
                 }
             }else{
                 if(e){
@@ -618,21 +606,17 @@ export default {
            });
            this.fileUploader.init();
         },
-
     },
     activated(){
         this.show=false;
         this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
         if(this.$route.query.mode&&this.$route.query.mode=='MODIFY'){
+            this.isEditType=true;
             this.loadDataEdit(this.$route.query.id);
         }else{
              this.listRepeatProcess();
         }
-        if(this.$route.query.mode='MODIFY'){
-            this.isEditType=true;
-        }
-
         setTimeout(()=>{
             this.loadingShow=false;
         },500)

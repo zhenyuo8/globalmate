@@ -1,6 +1,14 @@
 <style scoped>
 .gl_list{
     font-size: 14px;
+    position: absolute;
+    overflow: hidden;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: #eee;
+    overflow-y: auto;
 }
 .filter_right>.select_out{
     position: fixed;
@@ -286,11 +294,27 @@
 					}
 				}
                 .status_1{
-                    color:#238204
+                    color:#238204;
                 }
                 .status_2{
-                    color:#847405
+                    color:#847405;
                 }
+                .status_0{
+                    color:red;
+                }
+                .status_6{
+                    color:#666;
+                }
+                .status_4{
+                    color:#238204;
+                }
+                .status_5{
+                    color:#847405;
+                }
+                .status_3{
+                    color:#e407f3;
+                }
+
                 .status_close{
                     span{
                         color: red!important;
@@ -362,7 +386,7 @@
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
-
+   <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
    <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
@@ -405,10 +429,11 @@
 import searchInput from '../components/searchInput.vue'
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
+import tips from '../components/tips.vue'
 export default {
     'name': 'seekHelpList',
     components: {
-        searchInput,loading
+        searchInput,loading,tips
     },
     data() {
         return {
@@ -428,7 +453,8 @@ export default {
               where:'',
           },
           isSOS:false,
-          loadingShow:true
+          loadingShow:true,
+          showTipsText:''
 
         }
     },
@@ -476,6 +502,13 @@ export default {
             e.preventDefault;
             e.cancelBubble=true;
             let _this=this;
+            if(item.need.enable!=1){
+                this.showTipsText='当前任务已完成或者正在执行中！'
+                setTimeout(()=>{
+                    this.showTipsText='';
+                },1500);
+                return;
+            }
             this.getUserInfo(item.need.userId,function(data){
                 _this.$router.push({
                     path: 'im',

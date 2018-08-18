@@ -7,16 +7,12 @@ import qs from 'qs';
 import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
-import '../static/css/datePicker.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from'mint-ui'
 import'mint-ui/lib/style.css'
 import utils from './libs/js/util.js'
 import VueLazyLoad from 'vue-lazyload'
-Vue.use(VueLazyLoad,{
-    error:'./assets/images/icon.png',
-    loading:'./assets/images/loading.gif'
-})
+
 Vue.use(Mint);
 Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
