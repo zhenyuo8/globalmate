@@ -212,6 +212,14 @@
             },
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
+                 var isIdentify=window.localStorage.getItem('IDENTIFY_YET_glohelp');
+                 if(!isIdentify){
+                     this.showTipsText='身份认证之后才能发布需求,请前往个人中心进行身份认证!谢谢~~';
+                     setTimeout(()=>{
+                         this.showTipsText='';
+                     },2000);
+                     return;
+                 }
                  if(item.key=='carry'){
                      this.showTipsText='对不起，该功能暂未上线，敬请关注...';
                      setTimeout(()=>{
@@ -475,7 +483,7 @@
             },
 		},
         activated(){
-            document.title='Global Mate';
+            document.title='Glohelp';
             this.getToken(this.getCurrentUser);
             setTimeout(()=>{
                 this.loadingShow=false;
@@ -534,11 +542,9 @@
     .header .right{
         float: right;
         display: flex;
-       /*width: 50%*/
     }
     .icon-global-im{
         width: .76rem;
-        margin-right: 0.2rem;
         position: relative;
     }
     .message_tips{

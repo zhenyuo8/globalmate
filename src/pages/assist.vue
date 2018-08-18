@@ -463,7 +463,7 @@ export default {
                 text: '请选择',
                 arrow: true,
                 key:'date',
-                isRequire:false,
+                isRequire:true,
                 isPlacehold:true,
                 componentKey:'startTime'
             },{
@@ -471,7 +471,7 @@ export default {
                 text: '请选择',
                 arrow: true,
                 key:'date',
-                isRequire:false,
+                isRequire:true,
                 isPlacehold:true,
                 componentKey:'endTime'
             }, {

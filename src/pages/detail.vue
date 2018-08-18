@@ -95,9 +95,6 @@
             padding: 10px 0;
             border-top: 1px solid #eee;
             color: #333;
-            &:last-child{
-                border-bottom:1px solid #eee;
-            }
         }
     }
     .detail_image_new{
@@ -131,13 +128,13 @@
            padding: 10px 0;
        }
        .list_repeat_pushed_item{
-           display: flex;
-
+            overflow: hidden;
            div{
-                margin-right: 10px;
+                float: left;
+                width: 20%;
                img{
-                   width: 1.2rem;
-                   height: 1.2rem;
+                   width: 1rem;
+                   height: 1rem;
                    border-radius: 50%;
                    display: block;
                    margin: auto;
@@ -146,6 +143,10 @@
                    margin:6px  auto 10px;
                    width: 100%;
                    text-align: center;
+                   white-space: nowrap;
+                   text-overflow: ellipsis;
+                   overflow: hidden;
+                   font-size: 12px;
                }
            }
        }
@@ -170,11 +171,12 @@
         </div>
         <div class="detail_middle">
             <p>标题：{{listData.title}}</p>
-            <p>地点：{{listData.country}}_{{listData.city}}</p>
-            <p>时间：{{listData.startTime}} 至 {{listData.endTime}}</p>
+            <p>地点：{{listData.country}}<i v-if="listData.city">_</i> {{listData.city}}</p>
+            <p>时间：{{listData.startTime}} <i v-if="listData.endTime">至</i> {{listData.endTime}}</p>
+            <p>悬赏金额(￥)：<i style="color:red">{{listData.rewardAmount}}</i></p>
             <p>详细内容：{{listData.description}}</p>
         </div>
-        <div class="detail_image_new" v-if="true">
+        <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
             <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
                 <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
             </div>
@@ -182,18 +184,10 @@
 
         <div class="list_repeat_pushed" >
             <p>推送名单:</p>
-            <div class="list_repeat_pushed_item">
-                <div class="">
-                    <img src="../assets/images/1.jpeg" alt="">
-                    <span>SuperMan</span>
-                </div>
-                <div class="">
-                    <img src="../assets/images/2.jpeg" alt="">
-                    <span>泰迪</span>
-                </div>
-                <div class="">
-                    <img src="../assets/images/3.jpg" alt="">
-                    <span>毛毛虫</span>
+            <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
+                <div class="" v-for="item in pushList">
+                    <img :src="item.userInfo.pic" alt="">
+                    <span>{{item.userInfo.nikename}}</span>
                 </div>
             </div>
         </div>
@@ -208,54 +202,6 @@
             </div>
         </div>
     </div>
-
-    <!-- <div class="detail_list">
-        <div class="detail_list_repeat">
-            <div class="detail_list_image">
-                <div class="">
-                    <img src="../assets/images/1.jpeg" alt="">
-                </div>
-            </div>
-            <div class="detail_list_decription">
-                <span class="detail_name">火影忍者佐助</span>
-                <span class="detail_type">cool</span>
-                <span class="detail_brand">japan</span>
-            </div>
-            <div class="detail_list_price">
-                ¥ 123
-            </div>
-        </div>
-        <div class="detail_list_repeat">
-            <div class="detail_list_image">
-                <div class="">
-                    <img src="../assets/images/2.jpeg" alt="">
-                </div>
-            </div>
-            <div class="detail_list_decription">
-                <span class="detail_name">秦时明月</span>
-                <span class="detail_type">history</span>
-                <span class="detail_brand">台湾</span>
-            </div>
-            <div class="detail_list_price">
-                $ 7890
-            </div>
-        </div>
-        <div class="detail_list_repeat">
-            <div class="detail_list_image">
-                <div class="">
-                    <img src="../assets/images/3.jpg" alt="">
-                </div>
-            </div>
-            <div class="detail_list_decription">
-                <span class="detail_name">火影忍者</span>
-                <span class="detail_type">v89</span>
-                <span class="detail_brand">japan</span>
-            </div>
-            <div class="detail_list_price">
-                ¥ 777
-            </div>
-        </div>
-    </div> -->
     <div class="detail_message" v-show="userId!=otherUserId">
         <div class="detail_message_chart" >
             <span @click='goChart'>去帮助</span>
@@ -287,12 +233,14 @@ export default {
             token:'',
             currentUserId:'',
             otherUserId:'',
-            listData:{}
+            listData:{},
+            pushList:[]
         }
     },
     activated(){
         let url=window.location.href;
         this.listData={};
+        this.pushList=[];
         this.detail={
             'title':'',
             'country':'',
@@ -380,7 +328,7 @@ export default {
                          this.show=true;
                      },500)
                      for(var key in data.conceretNeed){
-                         if(key=='tag'||key=='city'||key=='country'||key=='startTime'||key=='endTime'||key=='title'||key=='description'||key=='pic'){
+                         if(key=='tag'||key=='city'||key=='country'||key=='startTime'||key=='endTime'||key=='title'||key=='description'||key=='pic'||key=='rewardAmount'){
                              if(key=='startTime'||key=='endTime'){
                                  list[key]=this.moment(data.conceretNeed[key]).format('YYYY-MM-DD');
                              }else{
@@ -430,9 +378,9 @@ export default {
 
                          }
                      }
-                     this.getPushItem(list,function (result) {
-                         _this.listData=result;
-                     })
+                     console.log(list);
+                     _this.listData=list;
+                     this.getPushItem(data.need.id)
                 }else{
 
                 }
@@ -440,21 +388,39 @@ export default {
                 console.log(e);
             })
         },
-         getPushItem(data,callback){
-             this.apiHost=CONFIG[__ENV__].apiHost;
-             this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.id+'?token='+this.$route.query.token,{
+        getPushItemInfo(data,callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.providerId+'?token='+this.$route.query.token,{}).then((res)=>{
+                if(res.data.success){
+                    data.userInfo=res.data.data;
+                    callback&&callback(data);
+                }else{
+                    callback&&callback(data);
+                }
+            }).catch(()=>{
+                callback&&callback(data);
+            })
+        },
+        getPushItem(id){
+            let _this=this;
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/match/'+id+'?token='+this.$route.query.token,{
 
-             }).then((res)=>{
-                 if(res.data.success){
-                     data.pushList=res.data.data;
-                     callback&&callback(data)
-                 }else{
-                     callback&&callback(data)
-                 }
-             }).catch(()=>{
-
-             })
-         },
+            }).then((res)=>{
+                if(res.data.success){
+                   if(res.data.data&&res.data.data.length!=0){
+                       var nowData=res.data.data;
+                       for(var i=0;i<nowData.length;i++){
+                           this.getPushItemInfo(nowData[i],function (result) {
+                               _this.pushList.push(result);
+                           });
+                       }
+                   }
+                }
+            }).catch((e)=>{
+                console.log(e);
+            })
+        },
         goChart(){
             this.$router.push({
                 path: 'im',

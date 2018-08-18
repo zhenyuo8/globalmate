@@ -135,6 +135,7 @@
         margin: auto;
         -webkit-line-clamp:2;
         vertical-align: middle;
+        text-align: center;
     }
     .mint-indexsection-index{
         font-size: 14px;

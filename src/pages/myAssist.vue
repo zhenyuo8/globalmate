@@ -37,22 +37,25 @@
                         padding: 10px 0;
                     }
                     .list_repeat_pushed_item{
-                        display: flex;
-
+                        overflow: hidden;
                         div{
-                             margin-right: 10px;
+                            float: left;
+                            width: 20%;
                             img{
-                                width: 1.2rem;
-                                height: 1.2rem;
+                                width: 1rem;
+                                height: 1rem;
                                 border-radius: 50%;
                                 display: block;
                                 margin: auto;
                             }
                             span{
-                                /*margin-top: 10px;*/
                                 margin:6px  auto 10px;
                                 width: 100%;
                                 text-align: center;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                font-size: 12px;
                             }
                         }
                     }
@@ -344,7 +347,6 @@ export default {
 
             }).then((res)=>{
                 if(res.data.success){
-                    console.log(res.data.data);
                     if(res.data.data&&res.data.data.length!=0){
                         var nowData=res.data.data,tempNow=[];
                         for(var i=0;i<nowData.length;i++){

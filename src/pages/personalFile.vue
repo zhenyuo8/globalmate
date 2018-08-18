@@ -4,19 +4,23 @@
         <form class="personalFile_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p>
-					<label for="nicknamesignup" class="nickname" data-icon="u">昵称</label>&nbsp:&nbsp&nbsp
+					<label for="nicknamesignup" class="nickname" data-icon="u"><i class="gl_required_class">*</i>昵称</label>&nbsp:&nbsp&nbsp
 					<input id="nicknamesignup" name="nicknamesignup" required="required" type="text" placeholder="昵称" />
 				</p>
 				<p>
-					<label for="truenamesignup" class="truename" data-icon="u">真实姓名</label>&nbsp:&nbsp&nbsp
+					<label for="truenamesignup" class="truename" data-icon="u"><i class="gl_required_class">*</i>真实姓名</label>&nbsp:&nbsp&nbsp
 					<input id="truenamesignup" name="truenamesignup" required="required" type="text" placeholder="真实姓名" />
 				</p>
+                <p>
+					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>手机号码</label>&nbsp:&nbsp&nbsp
+					<input id="phonesignup" name="phonesignup" required="required" type="text" placeholder="手机号码" />
+				</p>
 				<p>
-					<label for="countrysignup" class="country" data-icon="u">所在国家</label>&nbsp:&nbsp&nbsp
+					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>所在国家</label>&nbsp:&nbsp&nbsp
 					<input id="countrysignup" name="countrysignup" required="required" type="text" placeholder="国家" />
 				</p>
 				<p>
-					<label for="citysignup" class="city" data-icon="u">所在城市</label>&nbsp:&nbsp&nbsp
+					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>所在城市</label>&nbsp:&nbsp&nbsp
 					<input id="citysignup" name="citysignup" required="required" type="text" placeholder="城市" />
 				</p>
 			</div>
@@ -44,11 +48,11 @@
 		<div class="personalFile_hobby">
 			<span class="personalFile_hobby_title">个人特质</span>
 			<p>
-				<label for="">兴趣爱好:</label>
+				<label for=""><i class="gl_required_class">*</i>兴趣爱好:</label>
 				<input id="hobbysignup" type="text" name="" value="" placeholder='请输入'>
 			</p>
 			<p id='' @click='selectHelpType'>
-				<label for="">愿意提供的帮助:</label>
+				<label for=""><i class="gl_required_class">*</i>愿意提供的帮助:</label>
 				<input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled'  style='text-align:center'>
 			</p>
 		</div>
@@ -73,9 +77,9 @@
 					<label for="schoolsignup" class="schoolname" data-icon="u">学校名称</label>&nbsp:&nbsp&nbsp
 					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
-				<p @click='choseSchoolDate($event)' id="schooldatesignup">
+				<p @click='choseSchoolDate($event)' id="schooldatesignup_p">
 					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
-					<input  name="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
+					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
 				</p>
 				<p>
 					<label for="schoolprofessionalsignup" class="professional" data-icon="u">所在专业</label>&nbsp:&nbsp&nbsp
@@ -90,11 +94,13 @@
                 </p>
 			</form>
 		</div>
+         <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
     </div>
 </template>
 
 <script>
 import CONFIG from '../config/config'
+import tips from '../components/tips.vue'
 export default {
     data(){
         return{
@@ -108,7 +114,8 @@ export default {
             educationValue:[],
             showEducationValue:false,
             userId:'',
-            headerImgae:''
+            headerImgae:'',
+            showTipsText:''
 
         }
     },
@@ -188,15 +195,17 @@ export default {
             this.$el.querySelector('#schoolgradesignup').value=item.grade;
         },
         choseSchoolDate(e){
+            var _this=this;
             if(!this.calendar2&&!this.showEducationValue){
               this.calendar2 = new datePicker();
               this.calendar2.init({
-                'trigger': '#schooldatesignup', /*按钮选择器，用于触发弹出插件*/
+                'trigger': '#schooldatesignup_p', /*按钮选择器，用于触发弹出插件*/
                 'type': 'date',/*模式：date日期；datetime日期时间；time时间；ym年月；*/
                 'minDate':'1900-1-1',/*最小日期*/
                 'maxDate':'2100-12-31',/*最大日期*/
                 'onSubmit':function(){/*确认时触发事件*/
                   var theSelectData=this.value;
+                  _this.$el.querySelector('#schooldatesignup').value=this.value;
                 },
                 'onClose':function(){/*取消时触发事件*/
                 }
@@ -208,6 +217,7 @@ export default {
     	    let postData={
                 name:'',
                 nikename:'',
+                phone:'',
                 country:'',
                 city:'',
                 pic:'',
@@ -218,12 +228,51 @@ export default {
             };
                 postData.nikename=this.$el.querySelector('#nicknamesignup').value;
                 postData.name=this.$el.querySelector('#truenamesignup').value;
+                postData.phone=this.$el.querySelector('#phonesignup').value;
                 postData.country=this.$el.querySelector('#countrysignup').value;
                 postData.city=this.$el.querySelector('#citysignup').value;
                 postData.hobby=this.$el.querySelector('#hobbysignup').value;
                 postData.school=JSON.stringify(this.educationValue);
-                postData.helpAvailable=this.type_list.join(',');
+                postData.helpAvailable=this.selectHelpTypeValue;
                 postData.pic=this.headerImgae||'';
+                for(var key in postData){
+                    if(!postData[key]||postData[key]=='[]'){
+                        switch (key) {
+                            case 'name':
+                                this.showTipsText='请输入您的真实姓名';
+                                break;
+                            case 'nikname':
+                                this.showTipsText='请输入您的昵称';
+                                break;
+                            case 'phone':
+                                this.showTipsText='请选择您的联系方式';
+                                break;
+                            case 'country':
+                                this.showTipsText='请选择您的国家';
+                                break;
+                            case 'city':
+                                this.showTipsText='请选择您所在城市';
+                                break;
+                            case 'school':
+                                this.showTipsText='请填写您的圈子（例如：毕业大学）';
+                                break;
+                            case 'helpAvailable':
+                                this.showTipsText='请设置您可提供的帮助';
+                                break;
+                            case 'hobby':
+                                this.showTipsText='请填写您的兴趣爱好';
+                                break;
+                            case 'pic':
+                                this.showTipsText='请上传头像';
+                                break;
+                            default:
+                        }
+                        setTimeout(()=>{
+                            this.showTipsText=''
+                        },2000);
+                        return;
+                    }
+                }
                 this.axios.put(this.apiHost+'/globalmate/rest/user/update/'+'?token='+this.$route.query.token,postData).then((res)=>{
                           if(res.data.success){
                               window.history.back(-1);
@@ -235,25 +284,25 @@ export default {
         },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
-        if(file.type=='image/gif'){
-            var fr = new mOxie.FileReader();
-            fr.onload = function(){
-                callback(fr.result);
-                fr.destroy();
-                fr = null;
+            if(file.type=='image/gif'){
+                var fr = new mOxie.FileReader();
+                fr.onload = function(){
+                    callback(fr.result);
+                    fr.destroy();
+                    fr = null;
+                }
+                fr.readAsDataURL(file.getSource());
+            }else{
+                var preloader = new mOxie.Image();
+                preloader.onload = function() {
+                    preloader.downsize( 100, 100 );
+                    var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
+                    callback && callback(imgsrc);
+                    preloader.destroy();
+                    preloader = null;
+                };
+                preloader.load( file.getSource() );
             }
-            fr.readAsDataURL(file.getSource());
-        }else{
-            var preloader = new mOxie.Image();
-            preloader.onload = function() {
-                preloader.downsize( 100, 100 );
-                var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
-                callback && callback(imgsrc);
-                preloader.destroy();
-                preloader = null;
-            };
-            preloader.load( file.getSource() );
-        }
         },
 		initUploader(){
             let _this=this;
@@ -321,7 +370,7 @@ export default {
 
 	},
     components:{
-
+        tips
     },
     activated(){
           this.selectFlag=false;
@@ -340,6 +389,9 @@ export default {
                   }
                   if(data.name){
                       this.$el.querySelector('#truenamesignup').value=data.name;
+                  }
+                  if(data.phone){
+                      this.$el.querySelector('#phonesignup').value=data.phone;
                   }
                   if(data.country){
                       this.$el.querySelector('#countrysignup').value=data.country;
@@ -638,6 +690,10 @@ export default {
 	.personalFile .buttom_action .confirm{
 		background: rgb(41, 182, 246);
 	}
+    label i{
+        color: red!important;
+    }
+
 
 </style>
 <style media="screen">

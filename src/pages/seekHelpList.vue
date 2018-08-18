@@ -239,7 +239,14 @@
 					border-radius: 4px;
 					color: #fff;
                     text-align: center;
+
 				}
+                &.gl_inProcess{
+                    span{
+                        background: #b3b3b3;
+                    }
+
+                }
 			}
 			.list_repeat_user{
 				display: flex;
@@ -269,16 +276,21 @@
 						&.type{
 						    font-size: 13px;
                             color: #888;
-							margin-top: .4rem;
+							margin-top: .1rem;
 						}
 					}
 				}
 				.status_user{
 					span{
-						color: blue;
 						font-size: 14px;
 					}
 				}
+                .status_1{
+                    color:#238204
+                }
+                .status_2{
+                    color:#847405
+                }
                 .status_close{
                     span{
                         color: red!important;
@@ -317,8 +329,9 @@
 				<div class="name_user">
 					<span class="name">{{item.need.userName}}</span>
 					<span class="type">{{item.conceretNeed.tag}}</span>
+					<span class="type">悬赏金额(￥) <i style="color:red">{{item.conceretNeed.rewardAmount}}</i></span>
 				</div>
-				<div class="status_user" :class="">
+				<div class="status_user" :class="'status_'+item.need.enable">
 					<span>{{item.need.status}}</span>
 				</div>
 			</div>
@@ -328,7 +341,7 @@
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
-			<div class="list_repeat_action" v-if="item.need.status!='已关闭'">
+			<div class="list_repeat_action" v-if="item.need.status!='已关闭'" :class="item.need.enable!=1?'gl_inProcess':''">
 				<span @click='goHelp($event,item)'>去帮助</span>
 			</div>
 		</div>

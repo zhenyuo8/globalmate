@@ -16,7 +16,7 @@
       background: #fff;
       border-radius: 4px;
       flex: 1;
-      height: 80px;
+      height: 98px;
       border: 1px solid #00adff;
       border-radius: 4px;
       display: flex;
@@ -320,13 +320,11 @@ export default {
         		 for(var i=0,len=files.length;i<len;i++){
                     var file_name=files[i].name;
                     !function(i){
-                        _this.previewImage(files[i],function(imgsrc){
-                            let imgEle=document.createElement('img');
-                            imgEle.src=imgsrc;
-                            $('#'+id).find('img').attr('src',imgsrc);
-                            $('#'+id).find('img').attr('data-src',imgsrc);
-                            $('#'+id).find('img').css('display','inline-block');
-                        });
+                        // _this.previewImage(files[i],function(imgsrc){
+                        //     let imgEle=document.createElement('img');
+                        //     imgEle.src=imgsrc;
+                        //
+                        // });
                     }(i);
                 }
                 _this.fileUploader.start();
@@ -347,6 +345,9 @@ export default {
            });
            this.fileUploader.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
+               $('#'+id).find('img').attr('src',_this.headerImgae);
+               $('#'+id).find('img').attr('data-src',_this.headerImgae);
+               $('#'+id).find('img').css('display','inline-block');
            });
            this.fileUploader.init();
         },
@@ -381,18 +382,36 @@ export default {
                 }
                 postData.push(obj);
             }
-            this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,{}).then((res)=>{
-                if(res.data.success){
-                    setTimeout(()=>{
-                        this.loadingShow=true;
-                        window.history.go(-1);
-                    },1500);
-                }else{
-                    this.showTipsText=e.msg||"";
-                 }
-            }).catch((e)=>{
-                console.log(e);
-            });
+            if(postData.length==1){
+                this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                    if(res.data.success){
+                        setTimeout(()=>{
+                            this.loadingShow=true;
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            window.history.go(-1);
+                        },1500);
+                    }else{
+                        this.showTipsText=e.msg||"";
+                     }
+                }).catch((e)=>{
+                    console.log(e);
+                });
+            }else{
+                this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,JSON.stringify(postData)).then((res)=>{
+                    if(res.data.success){
+                        setTimeout(()=>{
+                            this.loadingShow=true;
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            window.history.go(-1);
+                        },1500);
+                    }else{
+                        this.showTipsText=e.msg||"";
+                     }
+                }).catch((e)=>{
+                    console.log(e);
+                });
+            }
+
         }
 
     },
