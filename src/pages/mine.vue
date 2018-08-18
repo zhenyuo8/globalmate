@@ -147,11 +147,6 @@ export default {
                 arrow: true,
                 mineType: 'solove'
             }, {
-                title: '我的评论',
-                text: '',
-                arrow: true,
-                mineType: 'comments'
-            }, {
                 title: '我的朋友',
                 text: '',
                 arrow: true,

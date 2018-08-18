@@ -234,7 +234,8 @@ export default {
 				let temp=mess[i];
 				this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+mess[i].id+'?token='+this.$route.query.token,{}).then((res)=>{
 					if(res.data.success){
-						this.friendsIdList.push(res.data.data.id)
+						this.friendsIdList.push(res.data.data.id);
+						console.log(this.friendsIdList,999999);
 					}
 					this.getContact()
 	            }).catch((e)=>{

@@ -155,17 +155,9 @@
             <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
                 <p>推送名单:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
-                    <div class="">
-                        <img src="../assets/images/1.jpeg" alt="">
-                        <span>SuperMan</span>
-                    </div>
-                    <div class="">
-                        <img src="../assets/images/2.jpeg" alt="">
-                        <span>泰迪</span>
-                    </div>
-                    <div class="">
-                        <img src="../assets/images/3.jpg" alt="">
-                        <span>毛毛虫</span>
+                    <div class="" v-for="items in item.pushList">
+                        <img :src="items.userInfo.pic" alt="">
+                        <span>{{items.userInfo.nikename}}</span>
                     </div>
                 </div>
             </div>
@@ -182,7 +174,7 @@
             <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
                 <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">重新编辑</span>
                 <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">完成</span>
-                <span class="share" @click='evaluate($event,item)'>分享到</span>
+                <!-- <span class="share" @click='evaluate($event,item)'>分享到</span> -->
                 <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6?'can_be_evalute':''">评价</span>
             </div>
             <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
@@ -283,21 +275,22 @@ export default {
     			e.preventDefault();
     			event.stopPropagation();
     			e.cancelBubble=true;
-            if(item.need.enable2=6&&item.need.enable!=5){
+            if(item.need.enable==2||item.need.enable==5){
+                this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
+                    'needId':item.need.id,
+                    'action':'coplete'
+                }).then(res=>{
+
+                }).catch(e=>{
+                    console.log(e);
+                })
+            }else{
                 this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
                 setTimeout(()=>{
                     this.showTipsText=''
                 },2000);
                 return;
             }
-            this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
-                'needId':item.need.id,
-                'action':'coplete'
-            }).then(res=>{
-            }).catch(e=>{
-                console.log(e);
-            })
-
         },
         evaluate(e,item){
             	e=e?e:window.event;
@@ -331,16 +324,40 @@ export default {
                 }
             });
         },
+        getPushItemInfo(data,callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.providerId+'?token='+this.$route.query.token,{}).then((res)=>{
+                if(res.data.success){
+                    data.userInfo=res.data.data;
+                    callback&&callback(data);
+                }else{
+                    callback&&callback(data);
+                }
+            }).catch(()=>{
+                callback&&callback(data);
+            })
+        },
         getPushItem(data,callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
+            data.pushList=[]
             this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
                 if(res.data.success){
-                    data.pushList=res.data.data;
-                    callback&&callback(data)
+                    console.log(res.data.data);
+                    if(res.data.data&&res.data.data.length!=0){
+                        var nowData=res.data.data,tempNow=[];
+                        for(var i=0;i<nowData.length;i++){
+                            this.getPushItemInfo(nowData[i],function (result) {
+                                data.pushList.push(result);
+                                callback&&callback(data)
+                            });
+                        }
+                    }else {
+                        callback&&callback(data)
+                    }
                 }else{
-                    callback&&callback(data)
+
                 }
             }).catch(()=>{
                 callback&&callback(data)
@@ -393,8 +410,8 @@ export default {
                                      default:
 
                                  }
-                                 console.log(data[i]);
                                  this.getPushItem(data[i],function (result) {
+                                     console.log(result);
                                       _this.myAssistList.push(result)
                                  })
 

@@ -46,7 +46,7 @@ import loading from '../components/loading.vue'
                     evaExt2:''
                 };
 
-    			this.axios.put(this.apiHost+'/globalmate/rest/evaluate/add/sys'+'?token='+this.$route.query.token,postData).then((res)=>{
+    			this.axios.post(this.apiHost+'/globalmate/rest/evaluate/add/sys'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
                         setTimeout(()=>{
                             this.loadingShow=false;
