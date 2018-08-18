@@ -484,11 +484,14 @@ export default {
         loadDataEdit(id){
             let _this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
+            this.listRepeat=[];
             this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){
                     let data=res.data.data;
+
+                    this.listRepeatProcess();
                     this.myReward.text=data.conceretNeed.rewardAmount;
                     this.title.text=data.conceretNeed.title;
                     this.listRepeat.forEach(function (item,index) {
@@ -500,10 +503,10 @@ export default {
                             item.text=data.conceretNeed.city;
                         }
                         if(item.componentKey=='startTime'&&data.conceretNeed.startTime){
-                            item.text=this.moment(data.conceretNeed.startTime).format('YYYY-MM-DD');
+                            item.text=_this.moment(data.conceretNeed.startTime).format('YYYY-MM-DD');
                         }
                         if(item.componentKey=='endTime'&&data.conceretNeed.endTime){
-                            item.text=this.moment(data.conceretNeed.endTime).format('YYYY-MM-DD');
+                            item.text=_this.moment(data.conceretNeed.endTime).format('YYYY-MM-DD');
                         }
                         if(data.conceretNeed.description){
                             _this.$el.querySelector('.main_decription_area textarea').value=data.conceretNeed.description;
@@ -611,6 +614,8 @@ export default {
         this.show=false;
         this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
+        $('.repeat_content input').val('');
+        $('.main_decription_area textarea').val('');
         if(this.$route.query.mode&&this.$route.query.mode=='MODIFY'){
             this.isEditType=true;
             this.loadDataEdit(this.$route.query.id);

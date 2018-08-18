@@ -415,13 +415,9 @@ export default {
                                      default:
 
                                  }
-                                 console.log(i);
                                  this.getPushItem(data[i],function (result) {
-                                     console.log(result);
                                       _this.myAssistList.push(result);
-                                      console.log(_this.myAssistList);
                                  })
-
                              }
                          }
                          this.loadingShow=false;
@@ -462,11 +458,9 @@ export default {
            window.localStorage.setItem('OPENID',this.openId);
        }
        this.getToken(this.loadData);
-    //    this.loadData();
    },
    created(){
        this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
-
    }
 
 }

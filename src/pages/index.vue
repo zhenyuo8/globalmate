@@ -213,7 +213,7 @@
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
                  var isIdentify=window.localStorage.getItem('IDENTIFY_YET_glohelp');
-                 if(!isIdentify){
+                 if(isIdentify){
                      this.showTipsText='请您先完成身份认证!';
                      setTimeout(()=>{
                          this.showTipsText='';
