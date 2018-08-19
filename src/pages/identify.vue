@@ -398,6 +398,7 @@ export default {
                     console.log(e);
                 });
             }else{
+                console.log(postData);
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
                         this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';

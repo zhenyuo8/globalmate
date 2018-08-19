@@ -70,13 +70,13 @@
 	}
 	.request_action{
 		position: absolute;
-		right: 0.4rem;
+		right: 0.2rem;
 		top: 50%;
 	}
 	.request_action span{
 		font-size: 14px;
 		color: #fff;
-		padding: 4px .12rem;
+		padding: .16rem .32rem;
 		border-radius: 2px;
 		margin-left: 0.2rem;
 		&.accept{
@@ -171,7 +171,32 @@ export default {
 			e.preventDefault();
 			event.stopPropagation();
 			e.cancelBubble=true;
-			console.log(item);
+			YYIMChat.addRosterItem(item.id);
+			setTimeout(()=>{
+				this.getFriendsInIM()
+			},1000)
+			this.apiHost=CONFIG[__ENV__].apiHost;
+			this.axios.get(this.apiHost+'/globalmate/rest/userRelation/addFriend?token='+this.$route.query.token+'&targetUserId='+item.id,{
+				targetUserId:item.id
+			}).then((res)=>{
+				if(res.data.success){
+					this.getFriendsInGlohelp();
+				}
+			}).catch((e)=>{
+
+			});
+		},
+		getFriendsInGlohelp(){
+			this.apiHost=CONFIG[__ENV__].apiHost;
+			this.axios.get(this.apiHost+'/globalmate/rest/userRelation/getFriends?token='+this.$route.query.token+'&userId='+this.CURRENTUSER.id,{
+				userId:this.CURRENTUSER.id
+			}).then((res)=>{
+				if(res.data.success){
+					console.log(res.data,11111);
+				}
+			}).catch((e)=>{
+
+			});
 		},
 		toChatPage(item){
 			this.$router.push({
@@ -225,7 +250,7 @@ export default {
 	            })
 			}
 		},
-		processFriendsList(friends){
+		processFriendsList(friends,callback){
 			this.apiHost=CONFIG[__ENV__].apiHost;
 			let mess=friends;
 			this.friends=[];
@@ -237,18 +262,19 @@ export default {
 						this.friendsIdList.push(res.data.data.id);
 						console.log(this.friendsIdList,999999);
 					}
-					this.getContact()
+
 	            }).catch((e)=>{
 
 	            })
 			}
+			this.getContact()
 		},
 		getFriendsInIM(){
 			let _this=this;
 			YYIMChat.getRosterItems({
 				success: function(data){
 					if(data){
-						_this.processFriendsList(JSON.parse(data));
+						_this.processFriendsList(JSON.parse(data),_this.getContact);
 					}
 				},
 				error: function(err){
@@ -478,8 +504,10 @@ export default {
     },
     activated(){
 		this.initIM();
+		this.CURRENTUSER=window.localStorage.getItem('CURRENTUSER')?JSON.parse(window.localStorage.getItem('CURRENTUSER')):{}
 		setTimeout(()=>{
-			this.getFriendsInIM()
+			this.getFriendsInIM();
+			this.getFriendsInGlohelp();
 			// this.getContact()
 		},1000)
 		if(window.localStorage.getItem('MESSAGELIST')){
