@@ -7,7 +7,7 @@
         <!-- 虚拟键盘换行  搜索 -->
         <form onsubmit="return false">
             <input type="search" class="search-input"
-                   placeholder="搜索"
+                   :placeholder="$t('button.search')"
                    :disabled="disabled"
                    v-focus="focusStatus"
                    @keyup.enter ="getChangeVal"

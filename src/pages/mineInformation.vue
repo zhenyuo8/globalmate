@@ -223,7 +223,7 @@
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
-                    <span class="mineInformation_call">服务值 0</span>
+                    <span class="mineInformation_call">{{$t('formTitle.serviceValue')}} 0</span>
                 </div>
             </div>
             <div class="mineInformation_chart_button"  v-show="isOthers">
@@ -240,7 +240,7 @@
         </div>
         <div class="mineInformation_school">
             <div class="mineInformation_school_title">
-                我的圈子
+                {{$t('formTitle.mycircle')}}
             </div>
             <div class="mineInformation_school_content">
                 <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
@@ -254,20 +254,20 @@
         </div>
         <div class="mineInformation_hobby">
             <div class="mineInformation_hobby_title">
-                个人特质
+                {{$t('formTitle.pfrofile')}}
             </div>
             <div class="mineInformation_hobby_content">
                 <div class="mineInformation_hobby_love">
-                    <span class="title">兴趣爱好 ：{{hobby}}</span>
+                    <span class="title">{{$t('formTitle.intrest')}} ：{{hobby}}</span>
                 </div>
                 <div class="mineInformation_hobby_offer">
-                    <span class="title">愿意提供的帮助 ：{{helpAvailable}}</span>
+                    <span class="title">{{$t('formTitle.helpAvailable')}} ：{{helpAvailable}}</span>
                 </div>
             </div>
         </div>
         <div class="mineInformation_comment">
             <div class="mineInformation_comment_title">
-                别人眼中的我
+                {{$t('formTitle.commentsme')}}
             </div>
             <div class="mineInformation_comment_content">
                 <p v-if="tipInOther.length==0">暂无评价</p>

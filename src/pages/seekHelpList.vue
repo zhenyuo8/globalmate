@@ -174,7 +174,7 @@
     		margin-top: 10px;
     	}
     	 .rightIn_form .name p label{
-    		width: 1rem;
+    		width:30%;
     		text-align: justify;
     		text-justify:inter-ideograph;
     		text-align-last:justify;
@@ -353,13 +353,13 @@
 				<div class="name_user">
 					<span class="name">{{item.need.userName}}</span>
 					<span class="type">{{item.conceretNeed.tag}}</span>
-					<span class="type">悬赏金额(￥) <i style="color:red">{{item.conceretNeed.rewardAmount}}</i></span>
+					<span class="type">{{$t('formTitle.reward')}}(￥) <i style="color:red">{{item.conceretNeed.rewardAmount}}</i></span>
 				</div>
 				<div class="status_user" :class="'status_'+item.need.enable">
 					<span>{{item.need.status}}</span>
 				</div>
 			</div>
-			<p class="list_repeat_title">标题：{{item.conceretNeed.title}}</p>
+			<p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
 			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
                 <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
@@ -391,22 +391,22 @@
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p>
-					<label for="countrysearch" class="country" data-icon="u">国家</label>&nbsp:&nbsp&nbsp
-					<input id="countrysearch" name="countrysearch" required="required" type="text" placeholder="国家" />
+					<label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
+					<input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" />
 				</p>
 				<p>
-					<label for="citysearch" class="city" data-icon="u">城市</label>&nbsp:&nbsp&nbsp
-					<input id="citysearch" name="citysearch" required="required" type="text" placeholder="城市" />
+					<label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
+					<input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" />
 				</p>
                 <p @click='selectHelpType'>
-                    <label for="typesearch" class="type" data-icon="u">类型</label>&nbsp:&nbsp&nbsp
-					<input id="typesearch" name="typesearch" required="required" type="text"  placeholder='请选择' readonly='readonly' disabled='disabled'  :value="selectHelpTypeValue" />
+                    <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp:&nbsp&nbsp
+					<input id="typesearch" name="typesearch" required="required" type="text"  :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled'  :value="selectHelpTypeValue" />
                 </p>
 			</div>
         </form>
         <div class="action">
-            <span class="cancel" @click='hideMask'>取消</span>
-            <span class="confirm" @click='confirmSearch'>确认</span>
+            <span class="cancel" @click='hideMask'>{{$t('button.cancel')}}</span>
+            <span class="confirm" @click='confirmSearch'>{{$t('button.confirm')}}</span>
         </div>
         <div :class="selectFlag?'select_in':'select_out'">
 			<ul class="list_ul">
@@ -416,8 +416,8 @@
 				</li>
 			</ul>
 			<div class="buttom_action" v-show="selectFlag">
-				<span  class="cancel" @click='cancel'>取消</span>
-				<span class="confirm" @click='confirm1'>确定</span>
+				<span  class="cancel" @click='cancel'>{{$t('button.cancel')}}</span>
+				<span class="confirm" @click='confirm1'>{{$t('button.confirm')}}</span>
 			</div>
 		</div>
    </div>
@@ -447,7 +447,7 @@ export default {
           selectHelpTypeValue:'',
           type_list:[],
           hasSelect_list:[],
-          list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
+          list:[],
           searchContent:{
               type:'',
               where:'',
@@ -542,6 +542,7 @@ export default {
         },
         searchCallBack(data){
             this.msg=!this.msg;
+            this.list=[this.$t('formName.study'),this.$t('formName.textbook'),this.$t('formName.formality'),this.$t('formName.exchange'),this.$t('formName.medical'),this.$t('formName.carry'),this.$t('formName.rent'),this.$t('formName.accompany'),this.$t('formName.daigou'),this.$t('formName.other')]
             this.rightIn=!this.rightIn;
         },
         hideMask(){

@@ -726,7 +726,7 @@ export default {
 		color: #fff;
 	}
 	.personalFile .buttom_action .cancel{
-		background: rgb(153, 153, 153);
+		background: #b2b2b2;
 	}
 	.personalFile .buttom_action .confirm{
 		background: rgb(41, 182, 246);

@@ -158,22 +158,22 @@
     <div class="list_warp">
         <div class="list_repeat" v-for="(item,index) in myAssistList">
             <div class="list_repeat_content" @click='showDetail(item)'>
-                <p>事物标签: {{item.conceretNeed.tag}}</p>
+                <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
                 <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
-                <p>事物内容: {{item.conceretNeed.title}}</p>
+                <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
                 <p class="gl_status">{{item.need.status}}</p>
             </div>
             <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
-                <p>推送名单:</p>
+                <p>{{$t('formTitle.pushTitle')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
-                    <div class="" v-for="items in item.pushList">
+                    <div class="" v-for="items in item.pushList" @click='goChat(item,items)'>
                         <img :src="items.userInfo.pic" alt="">
                         <span>{{items.userInfo.nikename}}</span>
                     </div>
                 </div>
             </div>
             <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
-                <p>提供帮助方:</p>
+                <p>{{$t('formTitle.helpMan')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
                     <div class="">
                         <img src="../assets/images/1.jpeg" alt="">
@@ -183,10 +183,10 @@
                 </div>
             </div>
             <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
-                <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">重新编辑</span>
-                <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">完成</span>
+                <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
+                <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
                 <!-- <span class="share" @click='evaluate($event,item)'>分享到</span> -->
-                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6?'can_be_evalute':''">评价</span>
+                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
             </div>
             <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
                 <span>追加评论</span>
@@ -212,6 +212,7 @@
 import CONFIG from '../config/config.js'
 import loading from '../components/loading.vue'
 import tips from '../components/tips.vue'
+import { MessageBox } from 'mint-ui';
 export default {
     'name': 'myAssist',
     components: {
@@ -281,6 +282,18 @@ export default {
     			e.preventDefault();
     			event.stopPropagation();
     			e.cancelBubble=true;
+
+        //     MessageBox({
+        //        title: 'Notice',
+        //        message: '确定当前求助已完成?',
+        //        confirmButtonText:this.$t('button.confirm'),
+        //        cancelButtonText:this.$t('button.cancel'),
+        //        showCancelButton: true
+        //    })
+        //     MessageBox.confirm().then(action => {
+        //         console.log(action);
+        //     });
+        //     return
             if(item.need.enable==2||item.need.enable==5){
                 this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
                     'needId':item.need.id,
@@ -297,6 +310,18 @@ export default {
                 },2000);
                 return;
             }
+        },
+        goChat(item,items){
+            this.$router.push({
+                path: 'im',
+                query: {
+                    'token': this.$route.query.token,
+                    'title': items.userInfo.nikename,
+                    'id': item.need.id,
+                    'toChartUser':items.userInfo.id,
+                    'toChartId':items.userInfo.id,
+                }
+            });
         },
         evaluate(e,item){
             	e=e?e:window.event;

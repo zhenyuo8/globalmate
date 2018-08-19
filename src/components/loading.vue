@@ -20,7 +20,7 @@
 			    <div class="circle4"></div>
 			  </div>
 		</div>
-		<p>加载中...</p>
+		<p>{{$t('formTitle.loading')}}</p>
 	</div>
 </template>
 

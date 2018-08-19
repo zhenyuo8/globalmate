@@ -11,6 +11,10 @@ export default{
         'refuse':'拒绝',
         'confirm':'确定',
         'cancel':'取消',
+        'search':'搜索',
+        'evaluate':'评价',
+        'finished':'完成',
+        'edit':'重新编辑'
     },
     formName:{
         'study':'学习互助',
@@ -33,7 +37,7 @@ export default{
         reward:'我的悬赏',
         head:'标题',
         inputPlace:'请输入',
-        selectPlace:'请输入',
+        selectPlace:'请选择',
         headerTips:'简单描述求助内容',
         descriptionTips:'请描述细节',
         personaTitle:'个人资料',
@@ -48,7 +52,18 @@ export default{
         schoolname:'学校名称',
         schooldate:'入学年份',
         major:'所在专业',
-        schoolclass:'所在班级'
+        schoolclass:'所在班级',
+        feedTitle:'您的意见是我们平台发展最宝贵的助力:',
+        feedTips:'请输入您的宝贵意见!',
+        serviceValue:'服务质',
+        mycircle:'我的圈子',
+        commentsme:'别人眼中的我',
+        loading:'加载中...',
+        raty:'整体评分',
+        evaluateTips:'对她/他的评价',
+        score:'分',
+        pushTitle:'推送名单',
+        helpMan:'提供帮助放'
     },
     personaPage:{
         edit:'编辑',
@@ -61,7 +76,8 @@ export default{
         passport:'护照',
         studentcard:'学生证',
         selectidentify:'请选择认证方式',
-        lessType:'请至少选择一项认证方式!'
+        lessType:'请至少选择一项认证方式!',
+
     },
     messagePage:{
         friends:'好友',

@@ -38,7 +38,7 @@
                 <li><a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a></li>
             </ul>
         </div>
-        <div class="buttom_action" v-show="onload">
+        <div class="buttom_action">
             <ul>
                 <li class="need_help" @click="seekHelp">{{$t('button.myPublished')}}</li>
                 <li @click='offer'>{{$t('button.OthersPublished')}}</li>
@@ -92,7 +92,6 @@
                 hasReceiveMessage:false,
                 messageList:[],
                 loadingShow:true,
-                onload:false,
 			}
 		},
         computed: {
@@ -423,75 +422,75 @@
         activated(){
             document.title='Glohelp';
             this.getToken(this.getCurrentUser);
-            this.mainmenu=[
-                {
-                    'title':this.$t('formName.study'),
-                    'key':'learnco',
-                    'type':'assist',
-                    'form':'assist',
-                    'icon':'icon-pen'
-                },{
-                    'title': this.$t('formName.textbook'),
-                    'key': 'other',
-                    'type': 'assist',
-                    'form':'other',
-                    'icon':'icon-book'
-                },{
-                    'title': this.$t('formName.formality'),
-                    'key': 'other',
-                    'type': 'assist',
-                    'form':'other',
-                     'icon':'icon-Document_2_yinzhang'
-                },{
-                    'title': this.$t('formName.exchange'),
-                    'key': 'other',
-                    'type': 'assist',
-                    'form':'other',
-                     'icon':'icon-coin-yen'
-                },{
-                    'title': this.$t('formName.medical'),
-                    'key': 'other',
-                    'type': 'assist',
-                    'form':'other',
-                     'icon':'icon-local_hospital'
-                },{
-                    'title': this.$t('formName.carry'),
-                    'key': 'carry',
-                    'type': 'assist',
-                    'form':'carryAssist',
-                     'icon':'icon-flight_takeoff'
-                },{
-                    'title': this.$t('formName.rent'),
-                    'key': 'other',
-                    'type': 'assist',
-                    'form':'other',
-                     'icon':'icon-office'
-                }, {
-                    'title': this.$t('formName.accompany'),
-                    'key': 'accompany',
-                    'type': 'assist',
-                    'form':'accompany',
-                     'icon':'icon-pacman'
-                },{
-                    'title': this.$t('formName.daigou'),
-                    'key': 'buy',
-                    'type': 'assist',
-                    'form':'aassist',
-                     'icon':'icon-icon-announce'
-                }, {
-                    'title': this.$t('formName.other'),
-                    'key': 'assist',
-                    'type': 'assist',
-                    'form':'other',
-                     'icon':'icon-more-horizontal'
-                }
-            ]
+
 
             setTimeout(()=>{
                 this.loadingShow=false;
             },1500);
             setTimeout(()=>{
-                this.onload=true;
+                this.mainmenu=[
+                    {
+                        'title':this.$t('formName.study'),
+                        'key':'learnco',
+                        'type':'assist',
+                        'form':'assist',
+                        'icon':'icon-pen'
+                    },{
+                        'title': this.$t('formName.textbook'),
+                        'key': 'other',
+                        'type': 'assist',
+                        'form':'other',
+                        'icon':'icon-book'
+                    },{
+                        'title': this.$t('formName.formality'),
+                        'key': 'other',
+                        'type': 'assist',
+                        'form':'other',
+                         'icon':'icon-Document_2_yinzhang'
+                    },{
+                        'title': this.$t('formName.exchange'),
+                        'key': 'other',
+                        'type': 'assist',
+                        'form':'other',
+                         'icon':'icon-coin-yen'
+                    },{
+                        'title': this.$t('formName.medical'),
+                        'key': 'other',
+                        'type': 'assist',
+                        'form':'other',
+                         'icon':'icon-local_hospital'
+                    },{
+                        'title': this.$t('formName.carry'),
+                        'key': 'carry',
+                        'type': 'assist',
+                        'form':'carryAssist',
+                         'icon':'icon-flight_takeoff'
+                    },{
+                        'title': this.$t('formName.rent'),
+                        'key': 'other',
+                        'type': 'assist',
+                        'form':'other',
+                         'icon':'icon-office'
+                    }, {
+                        'title': this.$t('formName.accompany'),
+                        'key': 'accompany',
+                        'type': 'assist',
+                        'form':'accompany',
+                         'icon':'icon-pacman'
+                    },{
+                        'title': this.$t('formName.daigou'),
+                        'key': 'buy',
+                        'type': 'assist',
+                        'form':'aassist',
+                         'icon':'icon-icon-announce'
+                    }, {
+                        'title': this.$t('formName.other'),
+                        'key': 'assist',
+                        'type': 'assist',
+                        'form':'other',
+                         'icon':'icon-more-horizontal'
+                    }
+                ]
             },500);
         },
 
@@ -665,7 +664,17 @@
         margin: 15px auto 15px;
     }
 
-     .mainmenu li a span{ display:block; height:30px; line-height:30px;background-color:#FFF; color: #999; font-size:12px; }
+     .mainmenu li a span{
+         display:block;
+         height:30px;
+         line-height:30px;
+         background-color:#FFF;
+         color: #999;
+         font-size:12px;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         overflow: hidden;
+      }
 
      .mainmenu li:nth-child(8n+1) b{
           background: -webkit-linear-gradient(94.5deg,rgba(251,110,109,1),rgba(212,79,64,1)); /* Safari 5.1 - 6.0 */

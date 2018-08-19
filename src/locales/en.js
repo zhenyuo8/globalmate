@@ -10,7 +10,11 @@ export default{
         'agree':'Agree',
         'refuse':'Refuse',
         'confirm':'Confirm',
-        'cancel':'Cancel'
+        'cancel':'Cancel',
+        'search':'Search',
+        'evaluate':'Evaluate',
+        'finished':'Finished',
+        'edit':'Edit'
     },
     formName:{
         'study':'Study',
@@ -50,7 +54,16 @@ export default{
          major:'Major',
          schoolclass:'Class',
          feedTitle:'Your feedback is highly valued to our improvement:',
-         feedTips:'Please tell us here!'
+         feedTips:'Please tell us here!',
+         serviceValue:'Contribution',
+         mycircle:'My Circle',
+         commentsme:'Comments on me',
+         loading:'Loading ...',
+         raty:'Rating',
+         evaluateTips:'Comments on him/her',
+         score:'scores',
+         pushTitle:'Push List',
+         helpMan:'Supplier'
 
     },
      personaPage:{

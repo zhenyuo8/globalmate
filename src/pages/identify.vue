@@ -8,7 +8,7 @@
       top: 0;
   }
   .identify_body{
-      width: 84%;
+      width: 90%;
       margin: 10px auto;
       display: flex;
   }
@@ -16,7 +16,7 @@
       background: #fff;
       border-radius: 4px;
       flex: 1;
-      height: 98px;
+      height: 92px;
       border: 1px solid #00adff;
       border-radius: 4px;
       display: flex;
@@ -138,14 +138,14 @@
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
-                <div class="identify_face_page" id='id_face' @click="uploaderInit('id_face')">
+                <div class="identify_face_page" id='id_face'>
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_opposite' @click="uploaderInit('id_opposite')">
+                <div class="identify_opposite_page" id='id_opposite' >
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                        <span class="icon-camera2"></span>
@@ -159,14 +159,14 @@
         </div>
         <div class="" v-show="showSTUDENTID">
             <div class="identify_body STUDENTID">
-                <div class="identify_face_page" id='id_student' @click="uploaderInit('id_student')">
+                <div class="identify_face_page" id='id_student' >
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_student_opposite' @click="uploaderInit('id_student_opposite')">
+                <div class="identify_opposite_page" id='id_student_opposite' >
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                        <span class="icon-camera2"></span>
@@ -181,7 +181,7 @@
         </div>
         <div class="" v-show="showPASSPORT">
             <div class="identify_body PASSPORT">
-                <div class="identify_face_page" id='id_passport' @click="uploaderInit('id_passport')">
+                <div class="identify_face_page" id='id_passport'>
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                        <span class="icon-camera2"></span>
@@ -189,7 +189,7 @@
                     </div>
 
                 </div>
-                <div class="identify_opposite_page" id='iid_passport_opposite' @click="uploaderInit('id_passport_opposite')">
+                <div class="identify_opposite_page" id='id_passport_opposite'>
                     <img src="" alt="">
                     <div class="" style="margin:auto">
                        <span class="icon-camera2"></span>
@@ -219,7 +219,6 @@ export default {
         return {
             title:'',
             identifyType:['IDCARD'],
-            onloadYet:false,
             showIDCARD:true,
             showSTUDENTID:false,
             showPASSPORT:false,
@@ -258,32 +257,37 @@ export default {
                 this.identifyType.push(type);
                  $(e.target).addClass('select_class')
             }
-        },
-
-        uploaderInit(id){
-            this.initUploader(id)
+            if(type=='STUDENTID'){
+                if(!this['id_student']){
+                    this.initID('id_student','id_student_opposite')
+                }
+            }else if(type=='PASSPORT'){
+                if(!this['id_student']){
+                    this.initID('id_passport_opposite','id_passport_opposite')
+                }
+            }
         },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
-        if(file.type=='image/gif'){
-            var fr = new mOxie.FileReader();
-            fr.onload = function(){
-                callback(fr.result);
-                fr.destroy();
-                fr = null;
+            if(file.type=='image/gif'){
+                var fr = new mOxie.FileReader();
+                fr.onload = function(){
+                    callback(fr.result);
+                    fr.destroy();
+                    fr = null;
+                }
+                fr.readAsDataURL(file.getSource());
+            }else{
+                var preloader = new mOxie.Image();
+                preloader.onload = function() {
+                    preloader.downsize( 100, 100 );
+                    var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
+                    callback && callback(imgsrc);
+                    preloader.destroy();
+                    preloader = null;
+                };
+                preloader.load( file.getSource() );
             }
-            fr.readAsDataURL(file.getSource());
-        }else{
-            var preloader = new mOxie.Image();
-            preloader.onload = function() {
-                preloader.downsize( 100, 100 );
-                var imgsrc = preloader.type=='image/jpeg' ? preloader.getAsDataURL('image/jpeg',80) : preloader.getAsDataURL();
-                callback && callback(imgsrc);
-                preloader.destroy();
-                preloader = null;
-            };
-            preloader.load( file.getSource() );
-        }
         },
 		initUploader(id){
             let _this=this;
@@ -350,6 +354,116 @@ export default {
                $('#'+id).find('img').css('display','inline-block');
            });
            this.fileUploader.init();
+        },
+        initID(id1,id2){
+            let _this=this;
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            let ossMap={};
+            this.filesHasUpload=[];
+            this.multipart_params={
+                'key':'',
+                'policy':'',
+                'OSSAccessKeyId':'',
+                'success_action_status':'',
+                'signature':''
+            }
+            this.axios.get(this.apiHost+'/globalmate/rest/file/ossPolicy'+'?token='+this.$route.query.token,'').then(res=>{
+                if(res.data.success){
+                    ossMap.accessid=res.data.data.accessid;
+                    ossMap.policy=res.data.data.policy;
+                    ossMap.signature=res.data.data.signature;
+                    ossMap.key=res.data.data.dir;
+                    ossMap.host=res.data.data.host;
+                    ossMap.success_action_status=200;
+                }
+            }).catch(e=>{
+
+            })
+            this.id1=new plupload.Uploader({
+                runtimes : 'html5,flash,silverlight,html4',
+                browse_button : id1, //触发文件选择对话框的按钮，为那个元素id
+                url : 'http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/', //服务器端的上传页面地址
+                flash_swf_url : '../libs/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+                silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+            });
+            this.id1.bind('FilesAdded',function(uploader,files){
+        		 for(var i=0,len=files.length;i<len;i++){
+                    var file_name=files[i].name;
+                    !function(i){
+                        // _this.previewImage(files[i],function(imgsrc){
+                        //     let imgEle=document.createElement('img');
+                        //     imgEle.src=imgsrc;
+                        //
+                        // });
+                    }(i);
+                }
+                _this.id1.start();
+	       });
+           this.id1.bind('BeforeUpload',function(up,file){
+               file.name=new Date().getTime()+'_'+file.name;
+               _this.multipart_params={
+                   'key':ossMap.key+'_'+file.name,
+                   'policy':ossMap.policy,
+                   'OSSAccessKeyId':ossMap.accessid,
+                   'success_action_status':'200',
+                   'signature':ossMap.signature
+               }
+               up.setOption({
+                   'url':ossMap.host,
+                   'multipart_params':_this.multipart_params,
+               })
+           });
+           this.id1.bind('FileUploaded',function(up,file,info){
+               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
+               $('#'+id1).find('img').attr('src',_this.headerImgae);
+               $('#'+id1).find('img').attr('data-src',_this.headerImgae);
+               $('#'+id1).find('img').css('display','inline-block');
+           });
+
+
+           this.id2=new plupload.Uploader({
+               runtimes : 'html5,flash,silverlight,html4',
+               browse_button : id2, //触发文件选择对话框的按钮，为那个元素id
+               url : 'http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/', //服务器端的上传页面地址
+               flash_swf_url : '../libs/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+               silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+           });
+           this.id2.bind('FilesAdded',function(uploader,files){
+                for(var i=0,len=files.length;i<len;i++){
+                   var file_name=files[i].name;
+                   !function(i){
+                       // _this.previewImage(files[i],function(imgsrc){
+                       //     let imgEle=document.createElement('img');
+                       //     imgEle.src=imgsrc;
+                       //
+                       // });
+                   }(i);
+               }
+               _this.id2.start();
+          });
+          this.id2.bind('BeforeUpload',function(up,file){
+              file.name=new Date().getTime()+'_'+file.name;
+              _this.multipart_params={
+                  'key':ossMap.key+'_'+file.name,
+                  'policy':ossMap.policy,
+                  'OSSAccessKeyId':ossMap.accessid,
+                  'success_action_status':'200',
+                  'signature':ossMap.signature
+              }
+              up.setOption({
+                  'url':ossMap.host,
+                  'multipart_params':_this.multipart_params,
+              })
+          });
+          this.id2.bind('FileUploaded',function(up,file,info){
+              _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
+              $('#'+id2).find('img').attr('src',_this.headerImgae);
+              $('#'+id2).find('img').attr('data-src',_this.headerImgae);
+              $('#'+id2).find('img').css('display','inline-block');
+          });
+
+           this.id1.init();
+           this.id2.init();
         },
         submitData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -419,7 +533,7 @@ export default {
 
     },
     activated(){
-
+        this.initID('id_face','id_opposite');
     },
     watch:{
         'title':function (val,old) {
@@ -427,9 +541,6 @@ export default {
         }
     },
     created(){
-        setTimeout(()=>{
-            this.onloadYet=true;
-        },1000);
         this.loadData();
         this.title=this.$route.query.title;
     }

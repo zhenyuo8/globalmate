@@ -7,18 +7,18 @@
     			</div>
     			<div class="evaluate_score">
     				<div class="evaluate_title">
-    					整体评分
+    					{{$t('formTitle.raty')}}
     				</div>
     				<div class="evaluate_star" id='evaluate_star'>
     					<span v-for=" i in 5" class="icon-heart2" :index='i' @click='evaluateStar(i)'></span>
-    					<span class="evaluate_score_result">{{score}} 分</span>
+    					<span class="evaluate_score_result">{{score}}</span>
     				</div>
     			</div>
     		</div>
     		<div class="middle">
-    			<textarea  placeholder='对她/他的评价' v-model='textareaVal'></textarea>
+    			<textarea  :placeholder="$t('formTitle.evaluateTips')" v-model='textareaVal'></textarea>
     		</div>
-    		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>提交</button>
+    		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>{{$t('button.submit')}}</button>
         </div>
 
     </div>
@@ -106,8 +106,7 @@ import CONFIG from '../config/config.js'
 }
 .evaluate_score{
 	padding-left: .4rem;
-	height: 32px;
-	/*line-height: 32px;*/
+
 }
 .evaluate_title{
 	font-size: 14px;
@@ -145,9 +144,6 @@ import CONFIG from '../config/config.js'
     border-radius: 6px;
 }
 .evaluate_score_result{
-	font-size: 14px;
-	position: absolute;
-    right: -1rem;
-    top: 20px;
+	font-size: 20px;
 }
 </style>
