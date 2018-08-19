@@ -1,27 +1,27 @@
 <template>
     <div class="personalFile">
-		<h3>个人资料</h3>
+		<h3>{{$t('formTitle.personaTitle')}}</h3>
         <form class="personalFile_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p>
-					<label for="nicknamesignup" class="nickname" data-icon="u"><i class="gl_required_class">*</i>昵称</label>&nbsp:&nbsp&nbsp
-					<input id="nicknamesignup" name="nicknamesignup" required="required" type="text" placeholder="昵称" />
+					<label for="nicknamesignup" class="nickname" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.nikname')}}</label>&nbsp:&nbsp&nbsp
+					<input id="nicknamesignup" name="nicknamesignup" required="required" type="text" :placeholder="$t('formTitle.nikname')" />
 				</p>
 				<p>
-					<label for="truenamesignup" class="truename" data-icon="u"><i class="gl_required_class">*</i>真实姓名</label>&nbsp:&nbsp&nbsp
-					<input id="truenamesignup" name="truenamesignup" required="required" type="text" placeholder="真实姓名" />
+					<label for="truenamesignup" class="truename" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.name')}}</label>&nbsp:&nbsp&nbsp
+					<input id="truenamesignup" name="truenamesignup" required="required" type="text" :placeholder="$t('formTitle.name')" />
 				</p>
                 <p>
-					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>手机号码</label>&nbsp:&nbsp&nbsp
-					<input id="phonesignup" name="phonesignup" required="required" type="text" placeholder="手机号码" />
+					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.phone')}}</label>&nbsp:&nbsp&nbsp
+					<input id="phonesignup" name="phonesignup" required="required" type="text" :placeholder="$t('formTitle.phone')" />
 				</p>
 				<p>
-					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>所在国家</label>&nbsp:&nbsp&nbsp
-					<input id="countrysignup" name="countrysignup" required="required" type="text" placeholder="国家" />
+					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
+					<input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" />
 				</p>
 				<p>
-					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>所在城市</label>&nbsp:&nbsp&nbsp
-					<input id="citysignup" name="citysignup" required="required" type="text" placeholder="城市" />
+					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
+					<input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" />
 				</p>
 			</div>
 			<div class="image">
@@ -29,7 +29,7 @@
 					<img v-if="!headerImgae" class="icon-user image_span" src='../assets/images/icon.png' />
                     <img v-if="headerImgae" class='image_span' :src="headerImgae" alt="">
 					<!-- <span class="icon-user image_span"></span> -->
-					<button type="button" name="button">上传头像</button>
+					<button type="button" name="button">{{$t('formTitle.portrait')}}</button>
 				</div>
 			</div>
         </form>
@@ -42,22 +42,22 @@
                     </li>
                 </ul>
 				<!-- <span style="font-size:20px;">+</span> -->
-				<span style="color:#26a2ff"> + 教育经历</span>
+				<span style="color:#26a2ff"> + {{$t('formTitle.education')}}</span>
 			</div>
 		</div>
 		<div class="personalFile_hobby">
-			<span class="personalFile_hobby_title">个人特质</span>
+			<span class="personalFile_hobby_title">{{$t('formTitle.pfrofile')}}</span>
 			<p>
-				<label for=""><i class="gl_required_class">*</i>兴趣爱好:</label>
+				<label for=""><i class="gl_required_class">*</i>{{$t('formTitle.intrest')}}:</label>
 				<input id="hobbysignup" type="text" name="" value="" placeholder='请输入'>
 			</p>
 			<p id='' @click='selectHelpType'>
-				<label for=""><i class="gl_required_class">*</i>愿意提供的帮助:</label>
+				<label for=""><i class="gl_required_class">*</i>{{$t('formTitle.helpAvailable')}}:</label>
 				<input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled'  style='text-align:center'>
 			</p>
 		</div>
 		<div class="submitbtn" @click='submit'>
-			<button type="button" name="button">提交</button>
+			<button type="button" name="button">{{$t('button.submit')}}</button>
 		</div>
 		<div :class="selectFlag?'select_in':'select_out'">
 			<ul class="list_ul">
@@ -67,30 +67,30 @@
 				</li>
 			</ul>
 			<div class="buttom_action">
-				<span  class="cancel" @click='cancel'>取消</span>
-				<span class="confirm" @click='confirm'>确定</span>
+				<span  class="cancel" @click='cancel'>{{$t('button.cancel')}}</span>
+				<span class="confirm" @click='confirm'>{{$t('button.confirm')}}</span>
 			</div>
 		</div>
 		<div class="fillin_education" :class="educationFlag?'education_in':'education_out'" @click="hideThisModule($event)">
 			<form class="" action="" method="post" onsubmit='return false'>
 				<p>
-					<label for="schoolsignup" class="schoolname" data-icon="u">学校名称</label>&nbsp:&nbsp&nbsp
+					<label for="schoolsignup" class="schoolname" data-icon="u">{{$t('formTitle.schoolname')}}</label>&nbsp:&nbsp&nbsp
 					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p @click='openPicker' id="schooldatesignup_p">
-					<label for="schooldatesignup" class="schooldate" data-icon="u">入学年份</label>&nbsp:&nbsp&nbsp
+					<label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp:&nbsp&nbsp
 					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
 				</p>
 				<p>
-					<label for="schoolprofessionalsignup" class="professional" data-icon="u">所在专业</label>&nbsp:&nbsp&nbsp
+					<label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp:&nbsp&nbsp
 					<input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p>
-					<label for="schoolgradesignup" class="grade" data-icon="u">所在班级</label>&nbsp:&nbsp&nbsp
+					<label for="schoolgradesignup" class="grade" data-icon="u">{{$t('formTitle.schoolclass')}}</label>&nbsp:&nbsp&nbsp
 					<input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
                 <p class="confirm_add" v-if="!showEducationValue">
-                    <input type="button" value="确定" @click='addOneEducation()' />
+                    <input type="button" :value="$t('button.confirm')" @click='addOneEducation()' />
                 </p>
 			</form>
 		</div>
@@ -100,6 +100,8 @@
              type="date"
              :startDate="startDate"
              :endDate="endDate"
+             :cancelText="$t('button.cancel')"
+             :confirmText="$t('button.confirm')"
              @confirm="handleConfirm"
              v-model="pickerValue">
            </mt-datetime-picker>
@@ -113,7 +115,7 @@ import { DatetimePicker } from 'mint-ui';
 export default {
     data(){
         return{
-            list:['学习互助','教材','办手续','换汇','就医','帮带','租赁','陪玩','代购','其他'],
+            list:[this.$t('formName.study'),this.$t('formName.textbook'),this.$t('formName.formality'),this.$t('formName.exchange'),this.$t('formName.medical'),this.$t('formName.carry'),this.$t('formName.rent'),this.$t('formName.accompany'),this.$t('formName.daigou'),this.$t('formName.other')],
             selectFlag:false,
             type_list:[],
             hasSelect_list:[],
@@ -564,6 +566,7 @@ export default {
 		text-align: justify;
 		text-justify:inter-ideograph;
 		text-align-last:justify;
+        white-space: nowrap;
 	}
 	.personalFile_hobby p input{
 		width: 50%;
@@ -665,6 +668,10 @@ export default {
         box-sizing: border-box;
         border: 1px solid #eee;
         padding: 0 .2rem;
+    }
+    .personalFile .fillin_education form p label{
+        width: 24%;
+        text-align: left;
     }
     .personalFile .fillin_education form{
         width: 90%;

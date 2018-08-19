@@ -4,7 +4,6 @@ import index from '@/pages/index'
 import assist from '@/pages/assist'//帮代
 import mine from '@/pages/mine'//我的
 import mineInformation from '@/pages/mineInformation'//个人信息
-import mineInformationEdit from '@/pages/mineInformationEdit'//个人资料编辑
 import myAssist from '@/pages/myAssist'//我发布的
 import seekHelpList from '@/pages/seekHelpList'//求助列表
 import detail from '@/pages/detail'//详情页
@@ -15,10 +14,8 @@ import evaluate from '@/pages/evaluate'//求助详情页
 import feedback from '@/pages/feedback'//意见反馈
 import rankAll from '@/pages/rankAll'//排名
 import personalFile from '@/pages/personalFile'//个人资料
-import authorization from '@/pages/authorization'//授权
 import identify from '@/pages/identify' //身份验证
 import messageList from '@/pages/messageList' //身份验证
-import list from '@/pages/list' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -54,32 +51,14 @@ export default new Router({
         meta:{
             index:16
         }
-    },
-    {
-        path: '/mineInformationEdit',
-        name: 'mineInformationEdit',
-        component: mineInformationEdit,
-        meta:{
-            index:17
-        }
-    },
-    {
+    },{
         path: '/myAssist',
         name: 'myAssist',
         component: myAssist,
         meta:{
             index:10
         }
-    },
-    {
-        path: '/list',
-        name: 'list',
-        component: list,
-        meta:{
-            index:10
-        }
-    },
-    {
+    },{
         path: '/seekHelpList',
         name: 'seekHelpList',
         component: seekHelpList,
@@ -149,14 +128,6 @@ export default new Router({
         component: personalFile,
         meta:{
             index:18
-        }
-    },
-    {
-        path: '/authorization',
-        name: 'authorization',
-        component: authorization,
-        meta:{
-            index:19
         }
     },{
         path: '/identify',

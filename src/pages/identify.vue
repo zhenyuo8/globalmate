@@ -126,15 +126,15 @@
 
 <div class="identify" id="identify">
     <div class="identify_type">
-        <h3>请选择认证方式</h3>
+        <h3>{{$t('personaPage.selectidentify')}}</h3>
         <div class="identify_type_select">
-            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>身份证</span>
-            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>学生证</span>
-            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>护照</span>
+            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
+            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
+            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
             <!-- <span class="icon-checkbox" @click="selectType($event,'ALIPAYID')" :key=''>支付宝</span> -->
         </div>
     </div>
-    <p class="gl_totast_p" v-show="identifyType.length==0">请至少选择一项认证方式!</p>
+    <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
@@ -153,7 +153,7 @@
                     </div>
                 </div>
             </div>
-            <p>身份证</p>
+            <p>{{$t('personaPage.idcard')}}</p>
         </div>
         <div class="line_separeat" v-show="showIDCARD">
         </div>
@@ -174,7 +174,7 @@
                     </div>
                 </div>
             </div>
-            <p>学生证</p>
+            <p>{{$t('personaPage.studentcard')}}</p>
         </div>
         <div class="line_separeat" v-show="showSTUDENTID">
 
@@ -198,13 +198,13 @@
 
                 </div>
             </div>
-            <p>护照</p>
+            <p>{{$t('personaPage.passport')}}</p>
         </div>
         <div class="line_separeat" v-show="showPASSPORT">
 
         </div>
     </div>
-    <button type="button" name="button" class='submitbtn' @click='submitData' >提交</button>
+    <button type="button" name="button" class='submitbtn' @click='submitData' >{{$t('button.submit')}}</button>
     <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 

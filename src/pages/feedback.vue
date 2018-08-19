@@ -2,15 +2,15 @@
     <div class="feedback" id='feedback'>
         <div class="feedback_warp">
             <div class="feedback_title">
-    			您的意见是我们平台发展最宝贵的助力:
+    			{{$t('formTitle.feedTitle')}}
     		</div>
     		<div class="middle">
-    			<textarea  placeholder='请输入您的宝贵意见!' v-model='textareaVal'></textarea>
+    			<textarea  :placeholder="$t('formTitle.feedTips')" v-model='textareaVal'></textarea>
     		</div>
             <div class="defindloadig" v-if="loadingShow">
                 <loading></loading>
             </div>
-    		<button type="submit" name="button" class="evaluate_submit" @click='feedbackClick'>提交</button>
+    		<button type="submit" name="button" class="evaluate_submit" @click='feedbackClick'>{{$t('button.submit')}}</button>
         </div>
 
     </div>

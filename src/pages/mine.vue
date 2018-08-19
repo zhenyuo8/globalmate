@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="mine_settings" @click='goEditMineInfo'>
-                编辑
+                {{$t('personaPage.edit')}}
             </div>
         </div>
     </div>
@@ -127,17 +127,17 @@ export default {
     data() {
         return {
             listRepeat: [{
-                title: '身份认证',
+                title: this.$t('personaPage.identify'),
                 text: '',
                 arrow: true,
                 mineType: 'identify'
             },{
-                title: '我发布的',
+                title: this.$t('personaPage.posted'),
                 text: '',
                 arrow: true,
                 mineType: 'publish'
             },  {
-                title: '我收到的',
+                title: this.$t('personaPage.received'),
                 text: '',
                 arrow: true,
                 mineType: 'sos'
@@ -147,12 +147,12 @@ export default {
                 arrow: true,
                 mineType: 'solove'
             }, {
-                title: '我的朋友',
+                title: this.$t('personaPage.friends'),
                 text: '',
                 arrow: true,
                 mineType: 'friends'
             }, {
-                title: '意见反馈',
+                title: this.$t('personaPage.feedback'),
                 text: '',
                 arrow: true,
                 mineType: 'feedback'

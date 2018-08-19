@@ -84,7 +84,7 @@
                 <List :itemRepeat='title' :clickCallBack='clickCallBack'></List>
             </div>
             <div class="main_decription_area">
-                <textarea name="name" :placeholder='formTitle' style='width:100%'></textarea>
+                <textarea name="name" :placeholder="$t('formTitle.descriptionTips')" style='width:100%'></textarea>
             </div>
             <div class="main_decription_uploader" >
                 <div class="hide_space">
@@ -97,7 +97,7 @@
         </div>
     </div>
     <div class="assist_bottom" @click='publish' v-show="!isEditType">
-        发布
+        {{$t('button.publish')}}
     </div>
     <div class="assist_bottom" @click='publish' v-show="isEditType">
         提交
@@ -112,6 +112,8 @@
         type="date"
         :startDate="startDate"
         :endDate="endDate"
+        :cancelText="$t('button.cancel')"
+        :confirmText="$t('button.confirm')"
         @confirm="handleConfirm"
         v-model="pickerValue">
       </mt-datetime-picker>
@@ -136,8 +138,8 @@ export default {
         return {
             listRepeat: [],
             myReward: {
-                title: '我的悬赏',
-                text: '请输入',
+                title: this.$t('formTitle.reward'),
+                text: this.$t('formTitle.inputPlace'),
                 type: 'input',
                 arrow: false,
                 key:'reward',
@@ -146,8 +148,8 @@ export default {
                 componentKey:'rewardAmount'
             },
             title: {
-                title: '标题',
-                text: '简单说下求助内容',
+                title: this.$t('formTitle.head'),
+                text: this.$t('formTitle.headerTips'),
                 type: 'input',
                 arrow: false,
                 key:'title',
@@ -286,7 +288,7 @@ export default {
                     this.country=value;
                     this.listRepeat.forEach(function (item,index) {
                         if(item.componentKey=='city'){
-                            item.text="请选择";
+                            item.text=this.$t('formTitle.selectPlace');
                             item.isPlacehold=true;
                         }else if(item.componentKey==items) {
                             item.text=value;
@@ -419,8 +421,8 @@ export default {
         listRepeatProcess(){
             let form=this.$route.query.form;
             this.myReward={
-                title: '我的悬赏',
-                text: '请输入',
+                title: this.$t('formTitle.reward'),
+                text: this.$t('formTitle.inputPlace'),
                 type: 'input',
                 arrow: false,
                 key:'reward',
@@ -429,8 +431,8 @@ export default {
                 componentKey:'rewardAmount'
             };
             this.title={
-                title: '标题',
-                text: '简单说下求助内容',
+                title: this.$t('formTitle.head'),
+                text: this.$t('formTitle.headerTips'),
                 type: 'input',
                 arrow: false,
                 key:'title',
@@ -439,7 +441,7 @@ export default {
                 componentKey:'title'
             }
             this.listRepeat=[{
-                title: '方式',
+                title: this.$t('formTitle.type'),
                 text: this.$route.query.title,
                 arrow: false,
                 key:'style',
@@ -447,32 +449,32 @@ export default {
                 isPlacehold:false,
                 componentKey:'businessType'
             },{
-                title: '开始时间',
-                text: '请选择',
+                title: this.$t('formTitle.starttime'),
+                text: this.$t('formTitle.selectPlace'),
                 arrow: true,
                 key:'date',
                 isRequire:true,
                 isPlacehold:true,
                 componentKey:'startTime'
             },{
-                title: '结束时间',
-                text: '请选择',
+                title: this.$t('formTitle.endtime'),
+                text: this.$t('formTitle.selectPlace'),
                 arrow: true,
                 key:'date',
                 isRequire:true,
                 isPlacehold:true,
                 componentKey:'endTime'
             }, {
-                title: '国家',
-                text: '请选择',
+                title: this.$t('formTitle.country'),
+                text: this.$t('formTitle.selectPlace'),
                 arrow: true,
                 key:'country',
                 isRequire:true,
                 isPlacehold:true,
                 componentKey:'country'
             },{
-                title: '城市',
-                text: '请选择',
+                title: this.$t('formTitle.city'),
+                text: this.$t('formTitle.selectPlace'),
                 arrow: true,
                 key:'city',
                 isRequire:true,
@@ -612,7 +614,7 @@ export default {
     },
     activated(){
         this.show=false;
-        this.formTitle='请描述'+this.$route.query.title+'细节！';
+        // this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
         $('.repeat_content input').val('');
         $('.main_decription_area textarea').val('');

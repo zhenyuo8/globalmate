@@ -26,10 +26,10 @@
         <div class="rank service_star">
             <div class="rank_title service_star_title">
                 <div class="left">
-                    服务之星榜单
+                    {{$t('button.stars')}}
                 </div>
                 <div class="right icon-arrow_right_samll" @click='goRankAll("service")'>
-                    查看榜单
+                    {{$t('button.more')}}
                 </div>
             </div>
             <ul>
@@ -40,8 +40,8 @@
         </div>
         <div class="buttom_action" v-show="onload">
             <ul>
-                <li class="need_help" @click="seekHelp">我发布的</li>
-                <li @click='offer'>提供帮助</li>
+                <li class="need_help" @click="seekHelp">{{$t('button.myPublished')}}</li>
+                <li @click='offer'>{{$t('button.OthersPublished')}}</li>
             </ul>
         </div>
         <div class="defindloadig" v-if="loadingShow">
@@ -85,69 +85,7 @@
                         this.index = swiper.realIndex;
                     },
                 },
-                mainmenu:[
-                    {
-                        'title':'学习互助',
-                        'key':'learnco',
-                        'type':'assist',
-                        'form':'assist',
-                        'icon':'icon-pen'
-                    },{
-                        'title': '教材',
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                        'icon':'icon-book'
-                    },{
-                        'title': '办手续',
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-Document_2_yinzhang'
-                    },{
-                        'title': '换汇',
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-coin-yen'
-                    },{
-                        'title': '就医',
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-local_hospital'
-                    },{
-                        'title': '帮带',
-                        'key': 'carry',
-                        'type': 'assist',
-                        'form':'carryAssist',
-                         'icon':'icon-flight_takeoff'
-                    },{
-                        'title': '租赁',
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-office'
-                    }, {
-                        'title': '陪伴',
-                        'key': 'accompany',
-                        'type': 'assist',
-                        'form':'accompany',
-                         'icon':'icon-pacman'
-                    },{
-                        'title': '代购',
-                        'key': 'buy',
-                        'type': 'assist',
-                        'form':'aassist',
-                         'icon':'icon-icon-announce'
-                    }, {
-                        'title': '其他',
-                        'key': 'assist',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-more-horizontal'
-                    }
-                ],
+                mainmenu:[],
                 showTipsText:'',
                 token:'',
                 code:'',
@@ -213,7 +151,7 @@
             publish(item){
                  this.token=window.localStorage.getItem('TOKEN');
                  var isIdentify=window.localStorage.getItem('IDENTIFY_YET_glohelp');
-                 if(isIdentify){
+                 if(!isIdentify){
                      this.showTipsText='请您先完成身份认证!';
                      setTimeout(()=>{
                          this.showTipsText='';
@@ -485,6 +423,70 @@
         activated(){
             document.title='Glohelp';
             this.getToken(this.getCurrentUser);
+            this.mainmenu=[
+                {
+                    'title':this.$t('formName.study'),
+                    'key':'learnco',
+                    'type':'assist',
+                    'form':'assist',
+                    'icon':'icon-pen'
+                },{
+                    'title': this.$t('formName.textbook'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                    'icon':'icon-book'
+                },{
+                    'title': this.$t('formName.formality'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-Document_2_yinzhang'
+                },{
+                    'title': this.$t('formName.exchange'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-coin-yen'
+                },{
+                    'title': this.$t('formName.medical'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-local_hospital'
+                },{
+                    'title': this.$t('formName.carry'),
+                    'key': 'carry',
+                    'type': 'assist',
+                    'form':'carryAssist',
+                     'icon':'icon-flight_takeoff'
+                },{
+                    'title': this.$t('formName.rent'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-office'
+                }, {
+                    'title': this.$t('formName.accompany'),
+                    'key': 'accompany',
+                    'type': 'assist',
+                    'form':'accompany',
+                     'icon':'icon-pacman'
+                },{
+                    'title': this.$t('formName.daigou'),
+                    'key': 'buy',
+                    'type': 'assist',
+                    'form':'aassist',
+                     'icon':'icon-icon-announce'
+                }, {
+                    'title': this.$t('formName.other'),
+                    'key': 'assist',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-more-horizontal'
+                }
+            ]
+
             setTimeout(()=>{
                 this.loadingShow=false;
             },1500);

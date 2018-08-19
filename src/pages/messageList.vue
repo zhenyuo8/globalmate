@@ -106,7 +106,7 @@
 					</div>
 				</li>
 			</ul>
-			<p v-show="friends.length!==0">好友</p>
+			<p v-show="friends.length!==0">{{$t('messagePage.friends')}}</p>
 			<ul>
 				<li v-for="(item,index) in friends" @click='toChatPage(item)'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
@@ -120,7 +120,7 @@
 					</div>
 				</li>
 			</ul>
-			<p v-show="list.length!==0">联系人</p>
+			<p v-show="list.length!==0">{{$t('messagePage.concat')}}</p>
 			<ul class="gl_contact">
 				<li v-for="(item,index) in list" @click='goIm(item)'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
@@ -133,8 +133,8 @@
 						<span class="time_chat">{{item.lastContactTime}}</span>
 					</div>
 					<div class="request_action" v-show="item.isAddFriends">
-						<span class="accept" @click='agreeAddFriend($event,item)'>同意</span>
-						<span class="refuse">拒绝</span>
+						<span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
+						<span class="refuse">{{$t('button.refuse')}}</span>
 					</div>
 				</li>
 			</ul>
@@ -250,7 +250,7 @@ export default {
 	            })
 			}
 		},
-		processFriendsList(friends,callback){
+		processFriendsList(friends){
 			this.apiHost=CONFIG[__ENV__].apiHost;
 			let mess=friends;
 			this.friends=[];
@@ -260,7 +260,6 @@ export default {
 				this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+mess[i].id+'?token='+this.$route.query.token,{}).then((res)=>{
 					if(res.data.success){
 						this.friendsIdList.push(res.data.data.id);
-						console.log(this.friendsIdList,999999);
 					}
 
 	            }).catch((e)=>{
@@ -274,7 +273,7 @@ export default {
 			YYIMChat.getRosterItems({
 				success: function(data){
 					if(data){
-						_this.processFriendsList(JSON.parse(data),_this.getContact);
+						_this.processFriendsList(JSON.parse(data));
 					}
 				},
 				error: function(err){
@@ -373,7 +372,6 @@ export default {
 				size: 100,
 				success:function(data){
 					var list=_this.processList(data.list);
-					console.log(data,1111111);
 				},
 				error:function(err){
 					console.log(err);
