@@ -253,7 +253,10 @@ export default {
 			this.apiHost=CONFIG[__ENV__].apiHost;
 			let mess=friends;
 			this.friends=[];
-			if(mess.length==0) return;
+			if(mess.length==0){
+				this.getContact();
+				return;
+			}
 			for(var i=0;i<mess.length;i++){
 				let temp=mess[i];
 				this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+mess[i].id+'?token='+this.$route.query.token,{}).then((res)=>{

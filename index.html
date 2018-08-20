@@ -50,7 +50,7 @@
         	    return null;
         	};
             let Authorization=function(){
-                let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/index.html#/';
+                let url='http://39.96.134.227/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/index.html#/';
                 $.ajax({
                     url:url,
                     type:'GET',
@@ -60,7 +60,7 @@
                 })
             };
             let codeToToken=function(code){
-                let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code='+code;
+                let url='http://39.96.134.227/globalmate/rest/wechat/oauth/oauthCb?code='+code;
                 $.ajax({
                   url:url,
                   type:'GET',

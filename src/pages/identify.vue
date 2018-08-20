@@ -80,8 +80,14 @@
       background: #0095ff;
       color: #fff;
   }
+  .identify_face_page>div, .identify_opposite_page>div{
+       height: 100%;
+       /*padding: 19px 0;*/
+  }
+
   .identify_face_page, .identify_opposite_page{
       position: relative;
+
   }
   .identify_face_page img, .identify_opposite_page img{
       width: 100%;
@@ -93,7 +99,7 @@
   }
   .icon-camera2{
       width: 36px;
-      margin: auto;
+      margin-top: 18.5px;
       height: 36px;
       background: #00adff;
       border-radius: 50%;
@@ -140,14 +146,14 @@
             <div class="identify_body IDCARD">
                 <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_face'>
+                    <div class="" id='id_face'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
                 <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_opposite'>
+                    <div class="" id='id_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传国徽面</span>
                     </div>
@@ -161,14 +167,14 @@
             <div class="identify_body STUDENTID">
                 <div class="identify_face_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_student'>
+                    <div class="" id='id_student'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
                 <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_student_opposite'>
+                    <div class="" id='id_student_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传文字面</span>
                     </div>
@@ -183,14 +189,14 @@
             <div class="identify_body PASSPORT">
                 <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_passport'>
+                    <div class="" id='id_passport'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第一页</span>
                     </div>
                 </div>
                 <div class="identify_opposite_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto" id='id_passport_opposite'>
+                    <div class="" id='id_passport_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第二页</span>
                     </div>
