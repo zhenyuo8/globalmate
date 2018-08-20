@@ -71,7 +71,7 @@
                                'value':result.data.token,
                                'expires':new Date().setTime(new Date().getTime()+2*60*60*1000)
                            }));
-                           $('.authorization_totast').css('display','none');
+                        //    $('.authorization_totast').css('display','none');
                            window.localStorage.setItem('TOKEN',result.data.token);
                            window.localStorage.setItem('USERID',result.data.user.id);
                            window.localStorage.setItem('OPENID',result.data.user.openid);
@@ -87,7 +87,6 @@
                          window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN');
                          Authorization();
                     }else{
-                        $('.authorization_totast').css('display','none');
                        window.localStorage.setItem('TOKEN',ACCESS_TOKEN.value);
                     }
                 }else{
@@ -98,6 +97,9 @@
                         Authorization();
                     }
                 }
+                setTimeout(()=>{
+                    $('.authorization_totast').css('display','none');
+                },2000)
 
             };
 
