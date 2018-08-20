@@ -217,7 +217,6 @@ export default {
 				}catch(e){
 					chatItemId=''
 				}
-
 			}
 			this.$router.push({
 				path: 'im',
@@ -499,10 +498,26 @@ export default {
 			this.loginIM();
 			YYIMChat.onMessage();
 		},
+		getUserByToken(){
+			this.apiHost=CONFIG[__ENV__].apiHost;
+			this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{}).then((res)=>{
+				if(res.data.success){
+					this.CURRENTUSER=res.data.data;
+					window.localStorage.setItem('CURRENTUSER',JSON.stringify(res.data.data));
+					this.initIM();
+				}
+			}).catch((e)=>{
+				console.log(e);
+			})
+		}
     },
     activated(){
-		this.initIM();
-		this.CURRENTUSER=window.localStorage.getItem('CURRENTUSER')?JSON.parse(window.localStorage.getItem('CURRENTUSER')):{}
+		if(!window.localStorage.getItem('CURRENTUSER')){
+			this.getUserByToken();
+		}else{
+			this.CURRENTUSER=window.localStorage.getItem('CURRENTUSER');
+			this.initIM();
+		}
 		setTimeout(()=>{
 			this.getFriendsInIM();
 			this.getFriendsInGlohelp();
@@ -514,7 +529,6 @@ export default {
 		}
     },
     created(){
-
 		this.messageList=[]
     }
 

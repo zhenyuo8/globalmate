@@ -261,6 +261,7 @@
                         'token': this.token,
                         'title': '消息列表',
                         'id': 'message',
+
                     }
                 });
             },

@@ -186,7 +186,7 @@
                 <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
                 <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
                 <!-- <span class="share" @click='evaluate($event,item)'>分享到</span> -->
-                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
+                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6||item.need.enable==0?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
             </div>
             <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
                 <span>追加评论</span>
@@ -277,38 +277,67 @@ export default {
             });
         },
         finished(e,item){
+            console.log(item);
+            e=e?e:window.event;
+    		e.preventDefault();
+    		event.stopPropagation();
+    		e.cancelBubble=true;
+            let _this=this;
+            MessageBox.confirm('',{
+                title: '',
+                message: '确定当前求助已完成?',
+                confirmButtonText:this.$t('button.confirm'),
+                cancelButtonText:this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                _this.confirmFinished(item);
+            }).catch(cancel=>{
+
+            });
+        },
+        confirmFinished(item){
+
             this.apiHost=CONFIG[__ENV__].apiHost;
-            	e=e?e:window.event;
-    			e.preventDefault();
-    			event.stopPropagation();
-    			e.cancelBubble=true;
-
-        //     MessageBox({
-        //        title: 'Notice',
-        //        message: '确定当前求助已完成?',
-        //        confirmButtonText:this.$t('button.confirm'),
-        //        cancelButtonText:this.$t('button.cancel'),
-        //        showCancelButton: true
-        //    })
-        //     MessageBox.confirm().then(action => {
-        //         console.log(action);
-        //     });
-        //     return
-            if(item.need.enable==2||item.need.enable==5){
-                this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
-                    'needId':item.need.id,
-                    'action':'coplete'
-                }).then(res=>{
-
-                }).catch(e=>{
-                    console.log(e);
+            let providerId;
+            if(item&&item.pushList.length!=0){
+                 providerId=item.pushList.filter((item,index)=>{
+                    return item.matchAccept
                 })
+            }
+            if(providerId&&providerId.length!=0){
+                if(item.need.enable==2||item.need.enable==5){
+                    this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token+'&providerId='+providerId[0].providerId,{
+                        'needId':item.need.id,
+                        'action':'coplete'
+                    }).then(res=>{
+
+                    }).catch(e=>{
+                        console.log(e);
+                    })
+                }else{
+                    this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
+                    setTimeout(()=>{
+                        this.showTipsText=''
+                    },2000);
+                    return;
+                }
             }else{
-                this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
-                setTimeout(()=>{
-                    this.showTipsText=''
-                },2000);
-                return;
+                 if(item.need.enable==2||item.need.enable==5){
+                     this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token+'&providerId='+'',{
+                         'needId':item.need.id,
+                         'action':'coplete'
+                     }).then(res=>{
+
+                     }).catch(e=>{
+                         console.log(e);
+                     })
+                 }else{
+                     this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
+                     setTimeout(()=>{
+                         this.showTipsText=''
+                     },2000);
+                     return;
+                 }
             }
         },
         goChat(item,items){
@@ -324,11 +353,11 @@ export default {
             });
         },
         evaluate(e,item){
-            	e=e?e:window.event;
-    			e.preventDefault();
-    			event.stopPropagation();
-    			e.cancelBubble=true;
-            if(item.need.enable!=6){
+            e=e?e:window.event;
+            e.preventDefault();
+            event.stopPropagation();
+            e.cancelBubble=true;
+            if(item.need.enable!=6&&item.need.enable!=0){
                 this.showTipsText='当前任务还未完成，暂不能评价！';
                 setTimeout(()=>{
                     this.showTipsText=''
