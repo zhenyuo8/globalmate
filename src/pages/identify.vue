@@ -138,16 +138,16 @@
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
-                <div class="identify_face_page" id='id_face'>
+                <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_face'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_opposite' >
+                <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传国徽面</span>
                     </div>
@@ -159,16 +159,16 @@
         </div>
         <div class="" v-show="showSTUDENTID">
             <div class="identify_body STUDENTID">
-                <div class="identify_face_page" id='id_student' >
+                <div class="identify_face_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_student'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_student_opposite' >
+                <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_student_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传文字面</span>
                     </div>
@@ -181,21 +181,19 @@
         </div>
         <div class="" v-show="showPASSPORT">
             <div class="identify_body PASSPORT">
-                <div class="identify_face_page" id='id_passport'>
+                <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_passport'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第一页</span>
                     </div>
-
                 </div>
-                <div class="identify_opposite_page" id='id_passport_opposite'>
+                <div class="identify_opposite_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" style="margin:auto" id='id_passport_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第二页</span>
                     </div>
-
                 </div>
             </div>
             <p>{{$t('personaPage.passport')}}</p>
@@ -415,9 +413,9 @@ export default {
            });
            this.id1.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               $('#'+id1).find('img').attr('src',_this.headerImgae);
-               $('#'+id1).find('img').attr('data-src',_this.headerImgae);
-               $('#'+id1).find('img').css('display','inline-block');
+               $('#'+id1).prev('img').attr('src',_this.headerImgae);
+               $('#'+id1).prev('img').attr('data-src',_this.headerImgae);
+               $('#'+id1).prev('img').css('display','inline-block');
            });
 
 
@@ -457,9 +455,9 @@ export default {
           });
           this.id2.bind('FileUploaded',function(up,file,info){
               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-              $('#'+id2).find('img').attr('src',_this.headerImgae);
-              $('#'+id2).find('img').attr('data-src',_this.headerImgae);
-              $('#'+id2).find('img').css('display','inline-block');
+              $('#'+id2).prev('img').attr('src',_this.headerImgae);
+              $('#'+id2).prev('img').attr('data-src',_this.headerImgae);
+              $('#'+id2).prev('img').css('display','inline-block');
           });
 
            this.id1.init();
