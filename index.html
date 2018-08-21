@@ -1,110 +1,114 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Glohelp</title>
-    <script src="http://design.yonyoucloud.com/static/jquery/3.2.1/jquery.min.js"></script>
-    <script src="./static/js/YYIMSDK.min.js" async></script>
-    <script src="./static/plupload/plupload.full.min.js" async></script>
-    <style media="screen">
-        .authorization_totast{
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            z-index: 111;
-        }
-        .authorization_totast>div{
-            display: inline-block;
-            margin: auto;
-            font-size: 14px;
-            background: rgba(0,0,0,0.4);
-            padding: 10px 20px;
-            color: #fff;
-            border-radius: 4px;
-            position: absolute;
-            left: 35%;
-            top: 40%;
-        }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
-    <div class="authorization_totast">
-        <div class="">
-            登入中...
-        </div>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Glohelp</title>
+  <script src="http://design.yonyoucloud.com/static/jquery/3.2.1/jquery.min.js"></script>
+  <script src="./static/js/YYIMSDK.min.js" async></script>
+  <script src="./static/plupload/plupload.full.min.js" async></script>
+  <style media="screen">
+    .authorization_totast {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 111;
+    }
+
+    .authorization_totast>div {
+      display: inline-block;
+      margin: auto;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      color: #fff;
+      border-radius: 4px;
+      position: absolute;
+      left: 35%;
+      top: 40%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <div class="authorization_totast">
+    <div class="">
+      登入中...
     </div>
-    <script>
-        (function(){
-            let getQuery=function(name){
-        		var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-        	    var r = window.location.search.substr(1).match(reg);
-        	    if (r != null) {
-        	        return unescape(r[2]);
-        	    }
-        	    return null;
-        	};
-            let Authorization=function(){
-                let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/index.html#/';
-                $.ajax({
-                    url:url,
-                    type:'GET',
-                    success:function (result) {
-                        window.location.href=result.data;
-                    }
-                })
-            };
-            let codeToToken=function(code){
-                let url='http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code='+code;
-                $.ajax({
-                  url:url,
-                  type:'GET',
-                  success:function (result) {
-                      if(result.data&&result.data.token){
-                           window.localStorage.removeItem('TOKEN');
-                           window.localStorage.setItem('GLOBALMATE_WX_ACCESS_TOKEN',JSON.stringify({
-                               'value':result.data.token,
-                               'expires':new Date().setTime(new Date().getTime()+2*60*60*1000)
-                           }));
-                           $('.authorization_totast').css('display','none');
-                           window.localStorage.setItem('TOKEN',result.data.token);
-                           window.localStorage.setItem('USERID',result.data.user.id);
-                           window.localStorage.setItem('OPENID',result.data.user.openid);
-                      }
-                  }
-                })
-            };
-            let wxAuthorization=function(){
-                let ACCESS_TOKEN=window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
-                if(ACCESS_TOKEN){
-                    ACCESS_TOKEN=JSON.parse(ACCESS_TOKEN);
-                    if(ACCESS_TOKEN.expires>new Date().getTime()){
-                         window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN');
-                         Authorization();
-                    }else{
-                        $('.authorization_totast').css('display','none');
-                       window.localStorage.setItem('TOKEN',ACCESS_TOKEN.value);
-                    }
-                }else{
-                    if(getQuery('code')){
-                        let code=getQuery('code');
-                        codeToToken(code);
-                    }else{
-                        Authorization();
-                    }
-                }
+  </div>
+  <script>
+    (function () {
+      let getQuery = function (name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+          return unescape(r[2]);
+        }
+        return null;
+      };
+      let Authorization = function () {
+        let url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/index.html#/';
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function (result) {
+            window.location.href = result.data;
+          }
+        })
+      };
+      let codeToToken = function (code) {
+        let url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code=' + code;
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function (result) {
+            if (result.data && result.data.token) {
+              window.localStorage.removeItem('TOKEN');
+              window.localStorage.setItem('GLOBALMATE_WX_ACCESS_TOKEN', JSON.stringify({
+                'value': result.data.token,
+                'expires': new Date().setTime(new Date().getTime() + 2 * 60 * 60 * 1000)
+              }));
+              $('.authorization_totast').css('display', 'none');
+              window.localStorage.setItem('TOKEN', result.data.token);
+              window.localStorage.setItem('USERID', result.data.user.id);
+              window.localStorage.setItem('OPENID', result.data.user.openid);
+            }
+          }
+        })
+      };
+      let wxAuthorization = function () {
+        let ACCESS_TOKEN = window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
+        if (ACCESS_TOKEN) {
+          ACCESS_TOKEN = JSON.parse(ACCESS_TOKEN);
+          if (ACCESS_TOKEN.expires > new Date().getTime()) {
+            window.localStorage.removeItem('GLOBALMATE_WX_ACCESS_TOKEN');
+            Authorization();
+          } else {
+            $('.authorization_totast').css('display', 'none');
+            window.localStorage.setItem('TOKEN', ACCESS_TOKEN.value);
+          }
+        } else {
+          if (getQuery('code')) {
+            let code = getQuery('code');
+            codeToToken(code);
+          } else {
+            Authorization();
+          }
+        }
 
-            };
+      };
 
-            // $('.authorization_totast').css('display','none');
-            wxAuthorization();
-        })()
-    </script>
-    <!-- built files will be auto injected -->
-  </body>
+      // $('.authorization_totast').css('display','none');
+      wxAuthorization();
+    })()
+  </script>
+  <!-- built files will be auto injected -->
+</body>
+
 </html>
