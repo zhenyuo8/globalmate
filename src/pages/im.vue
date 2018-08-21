@@ -462,12 +462,12 @@ export default {
 		this.id='';
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
-		if(window.localStorage.getItem('CURRENTUSER')){
-			this.CURRENTUSER=JSON.parse(window.localStorage.getItem('CURRENTUSER'));
+		if(window.localStorage.getItem('gl_CURRENTUSER')){
+			this.CURRENTUSER=JSON.parse(window.localStorage.getItem('gl_CURRENTUSER'));
 			this.currentUserImgae=this.CURRENTUSER.pic;
 		}
 		this.getOthersInfo(this.toChartId);
-		this.init();
+		// this.init();
 		this.loadData();
 	},
 	mounted(){

@@ -40,20 +40,33 @@
                 this.apiHost=CONFIG[__ENV__].apiHost;
 				let url=this.apiHost+'/globalmate/rest/user/login/'+postData.phone+'/'+postData.password;
 				 this.axios.get(url,{}).then((res)=>{
-           if(res.data.success){
-          window.localStorage.setItem('TOKEN',res.data.data);
-          window.localStorage.setItem('USERPHONE',postData.phone);
-          this.token=res.data.data;
-          setTimeout(()=>{
-            window.history.go(-1);
-        },1000);
-        }else {
-          this.showTipsText='网络异常,请稍后再试!'
-        }
-      }).catch((e)=>{
-          this.showTipsText='网络异常,请稍后再试!'
-         })
+                       if(res.data.success){
+                          window.localStorage.setItem('TOKEN',res.data.data);
+                          window.localStorage.setItem('USERPHONE',postData.phone);
+                          this.token=res.data.data;
+                          this.getUserByToken(res.data.data);
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },1000);
+                        }else {
+                            this.showTipsText='网络异常,请稍后再试!'
+                        }
+                    }).catch((e)=>{
+                      this.showTipsText='网络异常,请稍后再试!'
+                 })
 			},
+            getUserByToken(token){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+    			this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{}).then((res)=>{
+    				if(res.data.success){
+    					this.CURRENTUSER=res.data.data;
+                        console.log(res.data.data);
+    					window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data));
+    				}
+    			}).catch((e)=>{
+    				console.log(e);
+    			})
+            },
 			getRegisterData(){
 				let postData={
 					password:'',
@@ -70,7 +83,8 @@
 						'title': '注册',
 					}
 				});
-			}
+			},
+
 		},
         activated(){
             document.title=this.$route.query.title;

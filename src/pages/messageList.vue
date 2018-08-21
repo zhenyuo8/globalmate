@@ -506,8 +506,8 @@ export default {
 			this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{}).then((res)=>{
 				if(res.data.success){
 					this.CURRENTUSER=res.data.data;
-					window.localStorage.setItem('CURRENTUSER',JSON.stringify(res.data.data));
-					this.initIM();
+					window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data));
+					// this.initIM();
 				}
 			}).catch((e)=>{
 				console.log(e);
@@ -515,11 +515,11 @@ export default {
 		}
     },
     activated(){
-		if(!window.localStorage.getItem('CURRENTUSER')){
+		if(!window.localStorage.getItem('gl_CURRENTUSER')){
 			this.getUserByToken();
 		}else{
-			this.CURRENTUSER=window.localStorage.getItem('CURRENTUSER');
-			this.initIM();
+			this.CURRENTUSER=window.localStorage.getItem('gl_CURRENTUSER');
+			// this.initIM();
 		}
 		setTimeout(()=>{
 			this.getFriendsInIM();

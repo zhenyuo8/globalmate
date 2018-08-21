@@ -104,7 +104,7 @@
             setTimeout(()=>{
                  this.token=window.localStorage.getItem('TOKEN')||"";
                 if(this.token){
-                    this.initIM();
+                    // this.initIM();
                 }
             },1000);
         },
@@ -141,7 +141,7 @@
                 }
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{}).then((res)=>{
                     if(res.data.success){
-                        window.localStorage.setItem('CURRENTUSER',JSON.stringify(res.data.data))
+                        window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data))
                     }
                 }).catch((e)=>{
                     console.log(e);
@@ -214,8 +214,8 @@
             offer(){
                  this.token=window.localStorage.getItem('TOKEN');
                  this.userId=window.localStorage.getItem('USERID')
-                 if(window.localStorage.getItem('CURRENTUSER')){
-                     this.userId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+                 if(window.localStorage.getItem('gl_CURRENTUSER')){
+                     this.userId=JSON.parse(window.localStorage.getItem('gl_CURRENTUSER')).id;
                  }
                  if(!this.token) {
                      this.showTipsText='请先登入...';
@@ -389,8 +389,8 @@
                 if(!username){
                     username=window.localStorage.getItem('USERPHONE');
                 }
-                if(window.localStorage.getItem('CURRENTUSER')){
-                    username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
+                if(window.localStorage.getItem('gl_CURRENTUSER')){
+                    username=JSON.parse(window.localStorage.getItem('gl_CURRENTUSER')).id;
                 }
                 if(!username) return;
     			 $.ajax({
@@ -423,8 +423,7 @@
         activated(){
             document.title='Glohelp';
             this.getToken(this.getCurrentUser);
-
-
+            YYIMChat.onMessage(this.dealMessage);
             setTimeout(()=>{
                 this.loadingShow=false;
             },1500);
