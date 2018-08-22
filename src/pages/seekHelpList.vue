@@ -337,6 +337,29 @@
             }
 		}
 	}
+       .list_show{
+           position: fixed;
+           right:0;
+           top:0;
+           bottom:0;
+           width:7.5rem;
+           background:#f5f5f5;
+          -webkit-transition: all .2s ease-in;
+          -moz-transition: all .2s ease-in;
+          transition: all .2s ease-in;
+          overflow: scroll;
+       }
+       .list_hide{
+           position: fixed;
+           right: -7.5rem;
+           top:0;
+           bottom:0;
+           width:7.1rem;
+           background:#fff;
+           -webkit-transition: all .2s ease-out;
+           -moz-transition: all .2s ease-out;
+           transition: all .2s ease-out;
+       }
 </style>
 
 <template>
@@ -390,13 +413,13 @@
    <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
-				<p>
+				<p @click="getSelectItem('country')">
 					<label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
-					<input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" />
+					<input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')"  disabled='true' />
 				</p>
-				<p>
+				<p @click="getSelectItem('city')">
 					<label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
-					<input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" />
+					<input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
 				</p>
                 <p @click='selectHelpType'>
                     <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp:&nbsp&nbsp
@@ -421,6 +444,7 @@
 			</div>
 		</div>
    </div>
+   <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
 </div>
 
 </template>
@@ -430,10 +454,12 @@ import searchInput from '../components/searchInput.vue'
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
 import tips from '../components/tips.vue'
+import indexList from '../components/indexList.vue'
+let pinyin=require('pinyin')
 export default {
     'name': 'seekHelpList',
     components: {
-        searchInput,loading,tips
+        searchInput,loading,tips,indexList
     },
     data() {
         return {
@@ -454,7 +480,10 @@ export default {
           },
           isSOS:false,
           loadingShow:true,
-          showTipsText:''
+          showTipsText:'',
+          show:false,
+          selectItem:[],
+          listType:''
 
         }
     },
@@ -494,6 +523,7 @@ export default {
                      'title': item.need.userName,
                      'otherUserId':item.need.userId,
                      'id': item.need.id,
+                     'currentuser':this.$route.query.userId
                  }
              });
 
@@ -600,7 +630,95 @@ export default {
 			this.selectHelpTypeValue=this.type_list.join('、');
 			this.selectFlag=false;
 		},
+        countrySityCallBack(items,value){
+            this.show=false;
+            this.selectItem=[];
+            if(value){
+                if(items=='country'){
+                    this.country=value;
+                    this.$el.querySelector('#countrysearch').value=value;
+                    this.$el.querySelector('#citysearch').value='';
+                }else{
+                   this.$el.querySelector('#citysearch').value=value;
+                }
+            }
+        },
+         getSelectItem(key){
+             this.apiHost=CONFIG[__ENV__].apiHost;
+             let url='',_this=this,postData={};
+             if(key=='city'&&this.country){
+                 url='/globalmate/rest/user/city';
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                     if(res.data.success){
+                         let result=res.data.data,resultArr=[];
+                         if(this.country=='中国'){
+                             resultArr=['北京','天津','上海','重庆'];
+                         }
+                         result.forEach(function (item,index) {
+                             resultArr.push(item.city);
+                         });
+                         _this.buildItem(resultArr,key);
+                     }
+                 }).catch(e=>{
+                     this.showTipsText=e.msg;
+                     setTimeout(()=>{
+                         this.showTipsText=''
+                     },2000);
+                 })
+             }else if(key=='country'){
+                 url='/globalmate/rest/user/country';
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                     if(res.data.success){
+                         _this.buildItem(res.data.data,key);
+                     }
+                 }).catch(e=>{
+                     this.showTipsText=e.msg;
+                     setTimeout(()=>{
+                         this.showTipsText=''
+                     },2000);
+                 })
+             }else{
+                 this.showTipsText='请先选择国家！';
+                 setTimeout(()=>{
+                     this.showTipsText=''
+                 },2000);
+             }
 
+         },
+         buildItem(data,key){
+             let letter=this.buildLetter();
+             let _this = this;
+             for (let i = 0; i < 26; i++) {
+               letter[i].citylist = []
+             }
+             for (let i = 0; i < data.length; i++) {
+               let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65)
+               if (_index >= 0 && _index < 26) {
+                 letter[_index].citylist.push(data[i])
+               }
+             }
+             let showCity = letter.filter(function (value) {
+               let len = value.citylist.length
+               return len > 0
+             });
+             this.show=true;
+             this.listType=key;
+             this.selectItem=showCity;
+             window.localStorage.setItem('LIST',JSON.stringify(this.selectItem))
+         },
+         buildLetter(){
+             let letter = [];
+             for (let i = 0; i < 26; i++) {
+               let obj = {}
+               obj.letter = String.fromCharCode((65 + i))
+               obj.citylist = []
+               letter.push(obj)
+             }
+             return letter;
+         },
+         getFirstLetter(str){
+             return pinyin(str)[0][0].charAt(0).toUpperCase()
+         },
         keyWordsSearch(keywords){
                 this.searchVal=keywords;
                 if(!keywords){

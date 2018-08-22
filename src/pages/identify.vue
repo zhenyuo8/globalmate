@@ -80,8 +80,14 @@
       background: #0095ff;
       color: #fff;
   }
+  .identify_face_page>div, .identify_opposite_page>div{
+       height: 100%;
+       /*padding: 19px 0;*/
+  }
+
   .identify_face_page, .identify_opposite_page{
       position: relative;
+
   }
   .identify_face_page img, .identify_opposite_page img{
       width: 100%;
@@ -93,7 +99,7 @@
   }
   .icon-camera2{
       width: 36px;
-      margin: auto;
+      margin-top: 18.5px;
       height: 36px;
       background: #00adff;
       border-radius: 50%;
@@ -138,16 +144,16 @@
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
-                <div class="identify_face_page" id='id_face'>
+                <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_face'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_opposite' >
+                <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传国徽面</span>
                     </div>
@@ -159,16 +165,16 @@
         </div>
         <div class="" v-show="showSTUDENTID">
             <div class="identify_body STUDENTID">
-                <div class="identify_face_page" id='id_student' >
+                <div class="identify_face_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_student'>
                         <span class="icon-camera2"></span>
                         <span class="icon-tips">点击拍照/上传人像面</span>
                     </div>
                 </div>
-                <div class="identify_opposite_page" id='id_student_opposite' >
+                <div class="identify_opposite_page"  >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_student_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传文字面</span>
                     </div>
@@ -181,21 +187,19 @@
         </div>
         <div class="" v-show="showPASSPORT">
             <div class="identify_body PASSPORT">
-                <div class="identify_face_page" id='id_passport'>
+                <div class="identify_face_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_passport'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第一页</span>
                     </div>
-
                 </div>
-                <div class="identify_opposite_page" id='id_passport_opposite'>
+                <div class="identify_opposite_page" >
                     <img src="" alt="">
-                    <div class="" style="margin:auto">
+                    <div class="" id='id_passport_opposite'>
                        <span class="icon-camera2"></span>
                        <span class="icon-tips">点击拍照/上传第二页</span>
                     </div>
-
                 </div>
             </div>
             <p>{{$t('personaPage.passport')}}</p>
@@ -205,14 +209,12 @@
         </div>
     </div>
     <button type="button" name="button" class='submitbtn' @click='submitData' >{{$t('button.submit')}}</button>
-    <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
 
 <script>
 import CONFIG from '../config/config'
-import tips from '../components/tips.vue'
 export default {
     'name': 'mine',
     data() {
@@ -222,11 +224,10 @@ export default {
             showIDCARD:true,
             showSTUDENTID:false,
             showPASSPORT:false,
-            showTipsText:''
         }
     },
     components: {
-        tips
+
     },
     computed:{
 
@@ -415,9 +416,9 @@ export default {
            });
            this.id1.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               $('#'+id1).find('img').attr('src',_this.headerImgae);
-               $('#'+id1).find('img').attr('data-src',_this.headerImgae);
-               $('#'+id1).find('img').css('display','inline-block');
+               $('#'+id1).prev('img').attr('src',_this.headerImgae);
+               $('#'+id1).prev('img').attr('data-src',_this.headerImgae);
+               $('#'+id1).prev('img').css('display','inline-block');
            });
 
 
@@ -457,9 +458,9 @@ export default {
           });
           this.id2.bind('FileUploaded',function(up,file,info){
               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-              $('#'+id2).find('img').attr('src',_this.headerImgae);
-              $('#'+id2).find('img').attr('data-src',_this.headerImgae);
-              $('#'+id2).find('img').css('display','inline-block');
+              $('#'+id2).prev('img').attr('src',_this.headerImgae);
+              $('#'+id2).prev('img').attr('data-src',_this.headerImgae);
+              $('#'+id2).prev('img').css('display','inline-block');
           });
 
            this.id1.init();
@@ -469,10 +470,10 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             let postData=[];
             if(this.identifyType.length==0){
-                this.showTipsText='请至少选择一种认证方式！谢谢...';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                Toast({
+                   message: '请至少选择一种认证方式！谢谢...',
+                   duration: 2000
+                });
                 return;
             }
             for(var i=0;i<this.identifyType.length;i++){
@@ -485,10 +486,10 @@ export default {
                 if(img.length!==0){
                     for(var j=0;j<img.length;j++){
                         if(!img[j].getAttribute('data-src')){
-                            this.showTipsText='请确认已选认证方式图片是否上传!';
-                            setTimeout(()=>{
-                                this.showTipsText='';
-                            },2000);
+                            Toast({
+                               message: '请确认已选认证方式图片是否上传!',
+                               duration: 2000
+                            });
                             return
                         }
                         obj.certifyPhoto.push(img[j].src);
@@ -499,30 +500,40 @@ export default {
             if(postData.length==1){
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                     if(res.data.success){
-                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
                         window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                        Toast({
+                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                           duration: 2000
+                        });
                         setTimeout(()=>{
-                           this.showTipsText='';
+
                             window.history.go(-1);
-                        },1500);
+                        },2000);
                     }else{
-                        this.showTipsText=e.msg||"";
+                         Toast({
+                            message: e.msg,
+                            duration: 2000
+                         });
                      }
                 }).catch((e)=>{
                     console.log(e);
                 });
             }else{
-                console.log(postData);
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
-                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
                         window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                        Toast({
+                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                           duration: 2000
+                        });
                         setTimeout(()=>{
-                           this.showTipsText='';
                             window.history.go(-1);
-                        },1500);
+                        },2000);
                     }else{
-                        this.showTipsText=e.msg||"";
+                        Toast({
+                           message: e.msg,
+                           duration: 2000
+                        });
                      }
                 }).catch((e)=>{
                     console.log(e);

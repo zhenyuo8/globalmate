@@ -284,15 +284,12 @@
 </template>
 
 <script>
-import List from '../components/list.vue'
-import ActionList from '../components/actionList.vue'
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
+import { MessageBox,Toast} from 'mint-ui';
 export default {
     'name': 'mine',
     components: {
-        List,
-        ActionList,
         loading
     },
     data() {
@@ -332,26 +329,55 @@ export default {
             });
         },
         addIMFriend(){
-            console.log(this.information);
-            console.log(this.currentUserId);
+            let _this=this;
             let content={
                 'item':'',
-                'chatContent':'',
+                'chatContent':"<i style='color:red'>我想和您成为好朋友!</i>",
                 'chatType':'add_friends_request',
                 'request_person':this.currentUserId
             }
-            YYIMChat.sendTextMessage({
-                to: this.information.id+'',
-                type: 'chat',
-                content: JSON.stringify(content),
-                body: {},
-                success:function(data){
-                },
-                error:function(err){
-                    console.log(err);
-                }
-            })
-            // YYIMChat.addRosterItem(this.information.id);
+            YYIMChat.getRosterItems({
+            	success: function(data){
+                    if(data){
+                        let userlist=JSON.parse(data);
+                        var isFriend=userlist.some((item,index)=>{
+                            return item.id==_this.information.id
+                        });
+                        if(isFriend){
+                            Toast({
+              					message: '您和'+_this.information.nikename+'已经是好友关系了！',
+              					duration: 2000
+            				});
+                        }else{
+                            MessageBox.confirm('',{
+                                title: '',
+                                message: '确定发送加好友请求?',
+                                confirmButtonText:_this.$t('button.confirm'),
+                                cancelButtonText:_this.$t('button.cancel'),
+                                showCancelButton: true
+                            }).then(action => {
+                                YYIMChat.sendTextMessage({
+                                    to: _this.information.id+'',
+                                    type: 'chat',
+                                    content: JSON.stringify(content),
+                                    body: {},
+                                    success:function(data){
+                                    },
+                                    error:function(err){
+                                        console.log(err);
+                                    }
+                                })
+                            }).catch(cancel=>{
+
+                            });
+                        }
+                    }
+            	},
+            	error: function(err){
+            		console.log(err);
+            	},
+            	complete: function(){}
+            });
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -381,18 +407,20 @@ export default {
                 this.loadingShow=false;
                 console.log(e);
             })
-        }
+        },
+
     },
     activated(){
         this.loadInfo();
+
         this.isOthers=true;
         this.otherUserId=this.$route.query.otherUserId;
+        this.currentUserId=this.$route.query.currentuser;
         if(!this.otherUserId||(this.otherUserId==this.currentUserId)){
             this.isOthers=false;
         }
     },
     created(){
-        this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
     }
 
 }

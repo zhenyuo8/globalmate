@@ -27,6 +27,9 @@ label,input{
 	-webkit-tap-highlight-color: transparent;
 	caret-color:red
 }
+input:disabled{
+    border: 1px solid #eee;
+}
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {

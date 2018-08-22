@@ -237,7 +237,6 @@ export default {
         return {
             id:'',
             userId:'',
-            show:false,
             country:'',
             detail:{
                 'title':'',
@@ -265,7 +264,6 @@ export default {
         };
 
         this.country='';
-        this.show=false;
         this.id=this.$route.query.id;
         this.userId=this.$route.query.userId;
         if(url.indexOf('openId=')>-1){
@@ -326,7 +324,7 @@ export default {
                     console.log(e);
                 })
             }else {
-                callback&&callback()
+                callback&&callback(this.token);
             }
         },
         loadData(token){
@@ -341,9 +339,7 @@ export default {
                      this.getOthersInfo(data.need.userId);
                      this.detail=data;
                      this.otherUserId=data.need.userId;
-                     setTimeout(()=>{
-                         this.show=true;
-                     },500)
+
                      for(var key in data.conceretNeed){
                          if(key=='tag'||key=='city'||key=='country'||key=='startTime'||key=='endTime'||key=='title'||key=='description'||key=='pic'||key=='rewardAmount'){
                              if(key=='startTime'||key=='endTime'){
@@ -396,7 +392,6 @@ export default {
 
                          }
                      }
-                     console.log(list);
                      _this.listData=list;
                      this.getPushItem(data.need.id)
                 }else{

@@ -13,7 +13,7 @@ export default{
         'cancel':'Cancel',
         'search':'Search',
         'evaluate':'Evaluate',
-        'finished':'Finished',
+        'finished':'Closed',
         'edit':'Edit'
     },
     formName:{
