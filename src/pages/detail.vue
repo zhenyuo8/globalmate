@@ -172,7 +172,7 @@
     <div class="detail_content">
         <div class="detail_top">
             <div class="image_user">
-                <img :src="othersImage" alt="">
+                <img :src="listData.othersImage+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="">
             </div>
             <div class="name_user">
                 <span class="name">{{listData.userName}}</span>
@@ -183,11 +183,11 @@
             </div>
         </div>
         <div class="detail_middle">
-            <p>标题：{{listData.title}}</p>
-            <p>地点：{{listData.country}}<i v-if="listData.city">_</i> {{listData.city}}</p>
-            <p>时间：{{listData.startTime}} <i v-if="listData.endTime">至</i> {{listData.endTime}}</p>
-            <p>悬赏金额(￥)：<i style="color:red">{{listData.rewardAmount}}</i></p>
-            <p>详细内容：{{listData.description}}</p>
+            <p>{{$t('formTitle.head')}} : {{listData.title}}</p>
+            <p>{{$t('formTitle.address')}} : {{listData.country}}<i v-if="listData.city">_</i> {{listData.city}}</p>
+            <p>{{$t('formTitle.time')}} : {{listData.startTime}} <i v-if="listData.endTime">{{$t('formTitle.to')}}</i> {{listData.endTime}}</p>
+            <p>{{$t('formTitle.reward')}}(￥) : <i style="color:red">{{listData.rewardAmount}}</i></p>
+            <p>{{$t('formTitle.decription')}}{{listData.description}}</p>
         </div>
         <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
             <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
@@ -196,7 +196,7 @@
         </div>
 
         <div class="list_repeat_pushed" >
-            <p>推送名单:</p>
+            <p>{{$t('formTitle.pushTitle')}} : </p>
             <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
                 <div class="" v-for="item in pushList">
                     <img :src="item.userInfo.pic" alt="">
@@ -205,7 +205,7 @@
             </div>
         </div>
         <div class="list_repeat_pushed">
-            <p>提供帮助方:</p>
+            <p>{{$t('formTitle.helpMan')}} : </p>
             <div class="list_repeat_pushed_item">
                 <div class="">
                     <img src="../assets/images/1.jpeg" alt="">
@@ -217,21 +217,19 @@
     </div>
     <div class="detail_message" v-show="userId!=otherUserId">
         <div class="detail_message_chart" :class="listData.enable!=1?'gl_disabled':''">
-            <span @click='goChart'>去帮助</span>
+            <span @click='goChart'>{{$t('button.gohelp')}}</span>
         </div>
     </div>
-    <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
 
 <script>
 import CONFIG from '../config/config.js'
-import tips from '../components/tips.vue'
+import { MessageBox,Toast} from 'mint-ui';
 export default {
     'name': 'detail',
     components: {
-        tips
     },
     data() {
         return {
@@ -243,7 +241,6 @@ export default {
                 'description':'',
                 'createTime':''
             },
-            othersImage:'',
             token:'',
             currentUserId:'',
             otherUserId:'',
@@ -257,10 +254,7 @@ export default {
         this.listData={};
         this.pushList=[];
         this.detail={
-            'title':'',
-            'country':'',
-            'description':'',
-            'type':''
+
         };
 
         this.country='';
@@ -270,7 +264,6 @@ export default {
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
             window.localStorage.setItem('USERID',this.userId);
-            this.initIM(this.userId);
         }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
@@ -336,7 +329,7 @@ export default {
             }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
-                     this.getOthersInfo(data.need.userId);
+
                      this.detail=data;
                      this.otherUserId=data.need.userId;
 
@@ -392,7 +385,11 @@ export default {
 
                          }
                      }
-                     _this.listData=list;
+
+                     this.getOthersInfo(data.need.userId,function(result){
+                         list['othersImage']=result||'../assets/images/icon.png';
+                         _this.listData=list;
+                     });
                      this.getPushItem(data.need.id)
                 }else{
 
@@ -436,10 +433,10 @@ export default {
         },
         goChart(){
             if(this.listData.enable!=1){
-                 this.showTipsText='当前任务已完成或者正在执行中';
-                 setTimeout(()=>{
-                     this.showTipsText='';
-                 },1500)
+                 Toast({
+                    message: '当前任务已完成或者正在执行中',
+                    duration: 2000
+                });
                  return
             }
 
@@ -454,139 +451,20 @@ export default {
                 }
             });
         },
-        getOthersInfo(userId){
+        getOthersInfo(userId,callback){
             this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
-                this.othersImage=res.data.data.pic||'../assets/images/icon.png';
+                callback&&callback(res.data.data.pic)
                 this.detail.country=res.data.data.country;
                 this.othersInfo=res.data.data
             }).catch((e)=>{
                 console.log(e);
             })
         },
-        initIM(username){
-            let _this=this;
-            YYIMChat.initSDK({
-                  app: 'globalmate_test', //appId应用id
-                  etp: 'zxy_test', //etpId企业id
-                  wsurl: 'stellar.yyuap.com', //websocket Url
-                  wsport: 5227, //websocket port 5227/5222/5225
-                  servlet: 'https://im.yyuap.com/', //rest Url
-                  hbport: 7075, //httpbind  port 7075/7070
-                  flash_swf_url: 'xxx/x/Moxie.swf', //flash 上传 swf文件位置
-                  logEnable: true, //client log
-                  clientMark: 'web', //client mark 'web' or 'pc'
-                  apiKey: '',
-                });
-            YYIMChat.init({
-              onOpened: function() {
-                // 登录成功
-                YYIMChat.getVCard({
-                  success:function(res){
-
-                  }
-                })
-              },
-              onExpiration: function(callback) {
-                //自动更新token
-                //callback(token, expiration);
-              },
-              onClosed: function(arg) {
-                //连接关闭
-              },
-              onConflicted: function(arg) {
-                //登陆冲突
-              },
-              onClientKickout: function(arg) {
-                //被他端踢掉
-              },
-              onUpdatePassword: function(arg) {
-                //更改密码，被踢掉
-              },
-              onAuthError: function(arg) {
-                //登陆认证失败
-              },
-              onConnectError: function(arg) {
-                //连接失败
-              },
-              onReceipts: function(arg) {
-                //消息回执
-              },
-              onSubscribe: function(arg) {
-                //发生订阅
-              },
-              onRosterFavorited: function(arg) {
-                //被收藏
-              },
-              onRosterUpdateded: function(arg) {
-                //好友信息更改
-              },
-              onMessage: function(arg) {
-                // _this.dealMessage(arg)
-                //收到消息,包括收到他人给自己发的消息和所有的群消息
-              },
-              onGroupUpdate: function(arg) {
-                //群组更新
-              },
-              onKickedOutGroup: function(arg) {
-                //群成员被群主提出
-              },
-              onTransferGroupOwner: function(arg){
-                //群主转让
-              },
-              onPresence: function(arg) {
-                //好友presence改变
-              },
-              onRosterDeleted: function(arg) {
-                //好友被删除
-              },
-              onPubaccountUpdate: function(pubaccounts) {
-                //公共号信息更新
-              },
-              onTransparentMessage: function(arg) {
-                //透传业务消息
-              },
-            });
-            this.loginIM(username);
-            YYIMChat.onMessage();
-        },
-        loginIM(username){
-
-            if(!username) return;
-             $.ajax({
-                url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
-                type: 'POST',
-                dataType: 'json',
-                headers: {"Content-Type": "application/json"},
-                data: JSON.stringify({
-                    "username":username,
-                    "clientId":"44a18837b5acf71f0017772df15e1542",
-                    "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
-                }),
-                success: function (result) {
-                    let clientIdentify = "pc" + String(new Date().getTime());
-                    //登陆YYIMSDK
-                    YYIMChat.login({
-                        "username": username,
-                        "token": result.token,
-                        "expiration": result.expiration,
-                        "appType": 4,
-                        "identify": clientIdentify
-                    });
-                },
-                error: function (arg) {
-                    console.log(arg);
-                }
-            });
-        },
     },
     created(){
-        if(window.localStorage.getItem('CURRENTUSER')){
-            this.currentUserId=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
-        }else{
-            this.currentUserId=this.$route.query.userId;
-        }
+
     }
 }
 
