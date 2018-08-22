@@ -69,7 +69,8 @@ export default{
          toWord:' To ',
          address:'Address',
          time:'Time',
-         decription:'Decription：'
+         decription:'Decription：',
+         indexnotice:' click following icons to submit your nedds'
 
     },
      personaPage:{

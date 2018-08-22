@@ -13,7 +13,6 @@ export default {
     data(){
         return{
             transitionName:'',
-            messageList:[]
         }
     },
     methods: {
@@ -35,7 +34,8 @@ export default {
             }else {
                 Toast({
                    message: '收到新消息，前往消息列表查看',
-                   duration: 2000
+                   duration: 2000,
+                   position:'top'
                });
             }
         },

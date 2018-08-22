@@ -17,7 +17,7 @@ YY<template>
             </swiper>
         </div>
         <div class="">
-            <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
+            <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
              <ul class="mainmenu">
                  <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
              </ul>
@@ -667,8 +667,7 @@ YY<template>
      }
      #index .index_notice{
          color: #f59d0b;
-         height: 20px;
-         line-height: 20px;
+         padding: 6px 0;
          text-align: left;
          background: #f9f8f4;
          padding-left: 20px;
