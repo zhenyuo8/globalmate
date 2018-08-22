@@ -13,7 +13,7 @@ export default{
         'cancel':'取消',
         'search':'搜索',
         'evaluate':'评价',
-        'finished':'完成',
+        'finished':'关闭',
         'edit':'重新编辑'
     },
     formName:{

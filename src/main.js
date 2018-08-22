@@ -63,9 +63,3 @@ loadLang(lang).then(() => {
     template: '<App/>'
   })
 })
-// new Vue({
-//   el: '#app',
-//   router,
-//   components: { App },
-//   template: '<App/>'
-// })

@@ -15,13 +15,13 @@
 					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.phone')}}</label>&nbsp:&nbsp&nbsp
 					<input id="phonesignup" name="phonesignup" required="required" type="text" :placeholder="$t('formTitle.phone')" />
 				</p>
-				<p>
+				<p @click="getSelectItem('country')">
 					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
-					<input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" />
+					<input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" disabled='true' />
 				</p>
-				<p>
+				<p @click="getSelectItem('city')">
 					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
-					<input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" />
+					<input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
 				</p>
 			</div>
 			<div class="image">
@@ -79,7 +79,7 @@
 				</p>
 				<p @click='openPicker' id="schooldatesignup_p">
 					<label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp:&nbsp&nbsp
-					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
+					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled'/>
 				</p>
 				<p>
 					<label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp:&nbsp&nbsp
@@ -94,6 +94,7 @@
                 </p>
 			</form>
 		</div>
+        <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
          <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
           <mt-datetime-picker
              ref="picker"
@@ -111,8 +112,13 @@
 <script>
 import CONFIG from '../config/config'
 import tips from '../components/tips.vue'
+import indexList from '../components/indexList.vue'
 import { DatetimePicker } from 'mint-ui';
+let pinyin=require('pinyin')
 export default {
+    components:{
+        tips,DatetimePicker,indexList
+    },
     data(){
         return{
             list:[this.$t('formName.study'),this.$t('formName.textbook'),this.$t('formName.formality'),this.$t('formName.exchange'),this.$t('formName.medical'),this.$t('formName.carry'),this.$t('formName.rent'),this.$t('formName.accompany'),this.$t('formName.daigou'),this.$t('formName.other')],
@@ -129,8 +135,10 @@ export default {
             showTipsText:'',
             startDate: new Date('1970/01/01'),
             endDate: new Date('2100/12/31'),
-            pickerValue:this.moment(new Date).format('YYYY-MM-DD')
-
+            pickerValue:this.moment(new Date).format('YYYY-MM-DD'),
+            show:false,
+            selectItem:[],
+            listType:''
         }
     },
 	methods:{
@@ -245,7 +253,95 @@ export default {
             this.$el.querySelector('#schoolprofessionalsignup').value=item.professional;
             this.$el.querySelector('#schoolgradesignup').value=item.grade;
         },
+        countrySityCallBack(items,value){
+            this.show=false;
+            this.selectItem=[];
+            if(value){
+                if(items=='country'){
+                    this.country=value;
+                    this.$el.querySelector('#countrysignup').value=value;
+                    this.$el.querySelector('#citysignup').value='';
+                }else{
+                   this.$el.querySelector('#citysignup').value=value;
+                }
+            }
+        },
+         getSelectItem(key){
+             this.apiHost=CONFIG[__ENV__].apiHost;
+             let url='',_this=this,postData={};
+             if(key=='city'&&this.country){
+                 url='/globalmate/rest/user/city';
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                     if(res.data.success){
+                         let result=res.data.data,resultArr=[];
+                         if(this.country=='中国'){
+                             resultArr=['北京','天津','上海','重庆'];
+                         }
+                         result.forEach(function (item,index) {
+                             resultArr.push(item.city);
+                         });
+                         _this.buildItem(resultArr,key);
+                     }
+                 }).catch(e=>{
+                     this.showTipsText=e.msg;
+                     setTimeout(()=>{
+                         this.showTipsText=''
+                     },2000);
+                 })
+             }else if(key=='country'){
+                 url='/globalmate/rest/user/country';
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                     if(res.data.success){
+                         _this.buildItem(res.data.data,key);
+                     }
+                 }).catch(e=>{
+                     this.showTipsText=e.msg;
+                     setTimeout(()=>{
+                         this.showTipsText=''
+                     },2000);
+                 })
+             }else{
+                 this.showTipsText='请先选择国家！';
+                 setTimeout(()=>{
+                     this.showTipsText=''
+                 },2000);
+             }
 
+         },
+         buildItem(data,key){
+             let letter=this.buildLetter();
+             let _this = this;
+             for (let i = 0; i < 26; i++) {
+               letter[i].citylist = []
+             }
+             for (let i = 0; i < data.length; i++) {
+               let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65)
+               if (_index >= 0 && _index < 26) {
+                 letter[_index].citylist.push(data[i])
+               }
+             }
+             let showCity = letter.filter(function (value) {
+               let len = value.citylist.length
+               return len > 0
+             });
+             this.show=true;
+             this.listType=key;
+             this.selectItem=showCity;
+             window.localStorage.setItem('LIST',JSON.stringify(this.selectItem))
+         },
+         buildLetter(){
+             let letter = [];
+             for (let i = 0; i < 26; i++) {
+               let obj = {}
+               obj.letter = String.fromCharCode((65 + i))
+               obj.citylist = []
+               letter.push(obj)
+             }
+             return letter;
+         },
+         getFirstLetter(str){
+             return pinyin(str)[0][0].charAt(0).toUpperCase()
+         },
 		submit(){
             this.apiHost=CONFIG[__ENV__].apiHost;
     	    let postData={
@@ -403,9 +499,7 @@ export default {
         },
 
 	},
-    components:{
-        tips,DatetimePicker
-    },
+
     activated(){
           this.selectFlag=false;
           this.educationFlag=false;
@@ -621,7 +715,7 @@ export default {
 		right: 0;
 		bottom: 0;
 		top: 0;
-    z-index: 2;
+        z-index: 2;
 		-webkit-transition: all .3s ease-in;
         -moz-transition: all .3s ease-in;
         transition: all .3s ease-in;
@@ -734,7 +828,29 @@ export default {
     label i{
         color: red!important;
     }
-
+    .list_show{
+        position: fixed;
+        right:0;
+        top:0;
+        bottom:0;
+        width:7.5rem;
+        background:#f5f5f5;
+       -webkit-transition: all .2s ease-in;
+       -moz-transition: all .2s ease-in;
+       transition: all .2s ease-in;
+       overflow: scroll;
+    }
+    .list_hide{
+        position: fixed;
+        right: -7.5rem;
+        top:0;
+        bottom:0;
+        width:7.1rem;
+        background:#fff;
+        -webkit-transition: all .2s ease-out;
+        -moz-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+    }
 
 
 </style>

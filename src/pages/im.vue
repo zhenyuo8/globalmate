@@ -17,7 +17,7 @@
 	                </div>
 	                <div class="chart_main_content_action">
 	                    <div class="">
-	                        <span class='do_help' @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
+	                        <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
 	                    </div>
 	                </div>
 	            </div>
@@ -50,6 +50,7 @@
 
 <script>
 import CONFIG from '../config/config'
+import { MessageBox,Toast} from 'mint-ui';
 export default {
     data(){
         return{
@@ -65,6 +66,7 @@ export default {
 			},
 			imageArr:[],
 			others:false,
+			hasSelectAready:false,
 			i_do_help:false,
 			wait_answer:false,
 			wait_evaluate:false,
@@ -119,11 +121,33 @@ export default {
 		 * @return {[type]} [description]
 		 */
 		selectWhoHelp(){
+			let _this=this;
+			if(this.detail.enable!=1){
+				Toast({
+  					message: '当前求助正在执行中',
+  					duration: 2000
+				});
+				return
+			}
+            MessageBox.confirm('',{
+                title: '',
+                message: "确定选择 <"+_this.othersInfo.nikename+"> 来帮忙？",
+                confirmButtonText:this.$t('button.confirm'),
+                cancelButtonText:this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                _this.confirmWhoHelp();
+            }).catch(cancel=>{
+
+            });
+		},
+		confirmWhoHelp(){
 			this.apiHost=CONFIG[__ENV__].apiHost;
             this.axios.get(this.apiHost+'/globalmate/rest/assist/'+this.detail.id+'/agree'+'?providerId='+this.othersInfo.id+'&token='+this.$route.query.token,{
 
             }).then((res)=>{
                 if(res.data.success){
+					this.hasSelectAready=true
                      console.log(res.data);
 
                 }else{
@@ -209,8 +233,8 @@ export default {
 					obj['chatContent']=content.chatContent;
 				}
 			}catch(e){
-					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
-					obj['chatContent']=arg.data.content;
+					// $li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+					// obj['chatContent']=arg.data.content;
 			}
 			obj['pic']=arg.pic;
 			obj['type']=true;
@@ -239,7 +263,7 @@ export default {
                      let data=res.data.data;
                      for(var key in data.conceretNeed){
                          if(key==='pic'){
-                             if(data.conceretNeed[key]){
+                             if(data.conceretNeed[key]&&data.conceretNeed[key].indexOf('aliyuncs')>-1){
                                  this.imageArr=data.conceretNeed[key].split(';');
                              }
                          }
@@ -255,6 +279,9 @@ export default {
                      }
 					 if(this.CURRENTUSER.id!==res.data.data.need.userId){
 						 this.others=true;
+					 }
+					 if(res.data.data.need.enable!=1){
+						 this.hasSelectAready=true
 					 }
                 }else{
 
@@ -338,31 +365,31 @@ export default {
 				username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
 			}
 
-			 $.ajax({
-		        url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
-		        type: 'POST',
-		        dataType: 'json',
-		        headers: {"Content-Type": "application/json"},
-		        data: JSON.stringify({
-		            "username":username,
-		            "clientId":"44a18837b5acf71f0017772df15e1542",
-		            "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
-		        }),
-		        success: function (result) {
-		            let clientIdentify = "pc" + String(new Date().getTime());
-		            //登陆YYIMSDK
-		            YYIMChat.login({
-		                "username": username,
-		                "token": result.token,
-		                "expiration": result.expiration,
-		                "appType": 4,
-		                "identify": clientIdentify
-		            });
-		        },
-		        error: function (arg) {
-		            console.log(arg);
-		        }
-		    });
+			//  $.ajax({
+		    //     url: 'https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token',
+		    //     type: 'POST',
+		    //     dataType: 'json',
+		    //     headers: {"Content-Type": "application/json"},
+		    //     data: JSON.stringify({
+		    //         "username":username,
+		    //         "clientId":"44a18837b5acf71f0017772df15e1542",
+		    //         "clientSecret":"959E5086D0544F36C915F91B624EA8DE"
+		    //     }),
+		    //     success: function (result) {
+		    //         let clientIdentify = "pc" + String(new Date().getTime());
+		    //         //登陆YYIMSDK
+		    //         YYIMChat.login({
+		    //             "username": username,
+		    //             "token": result.token,
+		    //             "expiration": result.expiration,
+		    //             "appType": 4,
+		    //             "identify": clientIdentify
+		    //         });
+		    //     },
+		    //     error: function (arg) {
+		    //         console.log(arg);
+		    //     }
+		    // });
 		},
 		init(){
 			let _this=this;
@@ -462,12 +489,12 @@ export default {
 		this.id='';
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
-		if(window.localStorage.getItem('CURRENTUSER')){
-			this.CURRENTUSER=JSON.parse(window.localStorage.getItem('CURRENTUSER'));
+		if(window.localStorage.getItem('gl_CURRENTUSER')){
+			this.CURRENTUSER=JSON.parse(window.localStorage.getItem('gl_CURRENTUSER'));
 			this.currentUserImgae=this.CURRENTUSER.pic;
 		}
 		this.getOthersInfo(this.toChartId);
-		this.init();
+		// this.init();
 		this.loadData();
 	},
 	mounted(){
@@ -584,8 +611,11 @@ export default {
 	&.do_help{
 		background: #1676ec
 	}
+	&.do_help_grey{
+		background: #b3b3b3;
+	}
 }
-.do_evaluate{
-
+.mint-toast{
+	padding: 20px .2rem!important;
 }
 </style>

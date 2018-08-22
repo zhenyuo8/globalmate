@@ -100,7 +100,7 @@
         {{$t('button.publish')}}
     </div>
     <div class="assist_bottom" @click='publish' v-show="isEditType">
-        提交
+        {{$t('button.submit')}}
     </div>
      <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
      <div class="defindloadig" v-if="loadingShow">
@@ -126,10 +126,10 @@
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
 import indexList from '../components/indexList.vue'
+let pinyin=require('pinyin')
 import CONFIG from '../config/config'
 import tips from '../components/tips.vue'
 import loading from '../components/loading.vue'
-let pinyin=require('pinyin')
 import { Toast} from 'mint-ui';
 import { DatetimePicker } from 'mint-ui';
 export default {
