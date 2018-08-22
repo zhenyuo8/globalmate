@@ -1,7 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import VueRouter from 'vue-router';
+// import VueRouter from 'vue-router';
 import App from './App'
 import axios from 'axios';
 import qs from 'qs';
@@ -15,6 +15,7 @@ import utils from './libs/js/util.js'
 import VueLazyLoad from 'vue-lazyload'
 import VueI18n from 'vue-i18n';
 import messages from './locales';
+import store from './store'
 
 require('es6-promise').polyfill();
 window.Vue = Vue;
@@ -57,6 +58,7 @@ loadLang(lang).then(() => {
     el: '#app',
     i18n,
     router,
+    store,
     components: { App },
     template: '<App/>'
   })

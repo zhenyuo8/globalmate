@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "chalk": "^2.4.1",
+    "i18n-vuex": "^1.0.5",
     "ip": "^1.1.5",
     "koa2": "^2.0.0-alpha.7",
     "mint-ui": "^2.2.13",

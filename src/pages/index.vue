@@ -460,7 +460,6 @@ export default {
   activated() {
     document.title = "Glohelp";
     this.getToken(this.getCurrentUser);
-
     setTimeout(() => {
       this.loadingShow = false;
     }, 1500);
@@ -540,16 +539,14 @@ export default {
     }, 500);
   },
 
-  created() {
-    let _this = this;
-    $("body").on("click", function(e) {
+  mounted() {
+    document.querySelector('body').addEventListener('click', e => {
       if (
-        e.target.className.indexOf("icon-user") === -1 &&
-        _this.showPersonal
+        !e.target.className.includes("icon-user") && this.showPersonal
       ) {
-        _this.showPersonal = false;
+        this.showPersonal = false;
       }
-    });
+    })
   }
 };
 </script>

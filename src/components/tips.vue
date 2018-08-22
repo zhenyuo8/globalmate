@@ -21,10 +21,9 @@
 			}
 		},
 		methods:{
-			wrapClick(){
-				this.showTipsText='';
+			wrapClick (){
+				// this.showTipsText='';
 			}
-
 		},
 		activated(){
 

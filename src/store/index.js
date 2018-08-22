@@ -5,8 +5,8 @@ import globalmate from './globalmate/';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    modules: {
-        i18n: vuexI18n.store,
-        business: globalmate,
-    }
+  modules: {
+    i18n: vuexI18n.store,
+    globalmate: globalmate,
+  }
 })

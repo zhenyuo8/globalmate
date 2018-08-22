@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +17,7 @@
       left: 0;
       z-index: 111;
     }
+
     .authorization_totast>div {
       display: inline-block;
       margin: auto;
@@ -32,68 +34,69 @@
 </head>
 
 <body>
-  <div class="authorization_totast">
+  <!-- <div class="authorization_totast">
     <div class="">
       登入中...
     </div>
-  </div>
+  </div> -->
 
   <script>
-    var dom = document.querySelector('.authorization_totast');
-    function getQuery(name) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-      var r = window.location.search.substr(1).match(reg);
-      if (r != null) {
-        return unescape(r[2]);
-      }
-      return null;
-    };
+    // var dom = document.querySelector('.authorization_totast');
+    // function getQuery(name) {
+    //   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+    //   var r = window.location.search.substr(1).match(reg);
+    //   if (r != null) {
+    //     return unescape(r[2]);
+    //   }
+    //   return null;
+    // };
     function Authorization() {
-      var url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/index.html#/';
+      var url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/enter.html#/';
       axios.get(url).then(function (res) {
         res && res.data && res.data.data && window.location.replace(res.data.data)
       })
     };
-    function codeToToken(code) {
-      let url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code=' + code;
-      axios.get(url).then(function (result) {
-        var data = result.data.data;
-        if (data && data.token) {
-          window.localStorage.removeItem('TOKEN');
-          window.localStorage.setItem('GLOBALMATE_WX_ACCESS_TOKEN', JSON.stringify({
-            'value': data.token,
-            'expires': Date.now() + 2 * 60 * 60 * 1000
-          }));
-          dom.style.display = 'none';
-          window.localStorage.setItem('TOKEN', data.token);
-          window.localStorage.setItem('USERID', data.user.id);
-          window.localStorage.setItem('OPENID', data.user.openid);
-          window.location.replace('http://glmate.cuibq.com/dist/index.html#/' + getQuery('router'))
-        }
-      })
-    };
-    function wxAuthorization() {
-      var ACCESS_TOKEN = window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
-      if (ACCESS_TOKEN) {
-        ACCESS_TOKEN = JSON.parse(ACCESS_TOKEN);
-        if (ACCESS_TOKEN.expires < Date.now()) {
-          Authorization();
-        } else {
-          dom.style.display = 'none';
-          window.localStorage.setItem('TOKEN', ACCESS_TOKEN.value);
-          window.location.replace('http://glmate.cuibq.com/dist/index.html#/' + getQuery('router'))
-        }
-      } else {
-        if (getQuery('code')) {
-          var code = getQuery('code');
-          codeToToken(code);
-        } else {
-          Authorization();
-        }
-      }
-    };
+    Authorization()
+    // function codeToToken(code) {
+    //   let url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code=' + code;
+    //   axios.get(url).then(function (result) {
+    //     var data = result.data.data;
+    //     if (data && data.token) {
+    //       // window.localStorage.setItem('GLOBALMATE_WX_ACCESS_TOKEN', JSON.stringify({
+    //       //   'value': data.token,
+    //       //   'expires': Date.now() + 2 * 60 * 60 * 1000
+    //       // }));
+    //       dom.style.display = 'none';
+    //       window.sessionStorage.setItem('globalMate', res.data)
+    //       // window.localStorage.setItem('TOKEN', data.token);
+    //       // window.localStorage.setItem('USERID', data.user.id);
+    //       // window.localStorage.setItem('OPENID', data.user.openid);
+    //       window.location.replace('http://glmate.cuibq.com/dist/index.html#/' + getQuery('router'))
+    //     }
+    //   })
+    // };
+    // function wxAuthorization() {
+      // var ACCESS_TOKEN = window.localStorage.getItem('GLOBALMATE_WX_ACCESS_TOKEN');
+      // if (ACCESS_TOKEN) {
+      //   ACCESS_TOKEN = JSON.parse(ACCESS_TOKEN);
+      //   if (ACCESS_TOKEN.expires < Date.now()) {
+      //     Authorization();
+      //   } else {
+      //     dom.style.display = 'none';
+      //     window.localStorage.setItem('TOKEN', ACCESS_TOKEN.value);
+      //     window.location.replace('http://glmate.cuibq.com/dist/index.html#/' + getQuery('router'))
+      //   }
+      // } else {
+      // if (getQuery('code')) {
+      //   var code = getQuery('code');
+      //   codeToToken(code);
+      // } else {
+        // Authorization();
+      // }
+      // }
+    // };
     // dom.style.display = 'none';
-    wxAuthorization();
+    // wxAuthorization();
   </script>
 </body>
 

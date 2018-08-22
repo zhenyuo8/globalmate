@@ -3311,6 +3311,10 @@ humanize-number@0.0.2:
   version "0.0.2"
   resolved "http://registry.npm.taobao.org/humanize-number/download/humanize-number-0.0.2.tgz#11c0af6a471643633588588048f1799541489c18"
 
+i18n-vuex@^1.0.5:
+  version "1.0.5"
+  resolved "http://registry.npm.taobao.org/i18n-vuex/download/i18n-vuex-1.0.5.tgz#be861c6ce9f5936d39713c2ee8b40fff12b5c412"
+
 iconv-lite@0.4.19:
   version "0.4.19"
   resolved "http://registry.npm.taobao.org/iconv-lite/download/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"

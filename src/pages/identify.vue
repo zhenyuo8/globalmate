@@ -514,14 +514,14 @@ export default {
             }else{
                 console.log(postData);
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
-                    if(res.data.success){
+                    if(res.data.success) {
                         this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
                         window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                         setTimeout(()=>{
                            this.showTipsText='';
                             window.history.go(-1);
                         },1500);
-                    }else{
+                    } else {
                         this.showTipsText=e.msg||"";
                      }
                 }).catch((e)=>{
