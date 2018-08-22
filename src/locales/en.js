@@ -14,7 +14,9 @@ export default{
         'search':'Search',
         'evaluate':'Evaluate',
         'finished':'Closed',
-        'edit':'Edit'
+        'edit':'Edit',
+        'gohelp':'Go Help',
+        'send':'Send'
     },
     formName:{
         'study':'Study',
@@ -63,7 +65,11 @@ export default{
          evaluateTips:'Comments on him/her',
          score:'scores',
          pushTitle:'Push List',
-         helpMan:'Supplier'
+         helpMan:'Supplier',
+         toWord:' To ',
+         address:'Address',
+         time:'Time',
+         decription:'Decription：'
 
     },
      personaPage:{

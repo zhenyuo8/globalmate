@@ -414,7 +414,6 @@ YY<template>
         display: none;
         right: .04rem;
         border: 1px solid #fff;
-        /*display: inline-table;*/
     }
     .icon-global-im::before{
         color: #bfbfbf;
@@ -423,7 +422,6 @@ YY<template>
         line-height: 36px;
     }
     .icon-user::before{
-        /*color: #bfbfbf;*/
         font-size: 26px;
         line-height: 36px;
     }
@@ -469,7 +467,6 @@ YY<template>
         content: '';
         height: 10px;
         width: 10px;
-        /*border: 1px solid;*/
     }
     .user_wrap > span{
         display: inline-block;
@@ -497,25 +494,26 @@ YY<template>
      .mainmenu:after { clear: both; content: " "; display: block; }
      .mainmenu{
          background: #fff;
-         padding: 0 .06rem;
+         padding: 10px .06rem;
          font-size: 12px;
      }
      .mainmenu li{
         float:left;
-        margin-left: .4rem;
+        width: 20%;
         margin-top: 2.5%;
-        width: 1rem;
         border-radius:3px;
         overflow:hidden;
     }
 
      .mainmenu li a{ display:block;  color:#FFF;   text-align:center;text-decoration:none}
      .mainmenu li a b{
-        display:block;
-        border-radius: 50%;
-        height:1rem;
-        font-size: 28px;
-        line-height: 1rem;
+         width: 1rem;
+         height: 1rem;
+         margin: auto;
+         display:block;
+         border-radius: 50%;
+         font-size: 28px;
+         line-height: 1rem;
     }
      .mainmenu li a img{
         margin: 15px auto 15px;
@@ -523,8 +521,7 @@ YY<template>
 
      .mainmenu li a span{
          display:block;
-         height:30px;
-         line-height:30px;
+         line-height: 30px;
          background-color:#FFF;
          color: #999;
          font-size:12px;
