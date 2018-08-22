@@ -249,12 +249,6 @@
                     text-align: center;
 
 				}
-                &.gl_inProcess{
-                    span{
-                        background: #b3b3b3;
-                    }
-
-                }
 			}
 			.list_repeat_user{
 				display: flex;
@@ -388,7 +382,7 @@
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
-			<div class="list_repeat_action" v-if="item.need.status!='已关闭'" :class="item.need.enable!=1?'gl_inProcess':''">
+			<div class="list_repeat_action" v-show="item.need.enable==1">
 				<span @click='goHelp($event,item)'>去帮助</span>
 			</div>
 		</div>

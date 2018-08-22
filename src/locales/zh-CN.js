@@ -89,5 +89,11 @@ export default{
     messagePage:{
         friends:'好友',
         concat:'联系人',
+    },
+    status:{
+        execute:'帮助中',
+        closed:'关闭',
+        open:'开放中',
+
     }
 }

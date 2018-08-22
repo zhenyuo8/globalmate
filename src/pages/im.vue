@@ -1,7 +1,7 @@
 <template>
 	<div class="um-win um-page" id="main">
 		<div class="um-content p5" id="content">
-			<div class="im_top_fix">
+			<div class="im_top_fix" v-show="id">
 				<div class="chart_main_content">
 	                <div class="chart_main_content_image" @click='showDetail(detail)'>
 	                    <div class="">
@@ -21,7 +21,7 @@
 	                </div>
 	            </div>
 			</div>
-			<div id="convo" class="convo">
+			<div id="convo" class="convo" :class="id?'':'gl_no_item'">
 				<ul class="chat-thread" id="chat-thread">
 					<li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)'>
 						<img :src="item.pic" alt="">
@@ -66,11 +66,7 @@ export default {
 			imageArr:[],
 			others:false,
 			hasSelectAready:false,
-			i_do_help:false,
-			wait_answer:false,
-			wait_evaluate:false,
 			historyList:[],
-			status_type:['i_do_help','i_do_cancel','i_wait_answer','i_wait_evaluate','i_rejected','i_evaluate_each','i_do_answer','i_do_evaluate','i_do_reject','i_show_evaluate']
 
         }
     },
@@ -197,7 +193,9 @@ export default {
 				}
 				obj['pic']=this.currentUserImgae;
 				obj['type']=false;
-				this.historyList.push(obj)
+				$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + obj['chatContent'] + '</div> </li>');
+				$('#chat-thread').append($li);
+				// this.historyList.push(obj)
 
 			}
 
@@ -214,43 +212,6 @@ export default {
 		    $('#content').animate({
 		        scrollTop: top
 		    }, 100);
-		},
-		createOnMessage(arg){
-			let headerPath = require("../assets/images/icon.png");
-			if(arg&&!arg.pic){
-				arg.pic=headerPath;
-			}
-			if(!arg) return;
-			let $li,_this=this;
-			let obj={};
-			try{
-				let content=JSON.parse(arg.data.content);
-				if(content&&content.chatType&&!content.chatContent){
-					this.processChatType(content.chatType);
-				}else{
-					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
-					obj['chatContent']=content.chatContent;
-				}
-			}catch(e){
-					// $li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
-					// obj['chatContent']=arg.data.content;
-			}
-			obj['pic']=arg.pic;
-			obj['type']=true;
-			this.historyList.push(obj);
-			if($li){
-				$li.on('click',function (e) {
-					if(e.target.tagName=='IMG'){
-						_this.showPersonal()
-					}
-				});
-			}
-
-			//  $('#chat-thread').append($li);
-			 let top = $('#convo').height();
- 		    $('#content').animate({
- 		        scrollTop: top
- 		    }, 100);
 		},
 
 		loadData(){
@@ -411,6 +372,9 @@ export default {
 .convo{
 	margin-top: 90px!important;
 	margin-bottom: 10px;
+}
+.gl_no_item{
+	margin-top: 0!important;
 }
 .chart_main_content{
 	font-size: 14px;

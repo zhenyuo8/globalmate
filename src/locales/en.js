@@ -90,5 +90,11 @@ export default{
          friends:'Friends',
          concat:'Concats',
 
+     },
+     status:{
+         execute:'Executing',
+         closed:'Closed',
+         open:'openning',
+
      }
 }

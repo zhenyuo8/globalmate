@@ -34,11 +34,6 @@
     }
     .detail_message_chart{
         height: 36px;
-        &.gl_disabled{
-            span{
-                background: #b3b3b3;
-            }
-        }
     }
 
     .detail_message_chart span{
@@ -91,14 +86,29 @@
             bottom: 0;
             line-height: 35px;
             span{
-                color: blue;
                 font-size: 14px;
             }
         }
-        .status_close{
-            span{
-                color: red!important;
-            }
+        .status_1{
+            color:#238204;
+        }
+        .status_2{
+            color:#847405;
+        }
+        .status_0{
+            color:red;
+        }
+        .status_6{
+            color:#666;
+        }
+        .status_4{
+            color:#238204;
+        }
+        .status_5{
+            color:#847405;
+        }
+        .status_3{
+            color:#e407f3;
         }
     }
     .detail_middle{
@@ -178,14 +188,14 @@
                 <span class="name">{{listData.userName}}</span>
                 <span class="type">{{listData.tag}}</span>
             </div>
-            <div class="status_user" :class="">
+            <div class="status_user" :class="'status_'+listData.enable">
                 <span>{{listData.status}}</span>
             </div>
         </div>
         <div class="detail_middle">
             <p>{{$t('formTitle.head')}} : {{listData.title}}</p>
             <p>{{$t('formTitle.address')}} : {{listData.country}}<i v-if="listData.city">_</i> {{listData.city}}</p>
-            <p>{{$t('formTitle.time')}} : {{listData.startTime}} <i v-if="listData.endTime">{{$t('formTitle.to')}}</i> {{listData.endTime}}</p>
+            <p>{{$t('formTitle.time')}} : {{listData.startTime}} <i v-if="listData.endTime">{{$t('formTitle.toWord')}}</i> {{listData.endTime}}</p>
             <p>{{$t('formTitle.reward')}}(￥) : <i style="color:red">{{listData.rewardAmount}}</i></p>
             <p>{{$t('formTitle.decription')}}{{listData.description}}</p>
         </div>
@@ -216,7 +226,7 @@
         </div>
     </div>
     <div class="detail_message" v-show="userId!=otherUserId">
-        <div class="detail_message_chart" :class="listData.enable!=1?'gl_disabled':''">
+        <div class="detail_message_chart" v-show="listData.enable==1">
             <span @click='goChart'>{{$t('button.gohelp')}}</span>
         </div>
     </div>
@@ -256,9 +266,9 @@ export default {
         this.detail={
 
         };
-
         this.country='';
         this.id=this.$route.query.id;
+        this.token=this.$route.query.token;
         this.userId=this.$route.query.userId;
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
@@ -269,10 +279,10 @@ export default {
         this.apiHost=CONFIG[__ENV__].apiHost;
         let _this=this;
         this.getToken(function (token) {
-            if(!token){
-                token=_this.$route.query.token;
+            if(token){
+                this.token=token;
             }
-            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{
+            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token,{
 
             }).then((res)=>{
                 if(res.data.success){
@@ -282,7 +292,6 @@ export default {
                     }
                     _this.country=data.country;
                     _this.loadData(token);
-
                 }
 
             }).catch((e)=>{
@@ -420,10 +429,14 @@ export default {
                 if(res.data.success){
                    if(res.data.data&&res.data.data.length!=0){
                        var nowData=res.data.data;
+                       var pushArr=[];
                        for(var i=0;i<nowData.length;i++){
-                           this.getPushItemInfo(nowData[i],function (result) {
-                               _this.pushList.push(result);
-                           });
+                           if(!pushArr.includes(nowData[i].providerId)){
+                               this.getPushItemInfo(nowData[i],function (result) {
+                                   _this.pushList.push(result);
+                               });
+                                pushArr.push(nowData[i].providerId)
+                           }
                        }
                    }
                 }
@@ -431,6 +444,10 @@ export default {
                 console.log(e);
             })
         },
+        /**
+         * 推送重复 数据去重
+         * @return {[type]} [description]
+         */
         goChart(){
             if(this.listData.enable!=1){
                  Toast({
@@ -443,9 +460,9 @@ export default {
             this.$router.push({
                 path: 'im',
                 query: {
-                    'token': this.$route.query.token,
+                    'token': this.token,
                     'title': this.othersInfo.nikename,
-                    'id': this.$route.query.id,
+                    'id': this.id,
                     'toChartUser':this.othersInfo.nikename,
                     'toChartId':this.othersInfo.id,
                 }
@@ -455,9 +472,10 @@ export default {
             this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
-                callback&&callback(res.data.data.pic)
                 this.detail.country=res.data.data.country;
                 this.othersInfo=res.data.data
+                callback&&callback(res.data.data.pic)
+
             }).catch((e)=>{
                 console.log(e);
             })
