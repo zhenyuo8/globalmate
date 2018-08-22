@@ -409,7 +409,6 @@
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
-   <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
    <div :class="rightIn?'slide_in_one':'slide_out_one'" class="filter_right">
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
@@ -453,13 +452,13 @@
 import searchInput from '../components/searchInput.vue'
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
-import tips from '../components/tips.vue'
 import indexList from '../components/indexList.vue'
+import { MessageBox,Toast} from 'mint-ui';
 let pinyin=require('pinyin')
 export default {
     'name': 'seekHelpList',
     components: {
-        searchInput,loading,tips,indexList
+        searchInput,loading,indexList
     },
     data() {
         return {
@@ -480,7 +479,6 @@ export default {
           },
           isSOS:false,
           loadingShow:true,
-          showTipsText:'',
           show:false,
           selectItem:[],
           listType:''
@@ -533,10 +531,10 @@ export default {
             e.cancelBubble=true;
             let _this=this;
             if(item.need.enable!=1){
-                this.showTipsText='当前任务已完成或者正在执行中！'
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                 Toast({
+                    message: '当前任务已完成或者正在执行中！',
+                    duration: 2000
+                 });
                 return;
             }
             this.getUserInfo(item.need.userId,function(data){
@@ -671,17 +669,18 @@ export default {
                      if(res.data.success){
                          _this.buildItem(res.data.data,key);
                      }
-                 }).catch(e=>{
-                     this.showTipsText=e.msg;
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                 }).catch((e)=>{
+                     Toast({
+                        message: e.msg,
+                        duration: 2000
+                     });
                  })
+
              }else{
-                 this.showTipsText='请先选择国家！';
-                 setTimeout(()=>{
-                     this.showTipsText=''
-                 },2000);
+                 Toast({
+                    message: '请先选择国家！',
+                    duration: 2000
+                 });
              }
 
          },

@@ -14,7 +14,9 @@ export default{
         'search':'搜索',
         'evaluate':'评价',
         'finished':'关闭',
-        'edit':'重新编辑'
+        'edit':'重新编辑',
+        'gohelp':'去帮助',
+        'send':'发送'
     },
     formName:{
         'study':'学习互助',
@@ -63,7 +65,11 @@ export default{
         evaluateTips:'对她/他的评价',
         score:'分',
         pushTitle:'推送名单',
-        helpMan:'提供帮助放'
+        helpMan:'提供帮助放',
+        toWord:'至',
+        address:'地点',
+        time:'时间',
+        decription:'详细内容：'
     },
     personaPage:{
         edit:'编辑',
