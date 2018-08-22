@@ -209,14 +209,12 @@
         </div>
     </div>
     <button type="button" name="button" class='submitbtn' @click='submitData' >{{$t('button.submit')}}</button>
-    <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
 
 <script>
 import CONFIG from '../config/config'
-import tips from '../components/tips.vue'
 export default {
     'name': 'mine',
     data() {
@@ -226,11 +224,10 @@ export default {
             showIDCARD:true,
             showSTUDENTID:false,
             showPASSPORT:false,
-            showTipsText:''
         }
     },
     components: {
-        tips
+
     },
     computed:{
 
@@ -473,10 +470,10 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             let postData=[];
             if(this.identifyType.length==0){
-                this.showTipsText='请至少选择一种认证方式！谢谢...';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                Toast({
+                   message: '请至少选择一种认证方式！谢谢...',
+                   duration: 2000
+                });
                 return;
             }
             for(var i=0;i<this.identifyType.length;i++){
@@ -489,10 +486,10 @@ export default {
                 if(img.length!==0){
                     for(var j=0;j<img.length;j++){
                         if(!img[j].getAttribute('data-src')){
-                            this.showTipsText='请确认已选认证方式图片是否上传!';
-                            setTimeout(()=>{
-                                this.showTipsText='';
-                            },2000);
+                            Toast({
+                               message: '请确认已选认证方式图片是否上传!',
+                               duration: 2000
+                            });
                             return
                         }
                         obj.certifyPhoto.push(img[j].src);
@@ -503,30 +500,40 @@ export default {
             if(postData.length==1){
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                     if(res.data.success){
-                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
                         window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                        Toast({
+                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                           duration: 2000
+                        });
                         setTimeout(()=>{
-                           this.showTipsText='';
+
                             window.history.go(-1);
-                        },1500);
+                        },2000);
                     }else{
-                        this.showTipsText=e.msg||"";
+                         Toast({
+                            message: e.msg,
+                            duration: 2000
+                         });
                      }
                 }).catch((e)=>{
                     console.log(e);
                 });
             }else{
-                console.log(postData);
                 this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
-                        this.showTipsText='感谢您的配合，我们会尽快审核你的认证信息!';
                         window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                        Toast({
+                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                           duration: 2000
+                        });
                         setTimeout(()=>{
-                           this.showTipsText='';
                             window.history.go(-1);
-                        },1500);
+                        },2000);
                     }else{
-                        this.showTipsText=e.msg||"";
+                        Toast({
+                           message: e.msg,
+                           duration: 2000
+                        });
                      }
                 }).catch((e)=>{
                     console.log(e);

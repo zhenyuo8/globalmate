@@ -7,12 +7,13 @@
 </template>
 
 <script>
-
+import {Toast} from 'mint-ui';
 export default {
     name: 'App',
     data(){
         return{
-            transitionName:''
+            transitionName:'',
+            messageList:[]
         }
     },
     methods: {
@@ -22,6 +23,50 @@ export default {
             var rem = width / 7.5;
             docEl.style.fontSize = rem + 'px';
         },
+        dealMessage(arg){
+
+            if(!arg) return;
+            if(this.$route.name=='index'){
+                $('.message_tips').show();
+            }else if(this.$route.name=='im'){
+                this.createOnMessage(arg)
+            }else if(this.$route.name=='messageList'){
+                // this.appVue(arg)
+            }else {
+                Toast({
+                   message: '收到新消息，前往消息列表查看',
+                   duration: 2000
+               });
+            }
+        },
+        createOnMessage(arg){
+			let headerPath = require("./assets/images/icon.png");
+			if(!arg) return;
+            if(!arg.pic){
+				arg.pic=headerPath;
+			}
+			let $li,_this=this;
+			let obj={};
+			try{
+				let content=JSON.parse(arg.data.content);
+				if(content&&content.chatType&&!content.chatContent){
+
+				}else{
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
+					obj['chatContent']=content.chatContent;
+				}
+			}catch(e){
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+					obj['chatContent']=arg.data.content;
+			}
+			obj['pic']=arg.pic;
+			obj['type']=true;
+			 $('#chat-thread').append($li);
+			 let top = $('#convo').height();
+ 		    $('#content').animate({
+ 		        scrollTop: top
+ 		    }, 100);
+		},
         initIM(){
             let _this=this;
             YYIMChat.initSDK({
@@ -79,9 +124,8 @@ export default {
               onRosterUpdateded: function(arg) {
                 //好友信息更改
               },
-              onMessage: function(arg,callback) {
-                  console.log(arg,1111);
-                // _this.dealMessage(arg)
+              onMessage: function(arg) {
+                _this.dealMessage(arg)
                 //收到消息,包括收到他人给自己发的消息和所有的群消息
               },
               onGroupUpdate: function(arg) {
@@ -144,6 +188,7 @@ export default {
                 }
             });
         },
+
         getToken(){
             // this.apiHost=CONFIG[__ENV__].apiHost;
             // this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+'111',{}).then((res)=>{
@@ -159,6 +204,10 @@ export default {
     },
     mounted () {
         this.setrem();
+        setTimeout(()=>{
+            this.initIM();
+        },1000)
+
     },
     watch:{
          $route(to, from) {
@@ -181,7 +230,7 @@ export default {
             }
     },
     created(){
-        this.initIM();
+
     }
 }
 </script>

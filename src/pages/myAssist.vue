@@ -167,7 +167,8 @@
                 <p>{{$t('formTitle.pushTitle')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
                     <div class="" v-for="items in item.pushList" @click='goChat(item,items)'>
-                        <img :src="items.userInfo.pic" alt="">
+                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                         <span>{{items.userInfo.nikename}}</span>
                     </div>
                 </div>
@@ -203,7 +204,6 @@
    <div class="defindloadig" v-if="loadingShow">
        <loading></loading>
    </div>
-   <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
 </div>
 
 </template>
@@ -211,12 +211,11 @@
 <script>
 import CONFIG from '../config/config.js'
 import loading from '../components/loading.vue'
-import tips from '../components/tips.vue'
-import { MessageBox } from 'mint-ui';
+import { MessageBox,Toast} from 'mint-ui';
 export default {
     'name': 'myAssist',
     components: {
-        loading,tips
+        loading
     },
     data() {
         return {
@@ -225,7 +224,6 @@ export default {
             noDataTips:'',
             loadingShow:true,
             currentUserImgae:'',
-            showTipsText:''
         }
     },
     methods:{
@@ -260,10 +258,10 @@ export default {
             event.stopPropagation();
             e.cancelBubble=true;
             if(item.need.enable!=1&&item.need.enable!=3){
-                this.showTipsText='当前任务正在执行中，暂不能编辑！';
-                setTimeout(()=>{
-                    this.showTipsText=''
-                },2000);
+                Toast({
+                   message: '当前任务正在执行中，暂不能编辑!',
+                   duration: 2000
+               });
                 return;
             }
             this.$router.push({
@@ -277,7 +275,6 @@ export default {
             });
         },
         finished(e,item){
-            console.log(item);
             e=e?e:window.event;
     		e.preventDefault();
     		event.stopPropagation();
@@ -315,10 +312,10 @@ export default {
                         console.log(e);
                     })
                 }else{
-                    this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
-                    setTimeout(()=>{
-                        this.showTipsText=''
-                    },2000);
+                    Toast({
+                       message: '当前任务还未找到帮助者，暂不能完成！',
+                       duration: 2000
+                   });
                     return;
                 }
             }else{
@@ -332,10 +329,10 @@ export default {
                          console.log(e);
                      })
                  }else{
-                     this.showTipsText='当前任务还未找到帮助者，暂不能完成！';
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                     Toast({
+                        message: '当前任务还未找到帮助者，暂不能完成！',
+                        duration: 2000
+                    });
                      return;
                  }
             }
@@ -358,10 +355,10 @@ export default {
             event.stopPropagation();
             e.cancelBubble=true;
             if(item.need.enable!=6&&item.need.enable!=0){
-                this.showTipsText='当前任务还未完成，暂不能评价！';
-                setTimeout(()=>{
-                    this.showTipsText=''
-                },2000);
+                Toast({
+                   message: '当前任务还未完成，暂不能评价！',
+                   duration: 2000
+               });
                 return;
             }
             this.$router.push({
@@ -514,7 +511,7 @@ export default {
        this.getToken(this.loadData);
    },
    created(){
-       this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
+    //    this.currentUserImgae=JSON.parse(window.localStorage.getItem('CURRENTUSER')).pic;
    }
 
 }
