@@ -10,7 +10,7 @@
             <mt-tab-container v-model="selected">
                 <mt-tab-container-item v-for="(item,index) in tabContent" :id="index" :key='index'>
                     <ul class="rank_user_img"  >
-                        <li v-for="items in item.list">
+                        <li v-for="(items,index) in item.list" :key='index'>
                             <img src="../assets/images/12.jpeg" alt="">
                         </li>
                     </ul>

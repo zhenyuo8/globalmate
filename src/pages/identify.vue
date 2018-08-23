@@ -134,9 +134,9 @@
     <div class="identify_type">
         <h3>{{$t('personaPage.selectidentify')}}</h3>
         <div class="identify_type_select">
-            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
+            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
+            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
+            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')">{{$t('personaPage.passport')}}</span>
             <!-- <span class="icon-checkbox" @click="selectType($event,'ALIPAYID')" :key=''>支付宝</span> -->
         </div>
     </div>

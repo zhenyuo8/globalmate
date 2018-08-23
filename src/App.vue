@@ -10,31 +10,6 @@
 
 <script>
 import userMix from "./mixins/userInfo";
-// <<<<<<< HEAD
-// import userMix from './mixins/userInfo'
-// export default {
-//   mixins: [userMix],
-//   name: "App",
-//   data() {
-//     return {
-//       transitionName: "",
-//       code: ""
-//     };
-//   },
-//   methods: {
-//     setrem() {
-//       var docEl = window.document.documentElement;
-//       var width = docEl.getBoundingClientRect().width;
-//       var rem = width / 7.5;
-//       docEl.style.fontSize = rem + "px";
-//     },
-//     handleParam(str) {
-//       const reg = /code\=([0-9a-zA-Z]+)/;
-//       const match = str.match(reg);
-//       if (match && match.length === 2 && match[1]) {
-//         this.code = match[1];
-//       }
-// =======
 import { Toast } from "mint-ui";
 export default {
   name: "App",
@@ -48,11 +23,19 @@ export default {
   },
   methods: {
     handleParam(str) {
-      const reg = /code\=([0-9a-zA-Z]+)/;
+      const reg = /code\=([0-9a-zA-Z\-\_]+)/;
       const match = str.match(reg);
       if (match && match.length === 2 && match[1]) {
         this.code = match[1];
       }
+    },
+    getRouter (str) {
+      const reg = /router\=([a-zA-Z]+)/;
+      const match = str.match(reg);
+      if (match && match.length === 2 && match[1]) {
+        return match[1]
+      }
+      return ''
     },
     setrem() {
       var docEl = window.document.documentElement;
@@ -264,16 +247,29 @@ export default {
   },
   mounted() {
     this.setrem();
-    setTimeout(() => {
+    if (window.YYIMChat) {
       this.initIM();
-    }, 1000);
+    } else {
+      this.timer = setInterval(() => {
+        if (window.YYIMChat) {
+          this.initIM();
+          clearInterval(this.timer)
+        }
+      }, 300)
+    }
   },
   created() {
     this.handleParam(window.location.href);
     if (!this.code) {
-      window.location.replace("/static/login.html");
+      // window.location.replace("/static/login.html");
     } else {
-      this.loadUserMsg();
+      this.loadUserMsg(this.code);
+    }
+    let router = this.getRouter(window.location.href);
+    if (router) {
+      this.$router.replace({
+        name: router
+      })
     }
   },
   watch: {
@@ -287,6 +283,9 @@ export default {
         }
       } else if (to.meta.index == 0 && from.meta.index > 0) {
         this.transitionName = "slide-right";
+      }
+      if (from.name === null && to.meta.index === 1) {
+        this.transitionName = "";
       }
       //当然，如果你没有需要设置索引值为0的页面可以直接用着一段
       /*if( to.meta.index < from.meta.index){

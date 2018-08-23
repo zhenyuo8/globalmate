@@ -103,7 +103,7 @@
 		<div class="message_warp">
 			<p v-show="friends.length!==0">{{$t('messagePage.friends')}}</p>
 			<ul>
-				<li v-for="(item,index) in friends" @click='toChatPage(item)'>
+				<li v-for="(item,index) in friends" @click='toChatPage(item)' :key='index'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
 						<img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'"  v-if='item.users.pic' alt="">
 						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
@@ -117,7 +117,7 @@
 			</ul>
 			<p v-show="list.length!==0">{{$t('messagePage.concat')}}</p>
 			<ul class="gl_contact">
-				<li v-for="(item,index) in list" @click='goIm(item)'>
+				<li v-for="(item,index) in list" @click='goIm(item)' :key='index'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
 						<img :src="item.users.pic" alt=""  v-if='item.users.pic'>
 						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
@@ -192,9 +192,10 @@ export default {
 		 * @return {[type]} [description]
 		 */
 		getFriendsInGlohelp(){
-			this.apiHost=CONFIG[__ENV__].apiHost;
+      if (!this.CURRENTUSER) return
+ 			this.apiHost = CONFIG[__ENV__].apiHost;
 			this.axios.get(this.apiHost+'/globalmate/rest/userRelation/getFriends?token='+this.$route.query.token+'&userId='+this.CURRENTUSER.id,{
-				userId:this.CURRENTUSER.id
+				userId: this.CURRENTUSER.id
 			}).then((res)=>{
 				if(res.data.success){
 					console.log(res.data,11111);
@@ -394,14 +395,18 @@ export default {
 			});
 		},
 		getUserByToken(){
-			this.apiHost=CONFIG[__ENV__].apiHost;
-			this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{}).then((res)=>{
+			this.apiHost = CONFIG[__ENV__].apiHost;
+			this.axios.get(this.apiHost + '/globalmate/rest/user/getUserByToken',{
+        params: {
+          token: this.$route.query.token
+        }
+      }).then((res) => {
 				if(res.data.success){
-					this.CURRENTUSER=res.data.data;
+					this.CURRENTUSER = res.data.data;
 					window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data));
 					// this.initIM();
 				}
-			}).catch((e)=>{
+			}).catch((e) => {
 				console.log(e);
 			})
 		}

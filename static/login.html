@@ -42,17 +42,19 @@
 
   <script>
     // var dom = document.querySelector('.authorization_totast');
-    // function getQuery(name) {
-    //   var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-    //   var r = window.location.search.substr(1).match(reg);
-    //   if (r != null) {
-    //     return unescape(r[2]);
-    //   }
-    //   return null;
-    // };
+    function getQuery(name) {
+      var reg = /query\=(\w+)/;
+      var r = window.location.search.substr(1).match(reg);
+      if (r) {
+        return unescape(r[1]);
+      }
+      return '';
+    };
     function Authorization() {
-      var url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/enter.html#/';
+      var router = getQuery('query');
+      var url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/enter.html?router='+router+'#/';
       axios.get(url).then(function (res) {
+        // console.log(res)
         res && res.data && res.data.data && window.location.replace(res.data.data)
       })
     };

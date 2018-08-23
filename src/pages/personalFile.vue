@@ -4,23 +4,23 @@
         <form class="personalFile_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p>
-					<label for="nicknamesignup" class="nickname" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.nikname')}}</label>&nbsp:&nbsp&nbsp
+					<label for="nicknamesignup" class="nickname" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.nikname')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="nicknamesignup" name="nicknamesignup" required="required" type="text" :placeholder="$t('formTitle.nikname')" />
 				</p>
 				<p>
-					<label for="truenamesignup" class="truename" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.name')}}</label>&nbsp:&nbsp&nbsp
+					<label for="truenamesignup" class="truename" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.name')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="truenamesignup" name="truenamesignup" required="required" type="text" :placeholder="$t('formTitle.name')" />
 				</p>
                 <p>
-					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.phone')}}</label>&nbsp:&nbsp&nbsp
+					<label for="phonesignup" class="phone" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.phone')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="phonesignup" name="phonesignup" required="required" type="text" :placeholder="$t('formTitle.phone')" />
 				</p>
 				<p @click="getSelectItem('country')">
-					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
+					<label for="countrysignup" class="country" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" disabled='true' />
 				</p>
 				<p @click="getSelectItem('city')">
-					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
+					<label for="citysignup" class="city" data-icon="u"><i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
 				</p>
 			</div>
@@ -36,7 +36,7 @@
 		<div class="personalFile_school">
 			<div class="personalFile_school_add" @click='fillEducation'>
                 <ul>
-                    <li v-for="(item,index) in educationValue" @click='showEducationDetail(item)'>
+                    <li v-for="(item,index) in educationValue" @click='showEducationDetail(item)' :key='index'>
                         <span class="fl">{{item.schoolname}}</span>
                         <span class="fr icon-arrow_right_samll">{{item.schooldate}}</span>
                     </li>
@@ -61,7 +61,7 @@
 		</div>
 		<div :class="selectFlag?'select_in':'select_out'">
 			<ul class="list_ul">
-				<li v-for="(item,index) in list" @click='selectItemType(item,index)'>
+				<li v-for="(item,index) in list" @click='selectItemType(item,index)' :key='index'>
 					<span class="list_item">{{item}}</span>
 					<span class="icon-checkbox"></span>
 				</li>
@@ -74,19 +74,19 @@
 		<div class="fillin_education" :class="educationFlag?'education_in':'education_out'" @click="hideThisModule($event)">
 			<form class="" action="" method="post" onsubmit='return false'>
 				<p>
-					<label for="schoolsignup" class="schoolname" data-icon="u">{{$t('formTitle.schoolname')}}</label>&nbsp:&nbsp&nbsp
+					<label for="schoolsignup" class="schoolname" data-icon="u">{{$t('formTitle.schoolname')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p @click='openPicker' id="schooldatesignup_p">
-					<label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp:&nbsp&nbsp
+					<label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp;&nbsp;&nbsp;
 					<input  id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled'/>
 				</p>
 				<p>
-					<label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp:&nbsp&nbsp
+					<label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
 				<p>
-					<label for="schoolgradesignup" class="grade" data-icon="u">{{$t('formTitle.schoolclass')}}</label>&nbsp:&nbsp&nbsp
+					<label for="schoolgradesignup" class="grade" data-icon="u">{{$t('formTitle.schoolclass')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text" :readonly='showEducationValue' />
 				</p>
                 <p class="confirm_add" v-if="!showEducationValue">

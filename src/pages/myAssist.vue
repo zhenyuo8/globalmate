@@ -156,7 +156,7 @@
 
 <div class="gl_list">
     <div class="list_warp">
-        <div class="list_repeat" v-for="(item,index) in myAssistList">
+        <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
             <div class="list_repeat_content" @click='showDetail(item)'>
                 <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
                 <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
@@ -166,7 +166,7 @@
             <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
                 <p>{{$t('formTitle.pushTitle')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
-                    <div class="" v-for="items in item.pushList" @click='goChat(item,items)'>
+                    <div class="" v-for="(items,index) in item.pushList" @click='goChat(item,items)' :key='index'>
                         <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
                         <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                         <span>{{items.userInfo.nikename}}</span>

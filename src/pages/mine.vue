@@ -108,7 +108,7 @@
         </div>
     </div>
     <div class="mine_business">
-        <div class="" v-for="item in listRepeat">
+        <div class="" v-for="(item,index) in listRepeat" :key='index'>
             <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
         </div>
     </div>

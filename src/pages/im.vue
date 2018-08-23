@@ -23,7 +23,7 @@
 			</div>
 			<div id="convo" class="convo">
 				<ul class="chat-thread" id="chat-thread">
-					<li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)'>
+					<li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)' :key='index'>
 						<img :src="item.pic" alt="">
 						<div class="chat-item-text">
 							{{item.chatContent}}

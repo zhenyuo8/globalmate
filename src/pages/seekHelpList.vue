@@ -368,7 +368,7 @@
     <!--搜索框-->
 	<searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
 	<div class="list_wrap">
-		<div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)'>
+		<div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
 			<div class="list_repeat_user">
 				<div class="image_user" @click='goDetail($event,item)'>
 					<img :src="item.need.pic" alt="">
@@ -384,7 +384,7 @@
 			</div>
 			<p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
 			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
-                <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
+                <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
@@ -413,15 +413,15 @@
         <form class="rightIn_form" action="" method="post" onsubmit='return false'>
 			<div class="name">
 				<p @click="getSelectItem('country')">
-					<label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp:&nbsp&nbsp
+					<label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')"  disabled='true' />
 				</p>
 				<p @click="getSelectItem('city')">
-					<label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp:&nbsp&nbsp
+					<label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
 				</p>
                 <p @click='selectHelpType'>
-                    <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp:&nbsp&nbsp
+                    <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp;&nbsp;&nbsp;
 					<input id="typesearch" name="typesearch" required="required" type="text"  :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled'  :value="selectHelpTypeValue" />
                 </p>
 			</div>
@@ -432,7 +432,7 @@
         </div>
         <div :class="selectFlag?'select_in':'select_out'">
 			<ul class="list_ul">
-				<li v-for="(item,index) in list" @click='selectItemType(item,index)'>
+				<li v-for="(item,index) in list" @click='selectItemType(item,index)' :key='index'>
 					<span class="list_item">{{item}}</span>
 					<span class="icon-checkbox"></span>
 				</li>

@@ -72,7 +72,7 @@
 <div class="assist" @click='removeFile($event)'>
     <div class="body">
         <div class="main_view">
-            <div class="main_view_repeat" v-for="item in listRepeat">
+            <div class="main_view_repeat" v-for="(item,index) in listRepeat" :key='index'>
                 <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
             </div>
         </div>

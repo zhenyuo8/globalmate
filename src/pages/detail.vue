@@ -178,7 +178,7 @@
                 <span class="name">{{listData.userName}}</span>
                 <span class="type">{{listData.tag}}</span>
             </div>
-            <div class="status_user" :class="">
+            <div class="status_user">
                 <span>{{listData.status}}</span>
             </div>
         </div>
@@ -190,7 +190,7 @@
             <p>{{$t('formTitle.decription')}}{{listData.description}}</p>
         </div>
         <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
-            <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
+            <div class="detail_content_img" v-for="(items,indexs) in listData.pic" :key='indexs'>
                 <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
             </div>
         </div>
@@ -198,7 +198,7 @@
         <div class="list_repeat_pushed" >
             <p>{{$t('formTitle.pushTitle')}} : </p>
             <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
-                <div class="" v-for="item in pushList">
+                <div class="" v-for="(item, index) in pushList" :key='index'>
                     <img :src="item.userInfo.pic" alt="">
                     <span>{{item.userInfo.nikename}}</span>
                 </div>

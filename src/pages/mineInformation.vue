@@ -243,7 +243,7 @@
                 {{$t('formTitle.mycircle')}}
             </div>
             <div class="mineInformation_school_content">
-                <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
+                <div class="mineInformation_school_content_repeat" v-for="(item,index) in school" :key='index'>
                     <span class="scholl_name">{{item.schoolname}}</span>
                     <span class="scholl_time">{{item.schooldate}}</span>
                     <span class="scholl_professional">{{item.professional}}</span>
@@ -271,7 +271,7 @@
             </div>
             <div class="mineInformation_comment_content">
                 <p v-if="tipInOther.length==0">暂无评价</p>
-                <span v-for='item in tipInOther'>{{item}}</span>
+                <span v-for='(item,index) in tipInOther' :key='index'>{{item}}</span>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="mineInformationEdit">
-        <div class="" v-for="item in listRepeat" @click='editItem(item)'>
+        <div class="" v-for="(item,index) in listRepeat" @click='editItem(item)' :key='index'>
             <List :itemRepeat='item' ></List>
         </div>
 
