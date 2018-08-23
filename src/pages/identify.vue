@@ -96,7 +96,9 @@
       width: 100%;
       height: 100%;
       position: absolute;
-      z-index: 11;
+      left: 0;
+      top: 0;
+    //   z-index: 11;
       display: none;
       border-radius: 4px;
   }
@@ -148,8 +150,9 @@
             <div class="identify_body IDCARD">
                 <div class="warp">
                     <div class="identify_face_page" >
-                        <img src="" alt="">
+
                         <div class="" id='id_face'>
+                            <img src="" alt="">
                             <span class="icon-camera2"></span>
                             <span class="icon-tips">点击拍照/上传人像面</span>
                         </div>
@@ -157,8 +160,9 @@
                 </div>
                 <div class="warp">
                     <div class="identify_opposite_page"  >
-                        <img src="" alt="">
+
                         <div class="" id='id_opposite'>
+                            <img src="" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传国徽面</span>
                         </div>
@@ -173,8 +177,9 @@
             <div class="identify_body STUDENTID">
                 <div class="warp">
                     <div class="identify_face_page"  >
-                        <img src="" alt="">
+
                         <div class="" id='id_student'>
+                            <img src="" alt="">
                             <span class="icon-camera2"></span>
                             <span class="icon-tips">点击拍照/上传人像面</span>
                         </div>
@@ -182,8 +187,9 @@
                 </div>
                 <div class="warp">
                     <div class="identify_opposite_page"  >
-                        <img src="" alt="">
+
                         <div class="" id='id_student_opposite'>
+                            <img src="" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传文字面</span>
                         </div>
@@ -198,8 +204,8 @@
             <div class="identify_body PASSPORT">
                 <div class="warp">
                     <div class="identify_face_page" >
-                        <img src="" alt="">
                         <div class="" id='id_passport'>
+                           <img src="" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传第一页</span>
                         </div>
@@ -207,8 +213,8 @@
                 </div>
                 <div class="warp">
                     <div class="identify_opposite_page" >
-                        <img src="" alt="">
                         <div class="" id='id_passport_opposite'>
+                            <img src="" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传第二页</span>
                         </div>
@@ -237,6 +243,7 @@ export default {
             showIDCARD:true,
             showSTUDENTID:false,
             showPASSPORT:false,
+            hasAreadyUpload:false,
         }
     },
     components: {
@@ -246,18 +253,6 @@ export default {
 
     },
     methods: {
-
-        clickCallBack(item) {
-
-
-        },
-        goEditMineInfo(){
-
-        },
-        loadData(){
-
-        },
-
         selectType(e,type){
             let _this=this;
             if($(e.target).hasClass('select_class')){
@@ -273,11 +268,11 @@ export default {
             }
             if(type=='STUDENTID'){
                 if(!this['id_student']){
-                    this.initID('id_student','id_student_opposite')
+                    this.initUploader('id_student','id_student_opposite')
                 }
             }else if(type=='PASSPORT'){
                 if(!this['id_passport']){
-                    this.initID('id_passport','id_passport_opposite')
+                    this.initUploader('id_passport','id_passport_opposite')
                 }
             }
         },
@@ -303,73 +298,8 @@ export default {
                 preloader.load( file.getSource() );
             }
         },
-		initUploader(id){
-            let _this=this;
-            this.apiHost=CONFIG[__ENV__].apiHost;
-            let ossMap={};
-            this.filesHasUpload=[];
-            this.multipart_params={
-                'key':'',
-                'policy':'',
-                'OSSAccessKeyId':'',
-                'success_action_status':'',
-                'signature':''
-            }
-            this.axios.get(this.apiHost+'/globalmate/rest/file/ossPolicy'+'?token='+this.$route.query.token,'').then(res=>{
-                if(res.data.success){
-                    ossMap.accessid=res.data.data.accessid;
-                    ossMap.policy=res.data.data.policy;
-                    ossMap.signature=res.data.data.signature;
-                    ossMap.key=res.data.data.dir;
-                    ossMap.host=res.data.data.host;
-                    ossMap.success_action_status=200;
-                }
-            }).catch(e=>{
 
-            })
-            this.fileUploader=new plupload.Uploader({
-                runtimes : 'html5,flash,silverlight,html4',
-                browse_button : id, //触发文件选择对话框的按钮，为那个元素id
-                url : 'http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/', //服务器端的上传页面地址
-                flash_swf_url : '../libs/plupload/Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
-                silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
-            });
-            this.fileUploader.bind('FilesAdded',function(uploader,files){
-        		 for(var i=0,len=files.length;i<len;i++){
-                    var file_name=files[i].name;
-                    !function(i){
-                        // _this.previewImage(files[i],function(imgsrc){
-                        //     let imgEle=document.createElement('img');
-                        //     imgEle.src=imgsrc;
-                        //
-                        // });
-                    }(i);
-                }
-                _this.fileUploader.start();
-	       });
-           this.fileUploader.bind('BeforeUpload',function(up,file){
-               file.name=new Date().getTime()+'_'+file.name;
-               _this.multipart_params={
-                   'key':ossMap.key+'_'+file.name,
-                   'policy':ossMap.policy,
-                   'OSSAccessKeyId':ossMap.accessid,
-                   'success_action_status':'200',
-                   'signature':ossMap.signature
-               }
-               up.setOption({
-                   'url':ossMap.host,
-                   'multipart_params':_this.multipart_params,
-               })
-           });
-           this.fileUploader.bind('FileUploaded',function(up,file,info){
-               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               $('#'+id).find('img').attr('src',_this.headerImgae);
-               $('#'+id).find('img').attr('data-src',_this.headerImgae);
-               $('#'+id).find('img').css('display','inline-block');
-           });
-           this.fileUploader.init();
-        },
-        initID(id1,id2){
+        initUploader(id1,id2){
             let _this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
             let ossMap={};
@@ -429,9 +359,10 @@ export default {
            });
            this.id1.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               $('#'+id1).prev('img').attr('src',_this.headerImgae);
-               $('#'+id1).prev('img').attr('data-src',_this.headerImgae);
-               $('#'+id1).prev('img').css('display','inline-block');
+               console.log($('#'+id1).find('img'));
+               $('#'+id1).find('img').attr('src',_this.headerImgae);
+               $('#'+id1).find('img').attr('data-src',_this.headerImgae);
+               $('#'+id1).find('img').css('display','inline-block');
            });
 
 
@@ -471,9 +402,9 @@ export default {
           });
           this.id2.bind('FileUploaded',function(up,file,info){
               _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-              $('#'+id2).prev('img').attr('src',_this.headerImgae);
-              $('#'+id2).prev('img').attr('data-src',_this.headerImgae);
-              $('#'+id2).prev('img').css('display','inline-block');
+              $('#'+id2).find('img').attr('src',_this.headerImgae);
+              $('#'+id2).find('img').attr('data-src',_this.headerImgae);
+              $('#'+id2).find('img').css('display','inline-block');
           });
 
            this.id1.init();
@@ -510,54 +441,157 @@ export default {
                 }
                 postData.push(obj);
             }
-            if(postData.length==1){
-                this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
-                    if(res.data.success){
-                        window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
-                        Toast({
-                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
-                           duration: 2000
-                        });
-                        setTimeout(()=>{
-                            window.history.go(-1);
-                        },2000);
-                    }else{
-                         Toast({
-                            message: e.msg,
-                            duration: 2000
-                         });
-                     }
-                }).catch((e)=>{
-                    console.log(e);
-                });
+            if(this.hasAreadyUpload){
+                if(postData.length==1){
+                    this.axios.post(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                        if(res.data.success){
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            Toast({
+                               message: '认证资料更新成功，我们会尽快重新审核你的认证信息!',
+                               duration: 2000
+                            });
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },2000);
+                        }else{
+                             Toast({
+                                message: e.msg,
+                                duration: 2000
+                             });
+                         }
+                    }).catch((e)=>{
+                        console.log(e);
+                    });
+                }else{
+                    this.axios.put(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                        if(res.data.success){
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            Toast({
+                               message: '认证资料更新成功，我们会尽快审核你的认证信息!',
+                               duration: 2000
+                            });
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },2000);
+                        }else{
+                            Toast({
+                               message: e.msg,
+                               duration: 2000
+                            });
+                         }
+                    }).catch((e)=>{
+                        console.log(e);
+                    });
+                }
             }else{
-                this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
-                    if(res.data.success){
-                        window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
-                        Toast({
-                           message: '感谢您的配合，我们会尽快审核你的认证信息!',
-                           duration: 2000
-                        });
-                        setTimeout(()=>{
-                            window.history.go(-1);
-                        },2000);
-                    }else{
-                        Toast({
-                           message: e.msg,
-                           duration: 2000
-                        });
-                     }
-                }).catch((e)=>{
-                    console.log(e);
-                });
+                if(postData.length==1){
+                    this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                        if(res.data.success){
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            Toast({
+                               message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                               duration: 2000
+                            });
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },2000);
+                        }else{
+                             Toast({
+                                message: e.msg,
+                                duration: 2000
+                             });
+                         }
+                    }).catch((e)=>{
+                        console.log(e);
+                    });
+                }else{
+                    this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                        if(res.data.success){
+                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
+                            Toast({
+                               message: '感谢您的配合，我们会尽快审核你的认证信息!',
+                               duration: 2000
+                            });
+                            setTimeout(()=>{
+                                window.history.go(-1);
+                            },2000);
+                        }else{
+                            Toast({
+                               message: e.msg,
+                               duration: 2000
+                            });
+                         }
+                    }).catch((e)=>{
+                        console.log(e);
+                    });
+                }
             }
-
+        },
+        loadData(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/certify/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{}).then((res)=>{
+                if(res.data.success){
+                    let list=res.data.data;
+                    let showList=[];
+                    if(list.length!=0){
+                        this.identifyType=[];
+                        this.hasAreadyUpload=true;
+                        for(let i=0;i<list.length;i++){
+                            if(list[i].certifyPhoto){
+                                let type=list[i].cetifyType;
+                                let pic=JSON.parse(list[i].certifyPhoto);
+                                if(!showList.includes(type)){
+                                    showList.push(type);
+                                    if(!this.identifyType.includes(type)){
+                                        this.identifyType.push(type)
+                                    }
+                                    this['show'+type]=true;
+                                    switch (type) {
+                                        case 'IDCARD':
+                                            this.initUploader('id_face','id_opposite');
+                                            this.showImage('id_face','id_opposite',pic)
+                                            break;
+                                        case 'STUDENTID':
+                                            this.initUploader('id_student','id_student_opposite')
+                                            this.showImage('id_student','id_student_opposite',pic)
+                                            break;
+                                        case 'PASSPORT':
+                                            this.initUploader('id_passport','id_passport_opposite')
+                                            this.showImage('id_passport','id_passport_opposite',pic)
+                                            break;
+                                        default:
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        this.identifyType=['IDCARD'];
+                        this.initUploader('id_face','id_opposite');
+                    }
+                }else{
+                     Toast({
+                        message: e.msg,
+                        duration: 2000
+                     });
+                 }
+            }).catch((e)=>{
+                console.log(e);
+            });
+        },
+        showImage(id1,id2,pic){
+             $('#'+id1).find('img').attr('src',pic[0]);
+             $('#'+id1).find('img').attr('data-src',pic[0]);
+             $('#'+id1).find('img').css('display','inline-block');
+             $('#'+id2).find('img').attr('src',pic[1]);
+             $('#'+id2).find('img').attr('data-src',pic[1]);
+             $('#'+id2).find('img').css('display','inline-block');
         }
 
     },
     activated(){
-        this.identifyType=['IDCARD'];
-        this.initID('id_face','id_opposite');
+        this.loadData();
+
+
     },
     watch:{
         'title':function (val,old) {
@@ -565,7 +599,6 @@ export default {
         }
     },
     created(){
-        this.loadData();
         this.title=this.$route.query.title;
     }
 }

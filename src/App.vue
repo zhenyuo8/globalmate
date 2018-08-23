@@ -28,8 +28,13 @@ export default {
             if(this.$route.name=='index'){
                 $('.message_tips').show();
                 if($('.message_tips').text()!=''){
-                    let num=$('.message_tips').text()-0;
-                    $('.message_tips').text(num++);
+                    let num=parseInt($('.message_tips').text());
+                    if(num>=99){
+                        num=99+
+                        $('.message_tips').text(num);
+                    }else{
+                        $('.message_tips').text(num++);
+                    }
                 }
             }else if(this.$route.name=='im'){
                 this.createOnMessage(arg)

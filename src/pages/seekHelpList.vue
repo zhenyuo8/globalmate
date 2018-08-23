@@ -203,13 +203,11 @@
                 right: 0.4rem;
                 bottom: 0.2rem;
 				span{
-					width: 1rem;
 					padding: 6px .15rem;
 					background: #2361ea;
 					border-radius: 4px;
 					color: #fff;
                     text-align: center;
-
 				}
 			}
 			.list_repeat_user{
@@ -466,13 +464,13 @@ export default {
             e.preventDefault;
             e.cancelBubble=true;
             let _this=this;
-            if(item.need.enable!=1){
-                 Toast({
-                    message: '当前任务已完成或者正在执行中！',
-                    duration: 2000
-                 });
-                return;
-            }
+            // if(item.need.enable!=1){
+            //      Toast({
+            //         message: '当前任务已完成或者正在执行中！',
+            //         duration: 2000
+            //      });
+            //     return;
+            // }
             this.getUserInfo(item.need.userId,function(data){
                 _this.$router.push({
                     path: 'im',
@@ -578,15 +576,17 @@ export default {
             }
         },
          getSelectItem(key){
+             let lang = navigator.language || 'zh-CN';
+             let isEN = /^zh/.test(lang) ? false : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
              this.apiHost=CONFIG[__ENV__].apiHost;
              let url='',_this=this,postData={};
              if(key=='city'&&this.country){
                  url='/globalmate/rest/user/city';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          let result=res.data.data,resultArr=[];
-                         if(this.country=='中国'){
-                             resultArr=['北京','天津','上海','重庆'];
+                         if(this.country=='中国'||this.country=='China'){
+                             resultArr=[this.$t('cityName.beijing'),this.$t('cityName.tianjin'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
                          }
                          result.forEach(function (item,index) {
                              resultArr.push(item.city);
@@ -595,13 +595,14 @@ export default {
                      }
                  }).catch(e=>{
                      this.showTipsText=e.msg;
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                     Toast({
+                        message: e.msg,
+                        duration: 2000
+                     });
                  })
              }else if(key=='country'){
                  url='/globalmate/rest/user/country';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          _this.buildItem(res.data.data,key);
                      }
@@ -702,13 +703,13 @@ export default {
                                  var status=data[i].need.enable+'';
                                  switch (status) {
                                      case '1':
-                                         data[i].need.status='开放中';
+                                         data[i].need.status=this.$t('status.open');
                                          break;
                                      case '2':
-                                         data[i].need.status='帮助中';
+                                         data[i].need.status=this.$t('status.execute');
                                          break;
                                      case '0':
-                                         data[i].need.status='关闭';
+                                         data[i].need.status=this.$t('status.closed');
                                          break;
                                      case '3':
                                          data[i].need.status='编辑中';

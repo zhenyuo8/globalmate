@@ -3,7 +3,8 @@
         <div class="evaluate_warp">
             <div class="top">
     			<div class="top_img">
-    				<img src="../assets/images/icon.png" alt="">
+    				<img :src='assistImage' v-if="assistImage" alt="">
+    				<img src="../assets/images/icon.png" v-if="!assistImage" alt="">
     			</div>
     			<div class="evaluate_score">
     				<div class="evaluate_title">
@@ -20,23 +21,40 @@
     		</div>
     		<button type="submit" name="button" class="evaluate_submit" @click='evaluateSubmit'>{{$t('button.submit')}}</button>
         </div>
+        <div class="defindloadig" v-if="loadingShow">
+            <loading></loading>
+        </div>
 
     </div>
 </template>
 
 <script>
 import CONFIG from '../config/config.js'
+import loading from '../components/loading.vue'
 	export default {
 		components:{
-
+            loading
 		},
 		data(){
 			return{
+                assistImage:'',
 				textareaVal:'',
-				score:0
+				score:0,
+                loadingShow:true
 			}
 		},
 		methods:{
+            loadData(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+this.$route.query.evaluateId+'?token='+this.$route.query.token,{}).then((res)=>{
+                    if(res.data.success){
+                        this.assistImage=res.data.data.pic;
+                        this.loadingShow=false;
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            },
 			evaluateStar(n){
 				let span=$('.icon-heart2');
 				this.score=20*n;
@@ -52,7 +70,7 @@ import CONFIG from '../config/config.js'
                 let postData={
                     uEvaluatorId:'',
                     uEvluatorName:'',
-                    uTargeterId:'',
+                    uTargeterId:this.$route.query.evaluateId,
                     uTargeterName:'',
                     needId:'',
                     score:this.score%2,
@@ -61,17 +79,21 @@ import CONFIG from '../config/config.js'
                     evaExt2:'',
                     evaExt1:''
                 }
+                this.loadingShow=true;
                 this.apiHost=CONFIG[__ENV__].apiHost;
-				this.axios.post(this.apiHost+'/globalmate/rest/evaluate/add',postData).then((res)=>{
+				this.axios.post(this.apiHost+'/globalmate/rest/evaluate/add'+'?token='+this.$route.query.token,postData).then((res)=>{
                     if(res.data.success){
-
+                        window.history.back(-1);
                     }
+                    this.loadingShow=false;
                 }).catch((e)=>{
+                    this.loadingShow=false;
                   console.log(e);
                 })
 			}
 		},
         activated(){
+            this.loadData()
             document.title=this.$route.query.title;
         },
 		created(){

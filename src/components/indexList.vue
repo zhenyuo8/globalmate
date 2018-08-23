@@ -3,7 +3,7 @@
         <div class="">
             <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" :hideFilter='hideFilter'></searchInput>
             <div class="back" @click='back'>
-                返回
+                {{$t('button.back')}}
             </div>
         </div>
 

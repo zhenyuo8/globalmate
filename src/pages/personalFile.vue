@@ -28,7 +28,6 @@
 				<div class="" id="uploader_header">
 					<img v-if="!headerImgae" class="icon-user image_span" src='../assets/images/icon.png' />
                     <img v-if="headerImgae" class='image_span' :src="headerImgae" alt="">
-					<!-- <span class="icon-user image_span"></span> -->
 					<button type="button" name="button">{{$t('formTitle.portrait')}}</button>
 				</div>
 			</div>
@@ -41,7 +40,6 @@
                         <span class="fr icon-arrow_right_samll">{{item.schooldate}}</span>
                     </li>
                 </ul>
-				<!-- <span style="font-size:20px;">+</span> -->
 				<span style="color:#26a2ff"> + {{$t('formTitle.education')}}</span>
 			</div>
 		</div>
@@ -95,7 +93,6 @@
 			</form>
 		</div>
         <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
-         <tips :showTipsText='showTipsText' v-if="showTipsText"></tips>
           <mt-datetime-picker
              ref="picker"
              type="date"
@@ -111,13 +108,12 @@
 
 <script>
 import CONFIG from '../config/config'
-import tips from '../components/tips.vue'
 import indexList from '../components/indexList.vue'
-import { DatetimePicker } from 'mint-ui';
+import { DatetimePicker,Toast } from 'mint-ui';
 let pinyin=require('pinyin')
 export default {
     components:{
-        tips,DatetimePicker,indexList
+        DatetimePicker,indexList
     },
     data(){
         return{
@@ -132,7 +128,6 @@ export default {
             showEducationValue:false,
             userId:'',
             headerImgae:'',
-            showTipsText:'',
             startDate: new Date('1970/01/01'),
             endDate: new Date('2100/12/31'),
             pickerValue:this.moment(new Date).format('YYYY-MM-DD'),
@@ -202,31 +197,31 @@ export default {
             }
 
             if(!education.schoolname){
-                this.showTipsText='请输入学校名称';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500)
+                Toast({
+                     message: '请输入学校名称',
+                     duration: 2000
+                });
                 return;
             }
             if(!education.schooldate){
-                this.showTipsText='请选择入学年份';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                Toast({
+                     message: '请选择入学年份',
+                     duration: 2000
+                });
                 return;
             }
             if(!education.professional){
-                this.showTipsText='请输入专业信息';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                Toast({
+                     message: '请输入专业信息',
+                     duration: 2000
+                });
                 return;
             }
             if(!education.grade){
-                this.showTipsText='请输入所在班级';
-                setTimeout(()=>{
-                    this.showTipsText='';
-                },1500);
+                Toast({
+                     message: '请输入所在班级',
+                     duration: 2000
+                });
                 return;
             }
             this.educationFlag=false;
@@ -267,15 +262,17 @@ export default {
             }
         },
          getSelectItem(key){
+             let lang = navigator.language || 'zh-CN';
+             let isEN = /^zh/.test(lang) ? false : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
              this.apiHost=CONFIG[__ENV__].apiHost;
              let url='',_this=this,postData={};
              if(key=='city'&&this.country){
                  url='/globalmate/rest/user/city';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          let result=res.data.data,resultArr=[];
-                         if(this.country=='中国'){
-                             resultArr=['北京','天津','上海','重庆'];
+                         if(this.country=='中国'||this.country=='China'){
+                             resultArr=[this.$t('cityName.beijing'),this.$t('cityName.tianjin'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
                          }
                          result.forEach(function (item,index) {
                              resultArr.push(item.city);
@@ -283,30 +280,29 @@ export default {
                          _this.buildItem(resultArr,key);
                      }
                  }).catch(e=>{
-                     this.showTipsText=e.msg;
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                     Toast({
+                          message: e.msg,
+                          duration: 2000
+                     });
                  })
              }else if(key=='country'){
                  url='/globalmate/rest/user/country';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          _this.buildItem(res.data.data,key);
                      }
                  }).catch(e=>{
-                     this.showTipsText=e.msg;
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                     Toast({
+                          message: e.msg,
+                          duration: 2000
+                     });
                  })
              }else{
-                 this.showTipsText='请先选择国家！';
-                 setTimeout(()=>{
-                     this.showTipsText=''
-                 },2000);
+                 Toast({
+                      message: '请先选择国家！',
+                      duration: 2000
+                 });
              }
-
          },
          buildItem(data,key){
              let letter=this.buildLetter();
@@ -365,41 +361,43 @@ export default {
                 postData.school=JSON.stringify(this.educationValue);
                 postData.helpAvailable=this.selectHelpTypeValue;
                 postData.pic=this.headerImgae||'';
+                let showTipsText='';
                 for(var key in postData){
                     if(!postData[key]||postData[key]=='[]'){
                         switch (key) {
                             case 'name':
-                                this.showTipsText='请输入您的真实姓名';
+                                showTipsText='请输入您的真实姓名';
                                 break;
                             case 'nikname':
-                                this.showTipsText='请输入您的昵称';
+                                showTipsText='请输入您的昵称';
                                 break;
                             case 'phone':
-                                this.showTipsText='请选择您的联系方式';
+                                showTipsText='请选择您的联系方式';
                                 break;
                             case 'country':
-                                this.showTipsText='请选择您的国家';
+                                showTipsText='请选择您的国家';
                                 break;
                             case 'city':
-                                this.showTipsText='请选择您所在城市';
+                                showTipsText='请选择您所在城市';
                                 break;
                             case 'school':
-                                this.showTipsText='请填写您的圈子（例如：毕业大学）';
+                                showTipsText='请填写您的圈子（例如：毕业大学）';
                                 break;
                             case 'helpAvailable':
-                                this.showTipsText='请设置您可提供的帮助';
+                                showTipsText='请设置您可提供的帮助';
                                 break;
                             case 'hobby':
-                                this.showTipsText='请填写您的兴趣爱好';
+                                showTipsText='请填写您的兴趣爱好';
                                 break;
                             case 'pic':
-                                this.showTipsText='请上传头像';
+                                showTipsText='请上传头像';
                                 break;
                             default:
                         }
-                        setTimeout(()=>{
-                            this.showTipsText=''
-                        },2000);
+                        Toast({
+                             message: showTipsText,
+                             duration: 2000
+                        });
                         return;
                     }
                 }

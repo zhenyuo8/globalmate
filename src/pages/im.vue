@@ -296,15 +296,10 @@ export default {
 					   	}
 						$(document).ready(function () {
 							let top = $('#convo').height();
-							console.log(top);
 							$('#content').animate({
 								scrollTop: top
 							}, 100);
 						})
-
-						setTimeout(()=>{
-
-						},0)
 						_this.loadData()
 				   	}
 			   	},

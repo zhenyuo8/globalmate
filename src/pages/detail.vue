@@ -188,7 +188,8 @@
             <p>{{$t('formTitle.pushTitle')}} : </p>
             <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
                 <div class="" v-for="item in pushList">
-                    <img :src="item.userInfo.pic" alt="">
+                    <img :src="item.userInfo.pic"  v-if="item.userInfo.pic" alt="">
+                    <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
                     <span>{{item.userInfo.nikename}}</span>
                 </div>
             </div>
@@ -270,7 +271,7 @@ export default {
                         _this.userId=data.id;
                     }
                     _this.country=data.country;
-                    _this.loadData(token);
+                    _this.loadData(_this.token);
                 }
 
             }).catch((e)=>{
@@ -283,11 +284,11 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             let userId=window.localStorage.getItem('USERID');
             let openid=window.localStorage.getItem('OPENID');
-
+            let _this=this;
             if(userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
-                        this.token=res.data.data;
+                        _this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
                         callback&&callback(res.data.data)
                     }
@@ -311,8 +312,10 @@ export default {
         loadData(token){
             let  list={},_this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
-
-            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+token+'&onlyCurrentUser=true',{
+            if(token){
+                this.token=token;
+            }
+            this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){
@@ -327,10 +330,10 @@ export default {
                                  list[key]=this.moment(data.conceretNeed[key]).format('YYYY-MM-DD');
                              }else{
                                  if(key=='pic'){
-                                     if(data.conceretNeed[key]){
+                                     if(data.conceretNeed[key]&&data.conceretNeed[key].indexOf('aliyuncs')>-1){
                                          list[key]=data.conceretNeed[key].split(';')
                                      }else{
-                                          list[key]=[]
+                                          list[key]=[];
                                      }
                                  }else{
                                      list[key]=data.conceretNeed[key]
@@ -388,7 +391,7 @@ export default {
         },
         getPushItemInfo(data,callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.providerId+'?token='+this.$route.query.token,{}).then((res)=>{
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.providerId+'?token='+this.token,{}).then((res)=>{
                 if(res.data.success){
                     data.userInfo=res.data.data;
                     callback&&callback(data);
@@ -402,7 +405,7 @@ export default {
         getPushItem(id){
             let _this=this;
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/match/'+id+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/match/'+id+'?token='+this.token,{
 
             }).then((res)=>{
                 if(res.data.success){

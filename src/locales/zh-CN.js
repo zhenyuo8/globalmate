@@ -16,7 +16,14 @@ export default{
         'finished':'关闭',
         'edit':'重新编辑',
         'gohelp':'去帮助',
-        'send':'发送'
+        'send':'发送',
+        'back':'返回'
+    },
+    cityName:{
+        'beijing':'北京',
+        'tianjin':'天津',
+        'chongqing':'重庆',
+        'shanghai':'上海',
     },
     formName:{
         'study':'学习互助',

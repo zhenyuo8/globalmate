@@ -3,7 +3,7 @@ YY<template>
         <div class="header">
             <div class="min right">
                 <div class="icon-global-im" @click='toMessage()'>
-                    <i class="message_tips"></i>
+                    <i class="message_tips">1</i>
                 </div>
                 <div class="icon-user" @click='goPersonalCenter()' :class="token?'login_yes':'login_no'">
 
@@ -394,8 +394,8 @@ YY<template>
         position: relative;
     }
     .message_tips{
-        background: red;
-        padding: 0 .04rem;
+        background: rgb(246, 108, 108);
+        padding: 0 .1rem;
         border-radius: 5px;
         color: #fff;
         position: absolute;
