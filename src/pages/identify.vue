@@ -359,7 +359,6 @@ export default {
            });
            this.id1.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               console.log($('#'+id1).find('img'));
                $('#'+id1).find('img').attr('src',_this.headerImgae);
                $('#'+id1).find('img').attr('data-src',_this.headerImgae);
                $('#'+id1).find('img').css('display','inline-block');
@@ -439,13 +438,16 @@ export default {
                         obj.certifyPhoto.push(img[j].src);
                     }
                 }
+                if(this.hasAreadyUpload&&this[this.identifyType[i]]){
+                    obj['id']=this[this.identifyType[i]]
+                }
                 postData.push(obj);
             }
+
             if(this.hasAreadyUpload){
                 if(postData.length==1){
                     this.axios.post(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '认证资料更新成功，我们会尽快重新审核你的认证信息!',
                                duration: 2000
@@ -463,9 +465,8 @@ export default {
                         console.log(e);
                     });
                 }else{
-                    this.axios.put(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                    this.axios.put(this.apiHost+'/globalmate/rest/certify/updateList'+'?token='+this.$route.query.token,postData).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '认证资料更新成功，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -487,7 +488,6 @@ export default {
                 if(postData.length==1){
                     this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -507,7 +507,6 @@ export default {
                 }else{
                     this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -543,7 +542,8 @@ export default {
                                 if(!showList.includes(type)){
                                     showList.push(type);
                                     if(!this.identifyType.includes(type)){
-                                        this.identifyType.push(type)
+                                        this.identifyType.push(type);
+                                        this[type]=list[i].id;
                                     }
                                     this['show'+type]=true;
                                     switch (type) {

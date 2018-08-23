@@ -184,9 +184,9 @@
             </div>
         </div>
 
-        <div class="list_repeat_pushed" >
+        <div class="list_repeat_pushed" v-if="pushList.length!=0">
             <p>{{$t('formTitle.pushTitle')}} : </p>
-            <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
+            <div class="list_repeat_pushed_item" >
                 <div class="" v-for="item in pushList">
                     <img :src="item.userInfo.pic"  v-if="item.userInfo.pic" alt="">
                     <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
@@ -194,12 +194,13 @@
                 </div>
             </div>
         </div>
-        <div class="list_repeat_pushed">
+        <div class="list_repeat_pushed" v-if="assistList.length!=0">
             <p>{{$t('formTitle.helpMan')}} : </p>
-            <div class="list_repeat_pushed_item">
-                <div class="">
-                    <img src="../assets/images/1.jpeg" alt="">
-                    <span>辛巴</span>
+            <div class="list_repeat_pushed_item" >
+                <div class=""  v-for="item in assistList">
+                    <img :src="item.userInfo.pic"  v-if="item.userInfo.pic" alt="">
+                    <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
+                    <span>{{item.userInfo.nikename}}</span>
                 </div>
 
             </div>
@@ -236,6 +237,7 @@ export default {
             otherUserId:'',
             listData:{},
             pushList:[],
+            assistList:[],
             showTipsText:''
         }
     },
@@ -250,10 +252,10 @@ export default {
         this.id=this.$route.query.id;
         this.token=this.$route.query.token;
         this.userId=this.$route.query.userId;
+        // alert(url);
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
-            window.localStorage.setItem('USERID',this.userId);
         }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
@@ -415,6 +417,9 @@ export default {
                        for(var i=0;i<nowData.length;i++){
                            if(!pushArr.includes(nowData[i].providerId)){
                                this.getPushItemInfo(nowData[i],function (result) {
+                                   if(result.matchAccept){
+                                       _this.assistList.push(result);
+                                   }
                                    _this.pushList.push(result);
                                });
                                 pushArr.push(nowData[i].providerId)
@@ -451,7 +456,7 @@ export default {
             });
         },
         getOthersInfo(userId,callback){
-            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.token,{
 
             }).then((res)=>{
                 this.detail.country=res.data.data.country;

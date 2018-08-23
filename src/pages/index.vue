@@ -90,6 +90,7 @@ YY<template>
                 hasReceiveMessage:false,
                 messageList:[],
                 loadingShow:true,
+                hasIdentify:false
 			}
 		},
         computed: {
@@ -133,6 +134,7 @@ YY<template>
                 }
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token,{}).then((res)=>{
                     if(res.data.success){
+                        this.isIdentify();
                         window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data))
                     }
                 }).catch((e)=>{
@@ -140,9 +142,7 @@ YY<template>
                 })
             },
             publish(item){
-                 this.token=window.localStorage.getItem('TOKEN');
-                 var isIdentify=window.localStorage.getItem('IDENTIFY_YET_glohelp');
-                 if(!isIdentify){
+                 if(!this.hasIdentify){
                      Toast({
        					message: '请您先完成身份认证',
        					duration: 2000
@@ -178,16 +178,8 @@ YY<template>
                      }
                  }
             },
-            /**
-             * [getServiceRank 服务之星数据获取]
-             * @return {[type]} [description]
-             */
-            getServiceRank(){
-                this.apiHost=CONFIG[__ENV__].apiHost;
 
-            },
             goPersonalCenter(){
-                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token){
                     Toast({
                        message: '请先登入...',
@@ -227,7 +219,6 @@ YY<template>
                  }
             },
             seekHelp(){
-              this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     Toast({
       					message: '请先登入...',
@@ -246,8 +237,6 @@ YY<template>
                 }
             },
             toMessage(){
-                this.token=window.localStorage.getItem('TOKEN');
-                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList));
                 $('.message_tips').text('');
                 this.$router.push({
                     path: 'messageList',
@@ -260,7 +249,6 @@ YY<template>
                 });
             },
             goRankAll(key){
-                 this.token=window.localStorage.getItem('TOKEN');
                 if(!this.token) {
                     Toast({
       					message: '请先登入...',
@@ -277,6 +265,19 @@ YY<template>
                     });
                 }
             },
+            isIdentify(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                this.axios.get(this.apiHost+'/globalmate/rest/certify/list'+'?token='+this.token+'&onlyCurrentUser=true',{}).then((res)=>{
+                    if(res.data.success){
+                        let list=res.data.data;
+                        if(list.length!=0){
+                            this.hasIdentify=true;
+                        }
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                });
+            }
 		},
         activated(){
             document.title='Glohelp';
