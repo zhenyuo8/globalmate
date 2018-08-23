@@ -325,7 +325,7 @@
                 </div>
 			</div>
 			<div class="list_repeat_action" v-show="item.need.enable==1">
-				<span @click='goHelp($event,item)'>{{$t('button.goHelp')}}</span>
+				<span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
 			</div>
 		</div>
 	</div>

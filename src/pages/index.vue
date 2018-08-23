@@ -3,7 +3,7 @@ YY<template>
         <div class="header">
             <div class="min right">
                 <div class="icon-global-im" @click='toMessage()'>
-                    <i class="message_tips">23</i>
+                    <i class="message_tips"></i>
                 </div>
                 <div class="icon-user" @click='goPersonalCenter()' :class="token?'login_yes':'login_no'">
 
@@ -246,7 +246,8 @@ YY<template>
                 }
             },
             toMessage(){
-                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList))
+                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList));
+                $('.message_tips').text('');
                 this.$router.push({
                     path: 'messageList',
                     query: {

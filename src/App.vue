@@ -27,6 +27,10 @@ export default {
             if(!arg) return;
             if(this.$route.name=='index'){
                 $('.message_tips').show();
+                if($('.message_tips').text()!=''){
+                    let num=$('.message_tips').text()-0;
+                    $('.message_tips').text(num++);
+                }
             }else if(this.$route.name=='im'){
                 this.createOnMessage(arg)
             }else if(this.$route.name=='messageList'){

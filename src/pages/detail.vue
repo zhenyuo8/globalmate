@@ -259,9 +259,9 @@ export default {
         let _this=this;
         this.getToken(function (token) {
             if(token){
-                this.token=token;
+                _this.token=token;
             }
-            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token,{
+            _this.axios.get(_this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.token,{
 
             }).then((res)=>{
                 if(res.data.success){
