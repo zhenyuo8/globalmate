@@ -85,46 +85,8 @@
 .bottom_right{
     color: #0400ff
 }
-.defindloadig{
-   position: fixed;
-   z-index: 11;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-}
 </style>
 <style  lang="less">
-    .yy_nodata_class{
-        text-align: center;
-        color: #999;
-        font-size: 13px;
-        position: fixed;
-        top: 46px;
-        left: 0;
-        right: 0;
-        bottom: 46px;
-        background: #fff;
-        .yy_icon_img{
-            position: absolute;
-            width: 80px;height: 80px;margin:auto;
-            top: 35%;
-            left: 0;
-            right: 0;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .yy_nodata_text{
-            width: 80px;
-            margin-top: 10px;
-            display: inline-block;
-            max-height: 200px;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-    }
     .slide_in_one{
         position: fixed;
         right:0;
@@ -287,27 +249,7 @@
 						font-size: 14px;
 					}
 				}
-                .status_1{
-                    color:#238204;
-                }
-                .status_2{
-                    color:#847405;
-                }
-                .status_0{
-                    color:red;
-                }
-                .status_6{
-                    color:#666;
-                }
-                .status_4{
-                    color:#238204;
-                }
-                .status_5{
-                    color:#847405;
-                }
-                .status_3{
-                    color:#e407f3;
-                }
+
 
                 .status_close{
                     span{
@@ -383,7 +325,7 @@
                 </div>
 			</div>
 			<div class="list_repeat_action" v-show="item.need.enable==1">
-				<span @click='goHelp($event,item)'>去帮助</span>
+				<span @click='goHelp($event,item)'>{{$t('button.goHelp')}}</span>
 			</div>
 		</div>
 	</div>

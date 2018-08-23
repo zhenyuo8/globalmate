@@ -89,27 +89,6 @@
                 font-size: 14px;
             }
         }
-        .status_1{
-            color:#238204;
-        }
-        .status_2{
-            color:#847405;
-        }
-        .status_0{
-            color:red;
-        }
-        .status_6{
-            color:#666;
-        }
-        .status_4{
-            color:#238204;
-        }
-        .status_5{
-            color:#847405;
-        }
-        .status_3{
-            color:#e407f3;
-        }
     }
     .detail_middle{
         text-align: left;

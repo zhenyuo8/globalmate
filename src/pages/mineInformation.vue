@@ -199,14 +199,7 @@
 .mineInformation_comment_content span:nth-child(3n+3){
     background: blue;
 }
-.defindloadig{
-   position: fixed;
-   z-index: 11;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-}
+
 </style>
 
 <template>

@@ -8,6 +8,7 @@ import qs from 'qs';
 import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
+import './assets/css/global.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from'mint-ui'
 import'mint-ui/lib/style.css'

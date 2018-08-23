@@ -106,50 +106,7 @@
                 }
             }
         }
-
-
     }
-</style>
-<style media="screen" lang="less">
-    .yy_nodata_class{
-        text-align: center;
-        color: #999;
-        font-size: 13px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-        .yy_icon_img{
-            position: absolute;
-            width: 80px;height: 80px;margin:auto;
-            top: 35%;
-            left: 0;
-            right: 0;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .yy_nodata_text{
-            width: 80px;
-            margin-top: 10px;
-            display: inline-block;
-            max-height: 200px;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-    }
-    .defindloadig{
-       position: fixed;
-       z-index: 11;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-    }
-
 </style>
 
 <template>
@@ -159,11 +116,11 @@
         <div class="list_repeat" v-for="(item,index) in myAssistList">
             <div class="list_repeat_content" @click='showDetail(item)'>
                 <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
-                <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
+                <p v-if="item.conceretNeed.country||item.conceretNeed.city">{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
                 <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
-                <p class="gl_status">{{item.need.status}}</p>
+                <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
             </div>
-            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
+            <div class="list_repeat_pushed" v-if="item.need.enable!=0">
                 <p>{{$t('formTitle.pushTitle')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
                     <div class="" v-for="items in item.pushList" @click='goChat(item,items)'>
@@ -173,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
+            <div class="list_repeat_pushed" v-if="item.need.enable!=0">
                 <p>{{$t('formTitle.helpMan')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
                     <div class="">

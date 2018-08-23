@@ -42,28 +42,7 @@
         height: 100%;
         display: inline-block;
     }
-    .defindloadig{
-       position: fixed;
-       z-index: 11;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-    }
-    .mint-datetime .picker-slot{
-        font-size: 14px;
-    }
-   .mint-datetime .mint-datetime-cancel{
-        text-align: left;
-        width: auto;
-        margin-left: .2rem;
-        color: #666;
-    }
-   .mint-datetime .mint-datetime-confirm{
-        text-align: right;
-         width: auto;
-        margin-right: .2rem;
-    }
+
 
 </style>
 

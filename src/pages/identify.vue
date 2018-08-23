@@ -1,4 +1,4 @@
-<style scoped>
+<style scoped lang="less">
   #identify{
       font-size: 14px;
       position: absolute;
@@ -9,26 +9,27 @@
   }
   .identify_body{
       width: 90%;
-      margin: 10px auto;
-      display: flex;
+      overflow: hidden;
+      margin: auto;
   }
   .identify_body>div{
+      &.warp{
+          float: left;
+          width: 50%;
+      }
+  }
+  .warp>div{
       background: #fff;
       border-radius: 4px;
-      flex: 1;
-      height: 92px;
+      width: 94%;
+      margin: auto;
       border: 1px solid #00adff;
       border-radius: 4px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
   }
   .identify_warp{
       margin-bottom: 36px;
   }
-  .identify_body>div:first-child{
-      margin-right: 10px;
-  }
+
   .icon-drivers-license-o{
       font-size: 86px;
       display: inherit;
@@ -82,7 +83,9 @@
   }
   .identify_face_page>div, .identify_opposite_page>div{
        height: 100%;
-       /*padding: 19px 0;*/
+       padding: 19px 0;
+       background: #fbfbfb;
+       border-radius:4px;
   }
 
   .identify_face_page, .identify_opposite_page{
@@ -99,7 +102,6 @@
   }
   .icon-camera2{
       width: 36px;
-      margin-top: 18.5px;
       height: 36px;
       background: #00adff;
       border-radius: 50%;
@@ -116,7 +118,7 @@
       width: 100%;
   }
   p{
-      margin-bottom: 10px;
+      padding: 10px 0;
   }
   .gl_totast_p{
       color: red;
@@ -125,6 +127,7 @@
       padding: 10px .4rem;
       background: aliceblue
   }
+
 
 </style>
 
@@ -137,25 +140,28 @@
             <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
             <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
             <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
-            <!-- <span class="icon-checkbox" @click="selectType($event,'ALIPAYID')" :key=''>支付宝</span> -->
         </div>
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
     <div class="identify_warp">
         <div class="" v-show="showIDCARD">
             <div class="identify_body IDCARD">
-                <div class="identify_face_page" >
-                    <img src="" alt="">
-                    <div class="" id='id_face'>
-                        <span class="icon-camera2"></span>
-                        <span class="icon-tips">点击拍照/上传人像面</span>
+                <div class="warp">
+                    <div class="identify_face_page" >
+                        <img src="" alt="">
+                        <div class="" id='id_face'>
+                            <span class="icon-camera2"></span>
+                            <span class="icon-tips">点击拍照/上传人像面</span>
+                        </div>
                     </div>
                 </div>
-                <div class="identify_opposite_page"  >
-                    <img src="" alt="">
-                    <div class="" id='id_opposite'>
-                       <span class="icon-camera2"></span>
-                       <span class="icon-tips">点击拍照/上传国徽面</span>
+                <div class="warp">
+                    <div class="identify_opposite_page"  >
+                        <img src="" alt="">
+                        <div class="" id='id_opposite'>
+                           <span class="icon-camera2"></span>
+                           <span class="icon-tips">点击拍照/上传国徽面</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -165,47 +171,53 @@
         </div>
         <div class="" v-show="showSTUDENTID">
             <div class="identify_body STUDENTID">
-                <div class="identify_face_page"  >
-                    <img src="" alt="">
-                    <div class="" id='id_student'>
-                        <span class="icon-camera2"></span>
-                        <span class="icon-tips">点击拍照/上传人像面</span>
+                <div class="warp">
+                    <div class="identify_face_page"  >
+                        <img src="" alt="">
+                        <div class="" id='id_student'>
+                            <span class="icon-camera2"></span>
+                            <span class="icon-tips">点击拍照/上传人像面</span>
+                        </div>
                     </div>
                 </div>
-                <div class="identify_opposite_page"  >
-                    <img src="" alt="">
-                    <div class="" id='id_student_opposite'>
-                       <span class="icon-camera2"></span>
-                       <span class="icon-tips">点击拍照/上传文字面</span>
+                <div class="warp">
+                    <div class="identify_opposite_page"  >
+                        <img src="" alt="">
+                        <div class="" id='id_student_opposite'>
+                           <span class="icon-camera2"></span>
+                           <span class="icon-tips">点击拍照/上传文字面</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <p>{{$t('personaPage.studentcard')}}</p>
         </div>
         <div class="line_separeat" v-show="showSTUDENTID">
-
         </div>
         <div class="" v-show="showPASSPORT">
             <div class="identify_body PASSPORT">
-                <div class="identify_face_page" >
-                    <img src="" alt="">
-                    <div class="" id='id_passport'>
-                       <span class="icon-camera2"></span>
-                       <span class="icon-tips">点击拍照/上传第一页</span>
+                <div class="warp">
+                    <div class="identify_face_page" >
+                        <img src="" alt="">
+                        <div class="" id='id_passport'>
+                           <span class="icon-camera2"></span>
+                           <span class="icon-tips">点击拍照/上传第一页</span>
+                        </div>
                     </div>
                 </div>
-                <div class="identify_opposite_page" >
-                    <img src="" alt="">
-                    <div class="" id='id_passport_opposite'>
-                       <span class="icon-camera2"></span>
-                       <span class="icon-tips">点击拍照/上传第二页</span>
+                <div class="warp">
+                    <div class="identify_opposite_page" >
+                        <img src="" alt="">
+                        <div class="" id='id_passport_opposite'>
+                           <span class="icon-camera2"></span>
+                           <span class="icon-tips">点击拍照/上传第二页</span>
+                        </div>
                     </div>
                 </div>
             </div>
             <p>{{$t('personaPage.passport')}}</p>
         </div>
         <div class="line_separeat" v-show="showPASSPORT">
-
         </div>
     </div>
     <button type="button" name="button" class='submitbtn' @click='submitData' >{{$t('button.submit')}}</button>
@@ -215,6 +227,7 @@
 
 <script>
 import CONFIG from '../config/config'
+import {Toast} from 'mint-ui';
 export default {
     'name': 'mine',
     data() {
@@ -263,8 +276,8 @@ export default {
                     this.initID('id_student','id_student_opposite')
                 }
             }else if(type=='PASSPORT'){
-                if(!this['id_student']){
-                    this.initID('id_passport_opposite','id_passport_opposite')
+                if(!this['id_passport']){
+                    this.initID('id_passport','id_passport_opposite')
                 }
             }
         },
@@ -506,7 +519,6 @@ export default {
                            duration: 2000
                         });
                         setTimeout(()=>{
-
                             window.history.go(-1);
                         },2000);
                     }else{
@@ -544,6 +556,7 @@ export default {
 
     },
     activated(){
+        this.identifyType=['IDCARD'];
         this.initID('id_face','id_opposite');
     },
     watch:{
