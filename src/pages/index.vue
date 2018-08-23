@@ -3,7 +3,7 @@ YY<template>
         <div class="header">
             <div class="min right">
                 <div class="icon-global-im" @click='toMessage()'>
-                    <i class="message_tips">1</i>
+                    <i class="message_tips"></i>
                 </div>
                 <div class="icon-user" @click='goPersonalCenter()' :class="token?'login_yes':'login_no'">
 
@@ -129,9 +129,9 @@ YY<template>
             getCurrentUser(token){
                 this.apiHost=CONFIG[__ENV__].apiHost;
                 if(!token){
-                    token=window.localStorage.getItem('TOKEN');
+                    this.token=window.localStorage.getItem('TOKEN');
                 }
-                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{}).then((res)=>{
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token,{}).then((res)=>{
                     if(res.data.success){
                         window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data))
                     }
@@ -246,6 +246,7 @@ YY<template>
                 }
             },
             toMessage(){
+                this.token=window.localStorage.getItem('TOKEN');
                 window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList));
                 $('.message_tips').text('');
                 this.$router.push({

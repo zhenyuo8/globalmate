@@ -194,8 +194,8 @@ export default {
 				obj['pic']=this.currentUserImgae;
 				obj['type']=false;
 				$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + obj['chatContent'] + '</div> </li>');
-				$('#chat-thread').append($li);
-				// this.historyList.push(obj)
+				// $('#chat-thread').append($li);
+				this.historyList.push(obj)
 
 			}
 
@@ -206,21 +206,64 @@ export default {
 					}
 				});
 			}
-
 			this.chartValue=''
-		    let top = $('#convo').height();
-		    $('#content').animate({
-		        scrollTop: top
-		    }, 100);
-		},
+			setTimeout(()=>{
+				 let top = $('#convo').height();
+	 		    $('#content').animate({
+	 		        scrollTop: top
+	 		    }, 100);
+			})
 
+
+		},
+		createOnMessage(arg){
+			let headerPath = require("../assets/images/icon.png");
+			if(arg&&!arg.pic){
+				arg.pic=headerPath;
+			}
+			if(!arg) return;
+			let $li,_this=this;
+			let obj={};
+			try{
+				let content=JSON.parse(arg.data.content);
+				if(content&&content.chatType&&!content.chatContent){
+					// this.processChatType(content.chatType);
+				}else{
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
+					obj['chatContent']=content.chatContent;
+				}
+			}catch(e){
+					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+arg.data.content+'</div> </li>');
+					obj['chatContent']=arg.data.content;
+			}
+			obj['pic']=arg.pic;
+			obj['type']=true;
+			this.historyList.push(obj);
+			if($li){
+				$li.on('click',function (e) {
+					if(e.target.tagName=='IMG'){
+						_this.showPersonal()
+					}
+				});
+			}
+
+			//  $('#chat-thread').append($li);
+			setTimeout(()=>{
+				 let top = $('#convo').height();
+	 		    $('#content').animate({
+	 		        scrollTop: top
+	 		    }, 100);
+			})
+		},
 		loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
+			if(!this.id) return;
             this.axios.get(this.apiHost+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
+					 if(!data) return;
                      for(var key in data.conceretNeed){
                          if(key==='pic'){
                              if(data.conceretNeed[key]&&data.conceretNeed[key].indexOf('aliyuncs')>-1){
@@ -258,7 +301,7 @@ export default {
 					this.othersInfo=res.data.data;
 					setTimeout(()=>{
 						this.getHistory();
-					},500)
+					},1000)
 				}
 			}).catch((e)=>{
 				console.log(e);

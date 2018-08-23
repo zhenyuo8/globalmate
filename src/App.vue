@@ -23,7 +23,6 @@ export default {
             docEl.style.fontSize = rem + 'px';
         },
         dealMessage(arg){
-
             if(!arg) return;
             if(this.$route.name=='index'){
                 $('.message_tips').show();
@@ -33,8 +32,10 @@ export default {
                         num=99+
                         $('.message_tips').text(num);
                     }else{
-                        $('.message_tips').text(num++);
+                        $('.message_tips').text(++num);
                     }
+                }else{
+                    $('.message_tips').text(1);
                 }
             }else if(this.$route.name=='im'){
                 this.createOnMessage(arg)
