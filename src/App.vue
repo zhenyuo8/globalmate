@@ -29,13 +29,13 @@ export default {
         this.code = match[1];
       }
     },
-    getRouter (str) {
+    getRouter(str) {
       const reg = /router\=([a-zA-Z]+)/;
       const match = str.match(reg);
       if (match && match.length === 2 && match[1]) {
-        return match[1]
+        return match[1];
       }
-      return ''
+      return "";
     },
     setrem() {
       var docEl = window.document.documentElement;
@@ -186,26 +186,35 @@ export default {
       YYIMChat.onMessage();
     },
     loginIM() {
-      let username = window.localStorage.getItem("USERID");
+      // let username = .getItem("USERID");
+      let username = this.userInfo.userId;
       if (!username) {
-        username = window.localStorage.getItem("USERPHONE");
+        username = this.userInfo.userPhone;
+        // username = .getItem("USERPHONE");
       }
-      if (window.localStorage.getItem("gl_CURRENTUSER")) {
-        username = JSON.parse(window.localStorage.getItem("gl_CURRENTUSER")).id;
+      if (this.userInfo["gl_CURRENTUSER"]) {
+        username = JSON.parse(this.userInfo["gl_CURRENTUSER"]).id;
       }
+      // if (.getItem("gl_CURRENTUSER")) {
+      //   username = JSON.parse(.getItem("gl_CURRENTUSER")).id;
+      // }
       if (!username) return;
-      $.ajax({
-        url:
+      let obj = JSON.stringify({
+        username: username,
+        clientId: "44a18837b5acf71f0017772df15e1542",
+        clientSecret: "959E5086D0544F36C915F91B624EA8DE"
+      });
+      this.axios
+        .post(
           "https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token",
-        type: "POST",
-        dataType: "json",
-        headers: { "Content-Type": "application/json" },
-        data: JSON.stringify({
-          username: username,
-          clientId: "44a18837b5acf71f0017772df15e1542",
-          clientSecret: "959E5086D0544F36C915F91B624EA8DE"
-        }),
-        success: function(result) {
+          obj,
+          {
+            headers: {
+              "Content-Type": "application/json"
+            }
+          }
+        )
+        .then(result => {
           let clientIdentify = "pc" + String(new Date().getTime());
           //登陆YYIMSDK
           YYIMChat.login({
@@ -215,30 +224,23 @@ export default {
             appType: 4,
             identify: clientIdentify
           });
-        },
-        error: function(arg) {
-          console.log(arg);
-        }
-      });
+        });
     },
     loadUserMsg(code) {
       let url =
         "http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code=" +
         this.code;
-      this.axios.get(url).then(function(result) {
+      this.axios.get(url).then(result => {
         var data = result.data.data;
         if (data && data.token) {
           if (data && data.token) {
             const token = data.token;
             const userId = data.user.id;
             const openId = data.user.openid;
-            this.$store.commit({
-              type: "globalmate/UPDATE_USERINFO",
-              userInfo: {
-                token,
-                userId,
-                openId
-              }
+            this.updateUserInfo({
+              token,
+              userId,
+              openId
             });
           }
         }
@@ -253,9 +255,9 @@ export default {
       this.timer = setInterval(() => {
         if (window.YYIMChat) {
           this.initIM();
-          clearInterval(this.timer)
+          clearInterval(this.timer);
         }
-      }, 300)
+      }, 300);
     }
   },
   created() {
@@ -269,7 +271,7 @@ export default {
     if (router) {
       this.$router.replace({
         name: router
-      })
+      });
     }
   },
   watch: {

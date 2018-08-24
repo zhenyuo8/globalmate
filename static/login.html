@@ -52,7 +52,10 @@
     };
     function Authorization() {
       var router = getQuery('query');
-      var url = 'http://47.94.115.87/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/enter.html?router='+router+'#/';
+      var url = 'http://39.96.134.227/globalmate/rest/wechat/oauth/oauthUrl?redirect=http://glmate.cuibq.com/dist/enter.html'
+      if (router) {
+        url += '?router=' + router
+      }
       axios.get(url).then(function (res) {
         // console.log(res)
         res && res.data && res.data.data && window.location.replace(res.data.data)

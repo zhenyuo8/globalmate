@@ -66,9 +66,11 @@ import { swipe, SwipeItem } from "vue-awesome-swiper";
 import loading from "../components/loading.vue";
 import CONFIG from "../config/config.js";
 import { MessageBox, Toast } from "mint-ui";
+import userMix from "../mixins/userInfo";
 require("swiper/dist/css/swiper.css");
 export default {
   name: "index",
+  mixins: [userMix],
   components: {
     swipe,
     SwipeItem,
@@ -116,8 +118,10 @@ export default {
   methods: {
     getToken(callback) {
       this.apiHost = CONFIG[__ENV__].apiHost;
-      let userId = window.localStorage.getItem("USERID");
-      let openid = window.localStorage.getItem("OPENID");
+      let userId = this.userInfo["userId"];
+      // let userId = .getItem("USERID");
+      let openid = this.userInfo["openId"];
+      // let openid = .getItem("OPENID");
       if (userId) {
         this.axios
           .get(
@@ -127,7 +131,10 @@ export default {
           .then(res => {
             if (res.data.success) {
               this.token = res.data.data;
-              window.localStorage.setItem("TOKEN", res.data.data);
+              // .setItem("TOKEN", res.data.data);
+              this.updateUserInfo({
+                token: res.data.data
+              });
             }
           })
           .catch(e => {
@@ -142,7 +149,10 @@ export default {
           .then(res => {
             if (res.data.success) {
               this.token = res.data.data;
-              window.localStorage.setItem("TOKEN", res.data.data);
+              // .setItem("TOKEN", res.data.data);
+              this.updateUserInfo({
+                token: res.data.data
+              });
             }
           })
           .catch(e => {
@@ -154,7 +164,8 @@ export default {
     getCurrentUser(token) {
       this.apiHost = CONFIG[__ENV__].apiHost;
       if (!token) {
-        token = window.localStorage.getItem("TOKEN");
+        // token = .getItem("TOKEN");
+        token = this.userInfo["token"];
       }
       this.axios
         .get(
@@ -166,10 +177,13 @@ export default {
         )
         .then(res => {
           if (res.data.success) {
-            window.localStorage.setItem(
-              "gl_CURRENTUSER",
-              JSON.stringify(res.data.data)
-            );
+            this.updateUserInfo({
+              gl_CURRENTUSER: JSON.stringify(res.data.data)
+            });
+            // .setItem(
+            //   "gl_CURRENTUSER",
+            //   JSON.stringify(res.data.data)
+            // );
           }
         })
         .catch(e => {
@@ -177,8 +191,10 @@ export default {
         });
     },
     publish(item) {
-      this.token = window.localStorage.getItem("TOKEN");
-      var isIdentify = window.localStorage.getItem("IDENTIFY_YET_glohelp");
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
+      // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
+      var isIdentify = this.userInfo["IDENTIFY_YET_glohelp"];
       if (!isIdentify) {
         Toast({
           message: "请您先完成身份认证",
@@ -223,7 +239,8 @@ export default {
       this.apiHost = CONFIG[__ENV__].apiHost;
     },
     goPersonalCenter() {
-      this.token = window.localStorage.getItem("TOKEN");
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -240,13 +257,18 @@ export default {
       }
     },
     offer() {
-      this.token = window.localStorage.getItem("TOKEN");
-      this.userId = window.localStorage.getItem("USERID");
-      if (window.localStorage.getItem("gl_CURRENTUSER")) {
-        this.userId = JSON.parse(
-          window.localStorage.getItem("gl_CURRENTUSER")
-        ).id;
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
+      // this.userId = .getItem("USERID");
+      this.userId = this.userInfo["userId"];
+      if (this.userInfo["gl_CURRENTUSER"]) {
+        this.userId = JSON.parse(this.userInfo["gl_CURRENTUSER"]).id;
       }
+      // if (.getItem("gl_CURRENTUSER")) {
+      //   this.userId = JSON.parse(
+      //     .getItem("gl_CURRENTUSER")
+      //   ).id;
+      // }
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -265,7 +287,8 @@ export default {
       }
     },
     seekHelp() {
-      this.token = window.localStorage.getItem("TOKEN");
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -284,10 +307,11 @@ export default {
       }
     },
     toMessage() {
-      window.localStorage.setItem(
-        "MESSAGELIST",
-        JSON.stringify(this.messageList)
-      );
+      // .setItem(
+      //   "MESSAGELIST",
+      //   JSON.stringify(this.messageList)
+      // );
+      this.updateMsgList(this.msgList)
       this.$router.push({
         path: "messageList",
         query: {
@@ -298,7 +322,8 @@ export default {
       });
     },
     goRankAll(key) {
-      this.token = window.localStorage.getItem("TOKEN");
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",
