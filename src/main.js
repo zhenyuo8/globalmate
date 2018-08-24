@@ -3,7 +3,8 @@
 import Vue from 'vue'
 // import VueRouter from 'vue-router';
 import App from './App'
-import axios from 'axios';
+// import axios from 'axios';
+import axios from './config/http'
 import qs from 'qs';
 import moment from 'moment'
 import router from './router'

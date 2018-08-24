@@ -235,9 +235,13 @@ export default {
           }
         })
         .then(res => {
-          res.data && res.data.length && this.updateUserInfo({
-            certifyMsg: res.data
-          })
+          if (res.data && res.data.length) {
+            let flag = res.data.some(item => item.isEffective !== 0);
+            this.updateUserInfo({
+              certifyMsg: res.data,
+              identified: flag  // 判断是否通过认证了
+            });
+          }
         });
     },
     loadUserMsg(code) {
@@ -246,19 +250,17 @@ export default {
       this.axios.get(url).then(result => {
         var data = result.data;
         if (data && data.token) {
-          if (data && data.token) {
-            const token = data.token;
-            const userId = data.user.id;
-            const openId = data.user.openid;
-            this.updateUserInfo({
-              token,
-              userId,
-              openId
-            });
-            this.loadIsCertified()
-          }
+          const token = data.token;
+          const userId = data.user.id;
+          const openId = data.user.openid;
+          this.updateUserInfo({
+            token,
+            userId,
+            openId
+          });
+          this.loadIsCertified();
         }
-      });
+      }).catch();
     }
   },
 

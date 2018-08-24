@@ -530,9 +530,6 @@ export default {
           .then(res => {
             if (res.success) {
               // .setItem('IDENTIFY_YET_glohelp','true');
-              this.updateUserInfo({
-                identified: true
-              });
               Toast({
                 message: "感谢您的配合，我们会尽快审核你的认证信息!",
                 duration: 2000
@@ -562,9 +559,6 @@ export default {
           .then(res => {
             if (res.success) {
               // .setItem("IDENTIFY_YET_glohelp", "true");
-              this.updateUserInfo({
-                identified: true
-              });
               Toast({
                 message: "感谢您的配合，我们会尽快审核你的认证信息!",
                 duration: 2000

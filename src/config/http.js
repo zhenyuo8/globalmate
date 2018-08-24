@@ -15,9 +15,9 @@ axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   config => {
     let url = getTokenUrl(config.url || ''),
-      apiHost = CONFIG[NODE_ENV].apiHost || '';
+      apiHost = CONFIG[__ENV__].apiHost || '';
     if (!/[http|https]:\/\//gi.test(url)) {
-      if (NODE_ENV === 'development') { //开发环境
+      if (__ENV__ === 'development') { //开发环境
         config.url = apiHost + url;
       } else {
         config.url = apiHost + url;

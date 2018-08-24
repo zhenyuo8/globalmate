@@ -121,10 +121,7 @@ export default {
       // let openid = .getItem("OPENID");
       if (userId) {
         this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?userId=" + userId,
-            {}
-          )
+          .get(this.ip + "/globalmate/rest/user/getToken?userId=" + userId, {})
           .then(res => {
             if (res.success) {
               this.token = res.data;
@@ -139,10 +136,7 @@ export default {
           });
       } else if (openid) {
         this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?openid=" + openid,
-            {}
-          )
+          .get(this.ip + "/globalmate/rest/user/getToken?openid=" + openid, {})
           .then(res => {
             if (res.success) {
               this.token = res.data;
@@ -165,10 +159,7 @@ export default {
       }
       this.axios
         .get(
-          this.ip +
-            "/globalmate/rest/user/getUserByToken" +
-            "?token=" +
-            token,
+          this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
           {}
         )
         .then(res => {
@@ -186,46 +177,75 @@ export default {
           console.log(e);
         });
     },
-    publish(item) {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
-      // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
-      var isIdentify = this.userInfo["identified"];
-      if (!isIdentify) {
-        Toast({
-          message: "请您先完成身份认证",
-          duration: 2000
+    loadIsCertified(callback) {
+      this.axios
+        .get(this.ip + "/globalmate/rest/certify/list", {
+          params: {
+            onlyCurrentUser: true,
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          if (res.data && res.data.length) {
+            let flag = res.data.some(item => item.isEffective !== 0);
+            this.updateUserInfo({
+              certifyMsg: res.data,
+              identified: flag // 判断是否通过认证了
+            });
+            if (!flag) {
+              Toast({
+                message: "请您先完成身份认证",
+                duration: 1000
+              });
+            }
+            flag && callback && callback();
+          }
         });
-        return;
-      }
+    },
+    publishHandler(item) {
       if (item.key == "carry") {
         Toast({
           message: "对不起，该功能暂未上线，敬请关注...",
           duration: 2000
         });
       } else {
-        this.loadingShow = true;
+        // this.loadingShow = true;
         if (!this.token) {
           Toast({
             message: "请先登入...",
             duration: 2000
           });
         } else {
-          setTimeout(() => {
-            this.loadingShow = false;
-            this.$router.push({
-              path: item.type,
-              query: {
-                token: this.token,
-                title: item.title,
-                type: item.type,
-                form: item.form,
-                key: item.key
-              }
-            });
-          }, 500);
+          // setTimeout(() => {
+          // this.loadingShow = false;
+          this.$router.push({
+            path: item.type,
+            query: {
+              token: this.token,
+              title: item.title,
+              type: item.type,
+              form: item.form,
+              key: item.key
+            }
+          });
+          // }, 500);
         }
       }
+    },
+    publish(item) {
+      // this.token = .getItem("TOKEN");
+      this.token = this.userInfo["token"];
+      // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
+      var isIdentify = this.userInfo["identified"];
+      if (!isIdentify) {
+        // Toast({
+        //   message: "请您先完成身份认证",
+        //   duration: 2000
+        // });
+        this.loadIsCertified(this.publishHandler.bind(this, item)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
+        return;
+      }
+      this.publishHandler(item);
     },
     goPersonalCenter() {
       // this.token = .getItem("TOKEN");
@@ -295,7 +315,7 @@ export default {
       //   "MESSAGELIST",
       //   JSON.stringify(this.messageList)
       // );
-      this.updateMsgList(this.msgList)
+      this.updateMsgList(this.msgList);
       this.$router.push({
         path: "messageList",
         query: {
@@ -408,13 +428,9 @@ export default {
   },
 
   created() {
-    let _this = this;
-    $("body").on("click", function(e) {
-      if (
-        e.target.className.indexOf("icon-user") === -1 &&
-        _this.showPersonal
-      ) {
-        _this.showPersonal = false;
+    $("body").on("click", e => {
+      if (e.target.className.indexOf("icon-user") === -1 && this.showPersonal) {
+        this.showPersonal = false;
       }
     });
   }
