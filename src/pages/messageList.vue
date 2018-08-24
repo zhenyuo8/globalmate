@@ -76,7 +76,7 @@
 	.request_action span{
 		font-size: 14px;
 		color: #fff;
-		padding: .16rem .32rem;
+		padding: .16rem;
 		border-radius: 2px;
 		margin-left: 0.2rem;
 		&.accept{
@@ -127,7 +127,7 @@
 						<span class="detail_chat">{{item.lastMessageContent}}</span>
 						<span class="time_chat">{{item.lastContactTime}}</span>
 					</div>
-					<div class="request_action" v-show="item.isAddFriends">
+					<div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
 						<span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
 						<span class="refuse">{{$t('button.refuse')}}</span>
 					</div>
@@ -144,6 +144,7 @@
 <script>
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
+import { MessageBox,Toast} from 'mint-ui';
 export default {
     'name': 'myAssist',
     components: {
@@ -157,6 +158,7 @@ export default {
 			friendsIdList:[],
 			addFriedsRequestList:[],
 			loadingShow:false,
+			currentUserId:''
         }
     },
     methods:{
@@ -171,21 +173,32 @@ export default {
 			e.preventDefault();
 			event.stopPropagation();
 			e.cancelBubble=true;
-			//同时添加 IM好友关系
-			YYIMChat.addRosterItem(item.id);
-			setTimeout(()=>{
-				this.getFriendsInIM()
-			},1000)
-			this.apiHost=CONFIG[__ENV__].apiHost;
-			this.axios.get(this.apiHost+'/globalmate/rest/userRelation/addFriend?token='+this.$route.query.token+'&targetUserId='+item.id,{
-				targetUserId:item.id
-			}).then((res)=>{
-				if(res.data.success){
-					this.getFriendsInGlohelp();
-				}
-			}).catch((e)=>{
+			let _this=this;
+			MessageBox.confirm('',{
+                title: '',
+                message: '确定同意 '+item.users.nikename+' 的好友请求？',
+                confirmButtonText:this.$t('button.confirm'),
+                cancelButtonText:this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+				//同时添加 IM好友关系
+				YYIMChat.addRosterItem(item.id);
+				setTimeout(()=>{
+					_this.getFriendsInIM()
+				},1000)
+				_this.apiHost=CONFIG[__ENV__].apiHost;
+				_this.axios.get(_this.apiHost+'/globalmate/rest/userRelation/addFriend?token='+_this.$route.query.token+'&targetUserId='+item.id,{
+					targetUserId:item.id
+				}).then((res)=>{
+					if(res.data.success){
+						_this.getFriendsInGlohelp();
+					}
+				}).catch((e)=>{
 
-			});
+				});
+            }).catch(cancel=>{
+
+            });
 		},
 		/**
 		 * 获取glohelp好友关系
@@ -250,6 +263,7 @@ export default {
 			this.apiHost=CONFIG[__ENV__].apiHost;
 			let mess=friends;
 			this.friends=[];
+			console.log(mess);
 			if(mess.length==0){
 				this.getContact();
 				return;
@@ -307,7 +321,6 @@ export default {
 					   	var len=result.length-1;
 					   	for(var i=len;i>=0;i--){
 							if(result[i].data.content.indexOf('add_friends_request')>-1){
-								console.log(result[i]);
 								callback&&callback(false);
 								return;
 							}
@@ -336,6 +349,9 @@ export default {
 							if(temp.lastMessage&&temp.lastMessage.data&&temp.lastMessage.data.content){
 								try{
 									temp['lastMessageContent']=JSON.parse(temp.lastMessage.data.content).chatContent;
+									if(temp['lastMessageContent'].indexOf('style=')>-1){
+										temp['lastMessageContent']="我想和您成为好朋友!"
+									}
 								}catch(e){
 									temp['lastMessageContent']=temp.lastMessage.data.content;
 								}
@@ -345,6 +361,7 @@ export default {
 								this.getHistory(temp.id,function(params){
 									if(!params){
 										temp.isAddFriends=true;
+										console.log(temp);
 									}
 									_this.list.push(temp);
 								})
@@ -396,11 +413,13 @@ export default {
 		},
 		getUserByToken(){
 			this.apiHost=CONFIG[__ENV__].apiHost;
+			let _this=this;
 			this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+_this.$route.query.token,{}).then((res)=>{
 				if(res.data.success){
 					this.CURRENTUSER=res.data.data;
-					window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data));
-					// this.initIM();
+					this.currentUserId=res.data.data.id;
+					_this.getFriendsInIM();
+					_this.getFriendsInGlohelp();
 				}
 			}).catch((e)=>{
 				console.log(e);
@@ -408,19 +427,12 @@ export default {
 		}
     },
     activated(){
-		if(!window.localStorage.getItem('gl_CURRENTUSER')){
-			this.getUserByToken();
-		}else{
-			this.CURRENTUSER=window.localStorage.getItem('gl_CURRENTUSER');
-		}
+		this.messageList=[]
+		this.getUserByToken();
 		this.loadingShow=true;
-		setTimeout(()=>{
-			this.getFriendsInIM();
-			this.getFriendsInGlohelp();
-		},1000)
     },
     created(){
-		this.messageList=[]
+
     }
 
 }

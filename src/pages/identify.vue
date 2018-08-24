@@ -139,9 +139,9 @@
     <div class="identify_type">
         <h3>{{$t('personaPage.selectidentify')}}</h3>
         <div class="identify_type_select">
-            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
         </div>
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
@@ -150,7 +150,6 @@
             <div class="identify_body IDCARD">
                 <div class="warp">
                     <div class="identify_face_page" >
-
                         <div class="" id='id_face'>
                             <img src="" alt="">
                             <span class="icon-camera2"></span>
@@ -160,7 +159,6 @@
                 </div>
                 <div class="warp">
                     <div class="identify_opposite_page"  >
-
                         <div class="" id='id_opposite'>
                             <img src="" alt="">
                            <span class="icon-camera2"></span>
