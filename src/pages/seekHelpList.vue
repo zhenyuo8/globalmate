@@ -85,46 +85,8 @@
 .bottom_right{
     color: #0400ff
 }
-.defindloadig{
-   position: fixed;
-   z-index: 11;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-}
 </style>
 <style  lang="less">
-    .yy_nodata_class{
-        text-align: center;
-        color: #999;
-        font-size: 13px;
-        position: fixed;
-        top: 46px;
-        left: 0;
-        right: 0;
-        bottom: 46px;
-        background: #fff;
-        .yy_icon_img{
-            position: absolute;
-            width: 80px;height: 80px;margin:auto;
-            top: 35%;
-            left: 0;
-            right: 0;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .yy_nodata_text{
-            width: 80px;
-            margin-top: 10px;
-            display: inline-block;
-            max-height: 200px;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-    }
     .slide_in_one{
         position: fixed;
         right:0;
@@ -241,20 +203,12 @@
                 right: 0.4rem;
                 bottom: 0.2rem;
 				span{
-					width: 1rem;
 					padding: 6px .15rem;
 					background: #2361ea;
 					border-radius: 4px;
 					color: #fff;
                     text-align: center;
-
 				}
-                &.gl_inProcess{
-                    span{
-                        background: #b3b3b3;
-                    }
-
-                }
 			}
 			.list_repeat_user{
 				display: flex;
@@ -293,27 +247,7 @@
 						font-size: 14px;
 					}
 				}
-                .status_1{
-                    color:#238204;
-                }
-                .status_2{
-                    color:#847405;
-                }
-                .status_0{
-                    color:red;
-                }
-                .status_6{
-                    color:#666;
-                }
-                .status_4{
-                    color:#238204;
-                }
-                .status_5{
-                    color:#847405;
-                }
-                .status_3{
-                    color:#e407f3;
-                }
+
 
                 .status_close{
                     span{
@@ -388,8 +322,8 @@
                     <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
                 </div>
 			</div>
-			<div class="list_repeat_action" v-if="item.need.status!='已关闭'" :class="item.need.enable!=1?'gl_inProcess':''">
-				<span @click='goHelp($event,item)'>去帮助</span>
+			<div class="list_repeat_action" v-show="item.need.enable==1">
+				<span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
 			</div>
 		</div>
 	</div>
@@ -530,13 +464,13 @@ export default {
             e.preventDefault;
             e.cancelBubble=true;
             let _this=this;
-            if(item.need.enable!=1){
-                 Toast({
-                    message: '当前任务已完成或者正在执行中！',
-                    duration: 2000
-                 });
-                return;
-            }
+            // if(item.need.enable!=1){
+            //      Toast({
+            //         message: '当前任务已完成或者正在执行中！',
+            //         duration: 2000
+            //      });
+            //     return;
+            // }
             this.getUserInfo(item.need.userId,function(data){
                 _this.$router.push({
                     path: 'im',
@@ -642,15 +576,17 @@ export default {
             }
         },
          getSelectItem(key){
+             let lang = navigator.language || 'zh-CN';
+             let isEN = /^zh/.test(lang) ? false : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
              this.apiHost=CONFIG[__ENV__].apiHost;
              let url='',_this=this,postData={};
              if(key=='city'&&this.country){
                  url='/globalmate/rest/user/city';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&countryregion='+this.country+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          let result=res.data.data,resultArr=[];
-                         if(this.country=='中国'){
-                             resultArr=['北京','天津','上海','重庆'];
+                         if(this.country=='中国'||this.country=='China'){
+                             resultArr=[this.$t('cityName.beijing'),this.$t('cityName.tianjin'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
                          }
                          result.forEach(function (item,index) {
                              resultArr.push(item.city);
@@ -659,13 +595,14 @@ export default {
                      }
                  }).catch(e=>{
                      this.showTipsText=e.msg;
-                     setTimeout(()=>{
-                         this.showTipsText=''
-                     },2000);
+                     Toast({
+                        message: e.msg,
+                        duration: 2000
+                     });
                  })
              }else if(key=='country'){
                  url='/globalmate/rest/user/country';
-                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token,'').then(res=>{
+                 this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&isEN='+isEN,{}).then(res=>{
                      if(res.data.success){
                          _this.buildItem(res.data.data,key);
                      }
@@ -766,13 +703,13 @@ export default {
                                  var status=data[i].need.enable+'';
                                  switch (status) {
                                      case '1':
-                                         data[i].need.status='开放中';
+                                         data[i].need.status=this.$t('status.open');
                                          break;
                                      case '2':
-                                         data[i].need.status='帮助中';
+                                         data[i].need.status=this.$t('status.execute');
                                          break;
                                      case '0':
-                                         data[i].need.status='关闭';
+                                         data[i].need.status=this.$t('status.closed');
                                          break;
                                      case '3':
                                          data[i].need.status='编辑中';

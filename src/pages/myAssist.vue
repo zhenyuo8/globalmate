@@ -106,50 +106,7 @@
                 }
             }
         }
-
-
     }
-</style>
-<style media="screen" lang="less">
-    .yy_nodata_class{
-        text-align: center;
-        color: #999;
-        font-size: 13px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-        .yy_icon_img{
-            position: absolute;
-            width: 80px;height: 80px;margin:auto;
-            top: 35%;
-            left: 0;
-            right: 0;
-            img{
-                width: 100%;
-                height: 100%;
-            }
-        }
-        .yy_nodata_text{
-            width: 80px;
-            margin-top: 10px;
-            display: inline-block;
-            max-height: 200px;
-            overflow: hidden;
-            overflow-y: auto;
-        }
-    }
-    .defindloadig{
-       position: fixed;
-       z-index: 11;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-    }
-
 </style>
 
 <template>
@@ -159,11 +116,11 @@
         <div class="list_repeat" v-for="(item,index) in myAssistList">
             <div class="list_repeat_content" @click='showDetail(item)'>
                 <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
-                <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
+                <p v-if="item.conceretNeed.country||item.conceretNeed.city">{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
                 <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
-                <p class="gl_status">{{item.need.status}}</p>
+                <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
             </div>
-            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
+            <div class="list_repeat_pushed" v-if="item.need.enable!=0">
                 <p>{{$t('formTitle.pushTitle')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
                     <div class="" v-for="items in item.pushList" @click='goChat(item,items)'>
@@ -173,14 +130,14 @@
                     </div>
                 </div>
             </div>
-            <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
+            <div class="list_repeat_pushed" v-if="item.assistList.length!=0">
                 <p>{{$t('formTitle.helpMan')}}:</p>
                 <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
-                    <div class="">
-                        <img src="../assets/images/1.jpeg" alt="">
-                        <span>辛巴</span>
+                    <div class="" v-for="items in item.assistList" @click='goChat(item,items)'>
+                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
+                        <span>{{items.userInfo.nikename}}</span>
                     </div>
-
                 </div>
             </div>
             <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
@@ -282,7 +239,7 @@ export default {
             let _this=this;
             MessageBox.confirm('',{
                 title: '',
-                message: '确定当前求助已完成?',
+                message: '确定当前困难已解决?',
                 confirmButtonText:this.$t('button.confirm'),
                 cancelButtonText:this.$t('button.cancel'),
                 showCancelButton: true
@@ -293,7 +250,6 @@ export default {
             });
         },
         confirmFinished(item){
-
             this.apiHost=CONFIG[__ENV__].apiHost;
             let providerId;
             if(item&&item.pushList.length!=0){
@@ -358,17 +314,27 @@ export default {
                 Toast({
                    message: '当前任务还未完成，暂不能评价！',
                    duration: 2000
-               });
+                });
                 return;
             }
-            this.$router.push({
-                path: 'evaluate',
-                query: {
-                    'token': this.token,
-                    'title': '评价',
-                    'id': 'evaluate',
-                }
-            });
+            if(item.assistList.length==0){
+                Toast({
+                   message: '当前困难不是由别人完成',
+                   duration: 2000
+                });
+                return;
+            }else{
+                let assistMan=item.assistList[0].providerId
+                this.$router.push({
+                    path: 'evaluate',
+                    query: {
+                        'token': this.token,
+                        'title': this.$t('button.evaluate'),
+                        'id': 'evaluate',
+                        'evaluateId':assistMan
+                    }
+                });
+            }
         },
         showDetail(item){
             this.$router.push({
@@ -397,7 +363,8 @@ export default {
         },
         getPushItem(data,callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            data.pushList=[]
+            data.pushList=[];
+            data.assistList=[];
             this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.$route.query.token,{
 
             }).then((res)=>{
@@ -406,6 +373,9 @@ export default {
                         var nowData=res.data.data;
                         for(var i=0;i<nowData.length;i++){
                             this.getPushItemInfo(nowData[i],function (result) {
+                                if(result.matchAccept){
+                                    data.assistList.push(result);
+                                }
                                 data.pushList.push(result);
                             });
                         }
@@ -443,13 +413,13 @@ export default {
                                  var status=data[i].need.enable+'';
                                  switch (status) {
                                      case '1':
-                                         data[i].need.status='开放中';
+                                         data[i].need.status=this.$t('status.open');
                                          break;
                                      case '2':
-                                         data[i].need.status='帮助中';
+                                         data[i].need.status=this.$t('status.execute');
                                          break;
                                      case '0':
-                                         data[i].need.status='关闭';
+                                         data[i].need.status=this.$t('status.closed');
                                          break;
                                      case '3':
                                          data[i].need.status='编辑中';

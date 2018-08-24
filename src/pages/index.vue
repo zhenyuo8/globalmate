@@ -17,7 +17,7 @@ YY<template>
             </swiper>
         </div>
         <div class="">
-            <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
+            <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
              <ul class="mainmenu">
                  <li v-for="(item,index) in mainmenu" ><a href="javascript:;" ><b :class="item.icon" @click='publish(item)'></b><span>{{item.title}}</span></a></li>
              </ul>
@@ -129,9 +129,9 @@ YY<template>
             getCurrentUser(token){
                 this.apiHost=CONFIG[__ENV__].apiHost;
                 if(!token){
-                    token=window.localStorage.getItem('TOKEN');
+                    this.token=window.localStorage.getItem('TOKEN');
                 }
-                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+token,{}).then((res)=>{
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getUserByToken'+'?token='+this.token,{}).then((res)=>{
                     if(res.data.success){
                         window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data))
                     }
@@ -246,7 +246,9 @@ YY<template>
                 }
             },
             toMessage(){
-                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList))
+                this.token=window.localStorage.getItem('TOKEN');
+                window.localStorage.setItem('MESSAGELIST',JSON.stringify(this.messageList));
+                $('.message_tips').text('');
                 this.$router.push({
                     path: 'messageList',
                     query: {
@@ -351,12 +353,7 @@ YY<template>
         },
 
         created(){
-            let _this=this;
-            $('body').on('click',function (e) {
-                if(e.target.className.indexOf('icon-user')===-1&&_this.showPersonal){
-                    _this.showPersonal=false;
-                }
-            })
+
         }
 	}
 </script>
@@ -389,13 +386,6 @@ YY<template>
     .header > div{
         color: #bfbfbf;
     }
-    .location > div {
-        float: left;
-    }
-
-    .header .left{
-        float: left;
-    }
     .header .right{
         float: right;
         display: flex;
@@ -405,19 +395,18 @@ YY<template>
         position: relative;
     }
     .message_tips{
-        width: .15rem;
-        height: .15rem;
-        background: red;
-        border-radius: 50%;
+        background: rgb(246, 108, 108);
+        padding: 0 .1rem;
+        border-radius: 5px;
+        color: #fff;
         position: absolute;
-        top: 8px;
+        top: 1px;
+        font-size: 11px;
         display: none;
-        right: .04rem;
-        border: 1px solid #fff;
+        right: -0.1rem;
     }
     .icon-global-im::before{
         color: #bfbfbf;
-
         font-size: 32px;
         line-height: 36px;
     }
@@ -425,9 +414,7 @@ YY<template>
         font-size: 26px;
         line-height: 36px;
     }
-    .icon-map-location{
-        width: 0.88rem;
-    }
+
     .icon-user{
         position: relative;
         font-size:20px;
@@ -437,50 +424,10 @@ YY<template>
     }
     .login_yes{
         color:#007aff!important;
-
     }
     .login_no{
         color:#bfbfbf!important;
     }
-    .user_wrap{
-        position: absolute;
-        z-index: 11;
-        right: .12rem;
-        top: 50px;
-        font-size: 14px;
-        color: #333!important;
-        display: flex;
-        flex-direction: column;
-        background: rgba(255,255,255,0.9);
-        border-radius: 4px;
-    }
-    .user_wrap::after{
-        -webkit-transform: rotate(45deg);
-        transform: rotate(45deg);
-        right: 8px;
-        background: rgba(255,255,255,0.8);
-        border-color: #89a8e0 #89a8e0 transparent transparent;
-        -webkit-border-radius: 3px;
-        border-radius: 3px;
-        position: absolute;
-        top: -5px;
-        content: '';
-        height: 10px;
-        width: 10px;
-    }
-    .user_wrap > span{
-        display: inline-block;
-        height: 36px;
-        padding: 0 .3rem;
-        line-height: 36px;
-        box-sizing: border-box;
-        border-bottom: 1px solid #e6e6e6;
-    }
-    .user_wrap > span:last-child{
-        border: none;
-    }
-
-
     .swiper-item{
         height: 177px!important;
     }
@@ -667,8 +614,7 @@ YY<template>
      }
      #index .index_notice{
          color: #f59d0b;
-         height: 20px;
-         line-height: 20px;
+         padding: 6px 0;
          text-align: left;
          background: #f9f8f4;
          padding-left: 20px;
@@ -676,13 +622,5 @@ YY<template>
      }
      #index .icon-exclamation::before{
          margin-right: .04rem
-     }
-     .defindloadig{
-     	position: fixed;
-        z-index: 11;
-         left: 0;
-         top: 0;
-         right: 0;
-         bottom: 0;
      }
 </style>

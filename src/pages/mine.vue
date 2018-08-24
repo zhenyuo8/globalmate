@@ -117,8 +117,6 @@
 </template>
 
 <script>
-
-import Header from '../components/header.vue'
 import List from '../components/list.vue'
 import selectList from '../components/selectList.vue'
 import CONFIG from '../config/config'
@@ -168,7 +166,6 @@ export default {
         }
     },
     components: {
-        Header,
         List,
         selectList
     },

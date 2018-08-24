@@ -13,7 +13,6 @@ export default {
     data(){
         return{
             transitionName:'',
-            messageList:[]
         }
     },
     methods: {
@@ -24,10 +23,20 @@ export default {
             docEl.style.fontSize = rem + 'px';
         },
         dealMessage(arg){
-
             if(!arg) return;
             if(this.$route.name=='index'){
                 $('.message_tips').show();
+                if($('.message_tips').text()!=''){
+                    let num=parseInt($('.message_tips').text());
+                    if(num>=99){
+                        num=99+
+                        $('.message_tips').text(num);
+                    }else{
+                        $('.message_tips').text(++num);
+                    }
+                }else{
+                    $('.message_tips').text(1);
+                }
             }else if(this.$route.name=='im'){
                 this.createOnMessage(arg)
             }else if(this.$route.name=='messageList'){
@@ -35,7 +44,8 @@ export default {
             }else {
                 Toast({
                    message: '收到新消息，前往消息列表查看',
-                   duration: 2000
+                   duration: 2000,
+                   position:'top'
                });
             }
         },

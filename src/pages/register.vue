@@ -96,7 +96,7 @@ import CONFIG from '../config/config.js'
 </script>
 
 <style scoped>
-@import "../assets/css/login.css";
+
 #register{
 	position: absolute;
 	top: 0px;
@@ -114,4 +114,52 @@ import CONFIG from '../config/config.js'
 		0px 0px 8px 5px rgba(208, 223, 226, 0.1) inset;
 	border-radius: 5px;
 }
+h1{
+	font-size: 18px;
+	height: 54px;
+	line-height: 54px;
+}
+form p{
+	font-size: 14px;
+	height: 40px;
+	line-height: 40px;
+	color: #9B9B9B;
+	margin-top: 12px;
+	width: 70%;
+	margin: 12px auto 0;
+}
+form {
+	padding: 10px;
+}
+form label{
+	margin-right: .2rem;
+	color: #333!important;
+}
+form p input{
+	font-size: 14px;
+	height: 76%;
+	padding: 2px 4px;
+	color: #ff4a5a;
+	width: 100%;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	background: #fff
+}
+.signin input{
+	width: 104%;
+	height: 100%!important;
+	color: #fff!important;
+	background: #ff4a5a;
+	outline: none;
+	border: none;
+	font-size: 16px!important
+}
+input {
+	outline: none;
+	-webkit-appearance: none;
+	border-radius: 0;
+	border: none
+}
+input:focus{ outline:none; }
+
 </style>

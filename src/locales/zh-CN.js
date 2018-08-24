@@ -16,7 +16,14 @@ export default{
         'finished':'关闭',
         'edit':'重新编辑',
         'gohelp':'去帮助',
-        'send':'发送'
+        'send':'发送',
+        'back':'返回'
+    },
+    cityName:{
+        'beijing':'北京',
+        'tianjin':'天津',
+        'chongqing':'重庆',
+        'shanghai':'上海',
     },
     formName:{
         'study':'学习互助',
@@ -69,7 +76,8 @@ export default{
         toWord:'至',
         address:'地点',
         time:'时间',
-        decription:'详细内容：'
+        decription:'详细内容：',
+        indexnotice:'点击下列应用类型可发布对应的需求'
     },
     personaPage:{
         edit:'编辑',
@@ -88,5 +96,11 @@ export default{
     messagePage:{
         friends:'好友',
         concat:'联系人',
+    },
+    status:{
+        execute:'帮助中',
+        closed:'关闭',
+        open:'开放中',
+
     }
 }
