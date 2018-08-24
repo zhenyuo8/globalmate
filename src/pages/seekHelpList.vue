@@ -812,12 +812,6 @@ export default {
         this.isSOS=[];
         this.noDataTips='';
         this.type=this.$route.query.id;
-        let url=window.location.href;
-        if(url.indexOf('openId=')>-1){
-            this.type='offer'
-            this.userId=this.$utils.getQueryStringByName('userId');
-            this.openId=this.$utils.getQueryStringByName('openId');
-        }
         this.getToken(this.loadData)
     },
     created(){

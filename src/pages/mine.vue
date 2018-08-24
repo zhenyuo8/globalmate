@@ -311,14 +311,9 @@ export default {
 
     },
     activated(){
-        let url=window.location.href;
         this.token=this.$route.query.token
         this.title=this.$route.query.title;
         document.title=this.$route.query.title||'个人中心';
-        if(url.indexOf('openId=')>-1){
-            this.userId=this.$utils.getQueryStringByName('userId');
-            this.openId=this.$utils.getQueryStringByName('openId');
-        }
         this.getToken(this.loadData);
     },
 

@@ -479,11 +479,6 @@ export default {
        this.nodataFlag=false;
        this.noDataTips='';
        this.token=this.$route.query.token;
-       let url=window.location.href;
-       if(url.indexOf('openId=')>-1){
-           this.userId=this.$utils.getQueryStringByName('userId');
-           this.openId=this.$utils.getQueryStringByName('openId');
-       }
        this.getToken(this.loadData);
    },
    created(){
