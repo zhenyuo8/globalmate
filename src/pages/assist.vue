@@ -107,6 +107,7 @@ import indexList from '../components/indexList.vue'
 let pinyin=require('pinyin')
 import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
+import uploader from '../components/uploader.vue'
 import { Toast,DatetimePicker } from 'mint-ui';
 export default {
     'name': 'assist',
@@ -149,7 +150,7 @@ export default {
 
     },
     components: {
-        List,selectList,indexList,loading,DatetimePicker
+        List,selectList,indexList,loading,uploader,DatetimePicker
     },
     methods:{
         openPicker(item) {

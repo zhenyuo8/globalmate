@@ -113,7 +113,11 @@ YY<template>
                             window.localStorage.setItem('TOKEN',res.data.data);
                         }
                     }).catch((e)=>{
-                        console.log(e);
+                        this.loadingShow=false;
+                        Toast({
+                           message: '网络异常，请稍后重试',
+                           duration: 2000
+                        });
                     })
                 }else if(openid){
                     this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
@@ -122,7 +126,11 @@ YY<template>
                             window.localStorage.setItem('TOKEN',res.data.data);
                         }
                     }).catch((e)=>{
-                        console.log(e);
+                        this.loadingShow=false;
+                        Toast({
+                           message: '网络异常，请稍后重试',
+                           duration: 2000
+                        });
                     })
                 }
                 callback&&callback(this.token)
@@ -138,7 +146,11 @@ YY<template>
                         window.localStorage.setItem('gl_CURRENTUSER',JSON.stringify(res.data.data))
                     }
                 }).catch((e)=>{
-                    console.log(e);
+                    this.loadingShow=false;
+                    Toast({
+                       message: '网络异常，请稍后重试',
+                       duration: 2000
+                    });
                 })
             },
             publish(item){
@@ -275,7 +287,11 @@ YY<template>
                         }
                     }
                 }).catch((e)=>{
-                    console.log(e);
+                    this.loadingShow=false;
+                    Toast({
+                       message: '网络异常，请稍后重试',
+                       duration: 2000
+                    });
                 });
             }
 		},

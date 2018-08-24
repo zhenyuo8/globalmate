@@ -1,90 +1,90 @@
 <style scoped>
-.gl_list{
-    font-size: 14px;
-    position: absolute;
-    overflow: hidden;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
-    background: #eee;
-    overflow-y: auto;
-}
-.filter_right>.select_out{
-    position: fixed;
-    left: 1rem;
-    right: 0;
-    bottom: 0;
-    top: 100%;
-    opacity: 0;
-    -webkit-transition: all .2s ease-out;
-    -moz-transition: all .2s ease-out;
-    transition: all .2s ease-out;
-    background: #eee;
-}
- .filter_right>.select_in{
-    position: fixed;
-    left: 1rem;
-    right: 0;
-    bottom: 0;
-    top: 43px;
-    opacity: 1;
-    -webkit-transition: all .3s ease-in;
-    -moz-transition: all .3s ease-in;
-    transition: all .3s ease-in;
-}
-.gl_list .list_ul{
-    padding: 0 0.2rem;
-    background: #fff;
-}
-.gl_list .list_ul li{
-    height: 36px;
-    line-height: 36px;
-    border-bottom: 1px solid #eee;
-    padding: 0 .2rem;
-}
-.gl_list .list_ul li:last-child{
-    border: none;
-}
-.gl_list .list_ul .select .icon-checkbox{
-    color: rgb(41, 182, 246);
-}
-.gl_list .list_ul li .list_item{
-    float: left;
-}
-.gl_list .list_ul li .icon-checkbox{
-    float: right;
-    line-height: 36px;
-    color: #999;
-    font-size: 16px;
-}
-.gl_list .buttom_action{
-    height: 46px;
-    background: #fff;
-    line-height: 46px;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-.gl_list .buttom_action span{
-    display: inline-block;
-    width: 40%;
-    height: 36px;
-    margin-left: .2rem;
-    line-height: 36px;
-    border-radius: 5px;
-    color: #fff;
-}
-.gl_list .buttom_action .cancel{
-    background: rgb(153, 153, 153);
-}
-.gl_list .buttom_action .confirm{
-    background: rgb(41, 182, 246);
-}
-.bottom_right{
-    color: #0400ff
-}
+    .gl_list{
+        font-size: 14px;
+        position: absolute;
+        overflow: hidden;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        background: #eee;
+        overflow-y: auto;
+    }
+    .filter_right>.select_out{
+        position: fixed;
+        left: 1rem;
+        right: 0;
+        bottom: 0;
+        top: 100%;
+        opacity: 0;
+        -webkit-transition: all .2s ease-out;
+        -moz-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+        background: #eee;
+    }
+     .filter_right>.select_in{
+        position: fixed;
+        left: 1rem;
+        right: 0;
+        bottom: 0;
+        top: 43px;
+        opacity: 1;
+        -webkit-transition: all .3s ease-in;
+        -moz-transition: all .3s ease-in;
+        transition: all .3s ease-in;
+    }
+    .gl_list .list_ul{
+        padding: 0 0.2rem;
+        background: #fff;
+    }
+    .gl_list .list_ul li{
+        height: 36px;
+        line-height: 36px;
+        border-bottom: 1px solid #eee;
+        padding: 0 .2rem;
+    }
+    .gl_list .list_ul li:last-child{
+        border: none;
+    }
+    .gl_list .list_ul .select .icon-checkbox{
+        color: rgb(41, 182, 246);
+    }
+    .gl_list .list_ul li .list_item{
+        float: left;
+    }
+    .gl_list .list_ul li .icon-checkbox{
+        float: right;
+        line-height: 36px;
+        color: #999;
+        font-size: 16px;
+    }
+    .gl_list .buttom_action{
+        height: 46px;
+        background: #fff;
+        line-height: 46px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .gl_list .buttom_action span{
+        display: inline-block;
+        width: 40%;
+        height: 36px;
+        margin-left: .2rem;
+        line-height: 36px;
+        border-radius: 5px;
+        color: #fff;
+    }
+    .gl_list .buttom_action .cancel{
+        background: rgb(153, 153, 153);
+    }
+    .gl_list .buttom_action .confirm{
+        background: rgb(41, 182, 246);
+    }
+    .bottom_right{
+        color: #0400ff
+    }
 </style>
 <style  lang="less">
     .slide_in_one{

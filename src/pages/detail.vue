@@ -258,6 +258,8 @@ export default {
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
+            window.localStorage.setItem('USERID',this.id);
+            window.localStorage.setItem('OPENID',this.openid);
         }
         this.otherUserId=this.$route.query.otherUserId;
         this.apiHost=CONFIG[__ENV__].apiHost;
