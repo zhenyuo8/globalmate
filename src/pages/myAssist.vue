@@ -186,9 +186,9 @@ export default {
     methods:{
         getToken(callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.userId=window.localStorage.getItem('USERID');
-            this.openid=window.localStorage.getItem('OPENID');
-            if(this.userId){
+            let userId=window.localStorage.getItem('USERID');
+            let openid=window.localStorage.getItem('OPENID');
+            if(userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
@@ -198,7 +198,7 @@ export default {
                 }).catch((e)=>{
                     console.log(e);
                 })
-            }else if(this.openid){
+            }else if(openid){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
@@ -218,13 +218,20 @@ export default {
             e.preventDefault();
             event.stopPropagation();
             e.cancelBubble=true;
-            if(item.need.enable!=1&&item.need.enable!=3){
-                Toast({
-                   message: '当前任务正在执行中，暂不能编辑!',
-                   duration: 2000
-               });
-                return;
-            }
+             if(item.need.enable==0){
+                 Toast({
+                    message: '当前任务已经完成',
+                    duration: 2000
+                 });
+                 return;
+             }
+             if(item.need.enable!=1&&item.need.enable!=3){
+                 Toast({
+                    message: '当前任务正在执行中，暂不能编辑!',
+                    duration: 2000
+                });
+                 return;
+             }
             this.$router.push({
                 path: 'assist',
                 query: {
@@ -241,6 +248,13 @@ export default {
     		event.stopPropagation();
     		e.cancelBubble=true;
             let _this=this;
+             if(item.need.enable==0){
+                 Toast({
+                    message: '当前任务已经完成',
+                    duration: 2000
+                 });
+                 return;
+             }
             MessageBox.confirm('',{
                 title: '',
                 message: '确定当前困难已解决?',
@@ -256,6 +270,7 @@ export default {
         confirmFinished(item){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let providerId;
+
             if(item&&item.pushList.length!=0){
                  providerId=item.pushList.filter((item,index)=>{
                     return item.matchAccept

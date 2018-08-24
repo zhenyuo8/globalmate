@@ -422,9 +422,9 @@ export default {
     methods:{
         getToken(callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.userId=window.localStorage.getItem('USERID');
-            this.openid=window.localStorage.getItem('OPENID');
-            if(this.userId){
+            let userId=window.localStorage.getItem('USERID');
+            let openid=window.localStorage.getItem('OPENID');
+            if(userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
@@ -433,7 +433,7 @@ export default {
                 }).catch((e)=>{
                     console.log(e);
                 })
-            }else if(this.openid){
+            }else if(openid){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
