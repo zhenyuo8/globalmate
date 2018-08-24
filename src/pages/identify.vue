@@ -139,9 +139,9 @@
     <div class="identify_type">
         <h3>{{$t('personaPage.selectidentify')}}</h3>
         <div class="identify_type_select">
-            <span class="icon-checkbox select_class" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
-            <span class="icon-checkbox" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
+            <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
         </div>
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
@@ -150,7 +150,6 @@
             <div class="identify_body IDCARD">
                 <div class="warp">
                     <div class="identify_face_page" >
-
                         <div class="" id='id_face'>
                             <img src="" alt="">
                             <span class="icon-camera2"></span>
@@ -160,7 +159,6 @@
                 </div>
                 <div class="warp">
                     <div class="identify_opposite_page"  >
-
                         <div class="" id='id_opposite'>
                             <img src="" alt="">
                            <span class="icon-camera2"></span>
@@ -263,7 +261,9 @@ export default {
                  $(e.target).removeClass('select_class')
             }else{
                 this['show'+type]=true;
-                this.identifyType.push(type);
+                if(!this.identifyType.includes(type)){
+                    this.identifyType.push(type);
+                }
                  $(e.target).addClass('select_class')
             }
             if(type=='STUDENTID'){
@@ -275,6 +275,7 @@ export default {
                     this.initUploader('id_passport','id_passport_opposite')
                 }
             }
+            console.log(this.identifyType);
         },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
@@ -359,7 +360,6 @@ export default {
            });
            this.id1.bind('FileUploaded',function(up,file,info){
                _this.headerImgae=ossMap.host+'/'+_this.multipart_params.key;
-               console.log($('#'+id1).find('img'));
                $('#'+id1).find('img').attr('src',_this.headerImgae);
                $('#'+id1).find('img').attr('data-src',_this.headerImgae);
                $('#'+id1).find('img').css('display','inline-block');
@@ -439,13 +439,16 @@ export default {
                         obj.certifyPhoto.push(img[j].src);
                     }
                 }
+                if(this.hasAreadyUpload&&this[this.identifyType[i]]){
+                    obj['id']=this[this.identifyType[i]]
+                }
                 postData.push(obj);
             }
+
             if(this.hasAreadyUpload){
                 if(postData.length==1){
-                    this.axios.post(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                    this.axios.put(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '认证资料更新成功，我们会尽快重新审核你的认证信息!',
                                duration: 2000
@@ -463,9 +466,8 @@ export default {
                         console.log(e);
                     });
                 }else{
-                    this.axios.put(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                    this.axios.put(this.apiHost+'/globalmate/rest/certify/updateList'+'?token='+this.$route.query.token,postData).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '认证资料更新成功，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -487,7 +489,6 @@ export default {
                 if(postData.length==1){
                     this.axios.post(this.apiHost+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -507,7 +508,6 @@ export default {
                 }else{
                     this.axios.post(this.apiHost+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
                         if(res.data.success){
-                            window.localStorage.setItem('IDENTIFY_YET_glohelp','true');
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
                                duration: 2000
@@ -543,7 +543,8 @@ export default {
                                 if(!showList.includes(type)){
                                     showList.push(type);
                                     if(!this.identifyType.includes(type)){
-                                        this.identifyType.push(type)
+                                        this.identifyType.push(type);
+                                        this[type]=list[i].id;
                                     }
                                     this['show'+type]=true;
                                     switch (type) {

@@ -101,7 +101,7 @@ export default{
      status:{
          execute:'Executing',
          closed:'Closed',
-         open:'openning',
+         open:'Openning',
 
      }
 }

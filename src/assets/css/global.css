@@ -9,6 +9,9 @@
 .mint-msgbox{
 	width: 76%!important;
 }
+.mint-msgbox-message{
+    line-height: 28px!important;
+}
 /* 日期组件样式更改*/
  .mint-datetime .picker-slot{
 	 font-size: 14px;
@@ -23,6 +26,11 @@
 	 text-align: right;
 	  width: auto;
 	 margin-right: .2rem;
+ }
+
+ input::-webkit-input-placeholder {
+       color: #aab2bd;
+       font-size: 12px;
  }
 
 /**

@@ -7,6 +7,9 @@
     				<img src="../assets/images/icon.png" v-if="!assistImage" alt="">
     			</div>
     			<div class="evaluate_score">
+                    <div class="gl_assist_name">
+                        {{assistName}}
+                    </div>
     				<div class="evaluate_title">
     					{{$t('formTitle.raty')}}
     				</div>
@@ -38,6 +41,7 @@ import loading from '../components/loading.vue'
 		data(){
 			return{
                 assistImage:'',
+                assistName:'',
 				textareaVal:'',
 				score:0,
                 loadingShow:true
@@ -49,6 +53,7 @@ import loading from '../components/loading.vue'
                 this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+this.$route.query.evaluateId+'?token='+this.$route.query.token,{}).then((res)=>{
                     if(res.data.success){
                         this.assistImage=res.data.data.pic;
+                        this.assistName=res.data.data.nikename;
                         this.loadingShow=false;
                     }
                 }).catch((e)=>{
@@ -73,7 +78,7 @@ import loading from '../components/loading.vue'
                     uTargeterId:this.$route.query.evaluateId,
                     uTargeterName:'',
                     needId:'',
-                    score:this.score%2,
+                    score:this.score/20,
                     content:this.textareaVal||'',
                     evaExt1:'',
                     evaExt2:'',
@@ -126,18 +131,27 @@ import loading from '../components/loading.vue'
 	height: 100%;
 	display: inline-block;
 }
+.gl_assist_name{
+    text-align: left;
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: 500;
+
+}
 .evaluate_score{
 	padding-left: .4rem;
 
 }
 .evaluate_title{
 	font-size: 14px;
+    margin-top: 10px;
 	text-align: left;
+    color: blue
 }
 .icon-heart2{
-	font-size: 20px;
+	font-size: 18px;
 	margin-right: .2rem;
-	color: #eee;
+	color: #aaa;
 }
 .icon-heart2-on{
 	color: red!important;
@@ -156,6 +170,8 @@ import loading from '../components/loading.vue'
 }
 .evaluate_star{
 	position: relative;
+    font-size: 0;
+    margin-top: 10px;
 }
 .evaluate_submit{
 	width: 100%;

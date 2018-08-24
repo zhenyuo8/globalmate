@@ -103,8 +103,9 @@
         display: flex;
         padding: 10px 0;
         .detail_content_img{
-            width: 1.6rem;
-            height: 1.6rem;
+            // width: 1.6rem;
+            height: 100%;
+            // height: 1.6rem;
             margin-right: .2rem;
             img{
                 width: 100%;
@@ -161,7 +162,7 @@
     <div class="detail_content">
         <div class="detail_top">
             <div class="image_user">
-                <img :src="listData.othersImage+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="">
+                <img :src="listData.othersImage" alt="">
             </div>
             <div class="name_user">
                 <span class="name">{{listData.userName}}</span>
@@ -180,13 +181,13 @@
         </div>
         <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
             <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
-                <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+                <img :src="items" alt="" v-if="indexs<3">
             </div>
         </div>
 
-        <div class="list_repeat_pushed" >
+        <div class="list_repeat_pushed" v-if="pushList.length!=0">
             <p>{{$t('formTitle.pushTitle')}} : </p>
-            <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
+            <div class="list_repeat_pushed_item" >
                 <div class="" v-for="item in pushList">
                     <img :src="item.userInfo.pic"  v-if="item.userInfo.pic" alt="">
                     <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
@@ -194,12 +195,13 @@
                 </div>
             </div>
         </div>
-        <div class="list_repeat_pushed">
+        <div class="list_repeat_pushed" v-if="assistList.length!=0">
             <p>{{$t('formTitle.helpMan')}} : </p>
-            <div class="list_repeat_pushed_item">
-                <div class="">
-                    <img src="../assets/images/1.jpeg" alt="">
-                    <span>辛巴</span>
+            <div class="list_repeat_pushed_item" >
+                <div class=""  v-for="item in assistList">
+                    <img :src="item.userInfo.pic"  v-if="item.userInfo.pic" alt="">
+                    <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
+                    <span>{{item.userInfo.nikename}}</span>
                 </div>
 
             </div>
@@ -236,7 +238,9 @@ export default {
             otherUserId:'',
             listData:{},
             pushList:[],
-            showTipsText:''
+            assistList:[],
+            showTipsText:'',
+            othersInfo:{}
         }
     },
     activated(){
@@ -250,6 +254,7 @@ export default {
         this.id=this.$route.query.id;
         this.token=this.$route.query.token;
         this.userId=this.$route.query.userId;
+        // alert(url);
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
@@ -415,6 +420,9 @@ export default {
                        for(var i=0;i<nowData.length;i++){
                            if(!pushArr.includes(nowData[i].providerId)){
                                this.getPushItemInfo(nowData[i],function (result) {
+                                   if(result.matchAccept){
+                                       _this.assistList.push(result);
+                                   }
                                    _this.pushList.push(result);
                                });
                                 pushArr.push(nowData[i].providerId)
@@ -451,7 +459,7 @@ export default {
             });
         },
         getOthersInfo(userId,callback){
-            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+userId+'?token='+this.token,{
 
             }).then((res)=>{
                 this.detail.country=res.data.data.country;

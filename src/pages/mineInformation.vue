@@ -216,7 +216,7 @@
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
-                    <span class="mineInformation_call">{{$t('formTitle.serviceValue')}} 0</span>
+                    <span class="mineInformation_call">{{$t('formTitle.serviceValue')}} <i style='color:blue'>{{nice}}</i></span>
                 </div>
             </div>
             <div class="mineInformation_chart_button"  v-show="isOthers">
@@ -289,6 +289,7 @@ export default {
         return {
             school:[],
             hobby:'',
+            nice:'',
             helpAvailable:'',
             information:{},
             tipInOther:[],
@@ -372,6 +373,23 @@ export default {
             	complete: function(){}
             });
         },
+        getEvalute(){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.axios.get(this.apiHost+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+
+            }).then((res)=>{
+                if(res.data.success){
+                    console.log(res.data);
+
+                }else {
+                    this.loadingShow=false;
+                }
+
+            }).catch((e)=>{
+                this.loadingShow=false;
+                console.log(e);
+            })
+        },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
             let url='/globalmate/rest/user/getUserByToken'
@@ -386,6 +404,7 @@ export default {
                     this.information=data;
                     this.userId=data.id;
                     this.hobby=data.hobby;
+                    this.nice=data.nice;
                     this.helpAvailable=data.helpAvailable;
                     this.loadingShow=false;
                     if(data.school){
@@ -405,10 +424,10 @@ export default {
     },
     activated(){
         this.loadInfo();
-
         this.isOthers=true;
         this.otherUserId=this.$route.query.otherUserId;
         this.currentUserId=this.$route.query.currentuser;
+        this.getEvalute();
         if(!this.otherUserId||(this.otherUserId==this.currentUserId)){
             this.isOthers=false;
         }
