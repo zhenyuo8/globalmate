@@ -491,13 +491,6 @@ export default {
             e.preventDefault;
             e.cancelBubble=true;
             let _this=this;
-            // if(item.need.enable!=1){
-            //      Toast({
-            //         message: '当前任务已完成或者正在执行中！',
-            //         duration: 2000
-            //      });
-            //     return;
-            // }
             this.getUserInfo(item.need.userId,function(data){
                 _this.$router.push({
                     path: 'im',
@@ -521,7 +514,7 @@ export default {
           }else{
               url='/globalmate/rest/user/list/'+userId
           }
-          this.axios.get(this.apiHost+url+'/?token='+this.$route.query.token,{}).then(res=>{
+          this.axios.get(this.apiHost+url+'/?token='+this.token,{}).then(res=>{
               if(res.data&&res.data.success){
                   callback(res.data.data);
               }
@@ -698,7 +691,7 @@ export default {
 
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            if(this.$route&&this.$route.query&&this.$route.query.id&&this.$route.query.id.toLocaleLowerCase()=='sos'){
+            if(this.type&&this.type.toLocaleLowerCase()=='sos'){
                 this.isSOS=true;
             }else{
                 this.isSOS=false;
@@ -795,7 +788,7 @@ export default {
         },
         getEveryItemPic(data,callback){
             let data1=data;
-            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.need.userId+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/user/list/'+data.need.userId+'?token='+this.token,{
 
             }).then((res)=>{
                 data1.need.pic=res.data.data.pic||'../assets/images/icon.png';
@@ -811,15 +804,15 @@ export default {
         this.nodataFlag=false;
         this.loadingShow=true;
         this.myAssistList=[];
-        this.isSOS=[];
+        this.isSOS=false;
         this.noDataTips='';
         this.type=this.$route.query.id;
+        this.token=this.$route.query.token;
         this.getToken(this.loadData)
     },
     created(){
-        this.rightIn=false;
-        this.selectFlag=false;
-        this.token=this.$route.query.token;
+
+
     }
 
 }

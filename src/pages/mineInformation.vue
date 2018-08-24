@@ -142,7 +142,7 @@
 .mineInformation_history_action{
     padding-bottom: 20px;
 }
-.mineInformation_hobby, .mineInformation_school, .mineInformation_comment{
+.mineInformation_hobby, .mineInformation_school{
      font-size: 14px;
      color: #999;
      width: 80%;
@@ -152,11 +152,12 @@
      border: 1px solid #eee;
      border-radius: 6px;
      position: relative;
+     margin-bottom: 10px;
 }
 .mineInformation_hobby_content{
     padding: .04rem;
 }
-.mineInformation_school_title, .mineInformation_hobby_title, .mineInformation_comment_title{
+.mineInformation_school_title, .mineInformation_hobby_title{
     height: 32px;
     line-height: 32px;
     position: absolute;
@@ -179,25 +180,60 @@
     white-space: nowrap;
     overflow-x: scroll;
 }
-.mineInformation_comment_content{
-    overflow: hidden;
+
+
+.mineInformation_comment_warp{
+    position: relative;
+    font-size: 14px;
+    background: #f7f5f3;
+    padding: 10px 0;
 }
-.mineInformation_comment_content span{
-    color: #fff;
-    padding: .1rem 0.15rem;
-    border-radius: 4px;
-    margin-top: 12px;
-    float: left;
+.mineInformation_comment_warp>div{
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 10px 0.4rem;
+}
+.mineInformation_comment_warp .mineInformation_comment_header{
+    margin-bottom: 0;
+    text-align: left;
+}
+.mineInformation_comment_warp>div>.comment_repeat_top img{
+    width: .8rem;
+    height: 0.8rem;
+}
+.comment_repeat_top{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+.comment_repeat_top span{
+    line-height: 0.8rem;
     margin-left: .2rem;
+    color: #333;
 }
-.mineInformation_comment_content span:nth-child(3n+1){
-    background: red;
+.comment_repeat_top .score{
+    position: absolute;
+    right: 0;
+    color: blue
 }
-.mineInformation_comment_content span:nth-child(3n+2){
-    background: #cc00ff;
+.comment_repeat_middle{
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999;
+    text-align: left;
 }
-.mineInformation_comment_content span:nth-child(3n+3){
-    background: blue;
+.comment_repeat_bottom{
+    margin-top: 10px;
+    text-align: left;
+}
+.mineInformation_comment_warp>p{
+    width: 2rem;
+    margin: auto;
+    color: #e42641;
+    border: 1px solid #e42641;
+    background: #fff;
+    padding: 6px 0.3rem;
+    border-radius: 16px;
 }
 
 </style>
@@ -258,14 +294,25 @@
                 </div>
             </div>
         </div>
-        <div class="mineInformation_comment">
-            <div class="mineInformation_comment_title">
-                {{$t('formTitle.commentsme')}}
+        <div class="mineInformation_comment_warp">
+            <div class="mineInformation_comment_header">
+                {{$t('formTitle.commentsme')}} ({{commentList.length}})
             </div>
-            <div class="mineInformation_comment_content">
-                <p v-if="tipInOther.length==0">暂无评价</p>
-                <span v-for='item in tipInOther'>{{item}}</span>
+            <div class="comment_repeat" v-for="(item,index) in commentList">
+                <p class="comment_repeat_top">
+                    <img :src="item.pic" alt="">
+                    <span>{{item.evaluation.uEvluatorName}}</span>
+                    <span class="score">评分:{{item.evaluation.score}}</span>
+                </p>
+                <p class="comment_repeat_middle">
+                    {{item.evaluation.createTime}} 标题:{{item.needAggEntity.conceretNeed.title}} 悬赏金额:{{item.needAggEntity.conceretNeed.rewardAmount}}
+                </p>
+                <p class="comment_repeat_bottom">
+                    {{item.evaluation.content}}
+                </p>
             </div>
+
+            <p v-show="commentList.length>3">查看全部评价</p>
         </div>
     </div>
     <div class="defindloadig" v-if="loadingShow">
@@ -292,11 +339,11 @@ export default {
             nice:'',
             helpAvailable:'',
             information:{},
-            tipInOther:[],
             isOthers:true,
             loadingShow:true,
             otherUserId:'',
             currentUserId:'',
+            commentList:[]
 
         }
     },
@@ -379,7 +426,9 @@ export default {
 
             }).then((res)=>{
                 if(res.data.success){
-                    console.log(res.data);
+                    console.log(res.data.data);
+                    let data=res.data.data
+                    this.getEvalutePic(data)
 
                 }else {
                     this.loadingShow=false;
@@ -389,6 +438,26 @@ export default {
                 this.loadingShow=false;
                 console.log(e);
             })
+        },
+        getEvalutePic(data){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            this.commentList=[];
+            let _this=this;
+            for(var i=0;i<data.length;i++){
+                var curData=data[i];
+                curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
+                (function(curData){
+                    _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uTargeterId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                        if(res.data.success){
+                            curData.pic=res.data.data.pic;
+                            _this.commentList.push(curData)
+                        }
+                    }).catch((e)=>{
+                        console.log(e);
+                    })
+                })(curData)
+
+            }
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;

@@ -73,11 +73,11 @@ import loading from '../components/loading.vue'
 			},
 			evaluateSubmit(){
                 let postData={
-                    uEvaluatorId:'',
-                    uEvluatorName:'',
+                    uEvaluatorId:this.$route.query.uNeedId,
+                    uEvluatorName:this.$route.query.uNeedName,
                     uTargeterId:this.$route.query.evaluateId,
-                    uTargeterName:'',
-                    needId:'',
+                    uTargeterName:this.assistName,
+                    needId:this.$route.query.businessId,
                     score:this.score/20,
                     content:this.textareaVal||'',
                     evaExt1:'',

@@ -319,7 +319,7 @@ export default {
 
     watch:{
         'title':function (val,old) {
-            document.title=val
+            document.title='个人中心'
         }
     },
     created(){
