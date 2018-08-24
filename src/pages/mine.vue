@@ -313,7 +313,7 @@ export default {
     activated(){
         this.token=this.$route.query.token
         this.title=this.$route.query.title;
-        document.title=this.$route.query.title||'个人中心';
+        document.title='个人中心';
         this.getToken(this.loadData);
     },
 

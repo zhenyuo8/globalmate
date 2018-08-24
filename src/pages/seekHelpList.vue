@@ -698,18 +698,20 @@ export default {
 
         loadData(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            if(this.$route.query.id.toLocaleLowerCase()=='sos'){
+            if(this.$route&&this.$route.query&&this.$route.query.id&&this.$route.query.id.toLocaleLowerCase()=='sos'){
                 this.isSOS=true;
             }else{
                 this.isSOS=false;
             }
             let _this=this;
-            let url='/globalmate/rest/assist/listSOS';
+            let url='/globalmate/rest/need/query';
+
             let postData={
                 onlyCurrentUser:''
             }
-            if(this.type==='offer'){
-                url='/globalmate/rest/need/query';
+            if(this.isSOS){
+                url='/globalmate/rest/assist/listSOS';
+            }else {
                 postData['type']=this.searchContent.type||''
                 postData['where']=this.searchContent.where||''
             }
