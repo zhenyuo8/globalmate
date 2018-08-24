@@ -1,7 +1,6 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-// import VueRouter from 'vue-router';
 import App from './App'
 // import axios from 'axios';
 import axios from './config/http'
@@ -9,11 +8,12 @@ import qs from 'qs';
 import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
+import './assets/css/css/style.css';
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from'mint-ui'
-import'mint-ui/lib/style.css'
+import 'mint-ui/lib/style.css'
 import utils from './libs/js/util.js'
-import VueLazyLoad from 'vue-lazyload'
+// import VueLazyLoad from 'vue-lazyload'
 import VueI18n from 'vue-i18n';
 import messages from './locales';
 import store from './store'
@@ -64,9 +64,3 @@ loadLang(lang).then(() => {
     template: '<App/>'
   })
 })
-// new Vue({
-//   el: '#app',
-//   router,
-//   components: { App },
-//   template: '<App/>'
-// })

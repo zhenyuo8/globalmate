@@ -316,7 +316,7 @@ export default {
 </script>
 
 <style>
-@import "../static/css/style.css";
+/* @import "../static/css/style.css"; */
 #app {
   font-family: "PingFangSC-Regular", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
