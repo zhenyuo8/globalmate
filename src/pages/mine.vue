@@ -117,7 +117,6 @@
 import Header from "../components/header.vue";
 import List from "../components/list.vue";
 import selectList from "../components/selectList.vue";
-import CONFIG from "../config/config";
 import userMix from "../mixins/userInfo";
 export default {
   name: "mine",
@@ -180,7 +179,6 @@ export default {
   computed: {},
   methods: {
     getToken(callback) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let userId = this.userInfo["userId"];
       // let userId = .getItem("USERID");
       let openid = this.userInfo["openId"];
@@ -188,15 +186,15 @@ export default {
       if (userId) {
         this.axios
           .get(
-            this.apiHost + "/globalmate/rest/user/getToken?userId=" + userId,
+            this.ip + "/globalmate/rest/user/getToken?userId=" + userId,
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
             }
           })
@@ -206,15 +204,15 @@ export default {
       } else if (openid) {
         this.axios
           .get(
-            this.apiHost + "/globalmate/rest/user/getToken?openid=" + openid,
+            this.ip + "/globalmate/rest/user/getToken?openid=" + openid,
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
             }
           })
@@ -311,7 +309,6 @@ export default {
       });
     },
     loadData() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       if (this.userInfo["token"]) {
         this.token = this.userInfo["token"];
       }
@@ -320,15 +317,15 @@ export default {
       // }
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/getUserByToken" +
             "?token=" +
             this.token || this.$route.query.token,
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
             this.userInfo.username = data.nikename || data.name;
             this.userInfo.country = data.country;
             this.userInfo.call = data.enable;

@@ -19,7 +19,6 @@
 
 <script>
 import List from "../components/list.vue";
-import CONFIG from "../config/config";
 export default {
   data() {
     return {
@@ -64,18 +63,17 @@ export default {
   },
   methods: {
     loadInfo() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/getUserByToken" +
             "?token=" +
             this.$route.query.token,
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
             this.userId = data.id;
             this.listRepeat[1].text = data.nikename || data.name;
             this.listRepeat[2].text = data.city || data.country;
@@ -108,7 +106,6 @@ export default {
       this.loadInfo();
     },
     done() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       if (this.hasChanged && this.needSaveValue) {
         let itype = this.editvalue.itype,
           _this = this,
@@ -122,14 +119,14 @@ export default {
         postData["id"] = _this.userId;
         this.axios
           .put(
-            this.apiHost +
+            this.ip +
               "/globalmate/rest/user/update/" +
               "?token=" +
               this.$route.query.token,
             postData
           )
           .then(res => {
-            if (res.data.success) {
+            if (res.success) {
               _this.editFlag = false;
               _this.loadInfo();
               // window.history.back(-1);

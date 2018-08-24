@@ -215,7 +215,6 @@ p {
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import userMix from "../mixins/userInfo";
 export default {
   name: "mine",
@@ -286,7 +285,6 @@ export default {
     },
     initUploader(id) {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let ossMap = {};
       this.filesHasUpload = [];
       this.multipart_params = {
@@ -298,19 +296,19 @@ export default {
       };
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/file/ossPolicy" +
             "?token=" +
             this.$route.query.token,
           ""
         )
         .then(res => {
-          if (res.data.success) {
-            ossMap.accessid = res.data.data.accessid;
-            ossMap.policy = res.data.data.policy;
-            ossMap.signature = res.data.data.signature;
-            ossMap.key = res.data.data.dir;
-            ossMap.host = res.data.data.host;
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
             ossMap.success_action_status = 200;
           }
         })
@@ -365,7 +363,6 @@ export default {
     },
     initID(id1, id2) {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let ossMap = {};
       this.filesHasUpload = [];
       this.multipart_params = {
@@ -377,19 +374,19 @@ export default {
       };
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/file/ossPolicy" +
             "?token=" +
             this.$route.query.token,
           ""
         )
         .then(res => {
-          if (res.data.success) {
-            ossMap.accessid = res.data.data.accessid;
-            ossMap.policy = res.data.data.policy;
-            ossMap.signature = res.data.data.signature;
-            ossMap.key = res.data.data.dir;
-            ossMap.host = res.data.data.host;
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
             ossMap.success_action_status = 200;
           }
         })
@@ -492,7 +489,6 @@ export default {
       this.id2.init();
     },
     submitData() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let postData = [];
       if (this.identifyType.length == 0) {
         Toast({
@@ -525,17 +521,17 @@ export default {
       if (postData.length == 1) {
         this.axios
           .post(
-            this.apiHost +
+            this.ip +
               "/globalmate/rest/certify/add" +
               "?token=" +
               this.$route.query.token,
             postData[0]
           )
           .then(res => {
-            if (res.data.success) {
+            if (res.success) {
               // .setItem('IDENTIFY_YET_glohelp','true');
               this.updateUserInfo({
-                IDENTIFY_YET_glohelp: "true"
+                identified: true
               });
               Toast({
                 message: "感谢您的配合，我们会尽快审核你的认证信息!",
@@ -557,17 +553,17 @@ export default {
       } else {
         this.axios
           .post(
-            this.apiHost +
+            this.ip +
               "/globalmate/rest/certify/addList" +
               "?token=" +
               this.$route.query.token,
             postData
           )
           .then(res => {
-            if (res.data.success) {
+            if (res.success) {
               // .setItem("IDENTIFY_YET_glohelp", "true");
               this.updateUserInfo({
-                IDENTIFY_YET_glohelp: "true"
+                identified: true
               });
               Toast({
                 message: "感谢您的配合，我们会尽快审核你的认证信息!",

@@ -6,7 +6,6 @@ YY<template>
           <i class="message_tips"></i>
         </div>
         <div class="icon-user" @click='goPersonalCenter()' :class="token?'login_yes':'login_no'">
-
         </div>
       </div>
     </div>
@@ -64,7 +63,6 @@ YY<template>
 <script>
 import { swipe, SwipeItem } from "vue-awesome-swiper";
 import loading from "../components/loading.vue";
-import CONFIG from "../config/config.js";
 import { MessageBox, Toast } from "mint-ui";
 import userMix from "../mixins/userInfo";
 require("swiper/dist/css/swiper.css");
@@ -117,7 +115,6 @@ export default {
   },
   methods: {
     getToken(callback) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let userId = this.userInfo["userId"];
       // let userId = .getItem("USERID");
       let openid = this.userInfo["openId"];
@@ -125,15 +122,15 @@ export default {
       if (userId) {
         this.axios
           .get(
-            this.apiHost + "/globalmate/rest/user/getToken?userId=" + userId,
+            this.ip + "/globalmate/rest/user/getToken?userId=" + userId,
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
             }
           })
@@ -143,15 +140,15 @@ export default {
       } else if (openid) {
         this.axios
           .get(
-            this.apiHost + "/globalmate/rest/user/getToken?openid=" + openid,
+            this.ip + "/globalmate/rest/user/getToken?openid=" + openid,
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
             }
           })
@@ -162,23 +159,22 @@ export default {
       callback && callback(this.token);
     },
     getCurrentUser(token) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       if (!token) {
         // token = .getItem("TOKEN");
         token = this.userInfo["token"];
       }
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/getUserByToken" +
             "?token=" +
             token,
           {}
         )
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             this.updateUserInfo({
-              gl_CURRENTUSER: JSON.stringify(res.data.data)
+              curUser: res.data
             });
             // .setItem(
             //   "gl_CURRENTUSER",
@@ -194,7 +190,7 @@ export default {
       // this.token = .getItem("TOKEN");
       this.token = this.userInfo["token"];
       // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
-      var isIdentify = this.userInfo["IDENTIFY_YET_glohelp"];
+      var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
         Toast({
           message: "请您先完成身份认证",
@@ -231,13 +227,6 @@ export default {
         }
       }
     },
-    /**
-     * [getServiceRank 服务之星数据获取]
-     * @return {[type]} [description]
-     */
-    getServiceRank() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
-    },
     goPersonalCenter() {
       // this.token = .getItem("TOKEN");
       this.token = this.userInfo["token"];
@@ -261,14 +250,9 @@ export default {
       this.token = this.userInfo["token"];
       // this.userId = .getItem("USERID");
       this.userId = this.userInfo["userId"];
-      if (this.userInfo["gl_CURRENTUSER"]) {
-        this.userId = JSON.parse(this.userInfo["gl_CURRENTUSER"]).id;
+      if (this.userInfo["curUser"]) {
+        this.userId = this.userInfo["curUser"].id;
       }
-      // if (.getItem("gl_CURRENTUSER")) {
-      //   this.userId = JSON.parse(
-      //     .getItem("gl_CURRENTUSER")
-      //   ).id;
-      // }
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -343,7 +327,7 @@ export default {
   },
   activated() {
     document.title = "Glohelp";
-    this.getToken(this.getCurrentUser);
+    // this.getToken(this.getCurrentUser);
     // setTimeout(() => {
     //   this.loadingShow = false;
     // }, 1500);

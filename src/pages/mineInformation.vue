@@ -289,7 +289,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import loading from "../components/loading.vue";
 import { MessageBox, Toast } from "mint-ui";
 export default {
@@ -384,16 +383,15 @@ export default {
       });
     },
     loadInfo() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url = "/globalmate/rest/user/getUserByToken";
       if (this.$route.query.otherUserId) {
         url = "/globalmate/rest/user/list/" + this.$route.query.otherUserId;
       }
       this.axios
-        .get(this.apiHost + url + "?token=" + this.$route.query.token, {})
+        .get(this.ip + url + "?token=" + this.$route.query.token, {})
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
             this.information = data;
             this.userId = data.id;
             this.hobby = data.hobby;

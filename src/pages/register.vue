@@ -34,23 +34,21 @@
 </template>
 
 <script>
-import CONFIG from "../config/config.js";
 export default {
   data() {
     return {};
   },
   methods: {
     register() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let postData = this.getRegisterData();
       this.axios
-        .post(this.apiHost + "/globalmate/rest/user/add", postData)
+        .post(this.ip + "/globalmate/rest/user/add", postData)
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             this.$router.push({
               path: "personalFile",
               query: {
-                id: res.data.data.id,
+                id: res.data.id,
                 title: "个人资料"
               }
             });

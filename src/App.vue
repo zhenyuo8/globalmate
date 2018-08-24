@@ -192,8 +192,8 @@ export default {
         username = this.userInfo.userPhone;
         // username = .getItem("USERPHONE");
       }
-      if (this.userInfo["gl_CURRENTUSER"]) {
-        username = JSON.parse(this.userInfo["gl_CURRENTUSER"]).id;
+      if (this.userInfo["curUser"]) {
+        username = this.userInfo["curUser"].id;
       }
       // if (.getItem("gl_CURRENTUSER")) {
       //   username = JSON.parse(.getItem("gl_CURRENTUSER")).id;
@@ -226,12 +226,25 @@ export default {
           });
         });
     },
+    loadIsCertified() {
+      this.axios
+        .get(this.ip + "/globalmate/rest/certify/list", {
+          params: {
+            onlyCurrentUser: true,
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          res.data && res.data.length && this.updateUserInfo({
+            certifyMsg: res.data
+          })
+        });
+    },
     loadUserMsg(code) {
       let url =
-        "http://47.94.115.87/globalmate/rest/wechat/oauth/oauthCb?code=" +
-        this.code;
+        this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + this.code;
       this.axios.get(url).then(result => {
-        var data = result.data.data;
+        var data = result.data;
         if (data && data.token) {
           if (data && data.token) {
             const token = data.token;
@@ -242,24 +255,13 @@ export default {
               userId,
               openId
             });
+            this.loadIsCertified()
           }
         }
       });
     }
   },
-  mounted() {
-    this.setrem();
-    if (window.YYIMChat) {
-      this.initIM();
-    } else {
-      this.timer = setInterval(() => {
-        if (window.YYIMChat) {
-          this.initIM();
-          clearInterval(this.timer);
-        }
-      }, 300);
-    }
-  },
+
   created() {
     this.handleParam(window.location.href);
     if (!this.code) {
@@ -272,6 +274,17 @@ export default {
       this.$router.replace({
         name: router
       });
+    }
+    this.setrem();
+    if (window.YYIMChat) {
+      this.initIM();
+    } else {
+      this.timer = setInterval(() => {
+        if (window.YYIMChat) {
+          this.initIM();
+          clearInterval(this.timer);
+        }
+      }, 300);
     }
   },
   watch: {

@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config.js";
 export default {
   components: {},
   data() {
@@ -59,11 +58,10 @@ export default {
         evaExt2: "",
         evaExt1: ""
       };
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
-        .post(this.apiHost + "/globalmate/rest/evaluate/add", postData)
+        .post(this.ip + "/globalmate/rest/evaluate/add", postData)
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
           }
         })
         .catch(e => {

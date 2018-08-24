@@ -109,7 +109,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import tips from "../components/tips.vue";
 import indexList from "../components/indexList.vue";
 import { DatetimePicker } from "mint-ui";
@@ -281,7 +280,6 @@ export default {
       }
     },
     getSelectItem(key) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url = "",
         _this = this,
         postData = {};
@@ -289,7 +287,7 @@ export default {
         url = "/globalmate/rest/user/city";
         this.axios
           .get(
-            this.apiHost +
+            this.ip +
               url +
               "?token=" +
               this.$route.query.token +
@@ -298,8 +296,8 @@ export default {
             ""
           )
           .then(res => {
-            if (res.data.success) {
-              let result = res.data.data,
+            if (res.success) {
+              let result = res.data,
                 resultArr = [];
               if (this.country == "中国") {
                 resultArr = ["北京", "天津", "上海", "重庆"];
@@ -319,10 +317,10 @@ export default {
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
         this.axios
-          .get(this.apiHost + url + "?token=" + this.$route.query.token, "")
+          .get(this.ip + url + "?token=" + this.$route.query.token, "")
           .then(res => {
-            if (res.data.success) {
-              _this.buildItem(res.data.data, key);
+            if (res.success) {
+              _this.buildItem(res.data, key);
             }
           })
           .catch(e => {
@@ -376,7 +374,6 @@ export default {
         .toUpperCase();
     },
     submit() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let postData = {
         name: "",
         nikename: "",
@@ -438,14 +435,14 @@ export default {
       }
       this.axios
         .put(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/update/" +
             "?token=" +
             this.$route.query.token,
           postData
         )
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             window.history.back(-1);
           }
         })
@@ -478,7 +475,6 @@ export default {
     },
     initUploader() {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let ossMap = {};
       this.filesHasUpload = [];
       this.multipart_params = {
@@ -490,19 +486,19 @@ export default {
       };
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/file/ossPolicy" +
             "?token=" +
             this.$route.query.token,
           ""
         )
         .then(res => {
-          if (res.data.success) {
-            ossMap.accessid = res.data.data.accessid;
-            ossMap.policy = res.data.data.policy;
-            ossMap.signature = res.data.data.signature;
-            ossMap.key = res.data.data.dir;
-            ossMap.host = res.data.data.host;
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
             ossMap.success_action_status = 200;
           }
         })
@@ -554,18 +550,17 @@ export default {
     this.educationFlag = false;
     this.showEducationValue = false;
     document.title = this.$route.query.title;
-    this.apiHost = CONFIG[__ENV__].apiHost;
     this.axios
       .get(
-        this.apiHost +
+        this.ip +
           "/globalmate/rest/user/getUserByToken" +
           "?token=" +
           this.$route.query.token,
         {}
       )
       .then(res => {
-        if (res.data.success) {
-          let data = res.data.data;
+        if (res.success) {
+          let data = res.data;
           this.userId = data.id;
           if (data.school) {
             this.educationValue = JSON.parse(data.school);

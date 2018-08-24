@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import tips from "../components/tips";
 import userMix from "../mixins/userInfo";
 export default {
@@ -39,9 +38,8 @@ export default {
   methods: {
     login() {
       let postData = this.getRegisterData();
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url =
-        this.apiHost +
+        this.ip +
         "/globalmate/rest/user/login/" +
         postData.phone +
         "/" +
@@ -49,15 +47,15 @@ export default {
       this.axios
         .get(url, {})
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             // .setItem("TOKEN", res.data.data);
             // .setItem("USERPHONE", postData.phone);
             this.updateUserInfo({
-              token: res.data.data,
+              token: res.data,
               userPhone: postData.phone
             });
-            this.token = res.data.data;
-            this.getUserByToken(res.data.data);
+            this.token = res.data;
+            this.getUserByToken(res.data);
             setTimeout(() => {
               window.history.go(-1);
             }, 1000);
@@ -70,20 +68,19 @@ export default {
         });
     },
     getUserByToken(token) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/getUserByToken" +
             "?token=" +
             token,
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            this.CURRENTUSER = res.data.data;
+          if (res.success) {
+            this.CURRENTUSER = res.data;
             this.updateUserInfo({
-                gl_CURRENTUSER: JSON.stringify(res.data.data)
+                curUser: res.data
               })
             // .setItem(
             //   "gl_CURRENTUSER",

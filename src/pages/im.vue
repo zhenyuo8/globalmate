@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import { MessageBox, Toast } from "mint-ui";
 import userMix from "../mixins/userInfo";
 export default {
@@ -153,10 +152,9 @@ export default {
         .catch(cancel => {});
     },
     confirmWhoHelp() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/assist/" +
             this.detail.id +
             "/agree" +
@@ -167,9 +165,8 @@ export default {
           {}
         )
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             this.hasSelectAready = true;
-            console.log(res.data);
           } else {
           }
         })
@@ -291,10 +288,9 @@ export default {
     },
 
     loadData() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/need/list/" +
             this.id +
             "?token=" +
@@ -305,8 +301,8 @@ export default {
           }
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
             for (var key in data.conceretNeed) {
               if (key === "pic") {
                 if (
@@ -326,10 +322,10 @@ export default {
             for (var key in data.need) {
               this.detail[key] = data.need[key];
             }
-            if (this.CURRENTUSER.id !== res.data.data.need.userId) {
+            if (this.CURRENTUSER.id !== res.data.need.userId) {
               this.others = true;
             }
-            if (res.data.data.need.enable != 1) {
+            if (res.data.need.enable != 1) {
               this.hasSelectAready = true;
             }
           } else {
@@ -341,10 +337,9 @@ export default {
     },
 
     getOthersInfo(toChartId) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/list/" +
             this.$route.query.toChartId +
             "?token=" +
@@ -352,8 +347,8 @@ export default {
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            this.othersInfo = res.data.data;
+          if (res.success) {
+            this.othersInfo = res.data;
             setTimeout(() => {
               this.getHistory();
             }, 500);
@@ -419,8 +414,8 @@ export default {
     this.id = "";
     this.id = this.$route.query.id;
     this.toChartId = this.$route.query.toChartId;
-    if (this.userInfo["gl_CURRENTUSER"]) {
-      this.CURRENTUSER = JSON.parse(this.userInfo["gl_CURRENTUSER"]);
+    if (this.userInfo["curUser"]) {
+      this.CURRENTUSER = this.userInfo["curUser"];
       this.currentUserImgae = this.CURRENTUSER.pic;
     }
     // if(.getItem('gl_CURRENTUSER')){

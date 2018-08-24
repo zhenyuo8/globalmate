@@ -442,7 +442,6 @@
 
 <script>
 import searchInput from "../components/searchInput.vue";
-import CONFIG from "../config/config";
 import loading from "../components/loading.vue";
 import indexList from "../components/indexList.vue";
 import { MessageBox, Toast } from "mint-ui";
@@ -484,10 +483,9 @@ export default {
     finished(e, item) {
       e.preventDefault();
       e.cancelBubble = true;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/assist/" +
             item.need.id +
             "/complete/?token=" +
@@ -557,7 +555,6 @@ export default {
       });
     },
     getUserInfo(userId, callback) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url = "";
       if (this.$route.query.id === "sos") {
         url = "/globalmate/rest/assist/listSOS";
@@ -565,10 +562,10 @@ export default {
         url = "/globalmate/rest/user/list/" + userId;
       }
       this.axios
-        .get(this.apiHost + url + "/?token=" + this.$route.query.token, {})
+        .get(this.ip + url + "/?token=" + this.$route.query.token, {})
         .then(res => {
-          if (res.data && res.data.success) {
-            callback(res.data.data);
+          if (res && res.success) {
+            callback(res.data);
           }
         })
         .catch(e => {});
@@ -661,7 +658,6 @@ export default {
       }
     },
     getSelectItem(key) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url = "",
         _this = this,
         postData = {};
@@ -669,7 +665,7 @@ export default {
         url = "/globalmate/rest/user/city";
         this.axios
           .get(
-            this.apiHost +
+            this.ip +
               url +
               "?token=" +
               this.$route.query.token +
@@ -678,8 +674,8 @@ export default {
             ""
           )
           .then(res => {
-            if (res.data.success) {
-              let result = res.data.data,
+            if (res.success) {
+              let result = res.data,
                 resultArr = [];
               if (this.country == "中国") {
                 resultArr = ["北京", "天津", "上海", "重庆"];
@@ -699,10 +695,10 @@ export default {
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
         this.axios
-          .get(this.apiHost + url + "?token=" + this.$route.query.token, "")
+          .get(this.ip + url + "?token=" + this.$route.query.token, "")
           .then(res => {
-            if (res.data.success) {
-              _this.buildItem(res.data.data, key);
+            if (res.success) {
+              _this.buildItem(res.data, key);
             }
           })
           .catch(e => {
@@ -771,7 +767,6 @@ export default {
     },
 
     loadData() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       if (this.$route.query.id.toLocaleLowerCase() == "sos") {
         this.isSOS = true;
       } else {
@@ -789,7 +784,7 @@ export default {
       }
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             url +
             "?token=" +
             this.$route.query.token +
@@ -800,8 +795,8 @@ export default {
           JSON.stringify(postData)
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
             this.listm = [];
             if (data) {
               let ClosedArr = [];
@@ -886,7 +881,7 @@ export default {
       let data1 = data;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/list/" +
             data.need.userId +
             "?token=" +
@@ -894,7 +889,7 @@ export default {
           {}
         )
         .then(res => {
-          data1.need.pic = res.data.data.pic || "../assets/images/icon.png";
+          data1.need.pic = res.data.pic || "../assets/images/icon.png";
           callback && callback(data1);
         })
         .catch(e => {

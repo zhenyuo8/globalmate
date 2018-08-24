@@ -226,7 +226,6 @@
 </template>
 
 <script>
-import CONFIG from "../config/config.js";
 import { MessageBox, Toast } from "mint-ui";
 import userMix from "../mixins/userInfo";
 export default {
@@ -269,23 +268,18 @@ export default {
       });
     }
     this.otherUserId = this.$route.query.otherUserId;
-    this.apiHost = CONFIG[__ENV__].apiHost;
     let _this = this;
-    this.getToken(function(token) {
+    this.getToken(token => {
       if (!token) {
         token = _this.$route.query.token;
       }
-      _this.axios
-        .get(
-          _this.apiHost +
-            "/globalmate/rest/user/getUserByToken" +
-            "?token=" +
-            token,
-          {}
-        )
-        .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+      this.axios.get(this.ip +"/globalmate/rest/user/getUserByToken", {
+        params: {
+          token
+        }
+      }).then(res => {
+          if (res.success) {
+            let data = res.data;
             if (!_this.userId) {
               _this.userId = data.id;
             }
@@ -300,45 +294,36 @@ export default {
   },
   methods: {
     getToken(callback) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       // let userId = .getItem("USERID");
       let userId = this.userInfo["userId"];
       let openid = this.userInfo["openId"];
       // let openid = .getItem("OPENID");
 
       if (userId) {
-        this.axios
-          .get(
-            this.apiHost + "/globalmate/rest/user/getToken?userId=" + userId,
-            {}
-          )
+        this.axios.get(this.ip + "/globalmate/rest/user/getToken?userId=" + userId)
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
-              callback && callback(res.data.data);
+              callback && callback(res.data);
             }
           })
           .catch(e => {
             console.log(e);
           });
       } else if (openid) {
-        this.axios
-          .get(
-            this.apiHost + "/globalmate/rest/user/getToken?openid=" + openid,
-            {}
-          )
+        this.axios.get(this.ip + "/globalmate/rest/user/getToken?openid=" + openid)
           .then(res => {
-            if (res.data.success) {
-              this.token = res.data.data;
+            if (res.success) {
+              this.token = res.data;
               // .setItem("TOKEN", res.data.data);
               this.updateUserInfo({
-                token: res.data.data
+                token: res.data
               });
-              callback && callback(res.data.data);
+              callback && callback(res.data);
             }
           })
           .catch(e => {
@@ -351,11 +336,9 @@ export default {
     loadData(token) {
       let list = {},
         _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
-
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/need/list/" +
             this.id +
             "?token=" +
@@ -366,8 +349,8 @@ export default {
           }
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
 
             this.detail = data;
             this.otherUserId = data.need.userId;
@@ -454,10 +437,9 @@ export default {
         });
     },
     getPushItemInfo(data, callback) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/list/" +
             data.providerId +
             "?token=" +
@@ -465,8 +447,8 @@ export default {
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            data.userInfo = res.data.data;
+          if (res.success) {
+            data.userInfo = res.data;
             callback && callback(data);
           } else {
             callback && callback(data);
@@ -478,10 +460,9 @@ export default {
     },
     getPushItem(id) {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/match/" +
             id +
             "?token=" +
@@ -489,9 +470,9 @@ export default {
           {}
         )
         .then(res => {
-          if (res.data.success) {
-            if (res.data.data && res.data.data.length != 0) {
-              var nowData = res.data.data;
+          if (res.success) {
+            if (res.data && res.data.length != 0) {
+              var nowData = res.data;
               for (var i = 0; i < nowData.length; i++) {
                 this.getPushItemInfo(nowData[i], function(result) {
                   _this.pushList.push(result);
@@ -527,7 +508,7 @@ export default {
     getOthersInfo(userId, callback) {
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/user/list/" +
             userId +
             "?token=" +
@@ -535,9 +516,9 @@ export default {
           {}
         )
         .then(res => {
-          callback && callback(res.data.data.pic);
-          this.detail.country = res.data.data.country;
-          this.othersInfo = res.data.data;
+          callback && callback(res.data.pic);
+          this.detail.country = res.data.country;
+          this.othersInfo = res.data;
         })
         .catch(e => {
           console.log(e);

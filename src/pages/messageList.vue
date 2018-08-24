@@ -141,7 +141,6 @@ ul > li:last-child {
 </template>
 
 <script>
-import CONFIG from "../config/config";
 import loading from "../components/loading.vue";
 import userMix from "../mixins/userInfo";
 export default {
@@ -177,10 +176,9 @@ export default {
       setTimeout(() => {
         this.getFriendsInIM();
       }, 1000);
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/userRelation/addFriend?token=" +
             this.$route.query.token +
             "&targetUserId=" +
@@ -190,7 +188,7 @@ export default {
           }
         )
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             this.getFriendsInGlohelp();
           }
         })
@@ -202,10 +200,9 @@ export default {
      */
     getFriendsInGlohelp() {
       if (!this.CURRENTUSER) return;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/userRelation/getFriends?token=" +
             this.$route.query.token +
             "&userId=" +
@@ -215,7 +212,7 @@ export default {
           }
         )
         .then(res => {
-          if (res.data.success) {
+          if (res.success) {
             console.log(res.data, 11111);
           }
         })
@@ -271,7 +268,6 @@ export default {
     },
 
     processFriendsList(friends) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let mess = friends;
       this.friends = [];
       if (mess.length == 0) {
@@ -282,7 +278,7 @@ export default {
         let temp = mess[i];
         this.axios
           .get(
-            this.apiHost +
+            this.ip +
               "/globalmate/rest/user/list/" +
               mess[i].id +
               "?token=" +
@@ -290,8 +286,8 @@ export default {
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              this.friendsIdList.push(res.data.data.id);
+            if (res.success) {
+              this.friendsIdList.push(res.data.id);
             }
           })
           .catch(e => {});
@@ -355,7 +351,6 @@ export default {
       });
     },
     processList(friends) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let mess = friends,
         _this = this;
       this.list = [];
@@ -363,7 +358,7 @@ export default {
         let temp = mess[i];
         this.axios
           .get(
-            this.apiHost +
+            this.ip +
               "/globalmate/rest/user/list/" +
               mess[i].id +
               "?token=" +
@@ -371,9 +366,9 @@ export default {
             {}
           )
           .then(res => {
-            if (res.data.success) {
-              if (res.data.data) {
-                temp["users"] = res.data.data;
+            if (res.success) {
+              if (res.data) {
+                temp["users"] = res.data;
                 if (
                   temp.lastMessage &&
                   temp.lastMessage.data &&
@@ -449,19 +444,18 @@ export default {
       });
     },
     getUserByToken() {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.axios
-        .get(this.apiHost + "/globalmate/rest/user/getUserByToken", {
+        .get(this.ip + "/globalmate/rest/user/getUserByToken", {
           params: {
             token: this.$route.query.token
           }
         })
         .then(res => {
-          if (res.data.success) {
-            this.CURRENTUSER = res.data.data;
+          if (res.success) {
+            this.CURRENTUSER = res.data;
             this.updateUserInfo({
-                gl_CURRENTUSER: JSON.stringify(res.data.data)
-              })
+              curUser: res.data
+            });
             // .setItem('gl_CURRENTUSER',JSON.stringify(res.data.data));
             // this.initIM();
           }
@@ -472,10 +466,10 @@ export default {
     }
   },
   activated() {
-    if (!this.userInfo["gl_CURRENTUSER"]) {
+    if (!this.userInfo["curUser"]) {
       this.getUserByToken();
     } else {
-      this.CURRENTUSER = this.userInfo["gl_CURRENTUSER"];
+      this.CURRENTUSER = this.userInfo["curUser"];
     }
     // if(!.getItem('gl_CURRENTUSER')){
     // 	this.getUserByToken();

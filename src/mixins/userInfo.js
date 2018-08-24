@@ -7,7 +7,8 @@ export default {
     // userInfo: function () {
     //   return this.$store.state.globalmate.userInfo
     // },
-    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList'])
+    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList']),
+    ...mapState(['ip'])
   },
   methods: {
     updateUserInfo: function (options) {

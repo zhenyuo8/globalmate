@@ -118,7 +118,6 @@ import List from "../components/list.vue";
 import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
 let pinyin = require("pinyin");
-import CONFIG from "../config/config";
 import tips from "../components/tips.vue";
 import loading from "../components/loading.vue";
 import { Toast } from "mint-ui";
@@ -209,16 +208,15 @@ export default {
           this.submitUrl = "/globalmate/rest/need/other/add";
           break;
       }
-      this.apiHost = CONFIG[__ENV__].apiHost;
       if (postData) {
         this.loadingShow = true;
         this.axios
           .post(
-            this.apiHost + this.submitUrl + "?token=" + this.$route.query.token,
+            this.ip + this.submitUrl + "?token=" + this.$route.query.token,
             postData
           )
           .then(res => {
-            if (res.data.success) {
+            if (res.success) {
               setTimeout(() => {
                 this.loadingShow = true;
                 window.history.go(-1);
@@ -312,25 +310,21 @@ export default {
       }
     },
     getSelectItem(key) {
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let url = "",
         _this = this,
         postData = {};
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
-          .get(
-            this.apiHost +
-              url +
-              "?token=" +
-              this.$route.query.token +
-              "&countryregion=" +
-              this.country,
-            ""
-          )
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token,
+              countryregion: this.country
+            }
+          })
           .then(res => {
-            if (res.data.success) {
-              let result = res.data.data,
+            if (res.success) {
+              let result = res.data,
                 resultArr = [];
               if (this.country == "中国") {
                 resultArr = ["北京", "天津", "上海", "重庆"];
@@ -350,10 +344,14 @@ export default {
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
         this.axios
-          .get(this.apiHost + url + "?token=" + this.$route.query.token, "")
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token
+            }
+          })
           .then(res => {
-            if (res.data.success) {
-              _this.buildItem(res.data.data, key);
+            if (res.success) {
+              _this.buildItem(res.data, key);
             }
           })
           .catch(e => {
@@ -389,7 +387,7 @@ export default {
       this.listType = key;
       this.selectItem = showCity;
       // .setItem("LIST", JSON.stringify(this.selectItem));
-      this.updateTodoList(this.selectItem)
+      this.updateTodoList(this.selectItem);
     },
     buildLetter() {
       let letter = [];
@@ -517,23 +515,22 @@ export default {
     //获取编辑表单数据
     loadDataEdit(id) {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       this.listRepeat = [];
       this.axios
         .get(
-          this.apiHost +
+          this.ip +
             "/globalmate/rest/need/list/" +
-            id +
-            "?token=" +
-            this.$route.query.token +
-            "&onlyCurrentUser=true",
-          {
-            onlyCurrentUser: true
+            id, {
+            // onlyCurrentUser: true,
+            params: {
+              token: this.userInfo.token,
+              onlyCurrentUser: true
+            }
           }
         )
         .then(res => {
-          if (res.data.success) {
-            let data = res.data.data;
+          if (res.success) {
+            let data = res.data;
 
             this.listRepeatProcess();
             this.myReward.text = data.conceretNeed.rewardAmount;
@@ -606,7 +603,6 @@ export default {
     },
     initUploader() {
       let _this = this;
-      this.apiHost = CONFIG[__ENV__].apiHost;
       let ossMap = {};
       this.filesHasUpload = [];
       this.multipart_params = {
@@ -616,21 +612,17 @@ export default {
         success_action_status: "",
         signature: ""
       };
-      this.axios
-        .get(
-          this.apiHost +
-            "/globalmate/rest/file/ossPolicy" +
-            "?token=" +
-            this.$route.query.token,
-          ""
-        )
-        .then(res => {
-          if (res.data.success) {
-            ossMap.accessid = res.data.data.accessid;
-            ossMap.policy = res.data.data.policy;
-            ossMap.signature = res.data.data.signature;
-            ossMap.key = res.data.data.dir;
-            ossMap.host = res.data.data.host;
+      this.axios.get( this.ip + "/globalmate/rest/file/ossPolicy", {
+          params: {
+            token: this.userInfo.token
+          }
+        }).then(res => {
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
             ossMap.success_action_status = 200;
           }
         })
