@@ -373,7 +373,7 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             data.pushList=[];
             data.assistList=[];
-            this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.$route.query.token,{
+            this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.token,{
 
             }).then((res)=>{
                 if(res.data.success){
@@ -392,7 +392,7 @@ export default {
                         callback&&callback(data)
                     }
                 }else{
-
+                    callback&&callback(data)
                 }
             }).catch(()=>{
                 callback&&callback(data)
