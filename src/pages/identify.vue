@@ -263,7 +263,9 @@ export default {
                  $(e.target).removeClass('select_class')
             }else{
                 this['show'+type]=true;
-                this.identifyType.push(type);
+                if(!this.identifyType.includes(type)){
+                    this.identifyType.push(type);
+                }
                  $(e.target).addClass('select_class')
             }
             if(type=='STUDENTID'){
@@ -275,6 +277,7 @@ export default {
                     this.initUploader('id_passport','id_passport_opposite')
                 }
             }
+            console.log(this.identifyType);
         },
         previewImage(file,callback){
             if(!file || !/image\//.test(file.type)) return;
@@ -446,7 +449,7 @@ export default {
 
             if(this.hasAreadyUpload){
                 if(postData.length==1){
-                    this.axios.post(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                    this.axios.put(this.apiHost+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
                         if(res.data.success){
                             Toast({
                                message: '认证资料更新成功，我们会尽快重新审核你的认证信息!',

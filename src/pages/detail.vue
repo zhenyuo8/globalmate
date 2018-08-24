@@ -239,7 +239,8 @@ export default {
             listData:{},
             pushList:[],
             assistList:[],
-            showTipsText:''
+            showTipsText:'',
+            othersInfo:{}
         }
     },
     activated(){

@@ -175,6 +175,8 @@ export default {
     methods: {
         getToken(callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
+            this.userId=window.localStorage.getItem('USERID');
+            this.openid=window.localStorage.getItem('OPENID');
             if(this.userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
