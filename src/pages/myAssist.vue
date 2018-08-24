@@ -318,6 +318,7 @@ export default {
             e.preventDefault();
             event.stopPropagation();
             e.cancelBubble=true;
+
             if(item.need.enable!=6&&item.need.enable!=0){
                 Toast({
                    message: '当前任务还未完成，暂不能评价！',
@@ -339,7 +340,10 @@ export default {
                         'token': this.token,
                         'title': this.$t('button.evaluate'),
                         'id': 'evaluate',
-                        'evaluateId':assistMan
+                        'evaluateId':assistMan,
+                        'businessId':item.need.id,
+                        'uNeedId':item.assistList[0].uNeedId,
+                        'uNeedName':item.assistList[0].uNeedName
                     }
                 });
             }

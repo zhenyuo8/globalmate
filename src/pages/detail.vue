@@ -160,7 +160,7 @@
 
 <div class="detail">
     <div class="detail_content">
-        <div class="detail_top">
+        <div class="detail_top" @click='showDetail(listData)'>
             <div class="image_user">
                 <img :src="listData.othersImage" alt="">
             </div>
@@ -247,6 +247,7 @@ export default {
         let url=window.location.href;
         this.listData={};
         this.pushList=[];
+        this.assistList=[];
         this.detail={
 
         };
@@ -254,7 +255,7 @@ export default {
         this.id=this.$route.query.id;
         this.token=this.$route.query.token;
         this.userId=this.$route.query.userId;
-        // alert(url);
+
         if(url.indexOf('openId=')>-1){
             this.id=this.$utils.getQueryStringByName('id');
             this.userId=this.$utils.getQueryStringByName('userId');
@@ -470,6 +471,21 @@ export default {
                 console.log(e);
             })
         },
+         showDetail(item){
+             console.log(item);
+             console.log(this.othersInfo);
+             return
+             this.$router.push({
+                 path: 'detail',
+                 query: {
+                     'token': this.$route.query.token,
+                     'title': item.conceretNeed.title,
+                     'id': item.need.id,
+                     'otherUserId':item.need.userId,
+                     'userId':this.$route.query.userId
+                 }
+             });
+         },
     },
     created(){
 
