@@ -136,14 +136,13 @@
     		margin-top: 10px;
     	}
     	 .rightIn_form .name p label{
-    		width:30%;
+    		width:1.4rem;
     		text-align: justify;
     		text-justify:inter-ideograph;
     		text-align-last:justify;
     		line-height: 32px;
     	}
         .rightIn_form .name p input{
-    		width: 4rem;
     		border: 1px solid #eee;
     		padding: 0 0.2rem;
         }
@@ -259,7 +258,8 @@
                 display: flex;
                 .list_content_img{
                     width: 1.6rem;
-                    height: 1.6rem;
+                    height: 100%;
+                    // height: 1.6rem;
                     margin-right: .2rem;
                     img{
                         width: 100%;
@@ -319,7 +319,7 @@
 			<p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
 			<div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
                 <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic">
-                    <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+                    <img :src="items" alt="" v-if="indexs<3">
                 </div>
 			</div>
 			<div class="list_repeat_action" v-show="item.need.enable==1">
@@ -420,6 +420,31 @@ export default {
         }
     },
     methods:{
+        getToken(callback){
+            this.apiHost=CONFIG[__ENV__].apiHost;
+            if(this.userId){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        callback&&callback(this.token)
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }else if(this.openid){
+                this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
+                    if(res.data.success){
+                        this.token=res.data.data;
+                        callback&&callback(this.token)
+                    }
+                }).catch((e)=>{
+                    console.log(e);
+                })
+            }else{
+                callback&&callback(this.token)
+            }
+
+        },
         finished(e,item){
             e.preventDefault();
             e.cancelBubble=true;
@@ -681,12 +706,12 @@ export default {
             let postData={
                 onlyCurrentUser:''
             }
-            if(this.$route.query.id==='offer'){
+            if(this.type==='offer'){
                 url='/globalmate/rest/need/query';
                 postData['type']=this.searchContent.type||''
                 postData['where']=this.searchContent.where||''
             }
-            this.axios.get(this.apiHost+url+'?token='+this.$route.query.token+'&type='+this.searchContent.type+'&where='+this.searchContent.where,JSON.stringify(postData)).then((res)=>{
+            this.axios.get(this.apiHost+url+'?token='+this.token+'&type='+this.searchContent.type+'&where='+this.searchContent.where,JSON.stringify(postData)).then((res)=>{
                 if(res.data.success){
                      let data=res.data.data;
                      this.listm=[];
@@ -784,7 +809,14 @@ export default {
         this.myAssistList=[];
         this.isSOS=[];
         this.noDataTips='';
-        this.loadData();
+        this.type=this.$route.query.id;
+        let url=window.location.href;
+        if(url.indexOf('openId=')>-1){
+            this.type='offer'
+            this.userId=this.$utils.getQueryStringByName('userId');
+            this.openId=this.$utils.getQueryStringByName('openId');
+        }
+        this.getToken(this.loadData)
     },
     created(){
         this.rightIn=false;

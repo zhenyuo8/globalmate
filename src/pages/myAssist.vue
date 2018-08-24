@@ -186,28 +186,30 @@ export default {
     methods:{
         getToken(callback){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            let userId=window.localStorage.getItem('USERID');
-            let openid=window.localStorage.getItem('OPENID');
-            if(userId){
+            if(this.userId){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?userId='+userId,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
+                        callback&&callback(this.token)
                     }
                 }).catch((e)=>{
                     console.log(e);
                 })
-            }else if(openid){
+            }else if(this.openid){
                 this.axios.get(this.apiHost+'/globalmate/rest/user/getToken?openid='+openid,{}).then((res)=>{
                     if(res.data.success){
                         this.token=res.data.data;
                         window.localStorage.setItem('TOKEN',res.data.data);
+                        callback&&callback(this.token)
                     }
                 }).catch((e)=>{
                     console.log(e);
                 })
+            }else{
+                callback&&callback(this.token)
             }
-            callback&&callback(this.token)
+
         },
         editForm(e,item){
             e=e?e:window.event;
@@ -258,39 +260,28 @@ export default {
                 })
             }
             if(providerId&&providerId.length!=0){
-                if(item.need.enable==2||item.need.enable==5){
-                    this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token+'&providerId='+providerId[0].providerId,{
-                        'needId':item.need.id,
-                        'action':'coplete'
-                    }).then(res=>{
+                this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token+'&providerId='+providerId[0].providerId,{
+                    'needId':item.need.id,
+                    'action':'coplete'
+                }).then(res=>{
+                    this.loadingShow=true;
+                    this.myAssistList=[];
+                    this.loadData(this.token);
 
-                    }).catch(e=>{
-                        console.log(e);
-                    })
-                }else{
-                    Toast({
-                       message: '当前任务还未找到帮助者，暂不能完成！',
-                       duration: 2000
-                   });
-                    return;
-                }
+                }).catch(e=>{
+                    console.log(e);
+                })
             }else{
-                 if(item.need.enable==2||item.need.enable==5){
-                     this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token+'&providerId='+'',{
-                         'needId':item.need.id,
-                         'action':'coplete'
-                     }).then(res=>{
-
-                     }).catch(e=>{
-                         console.log(e);
-                     })
-                 }else{
-                     Toast({
-                        message: '当前任务还未找到帮助者，暂不能完成！',
-                        duration: 2000
-                    });
-                     return;
-                 }
+                 this.axios.get(this.apiHost+'/globalmate/rest/assist/'+item.need.id+'/complete/?token='+this.$route.query.token,{
+                     'needId':item.need.id,
+                     'action':'coplete'
+                 }).then(res=>{
+                     this.loadingShow=true;
+                     this.myAssistList=[];
+                     this.loadData(this.token);
+                 }).catch(e=>{
+                     console.log(e);
+                 })
             }
         },
         goChat(item,items){
@@ -437,7 +428,7 @@ export default {
 
                                  }
                                  this.getPushItem(data[i],function (result) {
-                                      _this.myAssistList.push(result);
+                                     _this.myAssistList.push(result)
                                  })
                              }
                          }
@@ -475,8 +466,6 @@ export default {
        if(url.indexOf('openId=')>-1){
            this.userId=this.$utils.getQueryStringByName('userId');
            this.openId=this.$utils.getQueryStringByName('openId');
-           window.localStorage.setItem('USERID',this.userId);
-           window.localStorage.setItem('OPENID',this.openId);
        }
        this.getToken(this.loadData);
    },

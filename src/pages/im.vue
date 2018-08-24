@@ -5,21 +5,23 @@
 				<div class="chart_main_content">
 	                <div class="chart_main_content_image" @click='showDetail(detail)'>
 	                    <div class="">
-							<span class="icon-image_default" v-if="imageArr.length==0"></span>
-	                        <img :src="imageArr[0]+'?x-oss-process=image/resize,m_fixed,h_65,w_95'" v-if="imageArr.length!=0" alt="">
+	                        <img :src="othersInfo.pic" v-if="othersInfo.pic" alt="">
+	                        <img src="../assets/images/icon.png" v-if="!othersInfo.pic" alt="">
 	                    </div>
 	                </div>
 	                <div class="chart_main_content_decription" @click='showDetail(detail)'>
-	                    <span class="detail_name">{{detail.title}}</span>
-	                    <span class="detail_type">{{detail.tag}}</span>
+						<span class="detail_nikename">{{othersInfo.nikename}}</span>
+	                    <span class="detail_name">{{detail.tag}} : {{detail.title}}</span>
 	                    <span class="detail_brand">{{detail.where}}</span>
 	                </div>
-	                <div class="chart_main_content_action">
-	                    <div class="">
-	                        <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
-	                    </div>
+	                <div class="chart_main_content_action" v-show="detail.enable==1">
+	                    <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
 	                </div>
+					<div class="detail_status" :class="'status_'+detail.enable">
+						{{detail.status}}
+					</div>
 	            </div>
+
 			</div>
 			<div id="convo" class="convo" :class="id?'':'gl_no_item'">
 				<ul class="chat-thread" id="chat-thread">
@@ -67,6 +69,7 @@ export default {
 			others:false,
 			hasSelectAready:false,
 			historyList:[],
+			othersInfo:{}
 
         }
     },
@@ -277,6 +280,32 @@ export default {
 							 this.detail[key]=data.conceretNeed[key];
                          }
                      }
+					 var status=data.need.enable+'';
+					 switch (status) {
+						 case '1':
+							 this.detail['status']=this.$t('status.open');
+							 break;
+						 case '2':
+							 this.detail['status']=this.$t('status.execute');
+							 break;
+						 case '0':
+							 this.detail['status']=this.$t('status.closed');
+							 break;
+						 case '3':
+							 this.detail['status']='编辑中';
+							 break;
+						 case '4':
+							 this.detail['status']='洽谈中';
+							 break;
+						 case '5':
+							 this.detail['status']='执行中';
+							 break;
+						 case '6':
+							 this.detail['status']='已完成';
+							 break;
+						 default:
+
+					 }
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
                      }
@@ -351,18 +380,6 @@ export default {
 			   	}
 			})
 		},
-		getToken(){
-			let username=window.localStorage.getItem('USERID');
-			if(!username){
-				username=window.localStorage.getItem('USERPHONE');
-			}
-			if(this.$route.query.senderDId){
-				username=this.$route.query.senderDId;
-			}
-			if(window.localStorage.getItem('CURRENTUSER')){
-				username=JSON.parse(window.localStorage.getItem('CURRENTUSER')).id;
-			}
-		},
 
     },
 	activated(){
@@ -381,11 +398,6 @@ export default {
 
 	},
     created(){
-		this.id=this.$route.query.id;
-		this.toChartId=this.$route.query.toChartId;
-		$('#chat-thread').bind('click',function (e) {
-			console.log(e);
-		})
 
     }
 }
@@ -407,6 +419,7 @@ export default {
 	right: 0;
 	left: 0;
 }
+
 .convo{
 	margin-top: 90px!important;
 	margin-bottom: 10px;
@@ -422,11 +435,17 @@ export default {
 	border-radius: 8px;
 	background: #fff;
 	display: flex;
+	position: relative;
 }
-
+.chart_main_content .detail_status{
+	font-size: 14px;
+	position: absolute;
+	top: 12px;
+	right: 0.2rem;
+}
 .chart_main_content_image > div{
 	width: 1.6rem;
-	height: 100%;
+	height: 1.6rem;
 }
 .chart_main_content_image > div > img{
 	width: 100%;
@@ -438,15 +457,21 @@ export default {
 	overflow: hidden;
 }
 .chart_main_content_decription span{
-	line-height: 20px;
-	float: left;
+	// float: left;
+	padding: 4px 0;
 	margin-right: .2rem;
 	text-align: left;
+	display: block;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 2.4rem;
+    max-width: 3rem;
 	overflow: hidden;
 	color: #888;
+	font-size: 14px;
+}
+.chart_main_content_decription .detail_nikename{
+	color: blue;
+	font-size: 16px;
 }
 .chart_main_content_decription .detail_name{
 	color: #333;
@@ -465,17 +490,12 @@ export default {
 *评价css
  */
 .chart_main_content_action{
-	position: relative;
-	flex: 1;
+	position: absolute;
+    right: 0.2rem;
+    bottom: 12px;
 }
-.chart_main_content_action>div{
-	flex: 1;
-    margin-top: 36px;
-    display: flex;
-    flex-direction: row;
 
-}
-.chart_main_content_action>div span{
+.chart_main_content_action span{
 	padding: 6px .24rem;
 	margin-left: .08rem;
 	background-color: rgba(241, 241, 241, 1);
@@ -484,13 +504,6 @@ export default {
 	white-space: nowrap;
 	overflow: hidden;
 	color: #fff;
-	&.do_agree{
-		background: #1676ec;
-	}
-	&.do_reject{
-		background: red;
-
-	}
 	&.do_help{
 		background: #1676ec
 	}

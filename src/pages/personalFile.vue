@@ -368,7 +368,7 @@ export default {
                             case 'name':
                                 showTipsText='请输入您的真实姓名';
                                 break;
-                            case 'nikname':
+                            case 'nikename':
                                 showTipsText='请输入您的昵称';
                                 break;
                             case 'phone':

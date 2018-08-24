@@ -191,10 +191,14 @@ export default {
                this.loadingShow=true;
                this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
                    if(res.data.success){
+                       Toast({
+                          message: '您的信息已提交',
+                          duration: 2000
+                      });
                        setTimeout(()=>{
                            this.loadingShow=true;
                            window.history.go(-1);
-                       },1500);
+                       },2000);
                    }else{
                        Toast({
          					message: '发布失败',
@@ -226,11 +230,8 @@ export default {
         selectCallBack(value,selectItem){
             this.show=false;
             let key=selectItem.key;
+            let _this=this;
             switch (key) {
-                case 'delivery':
-                    this.payStyle.text=value;
-                    this.payStyle.isPlacehold=false;
-                    break;
                 case 'reward':
                     this.myReward.text=value;
                     this.myReward.isPlacehold=false;
@@ -243,6 +244,26 @@ export default {
                     this.listRepeat.forEach(function (item,index) {
                         if(item.key==='date'){
                             if(item.key===selectItem.key&&item.componentKey===selectItem.componentKey){
+                                if(selectItem.componentKey=='startTime'){
+                                    _this.startTime=_this.moment(value).valueOf();
+                                    if(_this.endTime&&_this.endTime<_this.startTime){
+                                        Toast({
+                                           message: '开始时间必须小于结束时间',
+                                           duration: 2000
+                                       });
+                                       return;
+                                    }
+                                }
+                                if(selectItem.componentKey=='endTime'){
+                                    _this.endTime=_this.moment(value).valueOf();
+                                    if(_this.startTime&&_this.endTime<_this.startTime){
+                                        Toast({
+                                           message: '结束时间必须大于开始时间',
+                                           duration: 2000
+                                       });
+                                       return;
+                                    }
+                                }
                                 item.text=value;
                                 item.isPlacehold=false;
                             }
@@ -602,7 +623,6 @@ export default {
     },
     activated(){
         this.show=false;
-        // this.formTitle='请描述'+this.$route.query.title+'细节！';
         document.title=this.$route.query.title;
         $('.repeat_content input').val('');
         $('.main_decription_area textarea').val('');

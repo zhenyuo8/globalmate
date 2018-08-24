@@ -198,6 +198,7 @@ export default {
 			}).then((res)=>{
 				if(res.data.success){
 					console.log(res.data,11111);
+					this.loadingShow=false;
 				}
 			}).catch((e)=>{
 

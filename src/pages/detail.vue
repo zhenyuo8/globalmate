@@ -103,8 +103,9 @@
         display: flex;
         padding: 10px 0;
         .detail_content_img{
-            width: 1.6rem;
-            height: 1.6rem;
+            // width: 1.6rem;
+            height: 100%;
+            // height: 1.6rem;
             margin-right: .2rem;
             img{
                 width: 100%;
@@ -161,7 +162,7 @@
     <div class="detail_content">
         <div class="detail_top">
             <div class="image_user">
-                <img :src="listData.othersImage+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="">
+                <img :src="listData.othersImage" alt="">
             </div>
             <div class="name_user">
                 <span class="name">{{listData.userName}}</span>
@@ -180,7 +181,7 @@
         </div>
         <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
             <div class="detail_content_img" v-for="(items,indexs) in listData.pic">
-                <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+                <img :src="items" alt="" v-if="indexs<3">
             </div>
         </div>
 
