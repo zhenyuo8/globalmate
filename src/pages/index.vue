@@ -11,10 +11,9 @@ YY<template>
             </div>
         </div>
         <div class="swpier_container" >
-            <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
-                <swiper-slide class="swiper-item" v-for="(item,index) in slides" :key='index'><img :src='item' alt=""></swiper-slide>
-                <div class="swiper-pagination" slot="pagination"></div>
-            </swiper>
+            <mt-swipe :auto="3000">
+                <mt-swipe-item v-for="(item,index) in slides"><img :src="item" alt=""></mt-swipe-item>
+            </mt-swipe>
         </div>
         <div class="">
             <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
@@ -51,15 +50,15 @@ YY<template>
 </template>
 
 <script>
-    import { swipe, SwipeItem } from 'vue-awesome-swiper'
+    // import { swipe, SwipeItem } from 'vue-awesome-swiper'
     import loading from '../components/loading.vue'
     import CONFIG from '../config/config.js'
-    import { MessageBox,Toast} from 'mint-ui';
+    import { MessageBox,Toast,Swipe, SwipeItem} from 'mint-ui';
     require('swiper/dist/css/swiper.css')
 	export default {
         'name':'index',
         components:{
-            swipe, SwipeItem,loading
+            loading
         },
 		data(){
 			return{
@@ -68,22 +67,6 @@ YY<template>
                   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg',
                   'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg'
                 ],
-                swiperOption: {
-                    notNextTick: true,
-                    pagination: '.swiper-pagination',
-                    observer:true,
-                    observeParents:true,
-                    autoplay: {
-                        delay: 3000,
-                        disableOnInteraction: false
-                    },
-                    loop:true,
-                    onSlideChangeEnd: swiper => {
-                        //这个位置放swiper的回调方法
-                        this.page = swiper.realIndex + 1;
-                        this.index = swiper.realIndex;
-                    },
-                },
                 mainmenu:[],
                 token:'',
                 code:'',
@@ -94,12 +77,9 @@ YY<template>
 			}
 		},
         computed: {
-            swiper() {
-              return this.$refs.mySwiper.swiper;
-            }
+
         },
         mounted () {
-            this.swiper.slideTo(0, 0, false);
         },
 		methods:{
             getToken(callback){
@@ -302,71 +282,69 @@ YY<template>
             setTimeout(()=>{
                 this.loadingShow=false;
             },1500);
-            setTimeout(()=>{
-                this.mainmenu=[
-                    {
-                        'title':this.$t('formName.study'),
-                        'key':'learnco',
-                        'type':'assist',
-                        'form':'assist',
-                        'icon':'icon-pen'
-                    },{
-                        'title': this.$t('formName.textbook'),
-                        'key': 'teaching_material',
-                        'type': 'assist',
-                        'form':'other',
-                        'icon':'icon-book'
-                    },{
-                        'title': this.$t('formName.formality'),
-                        'key': 'formality',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-Document_2_yinzhang'
-                    },{
-                        'title': this.$t('formName.exchange'),
-                        'key': 'exchange',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-coin-yen'
-                    },{
-                        'title': this.$t('formName.medical'),
-                        'key': 'medical',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-local_hospital'
-                    },{
-                        'title': this.$t('formName.carry'),
-                        'key': 'carry',
-                        'type': 'assist',
-                        'form':'carryAssist',
-                         'icon':'icon-flight_takeoff'
-                    },{
-                        'title': this.$t('formName.rent'),
-                        'key': 'rent',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-office'
-                    }, {
-                        'title': this.$t('formName.accompany'),
-                        'key': 'accompany',
-                        'type': 'assist',
-                        'form':'accompany',
-                         'icon':'icon-pacman'
-                    },{
-                        'title': this.$t('formName.daigou'),
-                        'key': 'buy',
-                        'type': 'assist',
-                        'form':'aassist',
-                         'icon':'icon-icon-announce'
-                    }, {
-                        'title': this.$t('formName.other'),
-                        'key': 'other',
-                        'type': 'assist',
-                        'form':'other',
-                         'icon':'icon-more-horizontal'
-                    }
-                ]
-            },500);
+            this.mainmenu=[
+                {
+                    'title':this.$t('formName.study'),
+                    'key':'learnco',
+                    'type':'assist',
+                    'form':'assist',
+                    'icon':'icon-pen'
+                },{
+                    'title': this.$t('formName.textbook'),
+                    'key': 'teaching_material',
+                    'type': 'assist',
+                    'form':'other',
+                    'icon':'icon-book'
+                },{
+                    'title': this.$t('formName.formality'),
+                    'key': 'formality',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-Document_2_yinzhang'
+                },{
+                    'title': this.$t('formName.exchange'),
+                    'key': 'exchange',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-coin-yen'
+                },{
+                    'title': this.$t('formName.medical'),
+                    'key': 'medical',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-local_hospital'
+                },{
+                    'title': this.$t('formName.carry'),
+                    'key': 'carry',
+                    'type': 'assist',
+                    'form':'carryAssist',
+                     'icon':'icon-flight_takeoff'
+                },{
+                    'title': this.$t('formName.rent'),
+                    'key': 'rent',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-office'
+                }, {
+                    'title': this.$t('formName.accompany'),
+                    'key': 'accompany',
+                    'type': 'assist',
+                    'form':'accompany',
+                     'icon':'icon-pacman'
+                },{
+                    'title': this.$t('formName.daigou'),
+                    'key': 'buy',
+                    'type': 'assist',
+                    'form':'aassist',
+                     'icon':'icon-icon-announce'
+                }, {
+                    'title': this.$t('formName.other'),
+                    'key': 'other',
+                    'type': 'assist',
+                    'form':'other',
+                     'icon':'icon-more-horizontal'
+                }
+            ]
         },
 
         created(){
@@ -399,6 +377,11 @@ YY<template>
     }
     .swpier_container{
         margin-top: 36px;
+        height: 160px;
+    }
+    .swpier_container img{
+        width: 100%;
+        height: 100%;
     }
     .header > div{
         color: #bfbfbf;

@@ -350,7 +350,7 @@ export default {
 								try{
 									temp['lastMessageContent']=JSON.parse(temp.lastMessage.data.content).chatContent;
 									if(temp['lastMessageContent'].indexOf('style=')>-1){
-										temp['lastMessageContent']="我想和您成为好朋友!"
+										temp['lastMessageContent']="加好友申请!"
 									}
 								}catch(e){
 									temp['lastMessageContent']=temp.lastMessage.data.content;

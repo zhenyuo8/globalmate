@@ -1,22 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/pages/index'
-import assist from '@/pages/assist'//帮代
-import mine from '@/pages/mine'//我的
-import mineInformation from '@/pages/mineInformation'//个人信息
-import myAssist from '@/pages/myAssist'//我发布的
-import seekHelpList from '@/pages/seekHelpList'//求助列表
-import detail from '@/pages/detail'//详情页
-import register from '@/pages/register'//注册
-import login from '@/pages/login'//登陆
-import im from '@/pages/im'//聊天
-import evaluate from '@/pages/evaluate'//求助详情页
-import feedback from '@/pages/feedback'//意见反馈
-import rankAll from '@/pages/rankAll'//排名
-import personalFile from '@/pages/personalFile'//个人资料
-import identify from '@/pages/identify' //身份验证
-import messageList from '@/pages/messageList' //身份验证
-import allComments from '@/pages/allComments' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -24,7 +7,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index,
+      component: reslove=>require(['@/pages/index'],reslove),
       meta:{
           index:1
       }
@@ -32,7 +15,7 @@ export default new Router({
     {
         path: '/assist',
         name: 'assist',
-        component: assist,
+        component: reslove=>require(['@/pages/assist'],reslove),
         meta:{
             index:31
         }
@@ -40,7 +23,7 @@ export default new Router({
     {
         path: '/mine',
         name: 'mine',
-        component: mine,
+        component: reslove=>require(['@/pages/mine'],reslove),
         meta:{
             index:6
         }
@@ -48,21 +31,21 @@ export default new Router({
     {
         path: '/mineInformation',
         name: 'mineInformation',
-        component: mineInformation,
+        component: reslove=>require(['@/pages/mineInformation'],reslove),
         meta:{
             index:16
         }
     },{
         path: '/myAssist',
         name: 'myAssist',
-        component: myAssist,
+        component: reslove=>require(['@/pages/myAssist'],reslove),
         meta:{
             index:10
         }
     },{
         path: '/seekHelpList',
         name: 'seekHelpList',
-        component: seekHelpList,
+        component: reslove=>require(['@/pages/seekHelpList'],reslove),
         meta:{
             index:11
         }
@@ -70,7 +53,7 @@ export default new Router({
     {
         path: '/detail',
         name: 'detail',
-        component: detail,
+        component: reslove=>require(['@/pages/detail'],reslove),
         meta:{
             index:13
         }
@@ -78,7 +61,7 @@ export default new Router({
     {
         path: '/login',
         name: 'login',
-        component: login,
+        component: reslove=>require(['@/pages/login'],reslove),
         meta:{
             index:16
         }
@@ -86,7 +69,7 @@ export default new Router({
     {
         path: '/register',
         name: 'register',
-        component: register,
+        component: reslove=>require(['@/pages/register'],reslove),
         meta:{
             index:16
         }
@@ -94,7 +77,7 @@ export default new Router({
     {
         path: '/im',
         name: 'im',
-        component: im,
+        component: reslove=>require(['@/pages/im'],reslove),
         meta:{
             index:17
         }
@@ -102,7 +85,7 @@ export default new Router({
     {
         path: '/evaluate',
         name: 'evaluate',
-        component: evaluate,
+        component: reslove=>require(['@/pages/evaluate'],reslove),
         meta:{
             index:18
         }
@@ -110,7 +93,7 @@ export default new Router({
     {
         path: '/feedback',
         name: 'feedback',
-        component: feedback,
+        component: reslove=>require(['@/pages/feedback'],reslove),
         meta:{
             index:18
         }
@@ -118,7 +101,7 @@ export default new Router({
     {
         path: '/rankAll',
         name: 'rankAll',
-        component: rankAll,
+        component: reslove=>require(['@/pages/rankAll'],reslove),
         meta:{
             index:18
         }
@@ -126,28 +109,28 @@ export default new Router({
     {
         path: '/personalFile',
         name: 'personalFile',
-        component: personalFile,
+        component: reslove=>require(['@/pages/personalFile'],reslove),
         meta:{
             index:18
         }
     },{
         path: '/identify',
         name: 'identify',
-        component: identify,
+        component: reslove=>require(['@/pages/identify'],reslove),
         meta:{
             index:19
         }
     },{
         path: '/messageList',
         name: 'messageList',
-        component: messageList,
+        component: reslove=>require(['@/pages/messageList'],reslove),
         meta:{
             index:4
         }
     },{
         path: '/allComments',
         name: 'allComments',
-        component: allComments,
+        component: reslove=>require(['@/pages/allComments'],reslove),
         meta:{
             index:17
         }
