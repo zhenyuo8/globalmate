@@ -11,7 +11,7 @@ function getTokenUrl(url) {
   // url += '&token=' + token;
   return url.replace('?&', '?');
 }
-axios.defaults.timeout = 5000;
+// axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   config => {
     let url = getTokenUrl(config.url || ''),

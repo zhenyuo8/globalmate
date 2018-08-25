@@ -119,9 +119,11 @@ import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
 let pinyin = require("pinyin");
 import tips from "../components/tips.vue";
+import Vue from 'vue'
 import loading from "../components/loading.vue";
-import { Toast } from "mint-ui";
-import { DatetimePicker } from "mint-ui";
+import { Toast, DatetimePicker } from "mint-ui";
+Vue.component(Toast.name, Toast);
+Vue.component(DatetimePicker.name, DatetimePicker);
 import userMix from "../mixins/userInfo";
 export default {
   name: "assist",

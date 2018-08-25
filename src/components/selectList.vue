@@ -52,7 +52,9 @@ input[type="radio"]:checked {
 </template>
 
 <script>
+import Vue from 'vue'
 import { Radio } from "mint-ui";
+Vue.component(Radio.name, Radio);
 export default {
   components: {
     Radio

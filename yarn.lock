@@ -104,6 +104,10 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/amdefine/download/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+ansi-colors@^3.0.0:
+  version "3.0.5"
+  resolved "http://registry.npm.taobao.org/ansi-colors/download/ansi-colors-3.0.5.tgz#cb9dc64993b64fd6945485f797fc3853137d9a7b"
+
 ansi-escapes@^3.0.0:
   version "3.1.0"
   resolved "http://registry.npm.taobao.org/ansi-escapes/download/ansi-escapes-3.1.0.tgz#f73207bb81207d75fd6c83f125af26eea378ca30"
@@ -1403,7 +1407,7 @@ chownr@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/chownr/download/chownr-1.0.1.tgz#e2a75042a9551908bebd25b8523d5f9769d79181"
 
-chromedriver@^2.27.2:
+chromedriver@^2.41.0:
   version "2.41.0"
   resolved "http://registry.npm.taobao.org/chromedriver/download/chromedriver-2.41.0.tgz#2709d3544bc0c288b4738a6925a64c02a98a921f"
   dependencies:
@@ -2631,7 +2635,7 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-extract-text-webpack-plugin@^3.0.0:
+extract-text-webpack-plugin@^3.0.2:
   version "3.0.2"
   resolved "http://registry.npm.taobao.org/extract-text-webpack-plugin/download/extract-text-webpack-plugin-3.0.2.tgz#5f043eaa02f9750a9258b78c0a6e0dc1408fb2f7"
   dependencies:
@@ -3077,10 +3081,6 @@ has-flag@^2.0.0:
 has-flag@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/has-flag/download/has-flag-3.0.0.tgz#b5d454dc2199ae225699f3467e5a07f3b955bafd"
-
-has-symbols@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/has-symbols/download/has-symbols-1.0.0.tgz#ba1a8f1af2a0fc39650f5c850367704122063b44"
 
 has-unicode@^2.0.0:
   version "2.0.1"
@@ -4056,10 +4056,6 @@ jest@^22.0.4:
     import-local "^1.0.0"
     jest-cli "^22.4.4"
 
-jquery@^2.2.4:
-  version "2.2.4"
-  resolved "http://registry.npm.taobao.org/jquery/download/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
-
 js-base64@^2.1.9:
   version "2.4.8"
   resolved "http://registry.npm.taobao.org/js-base64/download/js-base64-2.4.8.tgz#57a9b130888f956834aa40c5b165ba59c758f033"
@@ -4622,13 +4618,6 @@ loglevel@^1.4.1:
   version "1.6.1"
   resolved "http://registry.npm.taobao.org/loglevel/download/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
 
-loglevelnext@^1.0.1:
-  version "1.0.5"
-  resolved "http://registry.npm.taobao.org/loglevelnext/download/loglevelnext-1.0.5.tgz#36fc4f5996d6640f539ff203ba819641680d75a2"
-  dependencies:
-    es6-symbol "^3.1.1"
-    object.assign "^4.1.0"
-
 longest@^1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/longest/download/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -4827,7 +4816,7 @@ mime@^1.4.1, mime@^1.5.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/mime/download/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
 
-mime@^2.1.0:
+mime@^2.3.1:
   version "2.3.1"
   resolved "http://registry.npm.taobao.org/mime/download/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
 
@@ -5225,7 +5214,7 @@ object-copy@^0.1.0:
     define-property "^0.2.5"
     kind-of "^3.0.3"
 
-object-keys@^1.0.11, object-keys@^1.0.12:
+object-keys@^1.0.12:
   version "1.0.12"
   resolved "http://registry.npm.taobao.org/object-keys/download/object-keys-1.0.12.tgz#09c53855377575310cca62f55bb334abff7b3ed2"
 
@@ -5234,15 +5223,6 @@ object-visit@^1.0.0:
   resolved "http://registry.npm.taobao.org/object-visit/download/object-visit-1.0.1.tgz#f79c4493af0c5377b59fe39d395e41042dd045bb"
   dependencies:
     isobject "^3.0.0"
-
-object.assign@^4.1.0:
-  version "4.1.0"
-  resolved "http://registry.npm.taobao.org/object.assign/download/object.assign-4.1.0.tgz#968bf1100d7956bb3ca086f006f846b3bc4008da"
-  dependencies:
-    define-properties "^1.1.2"
-    function-bind "^1.1.1"
-    has-symbols "^1.0.0"
-    object-keys "^1.0.11"
 
 object.getownpropertydescriptors@^2.0.3:
   version "2.0.3"
@@ -7397,7 +7377,7 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
 
-uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
+uuid@^3.0.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "http://registry.npm.taobao.org/uuid/download/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
@@ -7576,17 +7556,17 @@ webpack-dev-middleware@1.12.2:
     range-parser "^1.0.3"
     time-stamp "^2.0.0"
 
-webpack-dev-middleware@^3.1.3:
-  version "3.1.3"
-  resolved "http://registry.npm.taobao.org/webpack-dev-middleware/download/webpack-dev-middleware-3.1.3.tgz#8b32aa43da9ae79368c1bf1183f2b6cf5e1f39ed"
+webpack-dev-middleware@^3.2.0:
+  version "3.2.0"
+  resolved "http://registry.npm.taobao.org/webpack-dev-middleware/download/webpack-dev-middleware-3.2.0.tgz#a20ceef194873710052da678f3c6ee0aeed92552"
   dependencies:
     loud-rejection "^1.6.0"
     memory-fs "~0.4.1"
-    mime "^2.1.0"
+    mime "^2.3.1"
     path-is-absolute "^1.0.0"
     range-parser "^1.0.3"
     url-join "^4.0.0"
-    webpack-log "^1.0.1"
+    webpack-log "^2.0.0"
 
 webpack-dev-server@^2.11.2:
   version "2.11.2"
@@ -7620,14 +7600,12 @@ webpack-dev-server@^2.11.2:
     webpack-dev-middleware "1.12.2"
     yargs "6.6.0"
 
-webpack-log@^1.0.1:
-  version "1.2.0"
-  resolved "http://registry.npm.taobao.org/webpack-log/download/webpack-log-1.2.0.tgz#a4b34cda6b22b518dbb0ab32e567962d5c72a43d"
+webpack-log@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/webpack-log/download/webpack-log-2.0.0.tgz#5b7928e0637593f119d32f6227c1e0ac31e1b47f"
   dependencies:
-    chalk "^2.1.0"
-    log-symbols "^2.1.0"
-    loglevelnext "^1.0.1"
-    uuid "^3.1.0"
+    ansi-colors "^3.0.0"
+    uuid "^3.3.2"
 
 webpack-merge@^4.1.0:
   version "4.1.4"

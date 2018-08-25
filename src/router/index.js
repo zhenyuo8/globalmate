@@ -18,7 +18,7 @@ import index from '@/pages/index'
 // import messageList from '@/pages/messageList' //身份验证
 Vue.use(Router)
 
-var router = new Router({
+export default new Router({
   routes: [
     {
       path: '/',
@@ -33,7 +33,8 @@ var router = new Router({
       path: '/assist',
       name: 'assist',
       // component: assist,
-      component: () => import('@/pages/assist.vue'),
+      component: () => import('../pages/assist.vue'),
+      // component: (resolve) => require(['@/pages/assist.vue'], resolve),
       meta: {
         index: 31
       }
@@ -162,4 +163,3 @@ var router = new Router({
     },
   ]
 })
-export default router

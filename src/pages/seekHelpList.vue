@@ -445,6 +445,8 @@ import searchInput from "../components/searchInput.vue";
 import loading from "../components/loading.vue";
 import indexList from "../components/indexList.vue";
 import { MessageBox, Toast } from "mint-ui";
+Vue.component(Toast.name, Toast);
+Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
 let pinyin = require("pinyin");
 export default {

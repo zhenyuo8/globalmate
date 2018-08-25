@@ -23,11 +23,13 @@ const webpackConfig = merge(baseWebpackConfig, {
       usePostCSS: true
     })
   },
-  devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  // devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  devtool: false,
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
+    publicPath: './'
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -75,8 +77,10 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
+      // chunks: ['manifest', 'vendor', 'app'],
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
+      // chunksSortMode: 'manual'
     }),
     // keep module.id stable when vendor modules does not change
     new webpack.HashedModuleIdsPlugin(),

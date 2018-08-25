@@ -11,6 +11,8 @@
 <script>
 import userMix from "./mixins/userInfo";
 import { Toast } from "mint-ui";
+import Vue from 'vue'
+Vue.component(Toast.name, Toast)
 export default {
   name: "App",
   mixins: [userMix],
@@ -316,7 +318,7 @@ export default {
 </script>
 
 <style>
-/* @import "../static/css/style.css"; */
+@import "../static/css/style.css";
 #app {
   font-family: "PingFangSC-Regular", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

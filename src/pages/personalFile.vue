@@ -111,7 +111,9 @@
 <script>
 import tips from "../components/tips.vue";
 import indexList from "../components/indexList.vue";
+import Vue from 'vue'
 import { DatetimePicker } from "mint-ui";
+Vue.component(DatetimePicker.name, DatetimePicker);
 import userMix from "../mixins/userInfo";
 let pinyin = require("pinyin");
 export default {

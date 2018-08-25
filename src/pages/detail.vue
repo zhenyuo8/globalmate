@@ -227,6 +227,9 @@
 
 <script>
 import { MessageBox, Toast } from "mint-ui";
+import Vue from 'vue'
+Vue.component(Toast.name, Toast);
+Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
 export default {
   name: "detail",

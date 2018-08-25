@@ -10,10 +10,15 @@ YY<template>
       </div>
     </div>
     <div class="swpier_container">
-      <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
+      <mt-swipe :auto='0'>
+        <mt-swipe-item v-for='(item, index) in slides' :key='index'>
+          <img :src="item" alt="">
+        </mt-swipe-item>
+      </mt-swipe>
+      <!-- <swiper :options="swiperOption" class="swiper-box" ref="mySwiper">
         <swiper-slide class="swiper-item" v-for="(item,index) in slides" :key='index'><img :src='item' alt=""></swiper-slide>
         <div class="swiper-pagination" slot="pagination"></div>
-      </swiper>
+      </swiper> -->
     </div>
     <div class="">
       <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
@@ -61,17 +66,22 @@ YY<template>
 </template>
 
 <script>
-import { swipe, SwipeItem } from "vue-awesome-swiper";
+// import { swipe, SwipeItem } from "vue-awesome-swiper";
 import loading from "../components/loading.vue";
-import { MessageBox, Toast } from "mint-ui";
+import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
+import Vue from "vue";
+Vue.component(Toast.name, Toast);
+Vue.component(MessageBox.name, MessageBox);
+Vue.component(Swipe.name, Swipe);
+Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-require("swiper/dist/css/swiper.css");
+// require("swiper/dist/css/swiper.css");
 export default {
   name: "index",
   mixins: [userMix],
   components: {
-    swipe,
-    SwipeItem,
+    // swipe,
+    // SwipeItem,
     loading
   },
   data() {
@@ -107,11 +117,11 @@ export default {
   },
   computed: {
     swiper() {
-      return this.$refs.mySwiper.swiper;
+      // return this.$refs.mySwiper.swiper;
     }
   },
   mounted() {
-    this.swiper.slideTo(0, 0, false);
+    // this.swiper.slideTo(0, 0, false);
   },
   methods: {
     getToken(callback) {
@@ -437,7 +447,19 @@ export default {
 };
 </script>
 
+
 <style>
+.swpier_container .mint-swipe .mint-swipe-items-wrap {
+  height: 177px;
+}
+.swpier_container .mint-swipe .mint-swipe-items-wrap .mint-swipe-item {
+  width: 100%;
+  height: 100%;
+}
+.swpier_container .mint-swipe .mint-swipe-items-wrap .mint-swipe-item img {
+   width: 100%;
+  height: 100%;
+}
 #index {
   background: #efefef;
   overflow: hidden;

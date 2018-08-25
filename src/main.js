@@ -8,10 +8,11 @@ import qs from 'qs';
 import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
-import './assets/css/css/style.css';
-import VueAwesomeSwiper from 'vue-awesome-swiper'
-import Mint from'mint-ui'
-import 'mint-ui/lib/style.css'
+import "mint-ui/lib/style.css";
+// import './assets/css/css/style.css';
+// import VueAwesomeSwiper from 'vue-awesome-swiper'
+// import Mint from'mint-ui'
+// import 'mint-ui/lib/style.css'
 import utils from './libs/js/util.js'
 // import VueLazyLoad from 'vue-lazyload'
 import VueI18n from 'vue-i18n';
@@ -25,8 +26,8 @@ const defaultLang='zh-CN';
 const eventbus = new Vue()
 Vue.prototype.$eventbus = eventbus
 Vue.use(VueI18n)
-Vue.use(Mint);
-Vue.use(VueAwesomeSwiper)
+// Vue.use(Mint);
+// Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
 Vue.prototype.moment = moment
 Vue.prototype.qs = qs
@@ -52,7 +53,6 @@ const loadLang = (langToLoad) => {
   return Promise.resolve()
 }
 /* eslint-disable no-new */
-
 loadLang(lang).then(() => {
   i18n.locale = lang
   new Vue({
