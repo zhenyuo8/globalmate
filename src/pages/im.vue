@@ -188,6 +188,9 @@ export default {
 					let content=JSON.parse(arg.data.content);
 					if(content&&content.chatType&&!content.chatContent){
 					}else{
+						if(content.chatContent.indexOf('style=')>-1){
+							return;
+						}
 						obj['chatContent']=content.chatContent;
 					}
 				}catch(e){
@@ -197,7 +200,6 @@ export default {
 				obj['pic']=this.currentUserImgae;
 				obj['type']=false;
 				$li = $('<li class="right-item"> <img src="'+this.currentUserImgae+'" alt=""/> <div class="chat-item-text">' + obj['chatContent'] + '</div> </li>');
-				// $('#chat-thread').append($li);
 				this.historyList.push(obj)
 
 			}
@@ -232,6 +234,9 @@ export default {
 				if(content&&content.chatType&&!content.chatContent){
 					// this.processChatType(content.chatType);
 				}else{
+					if(content.chatContent.indexOf('style=')>-1){
+						return
+					}
 					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
 					obj['chatContent']=content.chatContent;
 				}
@@ -298,10 +303,10 @@ export default {
 							 this.detail['status']='洽谈中';
 							 break;
 						 case '5':
-							 this.detail['status']='执行中';
+							 this.detail['status']=this.$t('status.execute');
 							 break;
 						 case '6':
-							 this.detail['status']='已完成';
+							 this.detail['status']=this.$t('status.complete');
 							 break;
 						 default:
 
@@ -355,8 +360,9 @@ export default {
 								result[i].pic=_this.othersInfo.pic;
 								try{
 									_this.chatItemId=JSON.parse(result[i].data.content).item;
-									_this.id=_this.chatItemId;
-
+									if(!_this.id){
+										_this.id=_this.chatItemId;
+									}
 								}catch(e){
 
 								}
@@ -392,7 +398,6 @@ export default {
 			this.currentUserImgae=this.CURRENTUSER.pic;
 		}
 		this.getOthersInfo(this.toChartId);
-		this.loadData();
 	},
 	mounted(){
 

@@ -9,11 +9,9 @@ import moment from 'moment'
 import router from './router'
 import './assets/css/reset.css'
 import './assets/css/global.css'
-import VueAwesomeSwiper from 'vue-awesome-swiper'
 import Mint from'mint-ui'
 import'mint-ui/lib/style.css'
 import utils from './libs/js/util.js'
-import VueLazyLoad from 'vue-lazyload'
 import VueI18n from 'vue-i18n';
 import messages from './locales';
 
@@ -25,7 +23,6 @@ const eventbus = new Vue()
 Vue.prototype.$eventbus = eventbus
 Vue.use(VueI18n)
 Vue.use(Mint);
-Vue.use(VueAwesomeSwiper)
 Vue.prototype.axios = axios
 Vue.prototype.moment = moment
 Vue.prototype.qs = qs
