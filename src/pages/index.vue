@@ -50,11 +50,9 @@ YY<template>
 </template>
 
 <script>
-    // import { swipe, SwipeItem } from 'vue-awesome-swiper'
     import loading from '../components/loading.vue'
     import CONFIG from '../config/config.js'
     import { MessageBox,Toast,Swipe, SwipeItem} from 'mint-ui';
-    require('swiper/dist/css/swiper.css')
 	export default {
         'name':'index',
         components:{
