@@ -89,14 +89,14 @@
     <div class="mine_body">
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
-          <img :src="userInfo.pic" alt="">
+          <img :src="userInfo1.pic" alt="">
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">
-            <span class="mine_username">{{userInfo.username}}</span>
+            <span class="mine_username">{{userInfo1.username}}</span>
           </div>
           <div class="mine_location">
-            <span class="">{{userInfo.country}}</span>
+            <span class="">{{userInfo1.country}}</span>
           </div>
         </div>
         <div class="mine_settings" @click='goEditMineInfo'>
@@ -162,7 +162,7 @@ export default {
       ],
 
       title: "",
-      userInfo: {
+      userInfo1: {
         username: "",
         country: "",
         call: "",
@@ -171,16 +171,15 @@ export default {
     };
   },
   components: {
-
     List,
     selectList
   },
   computed: {},
   methods: {
     getToken(callback) {
-      let userId = this.userInfo["userId"];
+      let userId = this.userInfo1["userId"];
       // let userId = .getItem("USERID");
-      let openid = this.userInfo["openId"];
+      let openid = this.userInfo1["openId"];
       // let openid = .getItem("OPENID");
       if (userId) {
         this.axios
@@ -308,8 +307,8 @@ export default {
       });
     },
     loadData() {
-      if (this.userInfo["token"]) {
-        this.token = this.userInfo["token"];
+      if (this.userInfo1["token"]) {
+        this.token = this.userInfo1["token"];
       }
       // if (.getItem("TOKEN")) {
       //   this.token = .getItem("TOKEN");
@@ -325,10 +324,10 @@ export default {
         .then(res => {
           if (res.success) {
             let data = res.data;
-            this.userInfo.username = data.nikename || data.name;
-            this.userInfo.country = data.country;
-            this.userInfo.call = data.enable;
-            this.userInfo.pic = data.pic || "../assets/images/icon.png";
+            this.userInfo1.username = data.nikename || data.name;
+            this.userInfo1.country = data.country;
+            this.userInfo1.call = data.enable;
+            this.userInfo1.pic = data.pic || "../assets/images/icon.png";
           }
         })
         .catch(e => {
