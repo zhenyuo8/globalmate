@@ -1,4 +1,4 @@
-<style scoped>
+<style scoped lang='less'>
 
 .header{
     position: fixed;
@@ -105,34 +105,32 @@
     line-height: 32px;
 }
 .mineInformation_chart_button{
-    font-size: 30px;
-    margin-top: 8px;
-    margin-right:.4rem;
-    text-align: right;
+    font-size: 14px;
+    position: absolute;
+    right: 0.2rem;
+    top: 5px;
 }
  .mineInformation_chart_button span{
-    width: auto!important;
-    margin-left: 0!important;
-    display: inline-block;
-    background: #eee;
-    padding:0.1rem;
-    border-radius: 4px;
-    color: #007aff;
-    border-radius: 50%;
-    margin-right: .2rem;
+     padding: 4px .2rem;
+     box-sizing: border-box;
+     border-radius: 14px;
+     &.chat{
+         background: blue;
+         color: #fff;
+     }
+     &.friends{
+         color: #e42641;
+         border:1px solid #e42641
+     }
 }
- .mineInformation_chart_button .icon-wechat::before{
-     color: #0bbb0b;
- }
-
 .mineInformation_recommend{
     height: 98px;
 }
 .mineInformation_recommend p{
     text-align: left;
-       font-size: 14px;
-       color: #9B9B9B;
-       padding: 21px .58rem;
+    font-size: 14px;
+    color: #9B9B9B;
+    padding: 21px .58rem;
 }
 .mineInformation_line{
     width: 84%;
@@ -142,7 +140,7 @@
 .mineInformation_history_action{
     padding-bottom: 20px;
 }
-.mineInformation_hobby, .mineInformation_school{
+ .mineInformation_school{
      font-size: 14px;
      color: #999;
      width: 80%;
@@ -154,10 +152,8 @@
      position: relative;
      margin-bottom: 10px;
 }
-.mineInformation_hobby_content{
-    padding: .04rem;
-}
-.mineInformation_school_title, .mineInformation_hobby_title{
+
+.mineInformation_school_title{
     height: 32px;
     line-height: 32px;
     position: absolute;
@@ -167,7 +163,7 @@
     left: 6%;
 
 }
-.mineInformation_school_content_repeat span, .mineInformation_hobby_offer span, .mineInformation_hobby_love span{
+.mineInformation_school_content_repeat span{
     line-height: 32px;
     color: #333;
     font-size: 13px;
@@ -175,25 +171,52 @@
     text-align: left;
 }
 
-.mineInformation_school_content_repeat, .mineInformation_hobby_offer, .mineInformation_hobby_love{
+.mineInformation_school_content_repeat{
     text-align: left;
     white-space: nowrap;
     overflow-x: scroll;
 }
 
 
-.mineInformation_comment_warp{
+.mineInformation_comment_warp, .mineInformation_hobby_warp{
     position: relative;
     font-size: 14px;
     background: #f7f5f3;
     padding: 10px 0;
+}
+.mineInformation_hobby_warp>div{
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 5px 0.4rem;
+}
+.mineInformation_hobby_content{
+    text-align: left;
+}
+.mineInformation_hobby_content span{
+    padding: 5px;
+}
+.mineInformation_hobby_love{
+    padding: 4px;
+}
+.mineInformation_hobby_offer{
+    border: 1px solid #d3d3d3;
+    border-radius: 10px;
+    padding: 4px;
+}
+.mineInformation_hobby_offer>div span{
+    padding: 6px .4rem;
+    background: #f7ebf4;
+    border-radius: 12px;
+    margin: 4px .1rem;
+    font-size: 12px;
+    color: #666;
 }
 .mineInformation_comment_warp>div{
     background: #fff;
     margin-bottom: 10px;
     padding: 10px 0.4rem;
 }
-.mineInformation_comment_warp .mineInformation_comment_header{
+.mineInformation_comment_warp .mineInformation_comment_header, .mineInformation_hobby_warp .mineInformation_hobby_header{
     margin-bottom: 0;
     text-align: left;
 }
@@ -214,7 +237,7 @@
 .comment_repeat_top .score{
     position: absolute;
     right: 0;
-    color: blue
+    color: #ff0023;
 }
 .comment_repeat_middle{
     margin-top: 10px;
@@ -252,12 +275,12 @@
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
                     <span class="mineInformation_username">{{information.nikename||information.name}}</span>
-                    <span class="mineInformation_call">{{$t('formTitle.serviceValue')}} <i style='color:blue'>{{nice}}</i></span>
+                    <span class="mineInformation_call">{{$t('formTitle.serviceValue')}} <i style='color:#ff0023'>{{nice}}</i></span>
                 </div>
             </div>
             <div class="mineInformation_chart_button"  v-show="isOthers">
-                <span class="icon-wechat" @click='chartWith'></span>
-                <span class="icon-user-add" @click='addIMFriend'></span>
+                <span class="chat" @click='chartWith'>联系Ta</span>
+                <span class="friends" @click='addIMFriend'>+好友</span>
             </div>
         </div>
 
@@ -281,8 +304,8 @@
                 <p v-if="school.length==0">暂未添加圈子</p>
             </div>
         </div>
-        <div class="mineInformation_hobby">
-            <div class="mineInformation_hobby_title">
+        <div class="mineInformation_hobby_warp">
+            <div class="mineInformation_hobby_header">
                 {{$t('formTitle.pfrofile')}}
             </div>
             <div class="mineInformation_hobby_content">
@@ -290,7 +313,10 @@
                     <span class="title">{{$t('formTitle.intrest')}} ：{{hobby}}</span>
                 </div>
                 <div class="mineInformation_hobby_offer">
-                    <span class="title">{{$t('formTitle.helpAvailable')}} ：{{helpAvailable}}</span>
+                    <span class="title">{{$t('formTitle.helpAvailable')}}</span>
+                    <div class="">
+                        <span v-for="item in helpAvailable">{{item}}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -298,7 +324,7 @@
             <div class="mineInformation_comment_header">
                 {{$t('formTitle.commentsme')}} ({{commentList.length}})
             </div>
-            <div class="comment_repeat" v-for="(item,index) in commentList">
+            <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2'>
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
                     <span>{{item.evaluation.uEvluatorName}}</span>
@@ -312,7 +338,7 @@
                 </p>
             </div>
 
-            <p v-show="commentList.length>3">查看全部评价</p>
+            <p v-show="commentList.length>3" @click='viewAllComments'>查看全部评价</p>
         </div>
     </div>
     <div class="defindloadig" v-if="loadingShow">
@@ -337,7 +363,7 @@ export default {
             school:[],
             hobby:'',
             nice:'',
-            helpAvailable:'',
+            helpAvailable:[],
             information:{},
             isOthers:true,
             loadingShow:true,
@@ -422,7 +448,7 @@ export default {
         },
         getEvalute(){
             this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.apiHost+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+            this.axios.get(this.apiHost+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+'&acquired=true',{
 
             }).then((res)=>{
                 if(res.data.success){
@@ -447,7 +473,7 @@ export default {
                 var curData=data[i];
                 curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                 (function(curData){
-                    _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uTargeterId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                    _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
                         if(res.data.success){
                             curData.pic=res.data.data.pic;
                             _this.commentList.push(curData)
@@ -458,6 +484,9 @@ export default {
                 })(curData)
 
             }
+        },
+        viewAllComments(){
+            console.log(this);
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -474,7 +503,7 @@ export default {
                     this.userId=data.id;
                     this.hobby=data.hobby;
                     this.nice=data.nice;
-                    this.helpAvailable=data.helpAvailable;
+                    this.helpAvailable=data.helpAvailable.split(',');
                     this.loadingShow=false;
                     if(data.school){
                         this.school=JSON.parse(data.school);

@@ -144,7 +144,7 @@
                 <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
                 <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
                 <!-- <span class="share" @click='evaluate($event,item)'>分享到</span> -->
-                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6||item.need.enable==0?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
+                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
             </div>
             <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
                 <span>追加评论</span>
@@ -318,8 +318,14 @@ export default {
             e.preventDefault();
             event.stopPropagation();
             e.cancelBubble=true;
-
-            if(item.need.enable!=6&&item.need.enable!=0){
+            if(item.need.enable==6){
+                Toast({
+                   message: '当前任务已评价！',
+                   duration: 2000
+                });
+                return;
+            }
+            if(item.need.enable!=0){
                 Toast({
                    message: '当前任务还未完成，暂不能评价！',
                    duration: 2000
@@ -377,6 +383,7 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             data.pushList=[];
             data.assistList=[];
+            let _this=this;
             this.axios.get(this.apiHost+'/globalmate/rest/match/'+data.need.id+'?token='+this.token,{
 
             }).then((res)=>{
@@ -384,14 +391,18 @@ export default {
                     if(res.data.data&&res.data.data.length!=0){
                         var nowData=res.data.data;
                         for(var i=0;i<nowData.length;i++){
-                            this.getPushItemInfo(nowData[i],function (result) {
-                                if(result.matchAccept){
-                                    data.assistList.push(result);
-                                }
-                                data.pushList.push(result);
-                            });
+                            let curNowData=nowData[i];
+                            (function(curNowData){
+                                _this.getPushItemInfo(curNowData,function (result) {
+                                    if(result.matchAccept){
+                                        data.assistList.push(result);
+                                    }
+                                    data.pushList.push(result);
+                                    callback&&callback(data)
+                                });
+                            })(curNowData)
                         }
-                        callback&&callback(data)
+
                     }else {
                         callback&&callback(data)
                     }
@@ -443,14 +454,17 @@ export default {
                                          data[i].need.status='执行中';
                                          break;
                                      case '6':
-                                         data[i].need.status='已完成';
+                                         data[i].need.status=this.$t('status.complete');
                                          break;
                                      default:
 
                                  }
-                                 this.getPushItem(data[i],function (result) {
-                                     _this.myAssistList.push(result)
-                                 })
+                                 let curData=data[i];
+                                 (function (curData) {
+                                     _this.getPushItem(curData,function (result) {
+                                         _this.myAssistList.push(result)
+                                     })
+                                 })(curData);
                              }
                          }
                          this.loadingShow=false;
