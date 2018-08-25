@@ -1,72 +1,57 @@
 <template>
-	<div class="spinner_warp">
-		<div class="spinner">
-			  <div class="spinner-container container1">
-			    <div class="circle1"></div>
-			    <div class="circle2"></div>
-			    <div class="circle3"></div>
-			    <div class="circle4"></div>
-			  </div>
-			  <div class="spinner-container container2">
-			    <div class="circle1"></div>
-			    <div class="circle2"></div>
-			    <div class="circle3"></div>
-			    <div class="circle4"></div>
-			  </div>
-			  <div class="spinner-container container3">
-			    <div class="circle1"></div>
-			    <div class="circle2"></div>
-			    <div class="circle3"></div>
-			    <div class="circle4"></div>
-			  </div>
-		</div>
-		<p>{{$t('formTitle.loading')}}</p>
-	</div>
+  <div class="spinner_warp">
+    <div class="spinner">
+      <div class="spinner-container container1">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+      <div class="spinner-container container2">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+      <div class="spinner-container container3">
+        <div class="circle1"></div>
+        <div class="circle2"></div>
+        <div class="circle3"></div>
+        <div class="circle4"></div>
+      </div>
+    </div>
+    <p>{{$t('formTitle.loading')}}</p>
+  </div>
 </template>
 
 <script>
-    // import {  } from 'vux'
-    export default {
-        data() {
-            return {
-
-            }
-        },
-        props: {
-
-        },
-        components: {
-
-        },
-        computed: {
-
-        },
-        methods: {
-
-        },
-        directives: {
-
-        },
-        activated(){
-
-        },
-        watch: {
-
-        },
-        created() {
-        },
-    }
+// import {  } from 'vux'
+export default {
+  data() {
+    return {};
+  },
+  props: {},
+  components: {},
+  computed: {},
+  methods: {},
+  directives: {},
+  activated() {},
+  watch: {},
+  created() {}
+};
 </script>
 
 <style  lang="less">
-	.spinner {
-	  width: 20px;
-	  height: 20px;
-	  position: relative;
-	  margin:auto;
-	}
+.spinner {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  margin: auto;
+}
 
-.container1 > div, .container2 > div, .container3 > div {
+.container1 > div,
+.container2 > div,
+.container3 > div {
   width: 6px;
   height: 6px;
   background-color: #fff;
@@ -95,10 +80,22 @@
   transform: rotateZ(90deg);
 }
 
-.circle1 { top: 0; left: 0; }
-.circle2 { top: 0; right: 0; }
-.circle3 { right: 0; bottom: 0; }
-.circle4 { left: 0; bottom: 0; }
+.circle1 {
+  top: 0;
+  left: 0;
+}
+.circle2 {
+  top: 0;
+  right: 0;
+}
+.circle3 {
+  right: 0;
+  bottom: 0;
+}
+.circle4 {
+  left: 0;
+  bottom: 0;
+}
 
 .container2 .circle1 {
   -webkit-animation-delay: -1.1s;
@@ -106,8 +103,8 @@
 }
 
 .container3 .circle1 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
 }
 
 .container1 .circle2 {
@@ -156,32 +153,40 @@
 }
 
 @-webkit-keyframes bouncedelay {
-  0%, 80%, 100% { -webkit-transform: scale(0.0) }
-  40% { -webkit-transform: scale(1.0) }
+  0%,
+  80%,
+  100% {
+    -webkit-transform: scale(0);
+  }
+  40% {
+    -webkit-transform: scale(1);
+  }
 }
 
 @keyframes bouncedelay {
-  0%, 80%, 100% {
-    transform: scale(0.0);
-    -webkit-transform: scale(0.0);
-  } 40% {
-    transform: scale(1.0);
-    -webkit-transform: scale(1.0);
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    -webkit-transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
   }
 }
-.spinner_warp{
-	width: 80px;
-    padding: 20px 0 15px 0;
-    margin: auto;
-    z-index: 1111;
-	margin-top:66%;
-	border-radius:6px;
-	background: rgba(0,0,0,0.8);
+.spinner_warp {
+  width: 80px;
+  padding: 20px 0 15px 0;
+  margin: auto;
+  z-index: 1111;
+  margin-top: 66%;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.8);
 }
-.spinner_warp p{
-	font-size:14px;
-	margin-top:15px;
-	color:#fff
+.spinner_warp p {
+  font-size: 14px;
+  margin-top: 15px;
+  color: #fff;
 }
-
 </style>

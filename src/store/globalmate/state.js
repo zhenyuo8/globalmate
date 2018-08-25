@@ -1,3 +1,9 @@
 module.exports = {
-    userInfo: {},
+    userInfo: {
+      token: '',
+      userId: '',
+      openId: ''
+    },
+    todoList: [],  // 对应存的LIST
+    msgList: []    // 对应存的MESSAGELIST
 }
