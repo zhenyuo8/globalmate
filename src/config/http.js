@@ -1,12 +1,12 @@
 import axios from 'axios';
-import util from '../util/index'
+// import util from '../util/index'
 import CONFIG from './config';
 
 function getTokenUrl(url) {
   if (typeof url !== 'string') {
     return '';
   }
-  let token = util.getQueryStringByName('token');
+  // let token = util.getQueryStringByName('token');
   url += url.indexOf('?') < 0 ? '?' : '';
   // url += '&token=' + token;
   return url.replace('?&', '?');

@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../assets/css/login.css";
+/* @import "../assets/css/login.css"; */
 #login {
   position: absolute;
   top: 0px;

@@ -94,7 +94,7 @@ export default {
 </script>
 
 <style scoped>
-@import "../assets/css/login.css";
+/* @import "../assets/css/login.css"; */
 #register {
   position: absolute;
   top: 0px;

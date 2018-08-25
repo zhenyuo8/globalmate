@@ -175,7 +175,7 @@
           <p>{{$t('formTitle.helpMan')}}:</p>
           <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
             <div class="">
-              <img src="../assets/images/1.jpeg" alt="">
+              <!-- <img src="../assets/images/1.jpeg" alt=""> -->
               <span>辛巴</span>
             </div>
 
