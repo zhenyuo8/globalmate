@@ -16,6 +16,7 @@ import rankAll from '@/pages/rankAll'//排名
 import personalFile from '@/pages/personalFile'//个人资料
 import identify from '@/pages/identify' //身份验证
 import messageList from '@/pages/messageList' //身份验证
+import allComments from '@/pages/allComments' //身份验证
 Vue.use(Router)
 
 export default new Router({
@@ -142,6 +143,13 @@ export default new Router({
         component: messageList,
         meta:{
             index:4
+        }
+    },{
+        path: '/allComments',
+        name: 'allComments',
+        component: allComments,
+        meta:{
+            index:17
         }
     },
   ]

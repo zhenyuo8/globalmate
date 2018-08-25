@@ -1,27 +1,103 @@
 <template>
-    <div class="uploader" id='uploader'>
+    <div class="">
+        <div class="mineInformation_comment_warp">
+            <div class="comment_repeat" v-for="(item,index) in commentList" >
+                <p class="comment_repeat_top">
+                    <img :src="item.pic" alt="">
+                    <span>{{item.evaluation.uEvluatorName}}</span>
+                    <span class="score">评分:{{item.evaluation.score}}</span>
+                </p>
+                <p class="comment_repeat_middle">
+                    {{item.evaluation.createTime}} 标题:{{item.needAggEntity.conceretNeed.title}} 悬赏金额:{{item.needAggEntity.conceretNeed.rewardAmount}}
+                </p>
+                <p class="comment_repeat_bottom">
+                    {{item.evaluation.content}}
+                </p>
+            </div>
 
+        </div>
+         <div class="defindloadig" v-if="loadingShow">
+             <loading></loading>
+         </div>
     </div>
 </template>
 
 <script>
 	import CONFIG from '../config/config'
+    import loading from '../components/loading.vue'
 	export default {
 		components:{
-
+            loading
 		},
 		data(){
 			return{
-
+                commentList:[],
+                loadingShow:true
 			}
 		},
 		props:{
 
 		},
 		methods:{
+            getEvalute(){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                let acquired='&acquired=true';
+                if(this.id=='mycomment'){
+                    acquired='&acquired=false'
+                }
+                this.axios.get(this.apiHost+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+acquired,{
 
+                }).then((res)=>{
+                    if(res.data.success){
+                        let data=res.data.data
+                        this.getEvalutePic(data)
+                    }else {
+                        this.loadingShow=false;
+                    }
+
+                }).catch((e)=>{
+                    this.loadingShow=false;
+                    console.log(e);
+                })
+            },
+            getEvalutePic(data){
+                this.apiHost=CONFIG[__ENV__].apiHost;
+                this.commentList=[];
+                let _this=this;
+                for(var i=0;i<data.length;i++){
+                    var curData=data[i];
+                    curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
+                    (function(curData){
+                        _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                            if(res.data.success){
+                                curData.pic=res.data.data.pic;
+                                _this.commentList.push(curData)
+                                let len = _this.commentList.length;
+            　　                 let minIndex, temp;
+                                for(var i=0;i<len;i++){
+                                    minIndex = i;
+                            　　　　 for (var j = i + 1; j < len; j++) {
+                            　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
+                            　　　　　 　　　minIndex = j;
+                            　　　　　 　}
+                            　　　　 }
+                                    temp = _this.commentList[i];
+            　　　                   _this.commentList[i] = _this.commentList[minIndex];
+            　　　　                 _this.commentList[minIndex] = temp;
+                                }
+                            }
+                        }).catch((e)=>{
+                            console.log(e);
+                        })
+                    })(curData);
+                    this.loadingShow=false;
+                }
+            },
 		},
 		activated(){
+            this.commentList=[];
+            this.id=this.$route.query.id;
+            this.getEvalute();
 		},
 		created(){
 
@@ -30,5 +106,59 @@
 </script>
 
 <style>
-
+    .mineInformation_comment_warp{
+        position: relative;
+        font-size: 14px;
+        background: #f7f5f3;
+        padding: 10px 0;
+    }
+    .mineInformation_comment_warp>div{
+        background: #fff;
+        margin-bottom: 10px;
+        padding: 10px 0.4rem;
+        font-size: 14px;
+    }
+    .mineInformation_comment_warp .mineInformation_comment_header{
+        margin-bottom: 0;
+        text-align: left;
+    }
+    .mineInformation_comment_warp>div>.comment_repeat_top img{
+        width: .8rem;
+        height: 0.8rem;
+        border-radius:4px;
+    }
+    .comment_repeat_top{
+        display: flex;
+        flex-direction: row;
+        position: relative;
+    }
+    .comment_repeat_top span{
+        line-height: 0.8rem;
+        margin-left: .2rem;
+        color: #333;
+    }
+    .comment_repeat_top .score{
+        position: absolute;
+        right: 0;
+        color: #ff0023;
+    }
+    .comment_repeat_middle{
+        margin-top: 10px;
+        font-size: 12px;
+        color: #999;
+        text-align: left;
+    }
+    .comment_repeat_bottom{
+        margin-top: 10px;
+        text-align: left;
+    }
+    .mineInformation_comment_warp>p{
+        width: 2rem;
+        margin: auto;
+        color: #e42641;
+        border: 1px solid #e42641;
+        background: #fff;
+        padding: 6px 0.3rem;
+        border-radius: 16px;
+    }
 </style>

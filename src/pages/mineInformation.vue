@@ -223,6 +223,7 @@
 .mineInformation_comment_warp>div>.comment_repeat_top img{
     width: .8rem;
     height: 0.8rem;
+    border-radius:4px;
 }
 .comment_repeat_top{
     display: flex;
@@ -322,7 +323,7 @@
         </div>
         <div class="mineInformation_comment_warp">
             <div class="mineInformation_comment_header">
-                {{$t('formTitle.commentsme')}} ({{commentList.length}})
+                {{$t('formTitle.commentsme')}} ({{total}})
             </div>
             <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2'>
                 <p class="comment_repeat_top">
@@ -338,7 +339,7 @@
                 </p>
             </div>
 
-            <p v-show="commentList.length>3" @click='viewAllComments'>查看全部评价</p>
+            <p v-show="total>3" @click='viewAllComments'>查看全部评价</p>
         </div>
     </div>
     <div class="defindloadig" v-if="loadingShow">
@@ -369,7 +370,8 @@ export default {
             loadingShow:true,
             otherUserId:'',
             currentUserId:'',
-            commentList:[]
+            commentList:[],
+            total:0
 
         }
     },
@@ -452,8 +454,7 @@ export default {
 
             }).then((res)=>{
                 if(res.data.success){
-                    console.log(res.data.data);
-                    let data=res.data.data
+                    let data=res.data.data;
                     this.getEvalutePic(data)
 
                 }else {
@@ -469,24 +470,46 @@ export default {
             this.apiHost=CONFIG[__ENV__].apiHost;
             this.commentList=[];
             let _this=this;
+            this.total=data.length;
             for(var i=0;i<data.length;i++){
-                var curData=data[i];
-                curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
-                (function(curData){
-                    _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
-                        if(res.data.success){
-                            curData.pic=res.data.data.pic;
-                            _this.commentList.push(curData)
-                        }
-                    }).catch((e)=>{
-                        console.log(e);
-                    })
-                })(curData)
-
+                if(i<3){
+                   var curData=data[i];
+                   curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
+                   (function(curData){
+                       _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                           if(res.data.success){
+                               curData.pic=res.data.data.pic;
+                               _this.commentList.push(curData)
+                               let len = _this.commentList.length;
+           　　                 let minIndex, temp;
+                               for(var i=0;i<len;i++){
+                                   minIndex = i;
+                           　　　　 for (var j = i + 1; j < len; j++) {
+                           　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
+                           　　　　　 　　　minIndex = j;
+                           　　　　　 　}
+                           　　　　 }
+                                   temp = _this.commentList[i];
+           　　　                   _this.commentList[i] = _this.commentList[minIndex];
+           　　　　                 _this.commentList[minIndex] = temp;
+                               }
+                           }
+                       }).catch((e)=>{
+                           console.log(e);
+                       })
+                   })(curData)
+                }
             }
         },
         viewAllComments(){
-            console.log(this);
+            this.$router.push({
+                path: 'allComments',
+                query: {
+                    'token': this.$route.query.token,
+                    'title': "全部评价",
+                    'id':'othercomments'
+                }
+            });
         },
         loadInfo(){
             this.apiHost=CONFIG[__ENV__].apiHost;
@@ -523,6 +546,7 @@ export default {
     activated(){
         this.loadInfo();
         this.isOthers=true;
+        this.helpAvailable=[];
         this.otherUserId=this.$route.query.otherUserId;
         this.currentUserId=this.$route.query.currentuser;
         this.getEvalute();
