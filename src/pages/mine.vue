@@ -275,6 +275,16 @@ export default {
                          }
                      });
                      break;
+                //  case 'comment':
+                //      this.$router.push({
+                //          path: 'allComments',
+                //          query: {
+                //              'token': this.token,
+                //              'title': '我的评论',
+                //              'id': 'mycomment',
+                //          }
+                //      });
+                //      break;
                 default:
 
             }
