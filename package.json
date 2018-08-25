@@ -16,8 +16,10 @@
   "dependencies": {
     "axios": "^0.16.1",
     "chalk": "^2.4.1",
+    "es6-promise": "^4.2.4",
     "ip": "^1.1.5",
     "koa2": "^2.0.0-alpha.7",
+    "loader": "^2.1.1",
     "mint-ui": "^2.2.13",
     "moment": "^2.22.2",
     "pinyin": "^2.8.3",
