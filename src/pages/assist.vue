@@ -28,21 +28,6 @@
         -moz-transition: all .2s ease-out;
         transition: all .2s ease-out;
     }
-    .main_view_repeat:last-child{
-        border-bottom: 1px solid #f1f1f1;
-    }
-    .main_decription_uploader_container_img{
-        width:1.4rem;height:1.4rem;margin-right:0.1rem;border: 1px solid #F2F2F2;
-    }
-    .hide_space{
-        display: flex;
-    }
-    .prev_imgae{
-        width: 100%;
-        height: 100%;
-        display: inline-block;
-    }
-
 
 </style>
 
@@ -67,11 +52,14 @@
             </div>
             <div class="main_decription_uploader" >
                 <div class="hide_space">
+                    <div class="main_decription_uploader_container_img" v-for="item in filesHasUpload">
+                        <img :src="item" class="prev_imgae" alt="">
+                    </div>
+                    <div class="main_decription_uploader_container" >
+                        <span class="icon-add" id='uploader'></span>
+                    </div>
+                </div>
 
-                </div>
-                <div class="main_decription_uploader_container" >
-                    <span class="icon-add" id='uploader'></span>
-                </div>
             </div>
         </div>
     </div>
@@ -145,7 +133,8 @@ export default {
             isEditType:false,
             startDate: new Date('1970/01/01'),
             endDate: new Date('2100/12/31'),
-            pickerValue:this.moment(new Date).format('YYYY-MM-DD')
+            pickerValue:this.moment(new Date).format('YYYY-MM-DD'),
+            type:''
         }
 
     },
@@ -184,7 +173,9 @@ export default {
                     this.submitUrl='/globalmate/rest/need/other/add';
                     break;
                default:
-                    this.submitUrl='/globalmate/rest/need/other/add';
+                    this.submitUrl='/globalmate/rest/need/addCommon';
+                    postData['type']=this.type;
+                    postData['reward']=postData.rewardAmount;
                     break;
            }
            this.apiHost=CONFIG[__ENV__].apiHost;
@@ -192,12 +183,12 @@ export default {
                this.loadingShow=true;
                this.axios.post(this.apiHost+this.submitUrl+'?token='+this.$route.query.token,postData).then((res)=>{
                    if(res.data.success){
+                       this.loadingShow=false;
                        Toast({
                           message: '您的信息已提交',
                           duration: 2000
                       });
                        setTimeout(()=>{
-                           this.loadingShow=true;
                            window.history.go(-1);
                        },2000);
                    }else{
@@ -502,28 +493,38 @@ export default {
             }).then((res)=>{
                 if(res.data.success){
                     let data=res.data.data;
-
+                    this.type=data.conceretNeed.type;
                     this.listRepeatProcess();
                     this.myReward.text=data.conceretNeed.rewardAmount;
+                    this.myReward.isPlacehold=false;
                     this.title.text=data.conceretNeed.title;
+                    this.title.isPlacehold=false;
                     this.listRepeat.forEach(function (item,index) {
                         if(item.componentKey=='country'&&data.conceretNeed.country){
                             item.text=data.conceretNeed.country;
+                            item.isPlacehold=false;
                             _this.country=data.conceretNeed.country;
                         }
                         if(item.componentKey=='city'&&data.conceretNeed.city){
                             item.text=data.conceretNeed.city;
+                            item.isPlacehold=false;
                         }
                         if(item.componentKey=='startTime'&&data.conceretNeed.startTime){
                             item.text=_this.moment(data.conceretNeed.startTime).format('YYYY-MM-DD');
+                            item.isPlacehold=false;
                         }
                         if(item.componentKey=='endTime'&&data.conceretNeed.endTime){
                             item.text=_this.moment(data.conceretNeed.endTime).format('YYYY-MM-DD');
+                            item.isPlacehold=false;
                         }
                         if(data.conceretNeed.description){
                             _this.$el.querySelector('.main_decription_area textarea').value=data.conceretNeed.description;
+                            item.isPlacehold=false;
                         }
                     })
+                    if(data.conceretNeed.pic&&data.conceretNeed.pic.indexOf('aliyuncs')>-1){
+                        this.filesHasUpload=data.conceretNeed.pic.split(';')
+                    }
                 }else{
 
                 }
@@ -591,15 +592,6 @@ export default {
                 silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
             });
             this.fileUploader.bind('FilesAdded',function(uploader,files){
-        		 for(var i=0,len=files.length;i<len;i++){
-                    var file_name=files[i].name;
-                    !function(i){
-                        _this.previewImage(files[i],function(imgsrc){
-                            let con=$('<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="'+imgsrc+'"/></div>');
-                            $('.hide_space').append(con);
-                        });
-                    }(i);
-                }
                 _this.fileUploader.start();
 	       });
            this.fileUploader.bind('BeforeUpload',function(up,file){
@@ -625,6 +617,8 @@ export default {
     activated(){
         this.show=false;
         document.title=this.$route.query.title;
+        this.filesHasUpload=[];
+        this.type=this.$route.query.key;
         $('.repeat_content input').val('');
         $('.main_decription_area textarea').val('');
         if(this.$route.query.mode&&this.$route.query.mode=='MODIFY'){

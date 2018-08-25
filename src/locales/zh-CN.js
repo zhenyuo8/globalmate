@@ -101,6 +101,7 @@ export default{
         execute:'帮助中',
         closed:'关闭',
         open:'开放中',
+        complete:'已完成'
 
     }
 }
