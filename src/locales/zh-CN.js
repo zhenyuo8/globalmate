@@ -16,7 +16,14 @@ export default{
         'finished':'关闭',
         'edit':'重新编辑',
         'gohelp':'去帮助',
-        'send':'发送'
+        'send':'发送',
+        'back':'返回'
+    },
+    cityName:{
+        'beijing':'北京',
+        'tianjin':'天津',
+        'chongqing':'重庆',
+        'shanghai':'上海',
     },
     formName:{
         'study':'学习互助',
@@ -57,7 +64,7 @@ export default{
         schoolclass:'所在班级',
         feedTitle:'您的意见是我们平台发展最宝贵的助力:',
         feedTips:'请输入您的宝贵意见!',
-        serviceValue:'服务质',
+        serviceValue:'服务值',
         mycircle:'我的圈子',
         commentsme:'别人眼中的我',
         loading:'加载中...',
@@ -65,11 +72,12 @@ export default{
         evaluateTips:'对她/他的评价',
         score:'分',
         pushTitle:'推送名单',
-        helpMan:'提供帮助放',
+        helpMan:'提供帮助方',
         toWord:'至',
         address:'地点',
         time:'时间',
-        decription:'详细内容：'
+        decription:'详细内容：',
+        indexnotice:'点击下列应用类型可发布对应的需求'
     },
     personaPage:{
         edit:'编辑',
@@ -88,5 +96,12 @@ export default{
     messagePage:{
         friends:'好友',
         concat:'联系人',
+    },
+    status:{
+        execute:'帮助中',
+        closed:'关闭',
+        open:'开放中',
+        complete:'已完成'
+
     }
 }

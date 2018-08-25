@@ -182,7 +182,7 @@
 	position: relative;
 	clear: both;
 	display: inline-block;
-	padding: 10px;
+	padding: 8px;
 	margin: 0 0 20px 0;
 	border-radius: 10px;
 	background-color: #FF4D61;
@@ -228,8 +228,8 @@
 
 	float: right;
 	color: #343434;
-	background-color: #AFCFF7;
-	border: 1px solid #89a8e0;
+	background-color: #8dece4;
+	border: 1px solid #89ccc6;
 }
 
 .chat-thread li.right-item img {
@@ -237,8 +237,8 @@
 }
 
 .chat-thread li.right-item:after {
-	background-color: #AFCFF7;
-	border-color: #89a8e0 #89a8e0 transparent transparent;
+	background-color: #8dece4;
+	border-color: #89ccc6 #89ccc6 transparent transparent;
 	-webkit-border-radius: 0 3px 0 0;
 	border-radius: 0 3px 0 0;
 	-webkit-transform: rotate(45deg);

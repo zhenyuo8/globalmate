@@ -16,7 +16,14 @@ export default{
         'finished':'Closed',
         'edit':'Edit',
         'gohelp':'Go Help',
-        'send':'Send'
+        'send':'Send',
+        'back':'Back'
+    },
+    cityName:{
+        'beijing':'Beijing',
+        'tianjin':'Tianjin',
+        'chongqing':'Chongqing',
+        'shanghai':'Shanghai',
     },
     formName:{
         'study':'Study',
@@ -69,7 +76,8 @@ export default{
          toWord:' To ',
          address:'Address',
          time:'Time',
-         decription:'Decription：'
+         decription:'Decription：',
+         indexnotice:' click following icons to submit your nedds'
 
     },
      personaPage:{
@@ -88,6 +96,13 @@ export default{
      messagePage:{
          friends:'Friends',
          concat:'Concats',
+
+     },
+     status:{
+         execute:'Executing',
+         closed:'Closed',
+         open:'Openning',
+         complete:'Completed'
 
      }
 }
