@@ -220,6 +220,7 @@ export default {
     selectCallBack(value, selectItem) {
       this.show = false;
       let key = selectItem.key;
+      let _this=this;
       switch (key) {
         case "delivery":
           this.payStyle.text = value;
@@ -234,22 +235,39 @@ export default {
           this.title.isPlacehold = false;
           break;
         default:
-          this.listRepeat.forEach(function(item, index) {
-            if (item.key === "date") {
-              if (
-                item.key === selectItem.key &&
-                item.componentKey === selectItem.componentKey
-              ) {
-                item.text = value;
-                item.isPlacehold = false;
-              }
-            } else {
-              if (item.key === selectItem.key) {
-                item.text = value;
-                item.isPlacehold = false;
-              }
+        this.listRepeat.forEach(function (item,index) {
+            if(item.key==='date'){
+                if(item.key===selectItem.key&&item.componentKey===selectItem.componentKey){
+                    if(selectItem.componentKey=='startTime'){
+                        _this.startTime=_this.moment(value).valueOf();
+                        if(_this.endTime&&_this.endTime<_this.startTime){
+                            Toast({
+                               message: '开始时间必须小于结束时间',
+                               duration: 2000
+                           });
+                           return;
+                        }
+                    }
+                    if(selectItem.componentKey=='endTime'){
+                        _this.endTime=_this.moment(value).valueOf();
+                        if(_this.startTime&&_this.endTime<_this.startTime){
+                            Toast({
+                               message: '结束时间必须大于开始时间',
+                               duration: 2000
+                           });
+                           return;
+                        }
+                    }
+                    item.text=value;
+                    item.isPlacehold=false;
+                }
+            }else{
+                if(item.key===selectItem.key){
+                    item.text=value;
+                    item.isPlacehold=false;
+                }
             }
-          });
+        });
           break;
       }
     },
