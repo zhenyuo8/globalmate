@@ -103,7 +103,7 @@
 		<div class="message_warp">
 			<p v-show="friends.length!==0">{{$t('messagePage.friends')}}</p>
 			<ul>
-				<li v-for="(item,index) in friends" @click='toChatPage(item)'>
+				<li v-for="(item,index) in friends" @click='toChatPage(item)' :key='index'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
 						<img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'"  v-if='item.users.pic' alt="">
 						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
@@ -117,7 +117,7 @@
 			</ul>
 			<p v-show="list.length!==0">{{$t('messagePage.concat')}}</p>
 			<ul class="gl_contact">
-				<li v-for="(item,index) in list" @click='goIm(item)'>
+				<li v-for="(item,index) in list" @click='goIm(item)' :key='index'>
 					<div class="image_chat" :class="item.newMessage?'image_chat_after':''">
 						<img :src="item.users.pic" alt=""  v-if='item.users.pic'>
 						<img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">

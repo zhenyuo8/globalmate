@@ -258,102 +258,36 @@ export default {
     this.country = "";
     this.id = this.$route.query.id;
     this.userId = this.$route.query.userId;
-    if (url.indexOf("openId=") > -1) {
-      this.id = this.$utils.getQueryStringByName("id");
-      this.userId = this.$utils.getQueryStringByName("userId");
-      // .setItem("USERID", this.userId);
-      this.updateUserInfo({
-        userId: this.userId
-      });
-    }
     this.otherUserId = this.$route.query.otherUserId;
     let _this = this;
-    this.getToken(token => {
-      if (!token) {
-        token = _this.userInfo['token'];
-      }
-      this.axios.get(this.ip +"/globalmate/rest/user/getUserByToken", {
+    if (this.userInfo && this.userInfo.token) {
+      this.loadData(this.userInfo.token)
+    } else {
+      this.timer = setInterval(() => {
+        if (this.userInfo && this.userInfo.token) {
+          clearInterval(this.timer)
+          this.loadData(this.userInfo.token)
+        }
+      }, 300)
+    }
+  },
+  deactivated () {
+    this.timer && clearInterval(this.timer)
+  },
+  methods: {
+    loadData(token) {
+      let list = {},
+        _this = this;
+      this.axios.get(this.ip + "/globalmate/rest/need/list/" + this.id, {
         params: {
+          onlyCurrentUser: true,
           token
         }
       }).then(res => {
           if (res.success) {
             let data = res.data;
-            if (!_this.userId) {
-              _this.userId = data.id;
-            }
-            _this.country = data.country;
-            _this.loadData(token);
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    });
-  },
-  methods: {
-    getToken(callback) {
-      // let userId = .getItem("USERID");
-      let userId = this.userInfo["userId"];
-      let openid = this.userInfo["openId"];
-      // let openid = .getItem("OPENID");
-
-      if (userId) {
-        this.axios.get(this.ip + "/globalmate/rest/user/getToken?userId=" + userId)
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-              callback && callback(res.data);
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else if (openid) {
-        this.axios.get(this.ip + "/globalmate/rest/user/getToken?openid=" + openid)
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-              callback && callback(res.data);
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else {
-        callback && callback(this.token);
-      }
-    },
-    loadData(token) {
-      let list = {},
-        _this = this;
-      this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/need/list/" +
-            this.id +
-            "?token=" +
-            token +
-            "&onlyCurrentUser=true",
-          {
-            onlyCurrentUser: true
-          }
-        )
-        .then(res => {
-          if (res.success) {
-            let data = res.data;
-
             this.detail = data;
             this.otherUserId = data.need.userId;
-
             for (var key in data.conceretNeed) {
               if (
                 key == "tag" ||
@@ -422,7 +356,6 @@ export default {
                 }
               }
             }
-
             this.getOthersInfo(data.need.userId, function(result) {
               list["othersImage"] = result || "../assets/images/icon.png";
               _this.listData = list;
@@ -430,22 +363,11 @@ export default {
             this.getPushItem(data.need.id);
           } else {
           }
-        })
-        .catch(e => {
-          console.log(e);
-        });
+        }).catch();
     },
     getPushItemInfo(data, callback) {
       this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/user/list/" +
-            data.providerId +
-            "?token=" +
-            this.userInfo['token'],
-          {}
-        )
-        .then(res => {
+        .get( this.ip + "/globalmate/rest/user/list/" + data.providerId + "?token=" + this.userInfo.token).then(res => {
           if (res.success) {
             data.userInfo = res.data;
             callback && callback(data);
@@ -460,15 +382,8 @@ export default {
     getPushItem(id) {
       let _this = this;
       this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/match/" +
-            id +
-            "?token=" +
-            this.userInfo['token'],
-          {}
-        )
-        .then(res => {
+        .get(this.ip + "/globalmate/rest/match/" + id + "?token=" + this.userInfo.token, {}
+        ).then(res => {
           if (res.success) {
             if (res.data && res.data.length != 0) {
               var nowData = res.data;
@@ -482,14 +397,11 @@ export default {
                         _this.pushList.push(result);
                       });
                   }
-
               }
             }
           }
         })
-        .catch(e => {
-          console.log(e);
-        });
+        .catch();
     },
     goChart() {
       if (this.listData.enable != 1) {
@@ -503,7 +415,7 @@ export default {
       this.$router.push({
         path: "im",
         query: {
-          token: this.userInfo['token'],
+          token: this.userInfo.token,
           title: this.othersInfo.nikename,
           id: this.$route.query.id,
           toChartUser: this.othersInfo.nikename,
@@ -517,8 +429,7 @@ export default {
           this.ip +
             "/globalmate/rest/user/list/" +
             userId +
-            "?token=" +
-            this.userInfo['token'],
+            "?token=" + this.userInfo.token,
           {}
         )
         .then(res => {
