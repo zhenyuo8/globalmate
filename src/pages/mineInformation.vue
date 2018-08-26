@@ -517,7 +517,6 @@ export default {
             });
         },
         loadInfo(){
-            this.apiHost=CONFIG[__ENV__].apiHost;
             let url='/globalmate/rest/user/getUserByToken'
             if(this.$route.query.otherUserId){
                 url='/globalmate/rest/user/list/'+this.$route.query.otherUserId
