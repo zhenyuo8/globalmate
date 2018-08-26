@@ -88,11 +88,14 @@
         </div>
         <div class="main_decription_uploader">
           <div class="hide_space">
+              <div class="main_decription_uploader_container_img" v-for="(item,index) in filesHasUpload" :key='index'>
+                  <img :src="item"  class="prev_image" alt="">
+              </div>
+              <div class="main_decription_uploader_container">
+                <span class="icon-add" id='uploader'></span>
+              </div>
+          </div>
 
-          </div>
-          <div class="main_decription_uploader_container">
-            <span class="icon-add" id='uploader'></span>
-          </div>
         </div>
       </div>
     </div>
@@ -204,7 +207,9 @@ export default {
           this.submitUrl = "/globalmate/rest/need/other/add";
           break;
         default:
-          this.submitUrl = "/globalmate/rest/need/other/add";
+          this.submitUrl = "/globalmate/rest/need/addCommon";
+          postData['type']=this.type;
+          postData['reward']=postData.rewardAmount;
           break;
       }
       if (postData) {
@@ -312,21 +317,24 @@ export default {
       let url = "",
         _this = this,
         postData = {};
+        let lang=navigator.language||'zh-CN';
+        let isEN=/^zh/.test(lang)?false:/^en/.test(lang)?true:/^es/.test(lang)?true:true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
           .get(this.ip + url, {
             params: {
               token: this.userInfo.token,
-              countryregion: this.country
+              countryregion: this.country,
+              isEN:isEN
             }
           })
           .then(res => {
             if (res.success) {
               let result = res.data,
                 resultArr = [];
-              if (this.country == "中国") {
-                resultArr = ["北京", "天津", "上海", "重庆"];
+              if (this.country == "中国"||this.country == "China") {
+                resultArr = [this.$t('cityName.beijing'),this.$t('cityName.tianjing'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
               }
               result.forEach(function(item, index) {
                 resultArr.push(item.city);
@@ -345,7 +353,8 @@ export default {
         this.axios
           .get(this.ip + url, {
             params: {
-              token: this.userInfo.token
+              token: this.userInfo.token,
+              isEN:isEN
             }
           })
           .then(res => {
@@ -530,17 +539,20 @@ export default {
         .then(res => {
           if (res.success) {
             let data = res.data;
-
             this.listRepeatProcess();
             this.myReward.text = data.conceretNeed.rewardAmount;
+            this.myReward.isPlacehold = false;
             this.title.text = data.conceretNeed.title;
+            this.title.isPlacehold = false
             this.listRepeat.forEach(function(item, index) {
               if (item.componentKey == "country" && data.conceretNeed.country) {
                 item.text = data.conceretNeed.country;
                 _this.country = data.conceretNeed.country;
+                item.isPlacehold=false;
               }
               if (item.componentKey == "city" && data.conceretNeed.city) {
                 item.text = data.conceretNeed.city;
+                item.isPlacehold=false;
               }
               if (
                 item.componentKey == "startTime" &&
@@ -549,11 +561,13 @@ export default {
                 item.text = _this
                   .moment(data.conceretNeed.startTime)
                   .format("YYYY-MM-DD");
+                  item.isPlacehold=false;
               }
               if (item.componentKey == "endTime" && data.conceretNeed.endTime) {
                 item.text = _this
                   .moment(data.conceretNeed.endTime)
                   .format("YYYY-MM-DD");
+                  item.isPlacehold=false;
               }
               if (data.conceretNeed.description) {
                 _this.$el.querySelector(
@@ -634,20 +648,7 @@ export default {
         silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
       });
       this.fileUploader.bind("FilesAdded", function(uploader, files) {
-        for (var i = 0, len = files.length; i < len; i++) {
-          var file_name = files[i].name;
-          !(function(i) {
-            _this.previewImage(files[i], function(imgsrc) {
-              let con = $(
-                '<div class="main_decription_uploader_container_img" ><img class="prev_imgae" src="' +
-                  imgsrc +
-                  '"/></div>'
-              );
-              $(".hide_space").append(con);
-            });
-          })(i);
-        }
-        _this.fileUploader.start();
+         _this.fileUploader.start();
       });
       this.fileUploader.bind("BeforeUpload", function(up, file) {
         file.name = new Date().getTime() + "_" + file.name;
@@ -673,8 +674,10 @@ export default {
   },
   activated() {
     this.show = false;
+    this.filesHasUpload=[];
     // this.formTitle='请描述'+this.$route.query.title+'细节！';
     document.title = this.$route.query.title;
+    this.type=this.$route.query.key;
     $(".repeat_content input").val("");
     $(".main_decription_area textarea").val("");
     if (this.$route.query.mode && this.$route.query.mode == "MODIFY") {

@@ -191,7 +191,8 @@ export default {
         })
         .then(res => {
           if (res.data && res.data.length) {
-            let flag = res.data.some(item => item.isEffective !== 0);
+            // let flag = res.data.some(item => item.isEffective !== 0);
+            let flag = res.data.some(item => item.certifyPhoto!=='');
             this.updateUserInfo({
               certifyMsg: res.data,
               identified: flag // 判断是否通过认证了
@@ -366,28 +367,28 @@ export default {
         },
         {
           title: this.$t("formName.textbook"),
-          key: "other",
+          key: "teaching_material",
           type: "assist",
           form: "other",
           icon: "icon-book"
         },
         {
           title: this.$t("formName.formality"),
-          key: "other",
+          key: "formality",
           type: "assist",
           form: "other",
           icon: "icon-Document_2_yinzhang"
         },
         {
           title: this.$t("formName.exchange"),
-          key: "other",
+          key: "exchange",
           type: "assist",
           form: "other",
           icon: "icon-coin-yen"
         },
         {
           title: this.$t("formName.medical"),
-          key: "other",
+          key: "medical",
           type: "assist",
           form: "other",
           icon: "icon-local_hospital"
@@ -401,7 +402,7 @@ export default {
         },
         {
           title: this.$t("formName.rent"),
-          key: "other",
+          key: "rent",
           type: "assist",
           form: "other",
           icon: "icon-office"
@@ -422,7 +423,7 @@ export default {
         },
         {
           title: this.$t("formName.other"),
-          key: "assist",
+          key: "other",
           type: "assist",
           form: "other",
           icon: "icon-more-horizontal"
@@ -432,11 +433,7 @@ export default {
   },
 
   created() {
-    $("body").on("click", e => {
-      if (e.target.className.indexOf("icon-user") === -1 && this.showPersonal) {
-        this.showPersonal = false;
-      }
-    });
+
   }
 };
 </script>
