@@ -26,45 +26,7 @@
   -moz-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
 }
-.main_view_repeat:last-child {
-  border-bottom: 1px solid #f1f1f1;
-}
-.main_decription_uploader_container_img {
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-right: 0.1rem;
-  border: 1px solid #f2f2f2;
-}
-.hide_space {
-  display: flex;
-}
-.prev_imgae {
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-}
-.defindloadig {
-  position: fixed;
-  z-index: 11;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-.mint-datetime .picker-slot {
-  font-size: 14px;
-}
-.mint-datetime .mint-datetime-cancel {
-  text-align: left;
-  width: auto;
-  margin-left: 0.2rem;
-  color: #666;
-}
-.mint-datetime .mint-datetime-confirm {
-  text-align: right;
-  width: auto;
-  margin-right: 0.2rem;
-}
+
 </style>
 
 <template>
@@ -89,7 +51,7 @@
         <div class="main_decription_uploader">
           <div class="hide_space">
               <div class="main_decription_uploader_container_img" v-for="(item,index) in filesHasUpload" :key='index'>
-                  <img :src="item"  class="prev_image" alt="">
+                  <img :src="item"  class="prev_imgae" alt="">
               </div>
               <div class="main_decription_uploader_container">
                 <span class="icon-add" id='uploader'></span>
@@ -221,21 +183,24 @@ export default {
           )
           .then(res => {
             if (res.success) {
-              setTimeout(() => {
-                this.loadingShow = true;
-                window.history.go(-1);
-              }, 1500);
+                this.loadingShow = false;
+                Toast({
+                  message: "您的信息提交",
+                  duration: 2000
+                });
+               setTimeout(() => {
+                   window.history.go(-1);
+                }, 2000);
             } else {
-              this.showTipsText = e.msg || "发布失败";
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
             }
           })
           .catch(e => {
             console.log(e);
           });
-      } else {
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 1500);
       }
     },
     clickCallBack(item, e) {
@@ -291,12 +256,13 @@ export default {
     countrySityCallBack(items, value) {
       this.show = false;
       this.selectItem = [];
+      let _this=this;
       if (value) {
         if (items == "country") {
           this.country = value;
           this.listRepeat.forEach(function(item, index) {
             if (item.componentKey == "city") {
-              item.text = this.$t("formTitle.selectPlace");
+              item.text = _this.$t("formTitle.selectPlace");
               item.isPlacehold = true;
             } else if (item.componentKey == items) {
               item.text = value;
@@ -343,10 +309,10 @@ export default {
             }
           })
           .catch(e => {
-            this.showTipsText = e.msg;
-            setTimeout(() => {
-              this.showTipsText = "";
-            }, 2000);
+            Toast({
+              message: e.msg,
+              duration: 2000
+            });
           });
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
@@ -363,16 +329,16 @@ export default {
             }
           })
           .catch(e => {
-            this.showTipsText = e.msg;
-            setTimeout(() => {
-              this.showTipsText = "";
-            }, 2000);
+            Toast({
+              message: e.msg,
+              duration: 2000
+            });
           });
       } else {
-        this.showTipsText = "请先选择国家！";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 2000);
+        Toast({
+          message: "请先选择国家！",
+          duration: 2000
+        });
       }
     },
     buildItem(data, key) {
@@ -421,7 +387,10 @@ export default {
         if (listRepeat[i].isPlacehold && listRepeat[i].isRequire) {
           postData[listRepeat[i].componentKey] = "";
           hasParaRequired = true;
-          this.showTipsText = listRepeat[i].title + "为必填项";
+          Toast({
+            message: listRepeat[i].title + "为必填项",
+            duration: 2000
+          });
           return false;
         } else if (!listRepeat[i].isPlacehold) {
           postData[listRepeat[i].componentKey] = listRepeat[i].text;
@@ -435,7 +404,10 @@ export default {
       if (!this.title.isPlacehold) {
         postData[this.title.componentKey] = this.title.text;
       } else {
-        this.showTipsText = this.title.title + "为必填项";
+        Toast({
+          message: this.title.title + "为必填项",
+          duration: 2000
+        });
         return false;
       }
       if (this.$el.querySelector(".main_decription_area textarea")) {

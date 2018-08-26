@@ -8,8 +8,8 @@
     </div>
 
     <mt-index-list>
-      <mt-index-section :index="item.letter" v-for="(item,index) in selectItem " :key='index'>
-        <mt-cell :title="items" v-for="(items,indexs) in item.citylist" :key='indexs' @click.native='pickCountry($event,items)'></mt-cell>
+      <mt-index-section :index="item.letter" v-for="(item,index) in selectItem " :key='index' :name='item'>
+        <mt-cell :title="items" v-for="(items,indexs) in item.citylist" :key='indexs' :name='items' @click.native='pickCountry($event,items)'></mt-cell>
       </mt-index-section>
     </mt-index-list>
   </div>
@@ -17,10 +17,11 @@
 
 <script>
 import Vue from "vue";
-import { IndexSection, IndexList } from "mint-ui";
+import { IndexSection, IndexList ,Cell} from "mint-ui";
 import searchInput from "../components/searchInput.vue";
 import userMix from "../mixins/userInfo";
 Vue.component(IndexList.name, IndexList);
+Vue.component(Cell.name, Cell);
 Vue.component(IndexSection.name, IndexSection);
 export default {
   mixins: [userMix],
@@ -75,7 +76,8 @@ export default {
     }
   },
 
-  activated() {},
+  activated() {
+  },
   created() {}
 };
 </script>
