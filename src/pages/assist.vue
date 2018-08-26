@@ -503,7 +503,7 @@ export default {
             id, {
             // onlyCurrentUser: true,
             params: {
-              token: this.userInfo.token,
+              token: this.$route.query.token,
               onlyCurrentUser: true
             }
           }

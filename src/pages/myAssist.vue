@@ -1,209 +1,155 @@
 <style scoped lang='less'>
-.gl_list {
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  overflow: hidden;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background: #eee;
-  overflow-y: auto;
-  .list_warp {
-    background: #f7f5f3;
-    .list_repeat {
-      background: #fff;
-      margin-bottom: 10px;
-      padding: 10px 0.4rem;
-      position: relative;
-      .list_repeat_content {
-        text-align: left;
-        position: relative;
-        p {
-          padding: 10px 0;
-          &.gl_status {
-            position: absolute;
-            right: 0;
-            top: 0;
-          }
-        }
-      }
-      .list_repeat_pushed::before {
-        border-top: 1px solid #eee;
-        content: "";
-        clear: both;
+    .gl_list{
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
         position: absolute;
+        overflow: hidden;
         left: 0;
         right: 0;
-      }
-      .list_repeat_pushed {
-        text-align: left;
-        position: relative;
-        p {
-          padding: 10px 0;
-        }
-        .list_repeat_pushed_item {
-          overflow: hidden;
-          div {
-            float: left;
-            width: 20%;
-            img {
-              width: 1rem;
-              height: 1rem;
-              border-radius: 50%;
-              display: block;
-              margin: auto;
+        bottom: 0;
+        top: 0;
+        background: #eee;
+        overflow-y: auto;
+        .list_warp{
+            background: #f7f5f3;
+            .list_repeat{
+                background: #fff;
+                margin-bottom: 10px;
+                padding: 10px .4rem;
+                position: relative;
+                .list_repeat_content{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                        &.gl_status{
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                        }
+                    }
+                }
+                 .list_repeat_pushed::before{
+                    border-top: 1px solid #eee;
+                    content: '';
+                    clear: both;
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                }
+                .list_repeat_pushed{
+                    text-align: left;
+                    position: relative;
+                    p{
+                        padding: 10px 0;
+                    }
+                    .list_repeat_pushed_item{
+                        overflow: hidden;
+                        div{
+                            float: left;
+                            width: 20%;
+                            img{
+                                width: 1rem;
+                                height: 1rem;
+                                border-radius: 50%;
+                                display: block;
+                                margin: auto;
+                            }
+                            span{
+                                margin:6px  auto 10px;
+                                width: 100%;
+                                text-align: center;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+
+                }
+                .action_list{
+                    display: flex;
+                    margin-top: 10px;
+                    span{
+                        padding: 8px .18rem;
+                        flex: 1;
+                        background: #eee;
+                        margin-right: .2rem;
+                        border-radius: 4px;
+                        white-space: nowrap;
+                        /*background: #bbb;*/
+                        opacity: 0.6;
+                        text-overflow: ellipsis;
+                        &:last-child{
+                             margin-right: 0;
+                        }
+                        &.share{
+                            opacity: 1;
+                        }
+                        &.can_be_edit{
+                           opacity: 1;
+                        }
+                        &.can_be_done{
+                            opacity: 1;
+                        }
+                        &.can_be_evalute{
+                            opacity: 1;
+                        }
+                    }
+                }
+                .action_list_done{
+                    position: absolute;
+                    right: 0.4rem;
+                    bottom: 10px;
+                }
             }
-            span {
-              margin: 6px auto 10px;
-              width: 100%;
-              text-align: center;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              overflow: hidden;
-              font-size: 12px;
-            }
-          }
         }
-      }
-      .action_list {
-        display: flex;
-        margin-top: 10px;
-        span {
-          padding: 8px 0.18rem;
-          flex: 1;
-          background: #eee;
-          margin-right: 0.2rem;
-          border-radius: 4px;
-          white-space: nowrap;
-          /*background: #bbb;*/
-          opacity: 0.6;
-          text-overflow: ellipsis;
-          &:last-child {
-            margin-right: 0;
-          }
-          &.share {
-            opacity: 1;
-          }
-          &.can_be_edit {
-            opacity: 1;
-          }
-          &.can_be_done {
-            opacity: 1;
-          }
-          &.can_be_evalute {
-            opacity: 1;
-          }
-        }
-      }
-      .action_list_done {
-        position: absolute;
-        right: 0.4rem;
-        bottom: 10px;
-      }
     }
-  }
-}
 </style>
-<style media="screen" lang="less">
-.yy_nodata_class {
-  text-align: center;
-  color: #999;
-  font-size: 13px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #fff;
-  .yy_icon_img {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    margin: auto;
-    top: 35%;
-    left: 0;
-    right: 0;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .yy_nodata_text {
-    width: 80px;
-    margin-top: 10px;
-    display: inline-block;
-    max-height: 200px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
-}
-.defindloadig {
-  position: fixed;
-  z-index: 11;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-}
-</style>
+
 
 <template>
-
   <div class="gl_list">
     <div class="list_warp">
-      <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
-        <div class="list_repeat_content" @click='showDetail(item)'>
-          <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
-          <p v-if="item.conceretNeed.country||item.conceretNeed.city">事物地点: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
-          <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
-          <p class="gl_status">{{item.need.status}}</p>
-        </div>
-        <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
-          <p>{{$t('formTitle.pushTitle')}}:</p>
-          <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
-            <div class="" v-for="(items,index) in item.pushList" @click='goChat(item,items)' :key='index'>
-              <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-              <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
-              <span>{{items.userInfo.nikename}}</span>
+        <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
+            <div class="list_repeat_content" @click='showDetail(item)'>
+                <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
+                <p>{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
+                <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
+                <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
             </div>
-          </div>
-        </div>
-        <div class="list_repeat_pushed" v-if="item.need.status!='关闭'">
-          <p>{{$t('formTitle.helpMan')}}:</p>
-          <div class="list_repeat_pushed_item" v-show="item.need.enable=='0'">
-            <div class="">
-              <!-- <img src="../assets/images/1.jpeg" alt=""> -->
-              <span>辛巴</span>
+            <div class="list_repeat_pushed">
+                <p>{{$t('formTitle.pushTitle')}}</p>
+                <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
+                    <div class="" v-for="(items,indexs) in item.pushList" :key='indexs'>
+                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
+                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                        <span>{{items.userInfo.nikename}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0">
+                <p>{{$t('formTitle.helpMan')}}</p>
+                <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
+                    <div class="" v-for="(items,indexs) in item.assistList" :key='indexs'>
+                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
+                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                        <span>{{items.userInfo.nikename}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
+                <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
+                <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
+                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
             </div>
 
-          </div>
         </div>
-        <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
-          <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
-          <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
-          <!-- <span class="share" @click='evaluate($event,item)'>分享到</span> -->
-          <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==6||item.need.enable==0?'can_be_evalute':''">{{$t('button.evaluate')}}</span>
-        </div>
-        <div class="action_list action_list_done" v-if="item.conceretNeed.status=='Closed'">
-          <span>追加评论</span>
-        </div>
-      </div>
-    </div>
 
-    <div v-if="nodataFlag" class="yy_nodata_class" style="">
-      <div class="yy_icon_img">
-        <img src="../assets/images/business_nodata.png" alt="">
-        <span class="yy_nodata_text">{{noDataTips}}</span>
-      </div>
-    </div>
-    <div class="defindloadig" v-if="loadingShow">
-      <loading></loading>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -278,6 +224,13 @@ export default {
       e.preventDefault();
       event.stopPropagation();
       e.cancelBubble = true;
+      if(item.need.enable==0||item.need.enable==6){
+          Toast({
+             message: '当前任务已经完成',
+             duration: 2000
+          });
+          return;
+      }
       if (item.need.enable != 1 && item.need.enable != 3) {
         Toast({
           message: "当前任务正在执行中，暂不能编辑!",
@@ -301,6 +254,13 @@ export default {
       event.stopPropagation();
       e.cancelBubble = true;
       let _this = this;
+      if(item.need.enable==0||item.need.enable==6){
+          Toast({
+             message: '当前任务已经完成',
+             duration: 2000
+          });
+          return;
+      }
       MessageBox.confirm("", {
         title: "",
         message: "确定当前求助已完成?",
@@ -388,26 +348,46 @@ export default {
         }
       });
     },
-    evaluate(e, item) {
-      e = e ? e : window.event;
-      e.preventDefault();
-      event.stopPropagation();
-      e.cancelBubble = true;
-      if (item.need.enable != 6 && item.need.enable != 0) {
-        Toast({
-          message: "当前任务还未完成，暂不能评价！",
-          duration: 2000
-        });
-        return;
-      }
-      this.$router.push({
-        path: "evaluate",
-        query: {
-          token: this.token,
-          title: "评价",
-          id: "evaluate"
+    evaluate(e,item){
+        e=e?e:window.event;
+        e.preventDefault();
+        event.stopPropagation();
+        e.cancelBubble=true;
+        if(item.need.enable==6){
+            Toast({
+               message: '当前任务已评价！',
+               duration: 2000
+            });
+            return;
         }
-      });
+        if(item.need.enable!=0){
+            Toast({
+               message: '当前任务还未完成，暂不能评价！',
+               duration: 2000
+            });
+            return;
+        }
+        if(item.assistList.length==0){
+            Toast({
+               message: '当前困难不是由别人完成',
+               duration: 2000
+            });
+            return;
+        }else{
+            let assistMan=item.assistList[0].providerId
+            this.$router.push({
+                path: 'evaluate',
+                query: {
+                    'token': this.token,
+                    'title': this.$t('button.evaluate'),
+                    'id': 'evaluate',
+                    'evaluateId':assistMan,
+                    'businessId':item.need.id,
+                    'uNeedId':item.assistList[0].uNeedId,
+                    'uNeedName':item.assistList[0].uNeedName
+                }
+            });
+        }
     },
     showDetail(item) {
       this.$router.push({
@@ -445,6 +425,8 @@ export default {
     },
     getPushItem(data, callback) {
       data.pushList = [];
+      data.assistList=[];
+      let _this=this;
       this.axios
         .get(
           this.ip +
@@ -457,13 +439,19 @@ export default {
         .then(res => {
           if (res.success) {
             if (res.data && res.data.length != 0) {
-              var nowData = res.data;
-              for (var i = 0; i < nowData.length; i++) {
-                this.getPushItemInfo(nowData[i], function(result) {
-                  data.pushList.push(result);
-                });
+              var nowData=res.data;
+              for(var i=0;i<nowData.length;i++){
+                  let curNowData=nowData[i];
+                  (function(curNowData){
+                      _this.getPushItemInfo(curNowData,function (result) {
+                          if(result.matchAccept){
+                              data.assistList.push(result);
+                          }
+                          data.pushList.push(result);
+                          callback&&callback(data)
+                      });
+                  })(curNowData)
               }
-              callback && callback(data);
             } else {
               callback && callback(data);
             }
@@ -488,52 +476,68 @@ export default {
         .then(res => {
           if (res.success) {
             let data = res.data;
-            this.listm = [];
-            if (data.length != 0) {
-              for (var i = 0; i < data.length; i++) {
-                if (data[i].conceretNeed && data[i].conceretNeed.title) {
-                  if (data[i].conceretNeed.pic) {
-                    data[i].conceretNeed.pic = data[i].conceretNeed.pic.split(
-                      ";"
-                    )[0];
-                  }
-                  var status = data[i].need.enable + "";
-                  switch (status) {
-                    case "1":
-                      data[i].need.status = "开放中";
-                      break;
-                    case "2":
-                      data[i].need.status = "帮助中";
-                      break;
-                    case "0":
-                      data[i].need.status = "关闭";
-                      break;
-                    case "3":
-                      data[i].need.status = "编辑中";
-                      break;
-                    case "4":
-                      data[i].need.status = "洽谈中";
-                      break;
-                    case "5":
-                      data[i].need.status = "执行中";
-                      break;
-                    case "6":
-                      data[i].need.status = "已完成";
-                      break;
-                    default:
-                  }
-                  this.getPushItem(data[i], function(result) {
-                    _this.myAssistList.push(result);
-                  });
+            this.listm=[];
+            if(data.length!=0){
+                for(var i=0;i<data.length;i++){
+                    if(data[i].conceretNeed&&data[i].conceretNeed.title){
+                        if(data[i].conceretNeed.pic){
+                            data[i].conceretNeed.pic=data[i].conceretNeed.pic.split(';')[0];
+                        }
+                        var status=data[i].need.enable+'';
+                        switch (status) {
+                            case '1':
+                                data[i].need.status=this.$t('status.open');
+                                break;
+                            case '2':
+                                data[i].need.status=this.$t('status.execute');
+                                break;
+                            case '0':
+                                data[i].need.status=this.$t('status.closed');
+                                break;
+                            case '3':
+                                data[i].need.status='编辑中';
+                                break;
+                            case '4':
+                                data[i].need.status='洽谈中';
+                                break;
+                            case '5':
+                                data[i].need.status='执行中';
+                                break;
+                            case '6':
+                                data[i].need.status=this.$t('status.complete');
+                                break;
+                            default:
+
+                        }
+                        let curData=data[i];
+                        (function (curData) {
+                            _this.getPushItem(curData,function (result) {
+                                _this.myAssistList.push(result);
+                                let len = _this.myAssistList.length;
+            　　                 let minIndex, temp;
+                                for(var i=0;i<len;i++){
+                                    minIndex = i;
+                            　　　　 for (var j = i + 1; j < len; j++) {
+                            　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
+                            　　　　　 　　　minIndex = j;
+                            　　　　　 　}
+                            　　　　 }
+                                    temp = _this.myAssistList[i];
+            　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
+            　　　　                 _this.myAssistList[minIndex] = temp;
+                                }
+                                console.log(_this.myAssistList);
+                            })
+                        })(curData);
+                    }
                 }
-              }
-              this.loadingShow = false;
-            } else {
-              setTimeout(() => {
-                this.nodataFlag = true;
-                this.loadingShow = false;
-              }, 500);
-              this.noDataTips = "暂无相关数据";
+                this.loadingShow=false;
+            }else{
+                setTimeout(()=>{
+                    this.nodataFlag=true;
+                    this.loadingShow=false;
+                },500)
+                this.noDataTips='暂无相关数据';
             }
           } else {
             setTimeout(() => {
@@ -553,26 +557,14 @@ export default {
     }
   },
   activated() {
-    document.title = this.$route.query.title || "我发布的";
-    this.myAssistList = [];
-    this.nodataFlag = false;
-    this.noDataTips = "";
-    this.token = this.$route.query.token;
-    let url = window.location.href;
-    if (url.indexOf("openId=") > -1) {
-      this.userId = this.$utils.getQueryStringByName("userId");
-      this.openId = this.$utils.getQueryStringByName("openId");
-      // .setItem("USERID", this.userId);
-      // .setItem("OPENID", this.openId);
-      this.updateUserInfo({
-        userId: this.userId,
-        openId: this.openId
-      });
-    }
+    document.title=this.$route.query.title||'Glohelp';
+    this.myAssistList=[];
+    this.nodataFlag=false;
+    this.noDataTips='';
+    this.token=this.$route.query.token;
     this.getToken(this.loadData);
   },
   created() {
-    //    this.currentUserImgae=JSON.parse(.getItem('CURRENTUSER')).pic;
   }
 };
 </script>

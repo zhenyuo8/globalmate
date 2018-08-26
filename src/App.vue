@@ -12,6 +12,7 @@
 import userMix from "./mixins/userInfo";
 import { Toast } from "mint-ui";
 import Vue from 'vue'
+import './assets/css/global.css'
 Vue.component(Toast.name, Toast)
 export default {
   name: "App",

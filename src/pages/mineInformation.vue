@@ -292,10 +292,12 @@
 import loading from "../components/loading.vue";
 import { MessageBox, Toast } from "mint-ui";
 import Vue from 'vue'
+import userMix from "../mixins/userInfo";
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 export default {
   name: "mine",
+  mixins: [userMix],
   components: {
     loading
   },

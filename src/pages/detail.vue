@@ -89,15 +89,10 @@
     bottom: 0;
     line-height: 35px;
     span {
-      color: blue;
       font-size: 14px;
     }
   }
-  .status_close {
-    span {
-      color: red !important;
-    }
-  }
+
 }
 .detail_middle {
   text-align: left;
@@ -175,8 +170,8 @@
           <span class="name">{{listData.userName}}</span>
           <span class="type">{{listData.tag}}</span>
         </div>
-        <div class="status_user">
-          <span>{{listData.status}}</span>
+        <div class="status_user" >
+          <span :class="'status_'+listData.enable">{{listData.status}}</span>
         </div>
       </div>
       <div class="detail_middle">
@@ -196,24 +191,25 @@
         </div>
       </div>
 
-      <div class="list_repeat_pushed">
-        <p>{{$t('formTitle.pushTitle')}} : </p>
-        <div class="list_repeat_pushed_item" v-if="pushList.length!=0">
-          <div class="" v-for="(item, index) in pushList" :key='index'>
-            <img :src="item.userInfo.pic" alt="">
-            <span>{{item.userInfo.nikename}}</span>
+      <div class="list_repeat_pushed" v-if="pushList.length!=0">
+          <p>{{$t('formTitle.pushTitle')}}</p>
+          <div class="list_repeat_pushed_item">
+              <div class="" v-for="(item,index) in pushList" :key='index'>
+                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
+                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
+                  <span>{{item.userInfo.nikename}}</span>
+              </div>
           </div>
-        </div>
       </div>
-      <div class="list_repeat_pushed">
-        <p>{{$t('formTitle.helpMan')}} : </p>
-        <div class="list_repeat_pushed_item">
-          <div class="">
-            <!-- <img src="../assets/images/1.jpeg" alt=""> -->
-            <span>辛巴</span>
+      <div class="list_repeat_pushed" v-if="assistList.length!=0">
+          <p>{{$t('formTitle.helpMan')}}</p>
+          <div class="list_repeat_pushed_item">
+              <div class="" v-for="(item,index) in assistList" :key='index'>
+                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
+                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
+                  <span>{{item.userInfo.nikename}}</span>
+              </div>
           </div>
-
-        </div>
       </div>
     </div>
     <div class="detail_message" v-show="userId!=otherUserId">
@@ -250,6 +246,7 @@ export default {
       otherUserId: "",
       listData: {},
       pushList: [],
+      assistList: [],
       showTipsText: ""
     };
   },
@@ -476,10 +473,17 @@ export default {
           if (res.success) {
             if (res.data && res.data.length != 0) {
               var nowData = res.data;
+              var pushArr=[];
               for (var i = 0; i < nowData.length; i++) {
-                this.getPushItemInfo(nowData[i], function(result) {
-                  _this.pushList.push(result);
-                });
+                  if(!pushArr.includes(nowData[i].providerId)){
+                      this.getPushItemInfo(nowData[i], function(result) {
+                          if(result.matchAccept){
+                              _this.assistList.push(result)
+                          }
+                        _this.pushList.push(result);
+                      });
+                  }
+
               }
             }
           }

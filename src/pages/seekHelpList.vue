@@ -95,38 +95,6 @@
 }
 </style>
 <style  lang="less">
-.yy_nodata_class {
-  text-align: center;
-  color: #999;
-  font-size: 13px;
-  position: fixed;
-  top: 46px;
-  left: 0;
-  right: 0;
-  bottom: 46px;
-  background: #fff;
-  .yy_icon_img {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    margin: auto;
-    top: 35%;
-    left: 0;
-    right: 0;
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .yy_nodata_text {
-    width: 80px;
-    margin-top: 10px;
-    display: inline-block;
-    max-height: 200px;
-    overflow: hidden;
-    overflow-y: auto;
-  }
-}
 .slide_in_one {
   position: fixed;
   right: 0;
@@ -286,33 +254,6 @@
           font-size: 14px;
         }
       }
-      .status_1 {
-        color: #238204;
-      }
-      .status_2 {
-        color: #847405;
-      }
-      .status_0 {
-        color: red;
-      }
-      .status_6 {
-        color: #666;
-      }
-      .status_4 {
-        color: #238204;
-      }
-      .status_5 {
-        color: #847405;
-      }
-      .status_3 {
-        color: #e407f3;
-      }
-
-      .status_close {
-        span {
-          color: red !important;
-        }
-      }
     }
     .list_repeat_img {
       display: flex;
@@ -368,7 +309,8 @@
             <span class="name">{{item.need.userName}}</span>
             <span class="type">{{item.conceretNeed.tag}}</span>
             <span class="type">{{$t('formTitle.reward')}}(￥)
-              <i style="color:red">{{item.conceretNeed.rewardAmount}}</i>
+              <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+              <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
             </span>
           </div>
           <div class="status_user" :class="'status_'+item.need.enable">
@@ -378,11 +320,11 @@
         <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
         <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
           <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
-            <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+            <img :src="items" alt="" v-if="indexs<3">
           </div>
         </div>
-        <div class="list_repeat_action" v-if="item.need.status!='已关闭'" :class="item.need.enable!=1?'gl_inProcess':''">
-          <span @click='goHelp($event,item)'>去帮助</span>
+        <div class="list_repeat_action" v-if="item.need.enable==1">
+          <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
         </div>
       </div>
     </div>
@@ -663,24 +605,27 @@ export default {
       let url = "",
         _this = this,
         postData = {};
+        let lang=navigator.language||'zh-CN';
+        let isEN=/^zh/.test(lang)?false:/^en/.test(lang)?true:/^es/.test(lang)?true:true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
           .get(
-            this.ip +
-              url +
-              "?token=" +
-              this.$route.query.token +
-              "&countryregion=" +
-              this.country,
-            ""
+            this.ip +url,
+            {
+              params: {
+                token: this.$route.query.token,
+                countryregion: this.country,
+                isEN:isEN
+              }
+            }
           )
           .then(res => {
             if (res.success) {
               let result = res.data,
                 resultArr = [];
-              if (this.country == "中国") {
-                resultArr = ["北京", "天津", "上海", "重庆"];
+              if (this.country == "中国"||this.country == "China") {
+                resultArr = [this.$t('cityName.beijing'),this.$t('cityName.tianjing'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
               }
               result.forEach(function(item, index) {
                 resultArr.push(item.city);
@@ -697,7 +642,10 @@ export default {
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
         this.axios
-          .get(this.ip + url + "?token=" + this.$route.query.token, "")
+          .get(this.ip + url, {params: {
+            token: this.$route.query.token,
+            isEN:isEN
+        }})
           .then(res => {
             if (res.success) {
               _this.buildItem(res.data, key);
@@ -769,20 +717,21 @@ export default {
     },
 
     loadData() {
-      if (this.$route.query.id.toLocaleLowerCase() == "sos") {
+      if (this.type&&this.type.toLocaleLowerCase() == "sos") {
         this.isSOS = true;
       } else {
         this.isSOS = false;
       }
       let _this = this;
-      let url = "/globalmate/rest/assist/listSOS";
+      let url = "/globalmate/rest/need/query";
       let postData = {
         onlyCurrentUser: ""
       };
-      if (this.$route.query.id === "offer") {
-        url = "/globalmate/rest/need/query";
-        postData["type"] = this.searchContent.type || "";
-        postData["where"] = this.searchContent.where || "";
+      if(this.isSOS){
+          url = "/globalmate/rest/assist/listSOS";
+      }else{
+          postData["type"] = this.searchContent.type || "";
+          postData["where"] = this.searchContent.where || "";
       }
       this.axios
         .get(
@@ -842,8 +791,22 @@ export default {
                   }
 
                   if (data[i] && data[i].need) {
+                       let curData=data[i];
                     this.getEveryItemPic(data[i], function(result) {
                       _this.myAssistList.push(result);
+                      let len = _this.myAssistList.length;
+  　　                 let minIndex, temp;
+                      for(var i=0;i<len;i++){
+                          minIndex = i;
+                  　　　　 for (var j = i + 1; j < len; j++) {
+                  　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
+                  　　　　　 　　　minIndex = j;
+                  　　　　　 　}
+                  　　　　 }
+                          temp = _this.myAssistList[i];
+  　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
+  　　　　                 _this.myAssistList[minIndex] = temp;
+                      }
                     });
                   }
                 }
@@ -907,11 +870,10 @@ export default {
     this.myAssistList = [];
     this.isSOS = [];
     this.noDataTips = "";
+    this.type=this.$route.query.id;
     this.loadData();
   },
   created() {
-    this.rightIn = false;
-    this.selectFlag = false;
     this.token = this.$route.query.token;
   }
 };
