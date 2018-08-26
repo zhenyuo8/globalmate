@@ -178,7 +178,7 @@ export default {
         this.loadingShow = true;
         this.axios
           .post(
-            this.ip + this.submitUrl + "?token=" + this.$route.query.token,
+            this.ip + this.submitUrl + "?token=" + this.userInfo['token'],
             postData
           )
           .then(res => {
@@ -503,7 +503,7 @@ export default {
             id, {
             // onlyCurrentUser: true,
             params: {
-              token: this.$route.query.token,
+              token: this.userInfo['token'],
               onlyCurrentUser: true
             }
           }

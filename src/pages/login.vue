@@ -116,6 +116,7 @@ export default {
      } else if (this.$route.name == "im") {
        this.createOnMessage(arg);
      } else if (this.$route.name == "messageList") {
+         console.log(arg,11111);
        // this.appVue(arg)
      } else {
        Toast({

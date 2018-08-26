@@ -117,6 +117,7 @@
      &.chat{
          background: blue;
          color: #fff;
+         border:1px solid blue
      }
      &.friends{
          color: #e42641;
@@ -451,9 +452,16 @@ export default {
             });
         },
         getEvalute(){
-            this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+'&acquired=true',{
-
+            let url='/globalmate/rest/evaluate/list'
+            if(this.isOthers){
+                url='/globalmate/rest/evaluate/list/'+this.otherUserId;
+            }
+            this.axios.get(this.ip+url,{
+                params:{
+                    token:this.userInfo['token'],
+                    onlyCurrentUser:true,
+                    acquired:true,
+                }
             }).then((res)=>{
                 if(res.success){
                     let data=res.data;
@@ -469,38 +477,35 @@ export default {
             })
         },
         getEvalutePic(data){
-            this.apiHost=CONFIG[__ENV__].apiHost;
             this.commentList=[];
             let _this=this;
             this.total=data.length;
             for(var i=0;i<data.length;i++){
-                if(i<3){
-                   var curData=data[i];
-                   curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
-                   (function(curData){
-                       _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
-                           if(res.success){
-                               curData.pic=res.data.pic;
-                               _this.commentList.push(curData)
-                               let len = _this.commentList.length;
-           　　                 let minIndex, temp;
-                               for(var i=0;i<len;i++){
-                                   minIndex = i;
-                           　　　　 for (var j = i + 1; j < len; j++) {
-                           　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
-                           　　　　　 　　　minIndex = j;
-                           　　　　　 　}
-                           　　　　 }
-                                   temp = _this.commentList[i];
-           　　　                   _this.commentList[i] = _this.commentList[minIndex];
-           　　　　                 _this.commentList[minIndex] = temp;
-                               }
-                           }
-                       }).catch((e)=>{
-                           console.log(e);
-                       })
-                   })(curData)
-                }
+                var curData=data[i];
+                curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
+                (function(curData){
+                    _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                        if(res.success){
+                            curData.pic=res.data.pic;
+                            _this.commentList.push(curData)
+                            let len = _this.commentList.length;
+        　　                 let minIndex, temp;
+                            for(var i=0;i<len;i++){
+                                minIndex = i;
+                        　　　　 for (var j = i + 1; j < len; j++) {
+                        　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
+                        　　　　　 　　　minIndex = j;
+                        　　　　　 　}
+                        　　　　 }
+                                temp = _this.commentList[i];
+        　　　                   _this.commentList[i] = _this.commentList[minIndex];
+        　　　　                 _this.commentList[minIndex] = temp;
+                            }
+                        }
+                    }).catch((e)=>{
+                        console.log(e);
+                    })
+                })(curData)
             }
         },
         viewAllComments(){
@@ -509,7 +514,7 @@ export default {
                 query: {
                     'token': this.$route.query.token,
                     'title': "全部评价",
-                    'id':'othercomments'
+                    'isOthers':this.isOthers
                 }
             });
         },
@@ -554,12 +559,15 @@ export default {
         this.loadInfo();
         this.isOthers=true;
         this.helpAvailable=[];
+        this.commentList=[];
+         this.total=0;
         this.otherUserId=this.$route.query.otherUserId;
         this.currentUserId=this.$route.query.currentuser;
-        this.getEvalute();
         if(!this.otherUserId||(this.otherUserId==this.currentUserId)){
             this.isOthers=false;
         }
+        this.getEvalute();
+
     },
     created(){
     }

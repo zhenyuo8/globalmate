@@ -190,6 +190,9 @@ export default {
 					let content=JSON.parse(arg.data.content);
 					if(content&&content.chatType&&!content.chatContent){
 					}else{
+						if(content.chatContent.indexOf('style=')>-1){
+							return;
+						}
 						obj['chatContent']=content.chatContent;
 					}
 				}catch(e){
@@ -234,6 +237,9 @@ export default {
 				if(content&&content.chatType&&!content.chatContent){
 					// this.processChatType(content.chatType);
 				}else{
+					if(content.chatContent.indexOf('style=')>-1){
+						return;
+					}
 					$li = $('<li class="left-item"> <img src="'+arg.pic+'" alt=""/> <div class="chat-item-text ">'+content.chatContent+'</div> </li>');
 					obj['chatContent']=content.chatContent;
 				}
@@ -356,8 +362,9 @@ export default {
 								result[i].pic=_this.othersInfo.pic;
 								try{
 									_this.chatItemId=JSON.parse(result[i].data.content).item;
-									_this.id=_this.chatItemId;
-
+									if(!_this.id){
+										_this.id=_this.chatItemId;
+									}
 								}catch(e){
 
 								}

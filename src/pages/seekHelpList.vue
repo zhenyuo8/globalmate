@@ -469,7 +469,8 @@ export default {
           title: item.need.userName,
           otherUserId: item.need.userId,
           id: item.need.id,
-          currentuser: this.$route.query.userId
+          currentuser: this.$route.query.userId,
+          seeOther:true,
         }
       });
     },

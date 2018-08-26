@@ -44,6 +44,7 @@
 }
 .hide_space>div{
     width: 20%;
+    max-height: 1.4rem;
     float: left;
     margin-top:10px;
     margin-right: 2.5%;

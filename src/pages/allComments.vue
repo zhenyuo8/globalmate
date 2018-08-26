@@ -46,8 +46,16 @@
                 if(this.id=='mycomment'){
                     acquired='&acquired=false'
                 }
-                this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+acquired,{
-
+                let url='/globalmate/rest/evaluate/list'
+                if(this.isOthers){
+                    url='/globalmate/rest/evaluate/list/'+this.otherUserId;
+                }
+                this.axios.get(this.ip+url,{
+                    params:{
+                        token:this.userInfo['token'],
+                        onlyCurrentUser:true,
+                        acquired:true,
+                    }
                 }).then((res)=>{
                     if(res.success){
                         let data=res.data
@@ -68,7 +76,7 @@
                     var curData=data[i];
                     curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                     (function(curData){
-                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.userInfo['token'],{}).then((res)=>{
                             if(res.success){
                                 curData.pic=res.data.pic;
                                 _this.commentList.push(curData)
@@ -96,7 +104,7 @@
 		},
 		activated(){
             this.commentList=[];
-            this.id=this.$route.query.id;
+            this.isOthers=this.$route.query.isOthers;
             this.getEvalute();
 		},
 		created(){

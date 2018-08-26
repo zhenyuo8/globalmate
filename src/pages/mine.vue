@@ -186,7 +186,8 @@ export default {
         query: {
           token: this.token,
           title: "个人信息",
-          id: "mineInformation"
+          id: "mineInformation",
+          seeOther:false,
         }
       });
     },
