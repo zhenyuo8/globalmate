@@ -270,7 +270,7 @@ export default {
     let _this = this;
     this.getToken(token => {
       if (!token) {
-        token = _this.$route.query.token;
+        token = _this.userInfo['token'];
       }
       this.axios.get(this.ip +"/globalmate/rest/user/getUserByToken", {
         params: {
@@ -442,7 +442,7 @@ export default {
             "/globalmate/rest/user/list/" +
             data.providerId +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo['token'],
           {}
         )
         .then(res => {
@@ -465,7 +465,7 @@ export default {
             "/globalmate/rest/match/" +
             id +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo['token'],
           {}
         )
         .then(res => {
@@ -503,7 +503,7 @@ export default {
       this.$router.push({
         path: "im",
         query: {
-          token: this.$route.query.token,
+          token: this.userInfo['token'],
           title: this.othersInfo.nikename,
           id: this.$route.query.id,
           toChartUser: this.othersInfo.nikename,
@@ -518,7 +518,7 @@ export default {
             "/globalmate/rest/user/list/" +
             userId +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo['token'],
           {}
         )
         .then(res => {

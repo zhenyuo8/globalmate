@@ -46,7 +46,7 @@
                 if(this.id=='mycomment'){
                     acquired='&acquired=false'
                 }
-                this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+acquired,{
+                this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.userInfo['token']+'&onlyCurrentUser=true'+acquired,{
 
                 }).then((res)=>{
                     if(res.success){
@@ -68,7 +68,7 @@
                     var curData=data[i];
                     curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                     (function(curData){
-                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.userInfo['token'],{}).then((res)=>{
                             if(res.success){
                                 curData.pic=res.data.pic;
                                 _this.commentList.push(curData)
