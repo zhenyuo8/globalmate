@@ -161,5 +161,14 @@ export default new Router({
         index: 4
       }
     },
+    {
+      path: '/allComments',
+      name: 'allComments',
+      // component: messageList,
+      component: () => import('@/pages/allComments.vue'),
+      meta: {
+        index: 17
+      }
+    },
   ]
 })

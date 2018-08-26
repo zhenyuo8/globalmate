@@ -23,9 +23,11 @@
 </template>
 
 <script>
-	import CONFIG from '../config/config'
     import loading from '../components/loading.vue'
+    import userMix from "../mixins/userInfo";
 	export default {
+        'name': 'allComments',
+        mixins: [userMix],
 		components:{
             loading
 		},
@@ -40,16 +42,15 @@
 		},
 		methods:{
             getEvalute(){
-                this.apiHost=CONFIG[__ENV__].apiHost;
                 let acquired='&acquired=true';
                 if(this.id=='mycomment'){
                     acquired='&acquired=false'
                 }
-                this.axios.get(this.apiHost+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+acquired,{
+                this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true'+acquired,{
 
                 }).then((res)=>{
-                    if(res.data.success){
-                        let data=res.data.data
+                    if(res.success){
+                        let data=res.data
                         this.getEvalutePic(data)
                     }else {
                         this.loadingShow=false;
@@ -61,16 +62,15 @@
                 })
             },
             getEvalutePic(data){
-                this.apiHost=CONFIG[__ENV__].apiHost;
                 this.commentList=[];
                 let _this=this;
                 for(var i=0;i<data.length;i++){
                     var curData=data[i];
                     curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                     (function(curData){
-                        _this.axios.get(_this.apiHost+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
-                            if(res.data.success){
-                                curData.pic=res.data.data.pic;
+                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
+                            if(res.success){
+                                curData.pic=res.data.pic;
                                 _this.commentList.push(curData)
                                 let len = _this.commentList.length;
             　　                 let minIndex, temp;
