@@ -21,15 +21,33 @@ export default {
     return {
       transitionName: "",
       messageList: [],
-      code: ""
+      code: "",
+      userId: '',
+      openId: ''
     };
   },
   methods: {
     handleParam(str) {
-      const reg = /code\=([0-9a-zA-Z\-\_]+)/;
-      const match = str.match(reg);
+      const codeReg = /code\=([0-9a-zA-Z\-\_]+)/;
+      let match = str.match(codeReg);
       if (match && match.length === 2 && match[1]) {
         this.code = match[1];
+      }
+      const userIdReg = /userId\=([0-9a-zA-Z\-\_]+)/;
+      match = str.match(userIdReg);
+      if (match && match.length === 2 && match[1]) {
+        this.userId = match[1];
+        this.updateUserInfo({
+          userId: match[1]
+        })
+      }
+      const openIdReg = /openId\=([0-9a-zA-Z\-\_]+)/;
+      match = str.match(openIdReg);
+      if (match && match.length === 2 && match[1]) {
+        this.openId = match[1];
+        this.updateUserInfo({
+          openId: match[1]
+        })
       }
     },
     getRouter(str) {
@@ -247,6 +265,20 @@ export default {
           }
         });
     },
+    getToken (paramName, val) {
+      this.axios.get(this.ip + "/globalmate/rest/user/getToken", {
+        params: {
+          [paramName]: val
+        }
+      }).then(res => {
+        if (res.success) {
+          // .setItem("TOKEN", res.data.data);
+          this.updateUserInfo({
+            token: res.data
+          });
+        }
+      }).catch();
+    },
     loadUserMsg(code) {
       let url =
         this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + this.code;
@@ -266,13 +298,16 @@ export default {
       }).catch();
     }
   },
-
   created() {
     this.handleParam(window.location.href);
     if (!this.code) {
-      // window.location.replace("/static/login.html");
-    } else {
       this.loadUserMsg(this.code);
+    } else if (this.userId) {
+      this.getToken('userId', this.userId)
+    } else if (this.openId) {
+      this.getToken('openId', this.openId)
+    } else {
+      window.location.replace("/static/login.html");
     }
     let router = this.getRouter(window.location.href);
     if (router) {

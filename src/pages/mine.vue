@@ -174,52 +174,12 @@ export default {
     List,
     selectList
   },
-  computed: {},
+  computed: {
+    token: function () {
+      return this.userInfo && this.userInfo.token ? this.userInfo.token: ''
+    }
+  },
   methods: {
-    getToken(callback) {
-      let userId = this.userInfo1["userId"];
-      // let userId = .getItem("USERID");
-      let openid = this.userInfo1["openId"];
-      // let openid = .getItem("OPENID");
-      if (userId) {
-        this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?userId=" + userId,
-            {}
-          )
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else if (openid) {
-        this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?openid=" + openid,
-            {}
-          )
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      }
-      callback && callback(this.token);
-    },
     toMineInformation() {
       this.$router.push({
         path: "mineInformation",
@@ -306,56 +266,40 @@ export default {
         }
       });
     },
-    loadData() {
-      if (this.userInfo1["token"]) {
-        this.token = this.userInfo1["token"];
-      }
-      // if (.getItem("TOKEN")) {
-      //   this.token = .getItem("TOKEN");
-      // }
-      this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/user/getUserByToken" +
-            "?token=" +
-            this.token || this.$route.query.token,
-          {}
-        )
-        .then(res => {
-          if (res.success) {
-            let data = res.data;
-            this.userInfo1.username = data.nikename || data.name;
-            this.userInfo1.country = data.country;
-            this.userInfo1.call = data.enable;
-            this.userInfo1.pic = data.pic || "../assets/images/icon.png";
-          }
-        })
-        .catch(e => {
-          console.log(e);
-        });
+    loadData(token) {
+      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken", {
+        params: {
+          token
+        }
+      }).then(res => {
+        if (res.success) {
+          let data = res.data;
+          this.userInfo1.username = data.nikename || data.name;
+          this.userInfo1.country = data.country;
+          this.userInfo1.call = data.enable;
+          this.userInfo1.pic = data.pic || "../assets/images/icon.png";
+        }
+      }).catch();
     }
   },
   activated() {
-    let url = window.location.href;
-    if (url.indexOf("openId=") > -1) {
-      this.userId = this.$utils.getQueryStringByName("userId");
-      this.openId = this.$utils.getQueryStringByName("openId");
-      // .setItem("USERID", this.userId);
-      // .setItem("OPENID", this.openId);
-      this.updateUserInfo({
-        userId: this.userId,
-        openId: this.openId
-      });
+    if (this.userInfo && this.userInfo.token) {
+      this.loadData(this.userInfo.token)
+    } else {
+      this.timer = setInterval(() => {
+        if (this.userInfo && this.userInfo.token) {
+          clearInterval(this.timer)
+          this.loadData(this.userInfo.token)
+        }
+      }, 200)
     }
-    this.getToken(this.loadData);
   },
-
+  deactivated () {
+    this.timer && clearInterval(this.timer)
+  },
   watch: {
-
   },
   created() {
-    this.token = this.$route.query.token;
-    this.title = this.$route.query.title;
   }
 };
 </script>

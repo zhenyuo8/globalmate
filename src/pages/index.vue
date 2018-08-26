@@ -60,7 +60,6 @@
 </template>
 
 <script>
-// import { swipe, SwipeItem } from "vue-awesome-swiper";
 import loading from "../components/loading.vue";
 import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
 import Vue from "vue";
@@ -69,13 +68,10 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-// require("swiper/dist/css/swiper.css");
 export default {
   name: "index",
   mixins: [userMix],
   components: {
-    // swipe,
-    // SwipeItem,
     loading
   },
   data() {
@@ -85,24 +81,8 @@ export default {
         "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg",
         "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg"
       ],
-      swiperOption: {
-        notNextTick: true,
-        pagination: ".swiper-pagination",
-        observer: true,
-        observeParents: true,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false
-        },
-        loop: true,
-        onSlideChangeEnd: swiper => {
-          //这个位置放swiper的回调方法
-          this.page = swiper.realIndex + 1;
-          this.index = swiper.realIndex;
-        }
-      },
       mainmenu: [],
-      token: "",
+      // token: "",
       code: "",
       hasReceiveMessage: false,
       messageList: [],
@@ -110,74 +90,24 @@ export default {
     };
   },
   computed: {
-    swiper() {
-      // return this.$refs.mySwiper.swiper;
+    token: function () {
+      return this.userInfo && this.userInfo.token? this.userInfo.token: ''
     }
   },
-  mounted() {
-    // this.swiper.slideTo(0, 0, false);
-  },
   methods: {
-    getToken(callback) {
-      let userId = this.userInfo["userId"];
-      // let userId = .getItem("USERID");
-      let openid = this.userInfo["openId"];
-      // let openid = .getItem("OPENID");
-      if (userId) {
-        this.axios
-          .get(this.ip + "/globalmate/rest/user/getToken?userId=" + userId, {})
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else if (openid) {
-        this.axios
-          .get(this.ip + "/globalmate/rest/user/getToken?openid=" + openid, {})
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      }
-      callback && callback(this.token);
-    },
     getCurrentUser(token) {
       if (!token) {
-        // token = .getItem("TOKEN");
         token = this.userInfo["token"];
       }
-      this.axios
-        .get(
-          this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
+      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
           {}
-        )
-        .then(res => {
+        ).then(res => {
           if (res.success) {
             this.updateUserInfo({
               curUser: res.data
             });
-            // .setItem(
-            //   "gl_CURRENTUSER",
-            //   JSON.stringify(res.data.data)
-            // );
           }
-        })
-        .catch(e => {
+        }).catch(e => {
           console.log(e);
         });
     },
@@ -202,8 +132,14 @@ export default {
                 message: "请您先完成身份认证",
                 duration: 1000
               });
+              return;
             }
             flag && callback && callback();
+          } else {
+            Toast({
+              message: "请您先完成身份认证",
+              duration: 1000
+            });
           }
         });
     },
@@ -215,12 +151,12 @@ export default {
         });
       } else {
         // this.loadingShow = true;
-        if (!this.token) {
-          Toast({
-            message: "请先登入...",
-            duration: 2000
-          });
-        } else {
+        // if (!this.token) {
+        //   Toast({
+        //     message: "请先登入...",
+        //     duration: 2000
+        //   });
+        // } else {
           // setTimeout(() => {
           // this.loadingShow = false;
           this.$router.push({
@@ -234,13 +170,18 @@ export default {
             }
           });
           // }, 500);
-        }
+        // }
       }
     },
     publish(item) {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
       // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
+      if (!this.token) {
+        Toast({
+          message: "请先登入...",
+          duration: 2000
+        });
+        return;
+      }
       var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
         // Toast({
@@ -253,8 +194,6 @@ export default {
       this.publishHandler(item);
     },
     goPersonalCenter() {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -271,8 +210,6 @@ export default {
       }
     },
     offer() {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
       // this.userId = .getItem("USERID");
       this.userId = this.userInfo["userId"];
       if (this.userInfo["curUser"]) {
@@ -296,8 +233,6 @@ export default {
       }
     },
     seekHelp() {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -316,12 +251,7 @@ export default {
       }
     },
     toMessage() {
-      // .setItem(
-      //   "MESSAGELIST",
-      //   JSON.stringify(this.messageList)
-      // );
-      this.updateMsgList(this.msgList);
-       this.token = this.userInfo["token"];
+      this.updateMsgList(this.messageList);
       this.$router.push({
         path: "messageList",
         query: {
@@ -332,8 +262,6 @@ export default {
       });
     },
     goRankAll(key) {
-      // this.token = .getItem("TOKEN");
-      this.token = this.userInfo["token"];
       if (!this.token) {
         Toast({
           message: "请先登入...",

@@ -184,50 +184,6 @@ export default {
     };
   },
   methods: {
-    getToken(callback) {
-      let userId = this.userInfo["userId"];
-      // let userId = getItem("USERID");
-      let openid = this.userInfo["openId"];
-      // let openid = getItem("OPENID");
-      if (userId) {
-        this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?userId=" + userId,
-            {}
-          )
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      } else if (openid) {
-        this.axios
-          .get(
-            this.ip + "/globalmate/rest/user/getToken?openid=" + openid,
-            {}
-          )
-          .then(res => {
-            if (res.success) {
-              this.token = res.data;
-              // .setItem("TOKEN", res.data.data);
-              this.updateUserInfo({
-                token: res.data
-              });
-            }
-          })
-          .catch(e => {
-            console.log(e);
-          });
-      }
-      callback && callback(this.token);
-    },
     editForm(e, item) {
       e = e ? e : window.event;
       e.preventDefault();
@@ -250,7 +206,7 @@ export default {
       this.$router.push({
         path: "assist",
         query: {
-          token: this.$route.query.token,
+          token: this.userInfo.token,
           title: item.conceretNeed.tag,
           id: item.need.id,
           mode: "MODIFY"
@@ -297,7 +253,7 @@ export default {
                 "/globalmate/rest/assist/" +
                 item.need.id +
                 "/complete/?token=" +
-                this.$route.query.token +
+                this.userInfo.token +
                 "&providerId=" +
                 providerId[0].providerId,
               {
@@ -324,7 +280,7 @@ export default {
                 "/globalmate/rest/assist/" +
                 item.need.id +
                 "/complete/?token=" +
-                this.$route.query.token +
+                this.userInfo.token +
                 "&providerId=" +
                 "",
               {
@@ -349,7 +305,7 @@ export default {
       this.$router.push({
         path: "im",
         query: {
-          token: this.$route.query.token,
+          token: this.userInfo.token,
           title: items.userInfo.nikename,
           id: item.need.id,
           toChartUser: items.userInfo.id,
@@ -387,7 +343,7 @@ export default {
             this.$router.push({
                 path: 'evaluate',
                 query: {
-                    'token': this.token,
+                    'token': this.userInfo.token,
                     'title': this.$t('button.evaluate'),
                     'id': 'evaluate',
                     'evaluateId':assistMan,
@@ -402,10 +358,10 @@ export default {
       this.$router.push({
         path: "detail",
         query: {
-          token: this.$route.query.token,
+          token: this.userInfo.token,
           title: item.conceretNeed.title,
           id: item.need.id,
-          userId: this.$route.query.userId
+          userId: this.userInfo.userId
         }
       });
     },
@@ -417,7 +373,7 @@ export default {
             "/globalmate/rest/user/list/" +
             data.providerId +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo.token,
           {}
         )
         .then(res => {
@@ -442,7 +398,7 @@ export default {
             "/globalmate/rest/match/" +
             data.need.id +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo.token,
           {}
         )
         .then(res => {
@@ -568,8 +524,20 @@ export default {
     this.myAssistList=[];
     this.nodataFlag=false;
     this.noDataTips='';
-    this.token=this.$route.query.token;
-    this.getToken(this.loadData);
+    if (this.userInfo && this.userInfo.token) {
+      this.loadData(this.userInfo.token)
+    } else {
+      this.timer = setInterval(() => {
+        if (this.userInfo && this.userInfo.token) {
+          clearInterval(this.timer)
+          this.loadData(this.userInfo.token)
+        }
+      })
+    }
+    // this.getToken(this.loadData);
+  },
+  deactivated () {
+    clearInterval(this.timer)
   },
   created() {
   }
