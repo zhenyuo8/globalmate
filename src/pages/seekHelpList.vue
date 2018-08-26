@@ -1,174 +1,172 @@
 <style scoped>
-    .gl_list{
-        font-size: 14px;
-        position: absolute;
-        overflow: hidden;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        background: #eee;
-        overflow-y: auto;
-    }
-    .filter_right>.select_out{
-        position: fixed;
-        left: 1rem;
-        right: 0;
-        bottom: 0;
-        top: 100%;
-        opacity: 0;
-        -webkit-transition: all .2s ease-out;
-        -moz-transition: all .2s ease-out;
-        transition: all .2s ease-out;
-        background: #eee;
-    }
-     .filter_right>.select_in{
-        position: fixed;
-        left: 1rem;
-        right: 0;
-        bottom: 0;
-        top: 43px;
-        opacity: 1;
-        -webkit-transition: all .3s ease-in;
-        -moz-transition: all .3s ease-in;
-        transition: all .3s ease-in;
-    }
-    .gl_list .list_ul{
-        padding: 0 0.2rem;
-        background: #fff;
-    }
-    .gl_list .list_ul li{
-        height: 36px;
-        line-height: 36px;
-        border-bottom: 1px solid #eee;
-        padding: 0 .2rem;
-    }
-    .gl_list .list_ul li:last-child{
-        border: none;
-    }
-    .gl_list .list_ul .select .icon-checkbox{
-        color: rgb(41, 182, 246);
-    }
-    .gl_list .list_ul li .list_item{
-        float: left;
-    }
-    .gl_list .list_ul li .icon-checkbox{
-        float: right;
-        line-height: 36px;
-        color: #999;
-        font-size: 16px;
-    }
-    .gl_list .buttom_action{
-        height: 46px;
-        background: #fff;
-        line-height: 46px;
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-    .gl_list .buttom_action span{
-        display: inline-block;
-        width: 40%;
-        height: 36px;
-        margin-left: .2rem;
-        line-height: 36px;
-        border-radius: 5px;
-        color: #fff;
-    }
-    .gl_list .buttom_action .cancel{
-        background: rgb(153, 153, 153);
-    }
-    .gl_list .buttom_action .confirm{
-        background: rgb(41, 182, 246);
-    }
-    .bottom_right{
-        color: #0400ff
-    }
+.gl_list {
+  font-size: 14px;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background: #eee;
+  overflow-y: auto;
+}
+.filter_right > .select_out {
+  position: fixed;
+  left: 1rem;
+  right: 0;
+  bottom: 0;
+  top: 100%;
+  opacity: 0;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  background: #eee;
+}
+.filter_right > .select_in {
+  position: fixed;
+  left: 1rem;
+  right: 0;
+  bottom: 0;
+  top: 43px;
+  opacity: 1;
+  -webkit-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in;
+}
+.gl_list .list_ul {
+  padding: 0 0.2rem;
+  background: #fff;
+}
+.gl_list .list_ul li {
+  height: 36px;
+  line-height: 36px;
+  border-bottom: 1px solid #eee;
+  padding: 0 0.2rem;
+}
+.gl_list .list_ul li:last-child {
+  border: none;
+}
+.gl_list .list_ul .select .icon-checkbox {
+  color: rgb(41, 182, 246);
+}
+.gl_list .list_ul li .list_item {
+  float: left;
+}
+.gl_list .list_ul li .icon-checkbox {
+  float: right;
+  line-height: 36px;
+  color: #999;
+  font-size: 16px;
+}
+.gl_list .buttom_action {
+  height: 46px;
+  background: #fff;
+  line-height: 46px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.gl_list .buttom_action span {
+  display: inline-block;
+  width: 40%;
+  height: 36px;
+  margin-left: 0.2rem;
+  line-height: 36px;
+  border-radius: 5px;
+  color: #fff;
+}
+.gl_list .buttom_action .cancel {
+  background: rgb(153, 153, 153);
+}
+.gl_list .buttom_action .confirm {
+  background: rgb(41, 182, 246);
+}
+.bottom_right {
+  color: #0400ff;
+}
 </style>
 <style  lang="less">
-    .slide_in_one{
-        position: fixed;
-        right:0;
-        top:43px;
-        bottom:0;
-        opacity:1;
-        width:6.5rem;
-        background:#f5f5f5;
-       -webkit-transition: all .2s ease-in;
-       -moz-transition: all .2s ease-in;
-       transition: all .2s ease-in;
-       /*background:#eee;*/
-    }
-    .slide_out_one{
-        position: fixed;
-        right: -6.5rem;
-         top:44px;
-         bottom:0;
-         opacity:0;
-         width:6.5rem;
-         background:#fff;
-        -webkit-transition: all .2s ease-out;
-        -moz-transition: all .2s ease-out;
-        transition: all .2s ease-out;
-    }
-    .mask{
-        position:absolute;
-        left:0;
-        right:0;
-        top:44px;
-        bottom:0;
-        background:rgba(153,153,153,0.9)
-    }
-    	.rightIn_form{
-    		display: flex;
-    		background: #fff;
-    		margin-top: 10px;
-    		padding: 0 .3rem .2rem;
-    	}
-    	.rightIn_form .name{
-    		margin-right: .4rem;
-    	}
-    	 .rightIn_form .name p{
-    		display: flex;
-    		height: 32px;
-    		line-height: 32px;
-    		margin-top: 10px;
-    	}
-    	 .rightIn_form .name p label{
-    		width:1.4rem;
-    		text-align: justify;
-    		text-justify:inter-ideograph;
-    		text-align-last:justify;
-    		line-height: 32px;
-    	}
-        .rightIn_form .name p input{
-    		border: 1px solid #eee;
-    		padding: 0 0.2rem;
-        }
-        .gl_list .slide_in_one .action{
-            position: absolute;
-            bottom: 0;
-            display: flex;
-            width: 100%;
-            height: 36px;
-            line-height: 36px;
-        }
-        .gl_list .slide_in_one .action span{
-            flex:1;
-            text-align:center;
-            font-size:16px;
-
-        }
-       .gl_list .cancel{
-            background:#ddd;
-            color:#333;
-        }
-       .gl_list .confirm{
-            background:#007aff;
-            color:#fff;
-        }
-
+.slide_in_one {
+  position: fixed;
+  right: 0;
+  top: 43px;
+  bottom: 0;
+  opacity: 1;
+  width: 6.5rem;
+  background: #f5f5f5;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+  /*background:#eee;*/
+}
+.slide_out_one {
+  position: fixed;
+  right: -6.5rem;
+  top: 44px;
+  bottom: 0;
+  opacity: 0;
+  width: 6.5rem;
+  background: #fff;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+.mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44px;
+  bottom: 0;
+  background: rgba(153, 153, 153, 0.9);
+}
+.rightIn_form {
+  display: flex;
+  background: #fff;
+  margin-top: 10px;
+  padding: 0 0.3rem 0.2rem;
+}
+.rightIn_form .name {
+  margin-right: 0.4rem;
+}
+.rightIn_form .name p {
+  display: flex;
+  height: 32px;
+  line-height: 32px;
+  margin-top: 10px;
+}
+.rightIn_form .name p label {
+  width: 1.4rem;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  text-align-last: justify;
+  line-height: 32px;
+}
+.rightIn_form .name p input {
+  border: 1px solid #eee;
+  padding: 0 0.2rem;
+}
+.gl_list .slide_in_one .action {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  width: 100%;
+  height: 36px;
+  line-height: 36px;
+}
+.gl_list .slide_in_one .action span {
+  flex: 1;
+  text-align: center;
+  font-size: 16px;
+}
+.gl_list .cancel {
+  background: #ddd;
+  color: #333;
+}
+.gl_list .confirm {
+  background: #007aff;
+  color: #fff;
+}
 </style>
 
 /**
@@ -177,123 +175,121 @@
  */
 
 <style media="screen" lang='less'>
-	.list_wrap{
-		background: #f7f5f3;
-		.list_repeat{
-			background: #fff;
-			padding: .2rem 0.4rem;
-			margin: auto;
-			margin-bottom: 10px;
-            position: relative;
-			&>div{
-				margin-top: 10px;
-			}
-			.list_repeat_title{
-				text-align: left;
-				margin-top: 10px;
-                margin-bottom: 6px;
-				font-size: 15px;
-                color: #333;
-				font-weight: 500;
-			}
-			.list_repeat_action{
-				text-align: right;
-                position: absolute;
-                right: 0.4rem;
-                bottom: 0.2rem;
-				span{
-					padding: 6px .15rem;
-					background: #2361ea;
-					border-radius: 4px;
-					color: #fff;
-                    text-align: center;
-				}
-			}
-			.list_repeat_user{
-				display: flex;
-				.image_user{
-					width: 1.2rem;
-					height: 1.2rem;
-                    border-radius: 50%;
-                    overflow: hidden;
-					border: 1px solid #eee;
-					img{
-						display: inline-block;
-						width: 100%;
-						height: 100%;
-					}
-				}
-				.name_user{
-					display: flex;
-					flex: 2;
-    				flex-direction: column;
-    				text-align: left;
-    				margin-left: .24rem;
-					span{
-						&.name{
-							font-size: 14px;
-							color: #333;
-						}
-						&.type{
-						    font-size: 13px;
-                            color: #888;
-							margin-top: .1rem;
-						}
-					}
-				}
-				.status_user{
-					span{
-						font-size: 14px;
-					}
-				}
+.list_wrap {
+  background: #f7f5f3;
+  .list_repeat {
+    background: #fff;
+    padding: 0.2rem 0.4rem;
+    margin: auto;
+    margin-bottom: 10px;
+    position: relative;
+    & > div {
+      margin-top: 10px;
+    }
+    .list_repeat_title {
+      text-align: left;
+      margin-top: 10px;
+      margin-bottom: 6px;
+      font-size: 15px;
+      color: #333;
+      font-weight: 500;
+    }
+    .list_repeat_action {
+      text-align: right;
+      position: absolute;
+      right: 0.4rem;
+      bottom: 0.2rem;
+      span {
+        padding: 6px 0.15rem;
+        background: #2361ea;
+        border-radius: 4px;
+        color: #fff;
+        text-align: center;
+      }
+    }
+    .list_repeat_user {
+      display: flex;
+      .image_user {
+        width: 1.2rem;
+        height: 1.2rem;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px solid #eee;
+        img {
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .name_user {
+        display: flex;
+        flex: 2;
+        flex-direction: column;
+        text-align: left;
+        margin-left: 0.24rem;
+        span {
+          &.name {
+            font-size: 14px;
+            color: #333;
+          }
+          &.type {
+            font-size: 13px;
+            color: #888;
+            margin-top: 0.1rem;
+          }
+        }
+      }
+      .status_user {
+        span {
+          font-size: 14px;
+        }
+      }
 
-
-                .status_close{
-                    span{
-                        color: red!important;
-                    }
-                }
-			}
-            .list_repeat_img{
-                display: flex;
-                .list_content_img{
-                    width: 1.6rem;
-                    height: 100%;
-                    // height: 1.6rem;
-                    margin-right: .2rem;
-                    img{
-                        width: 100%;
-                        height: 100%;
-                        display: inline-block;
-                    }
-
-                }
-            }
-		}
-	}
-       .list_show{
-           position: fixed;
-           right:0;
-           top:0;
-           bottom:0;
-           width:7.5rem;
-           background:#f5f5f5;
-          -webkit-transition: all .2s ease-in;
-          -moz-transition: all .2s ease-in;
-          transition: all .2s ease-in;
-          overflow: scroll;
-       }
-       .list_hide{
-           position: fixed;
-           right: -7.5rem;
-           top:0;
-           bottom:0;
-           width:7.1rem;
-           background:#fff;
-           -webkit-transition: all .2s ease-out;
-           -moz-transition: all .2s ease-out;
-           transition: all .2s ease-out;
-       }
+      .status_close {
+        span {
+          color: red !important;
+        }
+      }
+    }
+    .list_repeat_img {
+      display: flex;
+      .list_content_img {
+        width: 1.6rem;
+        height: 100%;
+        // height: 1.6rem;
+        margin-right: 0.2rem;
+        img {
+          width: 100%;
+          height: 100%;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+.list_show {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 7.5rem;
+  background: #f5f5f5;
+  -webkit-transition: all 0.2s ease-in;
+  -moz-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+  overflow: scroll;
+}
+.list_hide {
+  position: fixed;
+  right: -7.5rem;
+  top: 0;
+  bottom: 0;
+  width: 7.1rem;
+  background: #fff;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
 </style>
 
 <template>
@@ -434,7 +430,7 @@ export default {
             "/globalmate/rest/assist/" +
             item.need.id +
             "/complete/?token=" +
-            this.$route.query.token,
+            this.userInfo.token,
           {
             needId: item.need.id,
             action: "coplete"
@@ -451,11 +447,11 @@ export default {
       this.$router.push({
         path: "detail",
         query: {
-          token: this.$route.query.token,
+          token: this.userInfo.token,
           title: item.conceretNeed.title,
           id: item.need.id,
           otherUserId: item.need.userId,
-          userId: this.$route.query.userId
+          userId: this.userInfo.userId
         }
       });
     },
@@ -465,12 +461,12 @@ export default {
       this.$router.push({
         path: "mineInformation",
         query: {
-          token: this.token,
+          token: this.userInfo.token,
           title: item.need.userName,
           otherUserId: item.need.userId,
           id: item.need.id,
-          currentuser: this.$route.query.userId,
-          seeOther:true,
+          currentuser: this.userInfo.userId,
+          seeOther: true
         }
       });
     },
@@ -489,13 +485,13 @@ export default {
         _this.$router.push({
           path: "im",
           query: {
-            token: _this.token,
+            token: _this.userInfo.token,
             title: data.nikename,
             id: item.need.id,
             toChartUser: data.nikename,
             toChartId: item.need.userId,
             whoNeedHelf: item.need.userId,
-            userId: _this.$route.query.userId
+            userId: _this.userInfo.userId
           }
         });
       });
@@ -508,7 +504,7 @@ export default {
         url = "/globalmate/rest/user/list/" + userId;
       }
       this.axios
-        .get(this.ip + url + "/?token=" + this.$route.query.token, {})
+        .get(this.ip + url + "/?token=" + this.userInfo.token, {})
         .then(res => {
           if (res && res.success) {
             callback(res.data);
@@ -607,27 +603,31 @@ export default {
       let url = "",
         _this = this,
         postData = {};
-        let lang=navigator.language||'zh-CN';
-        let isEN=/^zh/.test(lang)?false:/^en/.test(lang)?true:/^es/.test(lang)?true:true;
+      let lang = navigator.language || "zh-CN";
+      let isEN = /^zh/.test(lang)
+        ? false
+        : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
-          .get(
-            this.ip +url,
-            {
-              params: {
-                token: this.$route.query.token,
-                countryregion: this.country,
-                isEN:isEN
-              }
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token,
+              countryregion: this.country,
+              isEN: isEN
             }
-          )
+          })
           .then(res => {
             if (res.success) {
               let result = res.data,
                 resultArr = [];
-              if (this.country == "中国"||this.country == "China") {
-                resultArr = [this.$t('cityName.beijing'),this.$t('cityName.tianjing'),this.$t('cityName.shanghai'),this.$t('cityName.chongqing')];
+              if (this.country == "中国" || this.country == "China") {
+                resultArr = [
+                  this.$t("cityName.beijing"),
+                  this.$t("cityName.tianjing"),
+                  this.$t("cityName.shanghai"),
+                  this.$t("cityName.chongqing")
+                ];
               }
               result.forEach(function(item, index) {
                 resultArr.push(item.city);
@@ -644,10 +644,12 @@ export default {
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
         this.axios
-          .get(this.ip + url, {params: {
-            token: this.$route.query.token,
-            isEN:isEN
-        }})
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token,
+              isEN: isEN
+            }
+          })
           .then(res => {
             if (res.success) {
               _this.buildItem(res.data, key);
@@ -686,7 +688,7 @@ export default {
       this.listType = key;
       this.selectItem = showCity;
       // .setItem("LIST", JSON.stringify(this.selectItem));
-      this.updateTodoList(this.selectItem)
+      this.updateTodoList(this.selectItem);
     },
     buildLetter() {
       let letter = [];
@@ -719,7 +721,7 @@ export default {
     },
 
     loadData() {
-      if (this.type&&this.type.toLocaleLowerCase() == "sos") {
+      if (this.type && this.type.toLocaleLowerCase() == "sos") {
         this.isSOS = true;
       } else {
         this.isSOS = false;
@@ -729,18 +731,18 @@ export default {
       let postData = {
         onlyCurrentUser: ""
       };
-      if(this.isSOS){
-          url = "/globalmate/rest/assist/listSOS";
-      }else{
-          postData["type"] = this.searchContent.type || "";
-          postData["where"] = this.searchContent.where || "";
+      if (this.isSOS) {
+        url = "/globalmate/rest/assist/listSOS";
+      } else {
+        postData["type"] = this.searchContent.type || "";
+        postData["where"] = this.searchContent.where || "";
       }
       this.axios
         .get(
           this.ip +
             url +
             "?token=" +
-            this.$route.query.token +
+            this.userInfo.token +
             "&type=" +
             this.searchContent.type +
             "&where=" +
@@ -793,21 +795,24 @@ export default {
                   }
 
                   if (data[i] && data[i].need) {
-                       let curData=data[i];
+                    let curData = data[i];
                     this.getEveryItemPic(data[i], function(result) {
                       _this.myAssistList.push(result);
                       let len = _this.myAssistList.length;
-  　　                 let minIndex, temp;
-                      for(var i=0;i<len;i++){
-                          minIndex = i;
-                  　　　　 for (var j = i + 1; j < len; j++) {
-                  　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
-                  　　　　　 　　　minIndex = j;
-                  　　　　　 　}
-                  　　　　 }
-                          temp = _this.myAssistList[i];
-  　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
-  　　　　                 _this.myAssistList[minIndex] = temp;
+                      let minIndex, temp;
+                      for (var i = 0; i < len; i++) {
+                        minIndex = i;
+                        for (var j = i + 1; j < len; j++) {
+                          if (
+                            _this.myAssistList[j].need.createTime >
+                            _this.myAssistList[minIndex].need.createTime
+                          ) {
+                            minIndex = j;
+                          }
+                        }
+                        temp = _this.myAssistList[i];
+                        _this.myAssistList[i] = _this.myAssistList[minIndex];
+                        _this.myAssistList[minIndex] = temp;
                       }
                     });
                   }
@@ -852,7 +857,7 @@ export default {
             "/globalmate/rest/user/list/" +
             data.need.userId +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo.token,
           {}
         )
         .then(res => {
@@ -872,11 +877,23 @@ export default {
     this.myAssistList = [];
     this.isSOS = [];
     this.noDataTips = "";
-    this.type=this.$route.query.id;
-    this.loadData();
+    this.type = this.$route.query.id;
+    if (this.userInfo.token) {
+      this.loadData();
+    } else {
+      this.time = setInterval(() => {
+        if (this.userInfo.token) {
+          this.loadData();
+          clearInterval(this.timer);
+        }
+      }, 200);
+    }
+  },
+  deactivated() {
+    clearInterval(this.timer);
   },
   created() {
-    this.token = this.$route.query.token;
+    // this.token = this.$route.query.token;
   }
 };
 </script>
