@@ -1,181 +1,214 @@
 <template>
-  <div class="rank_all">
-    <div class="main_img">
-      <img src="../assets/images/stanfu.jpeg" alt="">
-    </div>
-    <div class="rank_content">
-      <mt-navbar v-model="selected">
-        <mt-tab-item v-for="(item,index) in tabContent" :id="index" :key='index'>{{item.key}}</mt-tab-item>
-      </mt-navbar>
-      <mt-tab-container v-model="selected">
-        <mt-tab-container-item v-for="(item,index) in tabContent" :id="index" :key='index'>
-          <ul class="rank_user_img">
-            <li v-for="(items,index) in item.list" :key='index'>
-              <img src="../assets/images/12.jpeg" alt="">
-            </li>
-          </ul>
-        </mt-tab-container-item>
-      </mt-tab-container>
-    </div>
+  <div class="rank_all" id='rank_all'>
+      <p class="title">排行榜</p>
+      <div class="rank_warp">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+              <div class="rank_repeat" v-for="(item,index) in userList" :key='index'>
+                  <div class="rank" :class="'rank_'+index">
+                      {{index+1}}
+                  </div>
+                  <div class="userInfo">
+                      <div class="userImage">
+                          <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
+                          <img :src="item.pic" v-if="item.pic" alt="">
+                      </div>
+                      <div class="userInfo_name">
+                          <span class="name">{{item.nikename}}</span>
+                          <span class="age">{{item.country}}</span>
+                      </div>
+                      <div class="nice">
+                          {{item.nice}}
+                      </div>
+                  </div>
+              </div>
+          </mt-loadmore>
+          <span>已显示所有排名</span>
+      </div>
+      <div class="defindloadig" v-if="loadingShow">
+        <loading></loading>
+      </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import userMix from "../mixins/userInfo";
+import loading from "../components/loading.vue";
+import { Loadmore } from 'mint-ui';
+Vue.component(Loadmore.name, Loadmore);
 export default {
   mixins: [userMix],
-  components: {},
+  components: {
+      loading
+  },
   data() {
     return {
-      selected: 0,
-      tabItem: [
-        "全部榜单",
-        "北京大学",
-        "哈佛大学",
-        "剑桥大学",
-        "清华大学",
-        "牛津大学"
-      ],
-      tabContent: [
-        {
-          key: "全部榜单",
-          list: ["zhenyuo8", "hongbing", "111", "2222", "333"]
-        },
-        {
-          key: "北京大学",
-          list: [
-            "zhenyu09",
-            "hongbing",
-            "111",
-            "2222",
-            "333",
-            "111",
-            "2222",
-            "333",
-            ,
-            "111",
-            "2222",
-            "333"
-          ]
-        },
-        {
-          key: "哈佛",
-          list: [
-            "zhenyu99",
-            "hongbing",
-            "111",
-            "2222",
-            "333",
-            ,
-            "111",
-            "2222",
-            "333"
-          ]
-        },
-        {
-          key: "剑桥",
-          list: [
-            "zhenyu88",
-            "hongbing",
-            "111",
-            "2222",
-            "333",
-            ,
-            "111",
-            "2222",
-            "333",
-            ,
-            "111",
-            "2222",
-            "333",
-            ,
-            "111",
-            "2222",
-            "333"
-          ]
-        },
-        {
-          key: "清华",
-          list: ["zhenyu77", "hongbing", "111", "2222", "333", , "111", "2222"]
-        },
-        {
-          key: "牛津",
-          list: ["zhenyu77", "hongbing", "111", "2222", "333", "44"]
-        }
-      ]
+        userList:[],
+        loadingShow:true,
+        allLoaded:true
     };
   },
-  methods: {},
+  methods: {
+      loadData(){
+          this.axios.get(this.ip+'/globalmate/rest/user/list',{
+              params:{
+                  token:this.userInfo.token,
+                  onlyCurrentUser:false,
+              }
+          }).then((res)=>{
+              if(res.success){
+                  let data=res.data;
+                  let len = data.length;
+　　               let minIndex, temp;
+                  for(var i=0;i<len;i++){
+                      minIndex = i;
+              　　　　 for (var j = i + 1; j < len; j++) {
+              　　　　 　　if (data[j].nice> data[minIndex].nice) {
+              　　　　　 　　　minIndex = j;
+              　　　　　 　}
+              　　　　 }
+                      temp = data[i];
+　　　                   data[i] = data[minIndex];
+　　　　                 data[minIndex] = temp;
+                  }
+                  this.userList=data;
+                  this.loadingShow=false;
+              }else {
+                  this.loadingShow=false;
+              }
+
+          }).catch((e)=>{
+              this.loadingShow=false;
+              console.log(e);
+          })
+      },
+      loadTop() {
+          this.$refs.loadmore.onTopLoaded();
+      },
+      loadBottom() {
+          this.allLoaded = true;
+          this.$refs.loadmore.onBottomLoaded();
+      }
+
+  },
   activated(){
+      this.userList=[];
+      if (this.userInfo.token) {
+         this.loadData();
+      } else {
+        this.time = setInterval(() => {
+          if (this.userInfo.token) {
+            this.loadData();
+            clearInterval(this.timer);
+          }
+        }, 200);
+      }
+  },
+  deactivated() {
+    clearInterval(this.timer);
   },
   created() {}
 };
 </script>
-<style media="screen">
-.mint-navbar {
-  display: block !important;
-  white-space: nowrap;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  height: 36px;
-  border-bottom: 1px solid #eee;
-  box-sizing: border-box;
-}
-.mint-navbar .mint-tab-item {
-  width: 2rem;
-  padding: 12px 0;
-  display: inline-block;
-  margin-bottom: 0;
-  vertical-align: top;
-}
-.mint-navbar .mint-tab-item.is-selected {
-  border: none;
-  background: #26a2ff;
-  color: #fff;
-  font-weight: 600;
-}
-.mint-tab-container-item {
-  display: flex;
-}
-.mint-tab-container-item {
-  width: 6.3rem;
-  margin: auto;
-}
-.rank_user_img {
-  width: 100%;
-  overflow: hidden;
-}
-.rank_user_img > li {
-  float: left;
-  width: 1.7rem;
-  height: 1.7rem;
-  overflow: hidden;
-  margin-top: 0.6rem;
-  box-sizing: border-box;
-  border: 1px solid #eee;
-  font-size: 0;
-}
-.rank_user_img > li:nth-child(3n + 1) {
-  margin-right: 0.6rem;
-}
-.rank_user_img > li:nth-child(3n + 2) {
-  margin-right: 0.6rem;
-}
-.rank_user_img > li > img {
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-}
-</style>
+<style media="screen" lang='less'>
+    #rank_all{
+        .title{
+            font-size: 16px;
+            font-weight: 600;
+            text-align: left;
+            padding: .3rem 0.4rem;
+            position: relative;
+            &:after{
+                content: '';
+                clear: both;
+                border-bottom: 1px solid #eee;
+                height: 1px;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                left: 0;
+            }
+        }
+        font-size: 14px;
+        .rank_warp{
+            padding:0 0 0 0.4rem;
+            &>span{
+                padding: 6px 0;
+                font-size: 12px;
+                color: #999;
+            }
+            .rank_repeat{
+                display: flex;
+                div{
 
-<style scoped>
-.main_img {
-  width: 7.5rem;
-  height: 100px;
-}
-.main_img img {
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-}
+                    &.rank{
+                        width: 6%;
+                        text-align: left;
+                        line-height: 36px;
+                        padding: 0rem 0 0.2rem;
+                    }
+                    &.rank_0{
+                        color: red;
+                        font-size: 16px;
+                        font-weight: bold;
+                    }
+                    &.rank_1{
+                        color: #fb00ff;
+                        font-size: 16px;
+                        font-weight: bold;
+                    }
+                    &.rank_2{
+                        color: blue;
+                        font-size: 16px;
+                        font-weight: bold;
+                    }
+                    &.userInfo{
+                        width: 94%;
+                        padding: 0.2rem 0 0.2rem;
+                        position: relative;
+                         .userImage{
+                             width: 12%;
+                             float: left;
+                             max-height: 36px;
+                             overflow: hidden;
+                             border-radius: 4px;
+                             img{
+                                 width: 100%;
+                                 height: 100%;
+                                 display: inline-block;
+                             }
+                         }
+                         &:after{
+                             content: '';
+                             clear: both;
+                             border-bottom: 1px solid #eee;
+                             height: 1px;
+                             position: absolute;
+                             bottom: 0;
+                             right: 0;
+                             left: 0;
+                         }
+                        &>.userInfo_name{
+                            float: left;
+                            font-size: 12px;
+                            margin-left: 4%;
+                            span{
+                                display: block;
+                                margin-top: 4px;
+                                text-align: left;
+                                &.age{
+                                    color: #888;
+                                }
+                            }
+                        }
+                         &>.nice{
+                             float: right;
+                             line-height: 36px;
+                             margin-right: 0.4rem;
+                         }
+                    }
+                }
+            }
+        }
+    }
 </style>

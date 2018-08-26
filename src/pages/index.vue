@@ -36,14 +36,9 @@
         </div>
       </div>
       <ul>
-        <li>
-          <a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a>
-        </li>
-        <li>
-          <a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a>
-        </li>
-        <li>
-          <a href="javascript:;"><img src="../assets/images/icon.png" alt=""></a>
+        <li v-for="(item,index) in rankUserList" :key="index">
+          <a href="javascript:;"><img :src="item.pic" alt=""></a>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -82,11 +77,11 @@ export default {
         "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg"
       ],
       mainmenu: [],
-      // token: "",
       code: "",
       hasReceiveMessage: false,
       messageList: [],
-      loadingShow: false
+      loadingShow: false,
+      rankUserList:[]
     };
   },
   computed: {
@@ -150,15 +145,6 @@ export default {
           duration: 2000
         });
       } else {
-        // this.loadingShow = true;
-        // if (!this.token) {
-        //   Toast({
-        //     message: "请先登入...",
-        //     duration: 2000
-        //   });
-        // } else {
-          // setTimeout(() => {
-          // this.loadingShow = false;
           this.$router.push({
             path: item.type,
             query: {
@@ -169,12 +155,9 @@ export default {
               key: item.key
             }
           });
-          // }, 500);
-        // }
       }
     },
     publish(item) {
-      // var isIdentify = .getItem("IDENTIFY_YET_glohelp");
       if (!this.token) {
         Toast({
           message: "请先登入...",
@@ -184,10 +167,6 @@ export default {
       }
       var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
-        // Toast({
-        //   message: "请您先完成身份认证",
-        //   duration: 2000
-        // });
         this.loadIsCertified(this.publishHandler.bind(this, item)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
         return;
       }
@@ -277,13 +256,48 @@ export default {
           }
         });
       }
+  },
+    getRank(){
+        this.axios.get(this.ip+'/globalmate/rest/user/list',{
+            params:{
+                token:this.userInfo.token,
+                onlyCurrentUser:false,
+            }
+        }).then((res)=>{
+            if(res.success){
+                let data=res.data;
+                let len = data.length;
+　　             let minIndex, temp;
+                for(var i=0;i<len;i++){
+                    minIndex = i;
+            　　　　 for (var j = i + 1; j < len; j++) {
+            　　　　 　　if (data[j].nice> data[minIndex].nice) {
+            　　　　　 　　　minIndex = j;
+            　　　　　 　}
+            　　　　 }
+                    temp = data[i];
+　　　               data[i] = data[minIndex];
+　　　　             data[minIndex] = temp;
+                }
+                if(data.length>3){
+                    this.rankUserList=data.slice(0,3);
+                }else{
+                    this.rankUserList=data;
+                }
+
+                console.log(this.rankUserList);
+
+            }else {
+                this.loadingShow=false;
+            }
+
+        }).catch((e)=>{
+            this.loadingShow=false;
+            console.log(e);
+        })
     }
   },
   activated() {
-    // this.getToken(this.getCurrentUser);
-    // setTimeout(() => {
-    //   this.loadingShow = false;
-    // }, 1500);
     this.mainmenu = [
       {
         title: this.$t("formName.study"),
@@ -356,6 +370,9 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
+    this.getRank();
+  },
+  deactivated() {
   },
 
   created() {
@@ -748,31 +765,29 @@ ul {
 .rank ul li {
   display: inline-block;
   width: 1.4rem;
-  height: 1.4rem;
-  background: #fff;
-  border-radius: 50%;
   margin-right: 0.94rem;
   overflow: hidden;
+}
+.rank ul li span{
+    color: #333;
+    font-size: 13px;
 }
 .rank ul li img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
   display: inline-block;
 }
 .rank_title {
   padding: 7px 0.22rem;
-  /*text-align: left;*/
   display: flex;
 }
-.school_star_title > div,
 .service_star_title > div {
   flex: 1;
 }
-.school_star_title .left,
 .service_star_title .left {
   text-align: left;
 }
-.school_star_title .right,
 .service_star_title .right {
   text-align: right;
 }
@@ -780,10 +795,7 @@ ul {
   margin: 0;
   /*margin: 0 1.02rem;*/
 }
-.school_star {
-  margin-bottom: 46px;
-}
-.school_star ul li a,
+
 .service_star ul li a {
   width: 1.4rem;
   height: 1.4rem;
