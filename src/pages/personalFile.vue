@@ -548,7 +548,7 @@ export default {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    document.title = this.$route.query.title;
+    document.title = "Glohelp";
     this.axios
       .get(
         this.ip +

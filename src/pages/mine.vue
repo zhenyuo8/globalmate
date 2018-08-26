@@ -337,7 +337,7 @@ export default {
   },
   activated() {
     let url = window.location.href;
-    document.title = this.$route.query.title || "个人中心";
+    document.title = "Glohelp";
     if (url.indexOf("openId=") > -1) {
       this.userId = this.$utils.getQueryStringByName("userId");
       this.openId = this.$utils.getQueryStringByName("openId");

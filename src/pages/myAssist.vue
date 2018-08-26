@@ -535,7 +535,6 @@ export default {
             　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
             　　　　                 _this.myAssistList[minIndex] = temp;
                                 }
-                                console.log(_this.myAssistList);
                             })
                         })(curData);
                     }
@@ -566,7 +565,7 @@ export default {
     }
   },
   activated() {
-    document.title=this.$route.query.title||'Glohelp';
+    document.title = "Glohelp";
     this.myAssistList=[];
     this.nodataFlag=false;
     this.noDataTips='';

@@ -96,6 +96,7 @@
 		},
 		activated(){
             this.commentList=[];
+            document.title = "Glohelp";
             this.id=this.$route.query.id;
             this.getEvalute();
 		},

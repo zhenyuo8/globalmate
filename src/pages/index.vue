@@ -321,6 +321,7 @@ export default {
       //   JSON.stringify(this.messageList)
       // );
       this.updateMsgList(this.msgList);
+       this.token = this.userInfo["token"];
       this.$router.push({
         path: "messageList",
         query: {

@@ -587,13 +587,12 @@ export default {
 
     },
     activated(){
+        document.title = "Glohelp";
         this.identifyType=[]
         this.loadData();
     },
     watch:{
-        'title':function (val,old) {
-            document.title=val
-        }
+    
     },
     created(){
         this.title=this.$route.query.title;
