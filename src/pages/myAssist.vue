@@ -147,6 +147,15 @@
             </div>
 
         </div>
+        <div v-if="nodataFlag" class="yy_nodata_class" style="">
+          <div class="yy_icon_img">
+            <img src="../assets/images/business_nodata.png" alt="">
+            <span class="yy_nodata_text">{{noDataTips}}</span>
+          </div>
+        </div>
+        <div class="defindloading" v-if='loadingShow'>
+            <loading></loading>
+        </div>
 
     </div>
   </div>

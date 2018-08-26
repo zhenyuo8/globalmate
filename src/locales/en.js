@@ -77,7 +77,7 @@ export default{
          address:'Address',
          time:'Time',
          decription:'Decription：',
-         indexnotice:' click following icons to submit your nedds'
+         indexnotice:' click following icons to submit your nedds',
 
     },
      personaPage:{

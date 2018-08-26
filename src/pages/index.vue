@@ -356,80 +356,78 @@ export default {
     // setTimeout(() => {
     //   this.loadingShow = false;
     // }, 1500);
-    setTimeout(() => {
-      this.mainmenu = [
-        {
-          title: this.$t("formName.study"),
-          key: "learnco",
-          type: "assist",
-          form: "assist",
-          icon: "icon-pen"
-        },
-        {
-          title: this.$t("formName.textbook"),
-          key: "teaching_material",
-          type: "assist",
-          form: "other",
-          icon: "icon-book"
-        },
-        {
-          title: this.$t("formName.formality"),
-          key: "formality",
-          type: "assist",
-          form: "other",
-          icon: "icon-Document_2_yinzhang"
-        },
-        {
-          title: this.$t("formName.exchange"),
-          key: "exchange",
-          type: "assist",
-          form: "other",
-          icon: "icon-coin-yen"
-        },
-        {
-          title: this.$t("formName.medical"),
-          key: "medical",
-          type: "assist",
-          form: "other",
-          icon: "icon-local_hospital"
-        },
-        {
-          title: this.$t("formName.carry"),
-          key: "carry",
-          type: "assist",
-          form: "carryAssist",
-          icon: "icon-flight_takeoff"
-        },
-        {
-          title: this.$t("formName.rent"),
-          key: "rent",
-          type: "assist",
-          form: "other",
-          icon: "icon-office"
-        },
-        {
-          title: this.$t("formName.accompany"),
-          key: "accompany",
-          type: "assist",
-          form: "accompany",
-          icon: "icon-pacman"
-        },
-        {
-          title: this.$t("formName.daigou"),
-          key: "buy",
-          type: "assist",
-          form: "aassist",
-          icon: "icon-icon-announce"
-        },
-        {
-          title: this.$t("formName.other"),
-          key: "other",
-          type: "assist",
-          form: "other",
-          icon: "icon-more-horizontal"
-        }
-      ];
-    }, 500);
+    this.mainmenu = [
+      {
+        title: this.$t("formName.study"),
+        key: "learnco",
+        type: "assist",
+        form: "assist",
+        icon: "icon-pen"
+      },
+      {
+        title: this.$t("formName.textbook"),
+        key: "teaching_material",
+        type: "assist",
+        form: "other",
+        icon: "icon-book"
+      },
+      {
+        title: this.$t("formName.formality"),
+        key: "formality",
+        type: "assist",
+        form: "other",
+        icon: "icon-Document_2_yinzhang"
+      },
+      {
+        title: this.$t("formName.exchange"),
+        key: "exchange",
+        type: "assist",
+        form: "other",
+        icon: "icon-coin-yen"
+      },
+      {
+        title: this.$t("formName.medical"),
+        key: "medical",
+        type: "assist",
+        form: "other",
+        icon: "icon-local_hospital"
+      },
+      {
+        title: this.$t("formName.carry"),
+        key: "carry",
+        type: "assist",
+        form: "carryAssist",
+        icon: "icon-flight_takeoff"
+      },
+      {
+        title: this.$t("formName.rent"),
+        key: "rent",
+        type: "assist",
+        form: "other",
+        icon: "icon-office"
+      },
+      {
+        title: this.$t("formName.accompany"),
+        key: "accompany",
+        type: "assist",
+        form: "accompany",
+        icon: "icon-pacman"
+      },
+      {
+        title: this.$t("formName.daigou"),
+        key: "buy",
+        type: "assist",
+        form: "aassist",
+        icon: "icon-icon-announce"
+      },
+      {
+        title: this.$t("formName.other"),
+        key: "other",
+        type: "assist",
+        form: "other",
+        icon: "icon-more-horizontal"
+      }
+    ];
   },
 
   created() {

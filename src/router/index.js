@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/pages/index'
+// import index from '@/pages/index'
 // import assist from '@/pages/assist'//帮代
 // import mine from '@/pages/mine'//我的
 // import mineInformation from '@/pages/mineInformation'//个人信息
@@ -23,8 +23,8 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index,
-      // component: () => import('@/pages/index.vue'),
+    //   component: index,
+      component: () => import('@/pages/index.vue'),
       meta: {
         index: 1
       }

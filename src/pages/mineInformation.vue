@@ -528,7 +528,12 @@ export default {
                     this.userId=data.id;
                     this.hobby=data.hobby;
                     this.nice=data.nice;
-                    this.helpAvailable=data.helpAvailable.split(',');
+                    if(data.helpAvailable&&data.helpAvailable.indexOf('、')>-1){
+                        this.helpAvailable=data.helpAvailable.split('、');
+                    }else{
+                        this.helpAvailable=data.helpAvailable.split(',');
+                    }
+
                     this.loadingShow=false;
                     if(data.school){
                         this.school=JSON.parse(data.school);

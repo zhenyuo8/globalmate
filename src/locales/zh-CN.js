@@ -77,7 +77,7 @@ export default{
         address:'地点',
         time:'时间',
         decription:'详细内容：',
-        indexnotice:'点击下列应用类型可发布对应的需求'
+        indexnotice:'点击下列应用类型可发布对应的需求',
     },
     personaPage:{
         edit:'编辑',
