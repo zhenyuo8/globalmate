@@ -300,14 +300,14 @@ export default {
   },
   created() {
     this.handleParam(window.location.href);
-    if (!this.code) {
+    if (this.code) {
       this.loadUserMsg(this.code);
     } else if (this.userId) {
       this.getToken('userId', this.userId)
     } else if (this.openId) {
       this.getToken('openId', this.openId)
     } else {
-      window.location.replace("/static/login.html");
+      // window.location.replace("/dist/static/login.html");
     }
     let router = this.getRouter(window.location.href);
     if (router) {
