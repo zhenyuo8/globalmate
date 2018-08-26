@@ -225,15 +225,19 @@
         </div>
     </div>
     <button type="button" name="button" class='submitbtn' @click='submitData' >{{$t('button.submit')}}</button>
+    <div class="defindloadig" v-if="loadingShow">
+        <loading></loading>
+    </div>
 </div>
 
 </template>
 
 <script>
 import {Toast} from 'mint-ui';
+import loading from '../components/loading.vue'
 import userMix from "../mixins/userInfo";
 export default {
-    'name': 'mine',
+    'name': 'identify',
     mixins: [userMix],
     data() {
         return {
@@ -243,10 +247,11 @@ export default {
             showSTUDENTID:false,
             showPASSPORT:false,
             hasAreadyUpload:false,
+            loadingShow:true,
         }
     },
     components: {
-
+        loading
     },
     computed:{
 
@@ -311,7 +316,7 @@ export default {
                 'success_action_status':'',
                 'signature':''
             }
-            this.axios.get(this.ip+'/globalmate/rest/file/ossPolicy'+'?token='+this.$route.query.token,'').then(res=>{
+            this.axios.get(this.ip+'/globalmate/rest/file/ossPolicy'+'?token='+this.userInfo.token,'').then(res=>{
                 if(res.data.success){
                     ossMap.accessid=res.data.data.accessid;
                     ossMap.policy=res.data.data.policy;
@@ -445,7 +450,9 @@ export default {
 
             if(this.hasAreadyUpload){
                 if(postData.length==1){
-                    this.axios.put(this.ip+'/globalmate/rest/certify/update'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                    this.loadingShow=true;
+                    this.axios.put(this.ip+'/globalmate/rest/certify/update'+'?token='+this.userInfo.token,postData[0]).then((res)=>{
+                        this.loadingShow=false;
                         if(res.success){
                             Toast({
                                message: '认证资料更新成功，我们会尽快重新审核你的认证信息!',
@@ -464,7 +471,9 @@ export default {
                         console.log(e);
                     });
                 }else{
-                    this.axios.put(this.ip+'/globalmate/rest/certify/updateList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                    this.loadingShow=true;
+                    this.axios.put(this.ip+'/globalmate/rest/certify/updateList'+'?token='+this.userInfo.token,postData).then((res)=>{
+                        this.loadingShow=false;
                         if(res.success){
                             Toast({
                                message: '认证资料更新成功，我们会尽快审核你的认证信息!',
@@ -480,12 +489,15 @@ export default {
                             });
                          }
                     }).catch((e)=>{
+                        this.loadingShow=false;
                         console.log(e);
                     });
                 }
             }else{
                 if(postData.length==1){
-                    this.axios.post(this.ip+'/globalmate/rest/certify/add'+'?token='+this.$route.query.token,postData[0]).then((res)=>{
+                    this.loadingShow=true;
+                    this.axios.post(this.ip+'/globalmate/rest/certify/add'+'?token='+this.userInfo.token,postData[0]).then((res)=>{
+                        this.loadingShow=false;
                         if(res.success){
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
@@ -501,10 +513,13 @@ export default {
                              });
                          }
                     }).catch((e)=>{
+                        this.loadingShow=false;
                         console.log(e);
                     });
                 }else{
-                    this.axios.post(this.ip+'/globalmate/rest/certify/addList'+'?token='+this.$route.query.token,postData).then((res)=>{
+                    this.loadingShow=true;
+                    this.axios.post(this.ip+'/globalmate/rest/certify/addList'+'?token='+this.userInfo.token,postData).then((res)=>{
+                        this.loadingShow=false;
                         if(res.success){
                             Toast({
                                message: '感谢您的配合，我们会尽快审核你的认证信息!',
@@ -520,16 +535,18 @@ export default {
                             });
                          }
                     }).catch((e)=>{
+                        this.loadingShow=false;
                         console.log(e);
                     });
                 }
             }
         },
         loadData(){
-            this.axios.get(this.ip+'/globalmate/rest/certify/list'+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{}).then((res)=>{
+            this.axios.get(this.ip+'/globalmate/rest/certify/list'+'?token='+this.userInfo.token+'&onlyCurrentUser=true',{}).then((res)=>{
                 if(res.success){
                     let list=res.data;
                     let showList=[];
+                    this.loadingShow=false;
                     if(list.length!=0){
                         this.identifyType=[];
                         this.hasAreadyUpload=true;
@@ -566,13 +583,16 @@ export default {
                         this.identifyType=['IDCARD'];
                         this.initUploader('id_face','id_opposite');
                     }
+                    this.loadingShow=false;
                 }else{
+                    this.loadingShow=false;
                      Toast({
                         message: res.msg,
                         duration: 2000
                      });
                  }
             }).catch((e)=>{
+                this.loadingShow=false;
                 console.log(e);
             });
         },
@@ -587,14 +607,25 @@ export default {
 
     },
     activated(){
-        this.identifyType=[]
-        this.loadData();
+        this.identifyType=[];
+        if (this.userInfo.token) {
+           this.loadData();
+        } else {
+          this.time = setInterval(() => {
+            if (this.userInfo.token) {
+              this.loadData();
+              clearInterval(this.timer);
+            }
+          }, 200);
+        }
+    },
+    deactivated() {
+      clearInterval(this.timer);
     },
     watch:{
 
     },
     created(){
-        this.title=this.$route.query.title;
     }
 }
 

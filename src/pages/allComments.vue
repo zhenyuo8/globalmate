@@ -52,7 +52,7 @@
                 }
                 this.axios.get(this.ip+url,{
                     params:{
-                        token:this.userInfo['token'],
+                        token:this.userInfo.token,
                         onlyCurrentUser:true,
                         acquired:true,
                     }
@@ -76,7 +76,7 @@
                     var curData=data[i];
                     curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                     (function(curData){
-                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.userInfo['token'],{}).then((res)=>{
+                        _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.userInfo.token,{}).then((res)=>{
                             if(res.success){
                                 curData.pic=res.data.pic;
                                 _this.commentList.push(curData)
@@ -105,8 +105,20 @@
 		activated(){
             this.commentList=[];
             this.isOthers=this.$route.query.isOthers;
-            this.getEvalute();
+            if (this.userInfo.token) {
+               this.getEvalute();
+            } else {
+              this.time = setInterval(() => {
+                if (this.userInfo.token) {
+                  this.getEvalute();
+                  clearInterval(this.timer);
+                }
+              }, 200);
+            }
 		},
+        deactivated() {
+          clearInterval(this.timer);
+        },
 		created(){
 
 		}

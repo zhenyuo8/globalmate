@@ -352,7 +352,6 @@
 </template>
 
 <script>
-import CONFIG from '../config/config'
 import loading from '../components/loading.vue'
 import { MessageBox,Toast} from 'mint-ui';
 import userMix from "../mixins/userInfo";
@@ -372,7 +371,6 @@ export default {
             isOthers:true,
             loadingShow:true,
             otherUserId:'',
-            currentUserId:'',
             commentList:[],
             total:0
 
@@ -406,7 +404,7 @@ export default {
                 'item':'',
                 'chatContent':"<i style='color:red'>我想和您成为好朋友!</i>",
                 'chatType':'add_friends_request',
-                'request_person':this.currentUserId
+                'request_person':this.userInfo.userId
             }
             YYIMChat.getRosterItems({
             	success: function(data){
@@ -556,18 +554,33 @@ export default {
 
     },
     activated(){
-        this.loadInfo();
         this.isOthers=true;
         this.helpAvailable=[];
         this.commentList=[];
          this.total=0;
         this.otherUserId=this.$route.query.otherUserId;
-        this.currentUserId=this.$route.query.currentuser;
-        if(!this.otherUserId||(this.otherUserId==this.currentUserId)){
-            this.isOthers=false;
-        }
-        this.getEvalute();
 
+        if (this.userInfo.token) {
+            this.loadInfo();
+            if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){
+                this.isOthers=false;
+            }
+             this.getEvalute();
+        } else {
+          this.time = setInterval(() => {
+            if (this.userInfo.token) {
+              this.loadInfo();
+              if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){
+                  this.isOthers=false;
+              }
+               this.getEvalute();
+              clearInterval(this.timer);
+            }
+          }, 200);
+        }
+    },
+    deactivated() {
+      clearInterval(this.timer);
     },
     created(){
     }

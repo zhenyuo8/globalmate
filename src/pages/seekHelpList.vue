@@ -875,7 +875,7 @@ export default {
     this.nodataFlag = false;
     this.loadingShow = true;
     this.myAssistList = [];
-    this.isSOS = [];
+    this.isSOS = false;
     this.noDataTips = "";
     this.type = this.$route.query.id;
     if (this.userInfo.token) {

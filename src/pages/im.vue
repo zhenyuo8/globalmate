@@ -15,7 +15,7 @@
 	                    <span class="detail_brand">{{detail.where}}</span>
 	                </div>
 	                <div class="chart_main_content_action" v-show="detail.enable==1">
-	                    <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="CURRENTUSER.id==detail.userId">选择Ta</span>
+	                    <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="!others">选择Ta</span>
 	                </div>
 					<div class="detail_status" :class="'status_'+detail.enable">
 						{{detail.status}}
@@ -61,7 +61,6 @@ export default {
 			id:'',
 			taskId:'',
 			toChartId:'',
-			CURRENTUSER:{},
 			detail:{
 				'title':'',
 				'type':'',
@@ -87,7 +86,7 @@ export default {
 			this.$router.push({
                 path: 'detail',
                 query: {
-                    'token': this.$route.query.token,
+                    'token': this.userInfo.token,
                     'title': detail.title,
                     'id': this.id,
                     'otherUserId':''
@@ -98,7 +97,7 @@ export default {
 			this.$router.push({
 				path: 'mineInformation',
 				query: {
-					'token': this.$route.query.token,
+					'token': this.userInfo.token,
 					'title': this.othersInfo.name,
 					'otherUserId':this.othersInfo.id,
 					'id': this.othersInfo.id,
@@ -109,10 +108,9 @@ export default {
 			this.$router.push({
 				path: 'mineInformation',
 				query: {
-					'token': this.$route.query.token,
-					'title': this.CURRENTUSER.name,
-					'otherUserId':this.CURRENTUSER.id,
-					'id': this.CURRENTUSER.id,
+					'token': this.userInfo.token,
+					'otherUserId':this.userInfo.userId,
+					'id': this.userInfo.userId,
 				}
 			});
 		},
@@ -143,7 +141,7 @@ export default {
 		},
 		confirmWhoHelp(){
 			this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.ip+'/globalmate/rest/assist/'+this.detail.id+'/agree'+'?providerId='+this.othersInfo.id+'&token='+this.$route.query.token,{
+            this.axios.get(this.ip+'/globalmate/rest/assist/'+this.detail.id+'/agree'+'?providerId='+this.othersInfo.id+'&token='+this.userInfo.token,{
 
             }).then((res)=>{
                 if(res.success){
@@ -268,8 +266,7 @@ export default {
 		},
 		loadData(){
 			if(!this.id) return;
-			console.log(this.id);
-            this.axios.get(this.ip+'/globalmate/rest/need/list/'+this.id+'?token='+this.$route.query.token+'&onlyCurrentUser=true',{
+            this.axios.get(this.ip+'/globalmate/rest/need/list/'+this.id+'?token='+this.userInfo.token+'&onlyCurrentUser=true',{
                 onlyCurrentUser:true
             }).then((res)=>{
                 if(res.success){
@@ -317,7 +314,7 @@ export default {
                      for(var key in data.need){
                          this.detail[key]=data.need[key];
                      }
-					 if(this.CURRENTUSER.id!==res.data.need.userId){
+					 if(this.userInfo.userId!==res.data.need.userId){
 						 this.others=true;
 					 }
 					 if(res.data.need.enable!=1){
@@ -332,7 +329,7 @@ export default {
         },
 
 		getOthersInfo(toChartId){
-			this.axios.get(this.ip+'/globalmate/rest/user/list/'+this.$route.query.toChartId+'?token='+this.$route.query.token,{}).then((res)=>{
+			this.axios.get(this.ip+'/globalmate/rest/user/list/'+this.$route.query.toChartId+'?token='+this.userInfo.token,{}).then((res)=>{
 				if(res.success){
 					this.othersInfo=res.data;
 					setTimeout(()=>{
@@ -391,12 +388,11 @@ export default {
 		getUserByToken(callback){
 			this.axios
 	          .get(
-	            this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + this.$route.query.token,
+	            this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + this.userInfo.token,
 	            {}
 	          )
 	          .then(res => {
 	            if (res.success) {
-					this.CURRENTUSER=res.data;
 					this.currentUserImgae=res.data.pic;
 					callback&&callback()
 	                this.updateUserInfo({
@@ -415,8 +411,20 @@ export default {
 		this.id='';
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
-		this.getUserByToken(this.loadData)
-		this.getOthersInfo(this.toChartId);
+		if (this.userInfo.token) {
+			this.getUserByToken(this.loadData);
+			this.getOthersInfo(this.toChartId);
+		} else {
+		  this.time = setInterval(() => {
+			if (this.userInfo.token) {
+				this.getUserByToken(this.loadData)
+				this.getOthersInfo(this.toChartId);
+			  	clearInterval(this.timer);
+			}
+		  }, 200);
+		}
+
+
 
 	},
 	mounted(){
