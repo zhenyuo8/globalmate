@@ -46,8 +46,16 @@
                 if(this.id=='mycomment'){
                     acquired='&acquired=false'
                 }
-                this.axios.get(this.ip+'/globalmate/rest/evaluate/list'+'?token='+this.userInfo['token']+'&onlyCurrentUser=true'+acquired,{
-
+                let url='/globalmate/rest/evaluate/list'
+                if(this.isOthers){
+                    url='/globalmate/rest/evaluate/list/'+this.otherUserId;
+                }
+                this.axios.get(this.ip+url,{
+                    params:{
+                        token:this.userInfo['token'],
+                        onlyCurrentUser:true,
+                        acquired:true,
+                    }
                 }).then((res)=>{
                     if(res.success){
                         let data=res.data
@@ -96,7 +104,7 @@
 		},
 		activated(){
             this.commentList=[];
-            this.id=this.$route.query.id;
+            this.isOthers=this.$route.query.isOthers;
             this.getEvalute();
 		},
 		created(){
