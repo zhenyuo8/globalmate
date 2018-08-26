@@ -869,7 +869,6 @@ export default {
     this.nodataFlag = false;
     this.loadingShow = true;
     this.myAssistList = [];
-    document.title = "Glohelp";
     this.isSOS = [];
     this.noDataTips = "";
     this.type=this.$route.query.id;

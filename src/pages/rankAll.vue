@@ -107,7 +107,6 @@ export default {
   },
   methods: {},
   activated(){
-      document.title = "Glohelp";
   },
   created() {}
 };

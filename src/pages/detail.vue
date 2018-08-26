@@ -255,7 +255,6 @@ export default {
     this.listData = {};
     this.pushList = [];
     this.detail = {};
-    document.title = "Glohelp";
     this.country = "";
     this.id = this.$route.query.id;
     this.userId = this.$route.query.userId;

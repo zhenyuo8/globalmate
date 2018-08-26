@@ -352,7 +352,6 @@ export default {
     }
   },
   activated() {
-    document.title = "Glohelp";
     // this.getToken(this.getCurrentUser);
     // setTimeout(() => {
     //   this.loadingShow = false;

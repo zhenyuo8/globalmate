@@ -554,7 +554,6 @@ export default {
         this.loadInfo();
         this.isOthers=true;
         this.helpAvailable=[];
-        document.title = "Glohelp";
         this.otherUserId=this.$route.query.otherUserId;
         this.currentUserId=this.$route.query.currentuser;
         this.getEvalute();

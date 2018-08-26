@@ -565,7 +565,6 @@ export default {
     }
   },
   activated() {
-    document.title = "Glohelp";
     this.myAssistList=[];
     this.nodataFlag=false;
     this.noDataTips='';

@@ -407,7 +407,6 @@ export default {
 		$('#chat-thread').empty();
 		this.id='';
 		this.id=this.$route.query.id;
-		document.title = "Glohelp";
 		this.toChartId=this.$route.query.toChartId;
 		this.getUserByToken(this.loadData)
 		this.getOthersInfo(this.toChartId);

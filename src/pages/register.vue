@@ -88,7 +88,6 @@ export default {
     }
   },
   activated() {
-    document.title = this.$route.query.title;
   }
 };
 </script>

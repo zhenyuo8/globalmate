@@ -70,7 +70,6 @@ export default {
     }
   },
   activated() {
-    document.title = "Glohelp";
   },
   created() {}
 };

@@ -548,7 +548,6 @@ export default {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    document.title = "Glohelp";
     this.axios
       .get(
         this.ip +

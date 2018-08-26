@@ -647,8 +647,6 @@ export default {
   activated() {
     this.show = false;
     this.filesHasUpload=[];
-    // this.formTitle='请描述'+this.$route.query.title+'细节！';
-    document.title = "Glohelp";
     this.type=this.$route.query.key;
     $(".repeat_content input").val("");
     $(".main_decription_area textarea").val("");

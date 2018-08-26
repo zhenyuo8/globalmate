@@ -337,7 +337,6 @@ export default {
   },
   activated() {
     let url = window.location.href;
-    document.title = "Glohelp";
     if (url.indexOf("openId=") > -1) {
       this.userId = this.$utils.getQueryStringByName("userId");
       this.openId = this.$utils.getQueryStringByName("openId");
@@ -352,9 +351,7 @@ export default {
   },
 
   watch: {
-    title: function(val, old) {
-      document.title = val;
-    }
+
   },
   created() {
     this.token = this.$route.query.token;
