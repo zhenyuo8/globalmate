@@ -39,6 +39,9 @@
         <li v-for="(item,index) in rankUserList" :key="index">
           <a href="javascript:;"><img :src="item.pic" alt=""></a>
           <span>{{item.name}}</span>
+          <img src="../assets/images/goden.png" alt="" v-if="index==0">
+          <img src="../assets/images/silver.png" alt="" v-if="index==1">
+          <img src="../assets/images/third.png" alt="" v-if="index==2">
         </li>
       </ul>
     </div>
@@ -284,9 +287,6 @@ export default {
                 }else{
                     this.rankUserList=data;
                 }
-
-                console.log(this.rankUserList);
-
             }else {
                 this.loadingShow=false;
             }
@@ -777,12 +777,20 @@ ul {
   width: 1.4rem;
   margin-right: 0.94rem;
   overflow: hidden;
+  position: relative;
+}
+.rank ul li>img{
+    width: .48rem!important;
+    height: .48rem!important;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 .rank ul li span{
     color: #333;
     font-size: 13px;
 }
-.rank ul li img {
+.rank ul li a img {
   width: 100%;
   height: 100%;
   border-radius: 50%;

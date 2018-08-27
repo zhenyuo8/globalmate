@@ -140,14 +140,16 @@ export default {
             });
 		},
 		confirmWhoHelp(){
-			this.apiHost=CONFIG[__ENV__].apiHost;
-            this.axios.get(this.ip+'/globalmate/rest/assist/'+this.detail.id+'/agree'+'?providerId='+this.othersInfo.id+'&token='+this.userInfo.token,{
-
+            this.axios.get(this.ip+'/globalmate/rest/assist/'+this.detail.id+'/agree',{
+				params:{
+					token:this.userInfo.token,
+					providerId:this.othersInfo.id
+				}
             }).then((res)=>{
                 if(res.success){
 					this.hasSelectAready=true
-                     console.log(res.data);
-
+					this.detail.status=this.$t('status.execute');
+					this.detail.enable=2;
                 }else{
 
                 }
@@ -386,12 +388,11 @@ export default {
 			})
 		},
 		getUserByToken(callback){
-			this.axios
-	          .get(
-	            this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + this.userInfo.token,
-	            {}
-	          )
-	          .then(res => {
+			this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken",{
+				params:{
+					token:this.userInfo.token
+				}
+			}).then(res => {
 	            if (res.success) {
 					this.currentUserImgae=res.data.pic;
 					callback&&callback()
@@ -423,10 +424,10 @@ export default {
 			}
 		  }, 200);
 		}
-
-
-
 	},
+	deactivated() {
+      clearInterval(this.timer);
+    },
 	mounted(){
 
 	},
