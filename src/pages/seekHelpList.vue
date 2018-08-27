@@ -201,8 +201,8 @@
       bottom: 0.2rem;
       span {
         padding: 6px 0.15rem;
-        background: #2361ea;
-        border-radius: 4px;
+        background: linear-gradient( 103.1deg, rgba(251, 141, 22, 1), rgba(235, 122, 52, 1) );
+        border-radius: 12px;
         color: #fff;
         text-align: center;
       }
@@ -242,7 +242,15 @@
       .status_user {
         span {
           font-size: 14px;
+          display: block;
+          text-align: right;
+          margin-bottom: 10px;
+          &.created_time{
+              font-size: 12px;
+              color: blue;
+          }
         }
+
       }
 
       .status_close {
@@ -310,8 +318,9 @@
               <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
             </span>
           </div>
-          <div class="status_user" :class="'status_'+item.need.enable">
-            <span>{{item.need.status}}</span>
+          <div class="status_user" >
+            <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+            <span class="created_time">{{item.need.time}}</span>
           </div>
         </div>
         <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
@@ -796,6 +805,7 @@ export default {
 
                   if (data[i] && data[i].need) {
                     let curData = data[i];
+                    curData.need.time=this.moment(curData.need.createTime).format('YYYY/MM/DD HH:mm');
                     this.getEveryItemPic(data[i], function(result) {
                       _this.myAssistList.push(result);
                       let len = _this.myAssistList.length;

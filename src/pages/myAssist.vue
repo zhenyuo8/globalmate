@@ -28,6 +28,13 @@
                             right: 0;
                             top: 0;
                         }
+                        &.created_time{
+                            position: absolute;
+                            right: 0;
+                            color: blue;
+                            font-size: 12px;
+                            top: 18px;
+                        }
                     }
                 }
                  .list_repeat_pushed::before{
@@ -41,6 +48,7 @@
                 .list_repeat_pushed{
                     text-align: left;
                     position: relative;
+                    margin-top: 6px;
                     p{
                         padding: 10px 0;
                     }
@@ -119,6 +127,7 @@
                 <p>{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
                 <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
                 <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
+                <p class="created_time" >{{item.need.time}}</p>
             </div>
             <div class="list_repeat_pushed">
                 <p>{{$t('formTitle.pushTitle')}}</p>
@@ -475,6 +484,7 @@ export default {
 
                         }
                         let curData=data[i];
+                        curData.need.time=this.moment(curData.need.createTime).format('YYYY/MM/DD HH:mm');
                         (function (curData) {
                             _this.getPushItem(curData,function (result) {
                                 _this.myAssistList.push(result);

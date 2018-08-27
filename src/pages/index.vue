@@ -765,13 +765,12 @@ ul {
 .rank {
   margin-top: 7px;
   background: rgba(255, 255, 255, 0.6);
-  /*height: 116px;*/
   font-size: 14px;
   color: #999;
 }
 .rank ul {
-    min-height: 100px;
-  padding: 6px 0.6rem 16px;
+    min-height: 80px;
+    padding: 6px 0.6rem;
 }
 .rank ul li {
   display: inline-block;
@@ -804,7 +803,6 @@ ul {
 }
 .rank ul li:last-child {
   margin: 0;
-  /*margin: 0 1.02rem;*/
 }
 
 .service_star ul li a {
