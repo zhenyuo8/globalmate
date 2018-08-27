@@ -881,7 +881,7 @@ export default {
     if (this.userInfo.token) {
       this.loadData();
     } else {
-      this.time = setInterval(() => {
+      this.timer = setInterval(() => {
         if (this.userInfo.token) {
           this.loadData();
           clearInterval(this.timer);

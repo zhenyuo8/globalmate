@@ -566,7 +566,7 @@ export default {
             }
              this.getEvalute();
         } else {
-          this.time = setInterval(() => {
+          this.timer = setInterval(() => {
             if (this.userInfo.token) {
               this.loadInfo();
               if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){

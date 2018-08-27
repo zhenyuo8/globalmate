@@ -298,13 +298,11 @@ export default {
   activated() {
   },
   created() {
-    console.log(YYIMChat);
   }
 };
 </script>
 
 <style scoped>
-/* @import "../assets/css/login.css"; */
 h1{
 	font-size: 18px;
 	height: 54px;

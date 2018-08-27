@@ -415,7 +415,7 @@ export default {
 			this.getUserByToken(this.loadData);
 			this.getOthersInfo(this.toChartId);
 		} else {
-		  this.time = setInterval(() => {
+		  this.timer = setInterval(() => {
 			if (this.userInfo.token) {
 				this.getUserByToken(this.loadData)
 				this.getOthersInfo(this.toChartId);

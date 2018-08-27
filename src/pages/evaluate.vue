@@ -52,7 +52,7 @@ export default {
         uTargeterId: "",
         uTargeterName: "",
         needId: "",
-        score: this.score % 2,
+        score: this.score % 20,
         content: this.textareaVal || "",
         evaExt1: "",
         evaExt2: "",

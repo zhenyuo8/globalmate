@@ -48,7 +48,7 @@ export default {
           this.ip +
             "/globalmate/rest/evaluate/add/sys" +
             "?token=" +
-            this.$route.query.token,
+            this.userInfo.token,
           postData
         )
         .then(res => {

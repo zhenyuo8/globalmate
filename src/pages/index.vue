@@ -370,9 +370,19 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
-    this.getRank();
+    if (this.userInfo.token) {
+       this.getRank();
+    } else {
+      this.timer = setInterval(() => {
+        if (this.userInfo.token) {
+          this.getRank();
+          clearInterval(this.timer);
+        }
+      }, 200);
+    }
   },
   deactivated() {
+    clearInterval(this.timer);
   },
 
   created() {
@@ -760,6 +770,7 @@ ul {
   color: #999;
 }
 .rank ul {
+    min-height: 100px;
   padding: 6px 0.6rem 16px;
 }
 .rank ul li {
