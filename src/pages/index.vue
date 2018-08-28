@@ -298,6 +298,7 @@ export default {
     }
   },
   activated() {
+      console.log(this.msgList);
     this.mainmenu = [
       {
         title: this.$t("formName.study"),

@@ -354,15 +354,15 @@
         <div class="name">
           <p @click="getSelectItem('country')">
             <label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
-            <input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" disabled='true' />
+            <input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' />
           </p>
           <p @click="getSelectItem('city')">
             <label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
-            <input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
+            <input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' />
           </p>
           <p @click='selectHelpType'>
             <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp;&nbsp;&nbsp;
-            <input id="typesearch" name="typesearch" required="required" type="text" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled' :value="selectHelpTypeValue" />
+            <input id="typesearch" name="typesearch" required="required" type="text" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' :value="selectHelpTypeValue" />
           </p>
         </div>
       </form>

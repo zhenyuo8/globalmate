@@ -21,12 +21,12 @@
         <p @click="getSelectItem('country')">
           <label for="countrysignup" class="country" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" disabled='true' />
+          <input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' />
         </p>
         <p @click="getSelectItem('city')">
           <label for="citysignup" class="city" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" disabled='true' />
+          <input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' />
         </p>
       </div>
       <div class="image">
@@ -60,7 +60,7 @@
       <p id='' @click='selectHelpType'>
         <label for="">
           <i class="gl_required_class">*</i>{{$t('formTitle.helpAvailable')}}:</label>
-        <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled' style='text-align:center'>
+        <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' style='text-align:center'>
       </p>
     </div>
     <div class="submitbtn" @click='submit'>
@@ -86,7 +86,7 @@
         </p>
         <p @click='openPicker' id="schooldatesignup_p">
           <label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' disabled='disabled' />
+          <input id="schooldatesignup" required="required" type="text" placeholder="" readonly='readonly' />
         </p>
         <p>
           <label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp;&nbsp;&nbsp;

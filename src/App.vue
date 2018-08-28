@@ -142,6 +142,16 @@ export default {
           YYIMChat.getVCard({
             success: function(res) {}
           });
+          YYIMChat.getRecentDigset({
+              startDate:0,
+              size: 100,
+              success:function(data){
+                  _this.updateMsgList(data.list);
+              },
+              error:function(err){
+                  console.log(err);
+              }
+          });
         },
         onExpiration: function(callback) {
           //自动更新token
