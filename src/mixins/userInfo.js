@@ -7,7 +7,7 @@ export default {
     // userInfo: function () {
     //   return this.$store.state.globalmate.userInfo
     // },
-    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList']),
+    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList','userList']),
     ...mapState(['ip'])
   },
   methods: {
@@ -28,6 +28,12 @@ export default {
         type: "globalmate/UPDATE_MSGLIST",
         msgList: list
       });
-    }
+   },
+    updateUserList: function (list) {
+      this.$store.commit({
+        type: "globalmate/UPDATE_USERLIST",
+        userList: list
+      });
+   },
   }
 }

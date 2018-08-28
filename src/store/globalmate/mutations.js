@@ -12,5 +12,8 @@ export default {
   },
   [types.UPDATE_MSGLIST](state, payload) {
     state.msgList = payload.msgList
+  },
+  [types.UPDATE_USERLIST](state, payload) {
+    state.userList = payload.userList
   }
 };

@@ -660,7 +660,29 @@ export default {
         );
       });
       this.fileUploader.init();
-    }
+      setTimeout(()=>{
+           this.uploadAttr();
+      },1000)
+
+   },
+     uploadAttr(){
+         const ua = navigator.userAgent.toLowerCase();
+         const isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);//判断是否是苹果手机，是则是true
+         if(this.fileUploader){
+              if (isIos) {
+                  $("input:file").removeAttr("capture");
+              }
+         }else{
+             this.timer2=setInterval(()=>{
+                 if(this.fileUploader){
+                     if (isIos) {
+                         $("input:file").removeAttr("capture");
+                     }
+                     clearInterval(this.timer2);
+                 }
+             },300)
+         }
+     }
   },
   activated() {
     this.show = false;

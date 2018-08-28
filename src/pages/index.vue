@@ -269,6 +269,7 @@ export default {
         }).then((res)=>{
             if(res.success){
                 let data=res.data;
+                this.updateUserList(data);
                 let len = data.length;
 　　             let minIndex, temp;
                 for(var i=0;i<len;i++){
@@ -295,10 +296,9 @@ export default {
             this.loadingShow=false;
             console.log(e);
         })
-    }
+    },
   },
   activated() {
-      console.log(this.msgList);
     this.mainmenu = [
       {
         title: this.$t("formName.study"),

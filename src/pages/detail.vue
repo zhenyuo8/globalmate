@@ -254,6 +254,7 @@ export default {
     let url = window.location.href;
     this.listData = {};
     this.pushList = [];
+    this.assistList = [];
     this.detail = {};
     this.country = "";
     this.id = this.$route.query.id;

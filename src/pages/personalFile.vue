@@ -538,10 +538,30 @@ export default {
       });
       this.fileUploader.bind("FileUploaded", function(up, file, info) {
         _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
-        console.log(_this.headerImgae);
       });
       this.fileUploader.init();
-    }
+      setTimeout(()=>{
+           this.uploadAttr();
+      },1000)
+  },
+  uploadAttr(){
+      const ua = navigator.userAgent.toLowerCase();
+      const isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);//判断是否是苹果手机，是则是true
+      if(this.fileUploader){
+           if (isIos) {
+               $("input:file").removeAttr("capture");
+           }
+      }else{
+          this.timer2=setInterval(()=>{
+              if(this.fileUploader){
+                  if (isIos) {
+                      $("input:file").removeAttr("capture");
+                  }
+                  clearInterval(this.timer2);
+              }
+          },300)
+      }
+  }
   },
 
   activated() {
@@ -877,6 +897,7 @@ label i {
   top: 0;
   bottom: 0;
   width: 7.5rem;
+  z-index: 11111;
   background: #f5f5f5;
   -webkit-transition: all 0.2s ease-in;
   -moz-transition: all 0.2s ease-in;

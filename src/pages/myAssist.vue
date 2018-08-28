@@ -416,15 +416,16 @@ export default {
               var nowData=res.data;
               for(var i=0;i<nowData.length;i++){
                   let curNowData=nowData[i];
-                  (function(curNowData){
-                      _this.getPushItemInfo(curNowData,function (result) {
-                          if(result.matchAccept){
-                              data.assistList.push(result);
+                  for(var n=0;n<this.userList.length;n++){
+                      if(curNowData.providerId==this.userList[n].id){
+                          curNowData.userInfo=this.userList[n];
+                          if(curNowData.matchAccept){
+                              data.assistList.push(curNowData);
                           }
-                          data.pushList.push(result);
-                          callback&&callback(data)
-                      });
-                  })(curNowData)
+                          data.pushList.push(curNowData);
+                          callback&&callback(data);
+                      }
+                  }
               }
             } else {
               callback && callback(data);

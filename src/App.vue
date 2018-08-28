@@ -306,7 +306,7 @@ export default {
           this.loadIsCertified();
         }
       }).catch();
-    }
+   },
   },
   created() {
     this.handleParam(window.location.href);

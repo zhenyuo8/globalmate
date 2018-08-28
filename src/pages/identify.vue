@@ -399,6 +399,7 @@ export default {
            this.id1.init();
            this.id2.init();
         },
+
         submitData(){
             let postData=[];
             if(this.identifyType.length==0){

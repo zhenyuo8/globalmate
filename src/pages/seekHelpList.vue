@@ -806,25 +806,28 @@ export default {
                   if (data[i] && data[i].need) {
                     let curData = data[i];
                     curData.need.time=this.moment(curData.need.createTime).format('YYYY/MM/DD HH:mm');
-                    this.getEveryItemPic(data[i], function(result) {
-                      _this.myAssistList.push(result);
-                      let len = _this.myAssistList.length;
-                      let minIndex, temp;
-                      for (var i = 0; i < len; i++) {
-                        minIndex = i;
-                        for (var j = i + 1; j < len; j++) {
-                          if (
-                            _this.myAssistList[j].need.createTime >
-                            _this.myAssistList[minIndex].need.createTime
-                          ) {
-                            minIndex = j;
-                          }
+                    for(var n=0;n<this.userList.length;n++){
+                        if(curData.need.userId==this.userList[n].id){
+                            curData.need.pic=this.userList[n].pic;
+                            _this.myAssistList.push(curData);
+                            let len = _this.myAssistList.length;
+                            let minIndex, temp;
+                            for (var ii = 0; ii < len; ii++) {
+                              minIndex = ii;
+                              for (var j = ii + 1; j < len; j++) {
+                                if (
+                                  _this.myAssistList[j].need.createTime >
+                                  _this.myAssistList[minIndex].need.createTime
+                                ) {
+                                  minIndex = j;
+                                }
+                              }
+                              temp = _this.myAssistList[ii];
+                              _this.myAssistList[ii] = _this.myAssistList[minIndex];
+                              _this.myAssistList[minIndex] = temp;
+                            }
                         }
-                        temp = _this.myAssistList[i];
-                        _this.myAssistList[i] = _this.myAssistList[minIndex];
-                        _this.myAssistList[minIndex] = temp;
-                      }
-                    });
+                    }
                   }
                 }
               }
