@@ -98,8 +98,6 @@
       position: absolute;
       left: 0;
       top: 0;
-    //   z-index: 11;
-      display: none;
       border-radius: 4px;
   }
   .icon-camera2{
@@ -151,7 +149,7 @@
                 <div class="warp">
                     <div class="identify_face_page" >
                         <div class="" id='id_face'>
-                            <img src="" alt="">
+                            <img :src="id_face_img" alt="">
                             <span class="icon-camera2"></span>
                             <span class="icon-tips">点击拍照/上传人像面</span>
                         </div>
@@ -160,7 +158,7 @@
                 <div class="warp">
                     <div class="identify_opposite_page"  >
                         <div class="" id='id_opposite'>
-                            <img src="" alt="">
+                            <img :src="id_opposite_img" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传国徽面</span>
                         </div>
@@ -177,7 +175,7 @@
                     <div class="identify_face_page"  >
 
                         <div class="" id='id_student'>
-                            <img src="" alt="">
+                            <img :src="id_student_img" alt="">
                             <span class="icon-camera2"></span>
                             <span class="icon-tips">点击拍照/上传人像面</span>
                         </div>
@@ -187,7 +185,7 @@
                     <div class="identify_opposite_page"  >
 
                         <div class="" id='id_student_opposite'>
-                            <img src="" alt="">
+                            <img :src="id_student_opposite_img" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传文字面</span>
                         </div>
@@ -203,7 +201,7 @@
                 <div class="warp">
                     <div class="identify_face_page" >
                         <div class="" id='id_passport'>
-                           <img src="" alt="">
+                           <img :src="id_passport_img" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传第一页</span>
                         </div>
@@ -212,7 +210,7 @@
                 <div class="warp">
                     <div class="identify_opposite_page" >
                         <div class="" id='id_passport_opposite'>
-                            <img src="" alt="">
+                            <img :src="id_passport_opposite_img" alt="">
                            <span class="icon-camera2"></span>
                            <span class="icon-tips">点击拍照/上传第二页</span>
                         </div>
@@ -248,6 +246,13 @@ export default {
             showPASSPORT:false,
             hasAreadyUpload:false,
             loadingShow:true,
+            id_face_img:'',
+            id_opposite_img:'',
+            id_student_img:'',
+            id_student_opposite_img:'',
+            id_passport_img:'',
+            id_passport_opposite_img:''
+
         }
     },
     components: {
@@ -336,16 +341,6 @@ export default {
                 silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
             });
             this.id1.bind('FilesAdded',function(uploader,files){
-        		 for(var i=0,len=files.length;i<len;i++){
-                    var file_name=files[i].name;
-                    !function(i){
-                        // _this.previewImage(files[i],function(imgsrc){
-                        //     let imgEle=document.createElement('img');
-                        //     imgEle.src=imgsrc;
-                        //
-                        // });
-                    }(i);
-                }
                 _this.id1.start();
 	       });
            this.id1.bind('BeforeUpload',function(up,file){
@@ -378,16 +373,6 @@ export default {
                silverlight_xap_url : '../libs/plupload/Moxie.xap' //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
            });
            this.id2.bind('FilesAdded',function(uploader,files){
-                for(var i=0,len=files.length;i<len;i++){
-                   var file_name=files[i].name;
-                   !function(i){
-                       // _this.previewImage(files[i],function(imgsrc){
-                       //     let imgEle=document.createElement('img');
-                       //     imgEle.src=imgsrc;
-                       //
-                       // });
-                   }(i);
-               }
                _this.id2.start();
           });
           this.id2.bind('BeforeUpload',function(up,file){
@@ -432,7 +417,7 @@ export default {
                 let img=$('.'+this.identifyType[i]).find('img');
                 if(img.length!==0){
                     for(var j=0;j<img.length;j++){
-                        if(!img[j].getAttribute('data-src')){
+                        if(!img[j].getAttribute('src')){
                             Toast({
                                message: '请确认已选认证方式图片是否上传!',
                                duration: 2000
@@ -448,7 +433,6 @@ export default {
                 obj.certifyPhoto=obj.certifyPhoto.join(';')
                 postData.push(obj);
             }
-
             if(this.hasAreadyUpload){
                 if(postData.length==1){
                     this.loadingShow=true;
@@ -554,7 +538,13 @@ export default {
                         for(let i=0;i<list.length;i++){
                             if(list[i].certifyPhoto){
                                 let type=list[i].cetifyType;
-                                let pic=JSON.parse(list[i].certifyPhoto);
+                                let pic;
+                                try{
+                                    pic=JSON.parse(list[i].certifyPhoto);
+                                }catch(e){
+                                    pic=list[i].certifyPhoto.split(';');
+                                }
+
                                 if(!showList.includes(type)){
                                     showList.push(type);
                                     if(!this.identifyType.includes(type)){
@@ -598,12 +588,8 @@ export default {
             });
         },
         showImage(id1,id2,pic){
-             $('#'+id1).find('img').attr('src',pic[0]);
-             $('#'+id1).find('img').attr('data-src',pic[0]);
-             $('#'+id1).find('img').css('display','inline-block');
-             $('#'+id2).find('img').attr('src',pic[1]);
-             $('#'+id2).find('img').attr('data-src',pic[1]);
-             $('#'+id2).find('img').css('display','inline-block');
+            this[id1+'_img']=pic[0];
+            this[id2+'_img']=pic[1];
         }
 
     },
