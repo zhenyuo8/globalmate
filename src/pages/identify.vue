@@ -445,6 +445,7 @@ export default {
                 if(this.hasAreadyUpload&&this[this.identifyType[i]]){
                     obj['id']=this[this.identifyType[i]]
                 }
+                obj.certifyPhoto=obj.certifyPhoto.join(';')
                 postData.push(obj);
             }
 
