@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="mineInformation_comment_warp">
-      <div class="comment_repeat" v-for="(item,index) in commentList">
+      <div class="comment_repeat" v-for="(item,index) in commentList" :key='index'>
         <p class="comment_repeat_top">
           <img :src="item.pic" alt="">
           <span>{{item.evaluation.uEvluatorName}}</span>

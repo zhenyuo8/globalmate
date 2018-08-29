@@ -7,10 +7,19 @@ var koa = require('koa');
 var router = require('koa-router')();
 var serve = require('koa-static');
 var koaBody = require('koa-body');
-var gzip = require('koa-gzip');
+// var gzip = require('koa-gzip');
 var logger = require('koa-logger');
+const compress = require('koa-compress');
+var app = new koa();
 
-var app = koa();
+app.use(compress({
+  filter: function (content_type) {
+  	return /text/i.test(content_type)
+  },
+  threshold: 2048,
+  flush: require('zlib').Z_SYNC_FLUSH
+}))
+
 app.use(koaBody({
   formidable: {uploadDir: __dirname},
   textLimit: '50mb',
