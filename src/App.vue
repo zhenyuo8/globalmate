@@ -321,7 +321,7 @@ export default {
     }
     let router = this.getRouter(window.location.href);
     if (router) {
-      this.$router.replace({
+      this.$router.push({
         name: router
       });
     }

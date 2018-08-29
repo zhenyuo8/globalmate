@@ -109,7 +109,7 @@
 
 <script>
 import indexList from "../components/indexList.vue";
-import Vue from 'vue'
+import Vue from "vue";
 import { DatetimePicker } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
 import userMix from "../mixins/userInfo";
@@ -355,7 +355,7 @@ export default {
       this.listType = key;
       this.selectItem = showCity;
       // .setItem("LIST", JSON.stringify(this.selectItem));
-      this.updateTodoList(this.selectItem)
+      this.updateTodoList(this.selectItem);
     },
     buildLetter() {
       let letter = [];
@@ -540,28 +540,28 @@ export default {
         _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
       });
       this.fileUploader.init();
-      setTimeout(()=>{
-           this.uploadAttr();
-      },1000)
-  },
-  uploadAttr(){
+      setTimeout(() => {
+        this.uploadAttr();
+      }, 1000);
+    },
+    uploadAttr() {
       const ua = navigator.userAgent.toLowerCase();
-      const isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);//判断是否是苹果手机，是则是true
-      if(this.fileUploader){
-           if (isIos) {
-               $("input:file").removeAttr("capture");
-           }
-      }else{
-          this.timer2=setInterval(()=>{
-              if(this.fileUploader){
-                  if (isIos) {
-                      $("input:file").removeAttr("capture");
-                  }
-                  clearInterval(this.timer2);
-              }
-          },300)
+      const isIos = ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1; //判断是否是苹果手机，是则是true
+      if (this.fileUploader) {
+        if (isIos) {
+          $("input:file").removeAttr("capture");
+        }
+      } else {
+        this.timer2 = setInterval(() => {
+          if (this.fileUploader) {
+            if (isIos) {
+              $("input:file").removeAttr("capture");
+            }
+            clearInterval(this.timer2);
+          }
+        }, 300);
       }
-  }
+    }
   },
 
   activated() {
