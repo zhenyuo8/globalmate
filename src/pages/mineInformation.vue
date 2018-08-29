@@ -168,16 +168,26 @@
     line-height: 32px;
     color: #333;
     font-size: 13px;
-    margin-left: .12rem;
-    text-align: left;
 }
 
 .mineInformation_school_content_repeat{
-    text-align: left;
     white-space: nowrap;
     overflow-x: scroll;
+    position: relative;
 }
 
+.mineInformation_school_content_repeat:after{
+    content: '';
+    clear: both;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid #eee
+}
+.mineInformation_school_content_repeat:last-child:after{
+    border: none;
+}
 
 .mineInformation_comment_warp, .mineInformation_hobby_warp{
     position: relative;
@@ -299,9 +309,9 @@
             <div class="mineInformation_school_content">
                 <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
                     <span class="scholl_name">{{item.schoolname}}</span>
-                    <span class="scholl_time">{{item.schooldate}}</span>
+                    <!-- <span class="scholl_time">{{item.schooldate}}</span>
                     <span class="scholl_professional">{{item.professional}}</span>
-                    <span class="scholl_grade">{{item.grade}}</span>
+                    <span class="scholl_grade">{{item.grade}}</span> -->
                 </div>
                 <p v-if="school.length==0">暂未添加圈子</p>
             </div>
@@ -481,29 +491,26 @@ export default {
             for(var i=0;i<data.length;i++){
                 var curData=data[i];
                 curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
-                (function(curData){
-                    _this.axios.get(_this.ip+'/globalmate/rest/user/list/'+curData.evaluation.uEvaluatorId+'?token='+_this.$route.query.token,{}).then((res)=>{
-                        if(res.success){
-                            curData.pic=res.data.pic;
-                            _this.commentList.push(curData)
-                            let len = _this.commentList.length;
-        　　                 let minIndex, temp;
-                            for(var i=0;i<len;i++){
-                                minIndex = i;
-                        　　　　 for (var j = i + 1; j < len; j++) {
-                        　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
-                        　　　　　 　　　minIndex = j;
-                        　　　　　 　}
-                        　　　　 }
-                                temp = _this.commentList[i];
-        　　　                   _this.commentList[i] = _this.commentList[minIndex];
-        　　　　                 _this.commentList[minIndex] = temp;
-                            }
-                        }
-                    }).catch((e)=>{
-                        console.log(e);
-                    })
-                })(curData)
+                 for(var n=0;n<this.userList.length;n++){
+                     if(curData.evaluation.uEvaluatorId==this.userList[n].id){
+                         curData.pic=this.userList[n].pic;
+
+                         _this.commentList.push(curData)
+                         let len = _this.commentList.length;
+     　　                 let minIndex, temp;
+                         for(var i=0;i<len;i++){
+                             minIndex = i;
+                     　　　　 for (var j = i + 1; j < len; j++) {
+                     　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
+                     　　　　　 　　　minIndex = j;
+                     　　　　　 　}
+                     　　　　 }
+                             temp = _this.commentList[i];
+     　　　                   _this.commentList[i] = _this.commentList[minIndex];
+     　　　　                 _this.commentList[minIndex] = temp;
+                         }
+                     }
+                 }
             }
         },
         viewAllComments(){

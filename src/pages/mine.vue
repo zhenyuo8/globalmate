@@ -284,7 +284,6 @@ export default {
     }
   },
   activated() {
-      console.log(this.userList,9999);
     if (this.userInfo && this.userInfo.token) {
       this.loadData(this.userInfo.token)
     } else {
