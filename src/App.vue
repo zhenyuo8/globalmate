@@ -11,9 +11,9 @@
 <script>
 import userMix from "./mixins/userInfo";
 import { Toast } from "mint-ui";
-import Vue from 'vue'
-import './assets/css/global.css'
-Vue.component(Toast.name, Toast)
+import Vue from "vue";
+import "./assets/css/global.css";
+Vue.component(Toast.name, Toast);
 export default {
   name: "App",
   mixins: [userMix],
@@ -22,41 +22,17 @@ export default {
       transitionName: "",
       messageList: [],
       code: "",
-      userId: '',
-      openId: ''
+      userId: "",
+      openId: ""
     };
   },
   methods: {
-    handleParam(str) {
-      const codeReg = /code\=([0-9a-zA-Z\-\_]+)/;
-      let match = str.match(codeReg);
-      if (match && match.length === 2 && match[1]) {
-        this.code = match[1];
-      }
-      const userIdReg = /userId\=([0-9a-zA-Z\-\_]+)/;
-      match = str.match(userIdReg);
-      if (match && match.length === 2 && match[1]) {
-        this.userId = match[1];
-        this.updateUserInfo({
-          userId: match[1]
-        })
-      }
-      const openIdReg = /openId\=([0-9a-zA-Z\-\_]+)/;
-      match = str.match(openIdReg);
-      if (match && match.length === 2 && match[1]) {
-        this.openId = match[1];
-        this.updateUserInfo({
-          openId: match[1]
-        })
-      }
-    },
-    getRouter(str) {
-      const reg = /router\=([a-zA-Z]+)/;
-      const match = str.match(reg);
+    getStrMsg(name) {
+      let reg = new RegExp(`${name}\=([0-9a-zA-Z\-\_]+)`);
+      let match = location.href.match(reg);
       if (match && match.length === 2 && match[1]) {
         return match[1];
       }
-      return "";
     },
     setrem() {
       var docEl = window.document.documentElement;
@@ -143,14 +119,14 @@ export default {
             success: function(res) {}
           });
           YYIMChat.getRecentDigset({
-              startDate:0,
-              size: 100,
-              success:function(data){
-                  _this.updateMsgList(data.list);
-              },
-              error:function(err){
-                  console.log(err);
-              }
+            startDate: 0,
+            size: 100,
+            success: function(data) {
+              _this.updateMsgList(data.list);
+            },
+            error: function(err) {
+              console.log(err);
+            }
           });
         },
         onExpiration: function(callback) {
@@ -270,58 +246,66 @@ export default {
             let flag = res.data.some(item => item.isEffective !== 0);
             this.updateUserInfo({
               certifyMsg: res.data,
-              identified: flag  // 判断是否通过认证了
+              identified: flag // 判断是否通过认证了
             });
           }
         });
     },
-    getToken (paramName, val) {
-      this.axios.get(this.ip + "/globalmate/rest/user/getToken", {
-        params: {
-          [paramName]: val
-        }
-      }).then(res => {
-        if (res.success) {
-          // .setItem("TOKEN", res.data.data);
-          this.updateUserInfo({
-            token: res.data
-          });
-        }
-      }).catch();
+    getToken(paramName, val) {
+      this.axios
+        .get(this.ip + "/globalmate/rest/user/getToken", {
+          params: {
+            [paramName]: val
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            // .setItem("TOKEN", res.data.data);
+            this.updateUserInfo({
+              token: res.data
+            });
+          }
+        })
+        .catch();
     },
     loadUserMsg(code) {
       let url =
-        this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + this.code;
-      this.axios.get(url).then(result => {
-        var data = result.data;
-        if (data && data.token) {
-          const token = data.token;
-          const userId = data.user.id;
-          const openId = data.user.openid;
-          this.updateUserInfo({
-            token,
-            userId,
-            openId
-          });
-          this.loadIsCertified();
-        }
-      }).catch();
-   },
+        this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + code;
+      this.axios
+        .get(url)
+        .then(result => {
+          var data = result.data;
+          if (data && data.token) {
+            const token = data.token;
+            const userId = data.user.id;
+            const openId = data.user.openid;
+            this.updateUserInfo({
+              token,
+              userId,
+              openId
+            });
+            this.loadIsCertified();
+          }
+        })
+        .catch();
+    }
   },
   created() {
-    this.handleParam(window.location.href);
-    if (this.code) {
-      this.loadUserMsg(this.code);
-    } else if (this.userId) {
-      this.getToken('userId', this.userId)
-    } else if (this.openId) {
-      this.getToken('openId', this.openId)
+    let code = this.getStrMsg("code");
+    let userId = this.getStrMsg("userId");
+    let openId = this.getStrMsg("openId");
+    if (code) {
+      this.loadUserMsg(code);
+    } else if (userId) {
+      this.getToken("userId", userId);
+    } else if (openId) {
+      this.getToken("openId", openId);
     } else {
       // window.location.replace("/dist/static/login.html");
     }
-    let router = this.getRouter(window.location.href);
+    let router = this.getStrMsg("router");
     if (router) {
-      this.$router.replace({
+      this.$router.push({
         name: router
       });
     }
