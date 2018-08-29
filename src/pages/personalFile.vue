@@ -350,10 +350,112 @@ export default {
         let len = value.citylist.length;
         return len > 0;
       });
+      if(key=="country"){
+          let hotcountry=this.getCountryHot();
+          showCity.unshift(hotcountry);
+      }else{
+          let hotcity=this.getHotCity(this.country);
+          showCity.unshift(hotcity)
+      }
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
-      this.updateTodoList(this.selectItem)
+      this.updateTodoList(this.selectItem);
+  },
+    getCountryHot(){
+        let obj={};
+        obj['letter']='热门国家';
+        obj['citylist']=[this.$t('country.china'),this.$t('country.korea'),this.$t('country.japan'),this.$t('country.singapore'),this.$t('country.uk'),this.$t('country.us'),this.$t('country.thailand'),this.$t('country.vietnam'),this.$t('country.germany'),this.$t('country.canada'),this.$t('country.australia'),this.$t('country.france'),this.$t('country.malaysia')];
+        return obj;
+    },
+    getHotCity(country){
+        let obj={};
+        obj['letter']='热门城市';
+        switch (country) {
+            case '中国':
+                obj['citylist']=[this.$t('city.Beijing'),this.$t('city.Shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.Shenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')];
+                break;
+             case 'China':
+                 obj['citylist']=[this.$t('city.beijing'),this.$t('city.shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.sShenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')]
+                 break;
+             case '韩国':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case 'Korea':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case '日本':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case 'Japan':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case '新加坡':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case 'Singapore':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case '泰国':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case 'Thailand':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case '越南':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case 'Vietnam':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case '美国':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
+             case 'US':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
+
+              case '德国':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case 'Germany':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case '加拿大':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case 'Canada':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case '英国':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case 'UK':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case '澳大利亚':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case 'Australia':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case '法国':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case 'France':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case '马来西亚':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+              case 'Malaysia':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+            default:
+
+
+        }
+        return obj;
     },
     submit() {
       let postData = {
@@ -551,15 +653,8 @@ export default {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    this.axios
-      .get(
-        this.ip +
-          "/globalmate/rest/user/getUserByToken" +
-          "?token=" +
-          this.$route.query.token,
-        {}
-      )
-      .then(res => {
+    this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken" +"?token=" +this.$route.query.token,
+        {}).then(res => {
         if (res.success) {
           let data = res.data;
           this.userId = data.id;
@@ -591,10 +686,13 @@ export default {
             this.headerImgae = data.pic;
           }
         }
-      })
-      .catch(e => {
+      }).catch(e => {
         console.log(e);
       });
+  },
+  deactivated () {
+    this.show=false;
+    this.selectItem=[];
   },
   created() {
     this.selectFlag = false;
@@ -901,7 +999,7 @@ label i {
 </style>
 <style media="screen">
 .moxie-shim {
-  width: 1.5rem !important;
+  /*width: 1.5rem !important;*/
 }
 .mint-datetime .picker-slot {
   font-size: 14px;

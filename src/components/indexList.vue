@@ -99,7 +99,7 @@ li {
   display: inline-block !important;
   height: 32px;
   min-height: 32px;
-  margin: 0 2.1667%;
+  margin: 4px 2.1667%;
   width: 29%;
   border-radius: 4px;
   border: 1px solid #eee;
@@ -110,7 +110,7 @@ li {
   border-color: red;
 }
 .mint-cell-title {
-  height: 32px;
+  /*height: 32px;*/
   text-align: center;
 }
 
@@ -122,9 +122,9 @@ li {
 }
 .mint-cell-text {
   font-size: 13px !important;
-  line-height: 32px;
+  /*line-height: 32px;*/
   max-width: 1.4rem;
-  height: 32px;
+  /*height: 32px;*/
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -138,7 +138,7 @@ li {
   font-size: 14px;
   text-align: left;
   font-weight: 600;
-  color: red;
+  color: #c38230;
   padding: 4px 0.2rem;
   background: #fff;
 }
@@ -148,11 +148,16 @@ li {
 }
 
 .mint-indexlist-nav {
-  color: #077fc5;
+    justify-content: flex-start!important;
+    color: #077fc5;
+}
+.mint-indexlist-navlist{
+    margin-top: 18px;
 }
 .mint-indexlist-navitem {
   font-size: 12px;
-  padding: 4px 8px;
+  width: .58rem;
+  padding: 4px 0px;
 }
 </style>
 
