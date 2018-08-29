@@ -263,9 +263,9 @@
       display: flex;
       .list_content_img {
         width: 1.6rem;
-        height: 100%;
-        // height: 1.6rem;
+        height: 1.6rem;
         margin-right: 0.2rem;
+        overflow: hidden;
         img {
           width: 100%;
           height: 100%;
@@ -326,10 +326,10 @@
         <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
         <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
           <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
-            <img :src="items" alt="" v-if="indexs<3">
+            <img :src="items" alt="" v-if="indexs<3" @click='previewImage($event,items)'>
           </div>
         </div>
-        <div class="list_repeat_action" v-if="item.need.enable==1">
+        <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
           <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
         </div>
       </div>
@@ -430,28 +430,6 @@ export default {
     };
   },
   methods: {
-    finished(e, item) {
-      e.preventDefault();
-      e.cancelBubble = true;
-      this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/assist/" +
-            item.need.id +
-            "/complete/?token=" +
-            this.userInfo.token,
-          {
-            needId: item.need.id,
-            action: "coplete"
-          }
-        )
-        .then(res => {
-          console.log(res);
-        })
-        .catch(e => {
-          console.log(e);
-        });
-    },
     showDetail(item) {
       this.$router.push({
         path: "detail",
@@ -467,6 +445,7 @@ export default {
     goDetail(e, item) {
       e.preventDefault;
       e.cancelBubble = true;
+      this.previewImageFlag=true;
       this.$router.push({
         path: "mineInformation",
         query: {
@@ -728,8 +707,27 @@ export default {
         this.listData = this.loadData(obj);
       }
     },
+    previewImage(e,item){
+        e.preventDefault();
+        e.cancelBubble = true;
+        this.previewImageFlag=true;
+        this.$router.push({
+          path: "previewImage",
+          query: {
+            url: item,
+          }
+        });
+    },
 
     loadData() {
+      this.myAssistList = [];
+      this.rightIn = false;
+      this.selectFlag = false;
+      this.nodataFlag = false;
+      this.loadingShow = true;
+      this.isSOS = false;
+      this.noDataTips = "";
+      this.type = this.$route.query.id;
       if (this.type && this.type.toLocaleLowerCase() == "sos") {
         this.isSOS = true;
       } else {
@@ -746,19 +744,7 @@ export default {
         postData["type"] = this.searchContent.type || "";
         postData["where"] = this.searchContent.where || "";
       }
-      this.axios
-        .get(
-          this.ip +
-            url +
-            "?token=" +
-            this.userInfo.token +
-            "&type=" +
-            this.searchContent.type +
-            "&where=" +
-            this.searchContent.where,
-          JSON.stringify(postData)
-        )
-        .then(res => {
+      this.axios.get(this.ip +url +"?token=" +this.userInfo.token +"&type=" +this.searchContent.type + "&where=" +this.searchContent.where,JSON.stringify(postData)).then(res => {
           if (res.success) {
             let data = res.data;
             this.listm = [];
@@ -805,6 +791,9 @@ export default {
 
                   if (data[i] && data[i].need) {
                     let curData = data[i];
+                    if(curData.need.userId==this.userInfo.userId){
+                        curData['self']=true;
+                    }
                     curData.need.time=this.moment(curData.need.createTime).format('YYYY/MM/DD HH:mm');
                     for(var n=0;n<this.userList.length;n++){
                         if(curData.need.userId==this.userList[n].id){
@@ -883,20 +872,16 @@ export default {
     }
   },
   activated() {
-    this.rightIn = false;
-    this.selectFlag = false;
-    this.nodataFlag = false;
-    this.loadingShow = true;
-    this.myAssistList = [];
-    this.isSOS = false;
-    this.noDataTips = "";
-    this.type = this.$route.query.id;
     if (this.userInfo.token) {
-      this.loadData();
+        if(!this.previewImageFlag){
+             this.loadData();
+        }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
-          this.loadData();
+          if(!this.previewImageFlag){
+               this.loadData();
+          }
           clearInterval(this.timer);
         }
       }, 200);
@@ -906,7 +891,6 @@ export default {
     clearInterval(this.timer);
   },
   created() {
-    // this.token = this.$route.query.token;
   }
 };
 </script>

@@ -79,7 +79,8 @@ export default {
           if (res.success) {
             this.CURRENTUSER = res.data;
             this.updateUserInfo({
-                curUser: res.data
+                curUser: res.data,
+                userId:res.data.id
               })
               this.initIM();
             // .setItem(

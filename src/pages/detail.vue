@@ -107,9 +107,7 @@
   display: flex;
   padding: 10px 0;
   .detail_content_img {
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-right: 0.2rem;
+      margin: auto;
     img {
       width: 100%;
       height: 100%;
@@ -187,11 +185,11 @@
       </div>
       <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
         <div class="detail_content_img" v-for="(items,indexs) in listData.pic" :key='indexs'>
-          <img :src="items+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="" v-if="indexs<3">
+          <img :src="items" alt="" v-if="indexs<3">
         </div>
       </div>
 
-      <div class="list_repeat_pushed" v-if="pushList.length!=0">
+      <div class="list_repeat_pushed" v-if="pushList.length!=0&&userId==otherUserId">
           <p>{{$t('formTitle.pushTitle')}}</p>
           <div class="list_repeat_pushed_item">
               <div class="" v-for="(item,index) in pushList" :key='index'>
@@ -201,7 +199,7 @@
               </div>
           </div>
       </div>
-      <div class="list_repeat_pushed" v-if="assistList.length!=0">
+      <div class="list_repeat_pushed" v-if="assistList.length!=0&&userId==otherUserId">
           <p>{{$t('formTitle.helpMan')}}</p>
           <div class="list_repeat_pushed_item">
               <div class="" v-for="(item,index) in assistList" :key='index'>
@@ -258,15 +256,14 @@ export default {
     this.detail = {};
     this.country = "";
     this.id = this.$route.query.id;
-    this.userId = this.$route.query.userId;
-    this.otherUserId = this.$route.query.otherUserId;
-    let _this = this;
     if (this.userInfo && this.userInfo.token) {
-      this.loadData(this.userInfo.token)
+        this.userId=this.userInfo.userId;
+      this.loadData(this.userInfo.token);
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo && this.userInfo.token) {
           clearInterval(this.timer)
+          this.userId=this.userInfo.userId;
           this.loadData(this.userInfo.token)
         }
       }, 300)
@@ -289,6 +286,8 @@ export default {
             let data = res.data;
             this.detail = data;
             this.otherUserId = data.need.userId;
+            console.log(this.userId);
+            console.log(this.otherUserId);
             for (var key in data.conceretNeed) {
               if (
                 key == "tag" ||

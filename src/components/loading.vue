@@ -176,13 +176,18 @@ export default {
   }
 }
 .spinner_warp {
-  width: 80px;
-  padding: 20px 0 15px 0;
-  margin: auto;
-  z-index: 1111;
-  margin-top: 66%;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.8);
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    padding: 20px 0 15px 0;
+    margin: auto;
+    z-index: 1111;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 .spinner_warp p {
   font-size: 14px;

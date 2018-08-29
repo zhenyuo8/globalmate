@@ -151,7 +151,7 @@
             </div>
             <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
                 <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
-                <span class="done" @click='finished($event,item)' :class="item.need.enable==5||item.need.enable==2?'can_be_done':''">{{$t('button.finished')}}</span>
+                <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
                 <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
             </div>
 
@@ -256,58 +256,36 @@ export default {
       }
       if (providerId && providerId.length != 0) {
         if (item.need.enable == 2 || item.need.enable == 5) {
-          this.axios
-            .get(
-              this.ip +
-                "/globalmate/rest/assist/" +
-                item.need.id +
-                "/complete/?token=" +
-                this.userInfo.token +
-                "&providerId=" +
-                providerId[0].providerId,
-              {
-                needId: item.need.id,
-                action: "coplete"
-              }
-            )
-            .then(res => {})
-            .catch(e => {
+          this.axios.get(this.ip +"/globalmate/rest/assist/" +item.need.id +"/complete",{
+                params:{
+                    token:this.userInfo.token,
+                    needId: item.need.id,
+                    action: "coplete",
+                    providerId:providerId[0].providerId
+                }
+              }).then(res => {
+                  this.myAssistList=[];
+                  this.loadingShow=true;
+                  this.loadData(this.userInfo.token);
+              }).catch(e => {
               console.log(e);
             });
-        } else {
-          Toast({
-            message: "当前任务还未找到帮助者，暂不能完成！",
-            duration: 2000
-          });
-          return;
         }
       } else {
-        if (item.need.enable == 2 || item.need.enable == 5) {
-          this.axios
-            .get(
-              this.ip +
-                "/globalmate/rest/assist/" +
-                item.need.id +
-                "/complete/?token=" +
-                this.userInfo.token +
-                "&providerId=" +
-                "",
-              {
+        this.axios.get(this.ip +"/globalmate/rest/assist/" +item.need.id +"/complete",{
+            params:{
+                token:this.userInfo.token,
                 needId: item.need.id,
-                action: "coplete"
-              }
-            )
-            .then(res => {})
-            .catch(e => {
-              console.log(e);
-            });
-        } else {
-          Toast({
-            message: "当前任务还未找到帮助者，暂不能完成！",
-            duration: 2000
+                action: "coplete",
+                providerId:item.need.userId
+            }
+          }).then(res => {
+              this.myAssistList=[];
+              this.loadingShow=true;
+              this.loadData(this.userInfo.token)
+          }).catch(e => {
+            console.log(e);
           });
-          return;
-        }
       }
     },
     goChat(item, items) {

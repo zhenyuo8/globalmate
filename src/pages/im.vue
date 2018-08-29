@@ -257,8 +257,6 @@ export default {
 					}
 				});
 			}
-
-			//  $('#chat-thread').append($li);
 			setTimeout(()=>{
 				 let top = $('#convo').height();
 	 		    $('#content').animate({
@@ -409,6 +407,7 @@ export default {
     },
 	activated(){
 		$('#chat-thread').empty();
+		this.historyList=[];
 		this.id='';
 		this.id=this.$route.query.id;
 		this.toChartId=this.$route.query.toChartId;
