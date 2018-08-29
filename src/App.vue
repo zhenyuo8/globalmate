@@ -270,7 +270,7 @@ export default {
     },
     loadUserMsg(code) {
       let url =
-        this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + this.code;
+        this.ip + "/globalmate/rest/wechat/oauth/oauthCb?code=" + code;
       this.axios
         .get(url)
         .then(result => {
@@ -295,11 +295,11 @@ export default {
     let userId = this.getStrMsg("userId");
     let openId = this.getStrMsg("openId");
     if (code) {
-      this.loadUserMsg(this.code);
+      this.loadUserMsg(code);
     } else if (userId) {
-      this.getToken("userId", this.userId);
+      this.getToken("userId", userId);
     } else if (openId) {
-      this.getToken("openId", this.openId);
+      this.getToken("openId", openId);
     } else {
       // window.location.replace("/dist/static/login.html");
     }
