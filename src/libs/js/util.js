@@ -1,3 +1,4 @@
+let pinyin = require("pinyin");
 let Re={
 	 getQueryStringByName: function(name){
      	var result = window.location.href.match(new RegExp("[\?\&]" + name+ "=([^\&]+)","i"));
@@ -19,6 +20,19 @@ let Re={
          return unescape(arr[2]);
        else
          return null;
-	}
+	},
+	getFirstLetter:function(str) {
+      return pinyin(str)[0][0].charAt(0).toUpperCase();
+    },
+	buildLetter:function() {
+      let letter = [];
+      for (let i = 0; i < 26; i++) {
+        let obj = {};
+        obj.letter = String.fromCharCode(65 + i);
+        obj.citylist = [];
+        letter.push(obj);
+      }
+      return letter;
+    },
 }
 module.exports=Re

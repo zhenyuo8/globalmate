@@ -7,6 +7,7 @@
       </div>
     </div>
 
+
     <mt-index-list>
       <mt-index-section :index="item.letter" v-for="(item,index) in selectItem " :key='index' :name='item'>
         <mt-cell :title="items" v-for="(items,indexs) in item.citylist" :key='indexs' :name='items' @click.native='pickCountry($event,items)'></mt-cell>

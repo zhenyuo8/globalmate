@@ -113,7 +113,6 @@ import Vue from 'vue'
 import { DatetimePicker } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
 import userMix from "../mixins/userInfo";
-let pinyin = require("pinyin");
 export default {
   mixins: [userMix],
   components: {
@@ -336,13 +335,13 @@ export default {
       }
     },
     buildItem(data, key) {
-      let letter = this.buildLetter();
+      let letter = this.$utils.buildLetter();
       let _this = this;
       for (let i = 0; i < 26; i++) {
         letter[i].citylist = [];
       }
       for (let i = 0; i < data.length; i++) {
-        let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65);
+        let _index = Number(_this.$utils.getFirstLetter(data[i]).charCodeAt() - 65);
         if (_index >= 0 && _index < 26) {
           letter[_index].citylist.push(data[i]);
         }
@@ -354,23 +353,7 @@ export default {
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
-      // .setItem("LIST", JSON.stringify(this.selectItem));
       this.updateTodoList(this.selectItem)
-    },
-    buildLetter() {
-      let letter = [];
-      for (let i = 0; i < 26; i++) {
-        let obj = {};
-        obj.letter = String.fromCharCode(65 + i);
-        obj.citylist = [];
-        letter.push(obj);
-      }
-      return letter;
-    },
-    getFirstLetter(str) {
-      return pinyin(str)[0][0]
-        .charAt(0)
-        .toUpperCase();
     },
     submit() {
       let postData = {

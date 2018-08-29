@@ -396,7 +396,6 @@ import { MessageBox, Toast } from "mint-ui";
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
-let pinyin = require("pinyin");
 export default {
   name: "seekHelpList",
   mixins: [userMix],
@@ -597,15 +596,13 @@ export default {
         : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
-        this.axios
-          .get(this.ip + url, {
+        this.axios.get(this.ip + url, {
             params: {
               token: this.userInfo.token,
               countryregion: this.country,
               isEN: isEN
             }
-          })
-          .then(res => {
+          }).then(res => {
             if (res.success) {
               let result = res.data,
                 resultArr = [];
@@ -622,8 +619,7 @@ export default {
               });
               _this.buildItem(resultArr, key);
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             this.showTipsText = e.msg;
             setTimeout(() => {
               this.showTipsText = "";
@@ -631,19 +627,16 @@ export default {
           });
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
-        this.axios
-          .get(this.ip + url, {
+        this.axios.get(this.ip + url, {
             params: {
               token: this.userInfo.token,
               isEN: isEN
             }
-          })
-          .then(res => {
+          }).then(res => {
             if (res.success) {
               _this.buildItem(res.data, key);
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             Toast({
               message: e.msg,
               duration: 2000
@@ -657,13 +650,13 @@ export default {
       }
     },
     buildItem(data, key) {
-      let letter = this.buildLetter();
+      let letter = this.$utils.buildLetter();
       let _this = this;
       for (let i = 0; i < 26; i++) {
         letter[i].citylist = [];
       }
       for (let i = 0; i < data.length; i++) {
-        let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65);
+        let _index = Number(_this.$utils.getFirstLetter(data[i]).charCodeAt() - 65);
         if (_index >= 0 && _index < 26) {
           letter[_index].citylist.push(data[i]);
         }
@@ -675,23 +668,7 @@ export default {
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
-      // .setItem("LIST", JSON.stringify(this.selectItem));
       this.updateTodoList(this.selectItem);
-    },
-    buildLetter() {
-      let letter = [];
-      for (let i = 0; i < 26; i++) {
-        let obj = {};
-        obj.letter = String.fromCharCode(65 + i);
-        obj.citylist = [];
-        letter.push(obj);
-      }
-      return letter;
-    },
-    getFirstLetter(str) {
-      return pinyin(str)[0][0]
-        .charAt(0)
-        .toUpperCase();
     },
     keyWordsSearch(keywords) {
       this.searchVal = keywords;

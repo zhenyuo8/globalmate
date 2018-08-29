@@ -131,8 +131,8 @@
             </div>
             <div class="list_repeat_pushed">
                 <p>{{$t('formTitle.pushTitle')}}</p>
-                <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
-                    <div class="" v-for="(items,indexs) in item.pushList" :key='indexs'>
+                <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0" >
+                    <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
                         <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                         <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
                         <span>{{items.userInfo.nikename}}</span>
@@ -142,7 +142,7 @@
             <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0">
                 <p>{{$t('formTitle.helpMan')}}</p>
                 <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
-                    <div class="" v-for="(items,indexs) in item.assistList" :key='indexs'>
+                    <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
                         <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                         <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
                         <span>{{items.userInfo.nikename}}</span>
