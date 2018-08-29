@@ -99,6 +99,7 @@ li {
   display: inline-block !important;
   height: 32px;
   min-height: 32px;
+  max-height: 32px;
   margin: 4px 2.1667%;
   width: 29%;
   border-radius: 4px;
@@ -143,16 +144,16 @@ li {
   background: #fff;
 }
 .mint-indexsection-index + ul {
-  padding: 10px;
+  padding: 10px 0.2rem;
   text-align: left;
 }
 
 .mint-indexlist-nav {
-    justify-content: flex-start!important;
+    /*justify-content: flex-start!important;*/
     color: #077fc5;
 }
 .mint-indexlist-navlist{
-    margin-top: 18px;
+    /*margin-top: 18px;*/
 }
 .mint-indexlist-navitem {
   font-size: 12px;
