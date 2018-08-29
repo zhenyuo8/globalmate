@@ -105,9 +105,10 @@
 }
 .detail_image_new {
   display: flex;
+  flex-direction: column;
   padding: 10px 0;
   .detail_content_img {
-      margin: auto;
+      margin: 0 auto 10px;
     img {
       width: 100%;
       height: 100%;
@@ -179,7 +180,7 @@
         <p>{{$t('formTitle.time')}} : {{listData.startTime}}
           <i v-if="listData.endTime">{{$t('formTitle.toWord')}}</i> {{listData.endTime}}</p>
         <p>{{$t('formTitle.reward')}}(￥) :
-          <i style="color:red">{{listData.rewardAmount}}</i>
+          <i style="color:red">{{listData.rewardAmount||listData.reward}}</i>
         </p>
         <p>{{$t('formTitle.decription')}}{{listData.description}}</p>
       </div>
@@ -298,7 +299,7 @@ export default {
                 key == "title" ||
                 key == "description" ||
                 key == "pic" ||
-                key == "rewardAmount"
+                key == "rewardAmount"||key == "reward"
               ) {
                 if (key == "startTime" || key == "endTime") {
                   list[key] = this.moment(data.conceretNeed[key]).format(

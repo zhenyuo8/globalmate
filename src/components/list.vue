@@ -59,7 +59,9 @@ input {
 .repeate_content_text_item {
   width: 84%;
   float: left;
+  overflow: hidden;
 }
+
 .repeate_content_text_item_fixed {
   width: 100%;
 }

@@ -148,32 +148,36 @@ export default {
     },
     // 点击发布按钮逻辑
     publish() {
+      this.previewImageFlag=false;
       let postData = this.getListData();
-      switch (this.$route.query.key) {
-        case "buy":
-          this.submitUrl = "/globalmate/rest/need/buy/add";
-          break;
-        case "accompany":
-          this.submitUrl = "/globalmate/rest/need/accompany/add";
-          break;
-        case "carryAssist":
-          this.submitUrl = "/globalmate/rest/need/carry/add";
-          break;
-        case "learnco":
-          this.submitUrl = "/globalmate/rest/need/learnco/add";
-          break;
-        case "carry":
-          this.submitUrl = "/globalmate/rest/need/carry/add";
-          break;
-        case "other":
-          this.submitUrl = "/globalmate/rest/need/other/add";
-          break;
-        default:
-          this.submitUrl = "/globalmate/rest/need/addCommon";
-          postData['type']=this.type;
-          postData['reward']=postData.rewardAmount;
-          break;
-      }
+      this.submitUrl = "/globalmate/rest/need/addCommon";
+      postData['type']=this.type;
+    //   switch (this.$route.query.key) {
+    //     case "buy":
+    //       this.submitUrl = "/globalmate/rest/need/buy/add";
+    //       break;
+    //     case "accompany":
+    //       this.submitUrl = "/globalmate/rest/need/accompany/add";
+    //       postData['where']=postData.country+'_'+postData.city;
+    //       break;
+    //     case "carryAssist":
+    //       this.submitUrl = "/globalmate/rest/need/carry/add";
+    //       break;
+    //     case "learnco":
+    //       this.submitUrl = "/globalmate/rest/need/learnco/add";
+    //       break;
+    //     case "carry":
+    //       this.submitUrl = "/globalmate/rest/need/carry/add";
+    //       break;
+    //     case "other":
+    //       this.submitUrl = "/globalmate/rest/need/other/add";
+    //       break;
+    //     default:
+    //       this.submitUrl = "/globalmate/rest/need/addCommon";
+    //       postData['type']=this.type;
+    //       postData['reward']=postData.rewardAmount;
+    //       break;
+    //   }
       if (postData) {
         this.loadingShow = true;
         this.axios
@@ -185,7 +189,7 @@ export default {
             if (res.success) {
                 this.loadingShow = false;
                 Toast({
-                  message: "您的信息提交",
+                  message: "您的信息已提交",
                   duration: 2000
                 });
                setTimeout(() => {
@@ -207,6 +211,7 @@ export default {
       let _this = this;
       if (!item.type) {
         if (item.key === "date") {
+          this.pickerValue=this.moment(new Date()).format("YYYY-MM-DD")
           this.openPicker(item);
         } else {
           this.getSelectItem(item.key);
@@ -378,7 +383,6 @@ export default {
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
-      // .setItem("LIST", JSON.stringify(this.selectItem));
       this.updateTodoList(this.selectItem);
     },
     buildLetter() {
@@ -429,8 +433,7 @@ export default {
         return false;
       }
       if (this.$el.querySelector(".main_decription_area textarea")) {
-        // postData['description']=this.$el.querySelector('.main_decription_area textarea').value;
-        postData["descrition"] = this.$el.querySelector(
+        postData["description"] = this.$el.querySelector(
           ".main_decription_area textarea"
         ).value;
       }
@@ -441,7 +444,6 @@ export default {
     },
     // 发布页面显示字段根据form显示不同字段
     listRepeatProcess() {
-      let form = this.$route.query.form;
       this.myReward = {
         title: this.$t("formTitle.reward"),
         text: this.$t("formTitle.inputPlace"),
@@ -450,7 +452,7 @@ export default {
         key: "reward",
         isRequire: false,
         isPlacehold: true,
-        componentKey: "rewardAmount"
+        componentKey: "reward"
       };
       this.title = {
         title: this.$t("formTitle.head"),

@@ -110,3 +110,13 @@
     bottom: 0;
     top: 0;
 }
+
+input:disabled{
+    border: 1px solid #eee;
+}
+input[disabled]{
+     border: 1px solid #eee;
+}
+* html input.disabled{
+    border: 1px solid #eee;
+}
