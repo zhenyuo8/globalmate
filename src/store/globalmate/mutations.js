@@ -15,5 +15,17 @@ export default {
   },
   [types.UPDATE_USERLIST](state, payload) {
     state.userList = payload.userList
+  },
+  [types.UPDATE_WXSIGN](state, payload) {
+    state.wx.signature = {
+      code: payload.sign,
+      expiry: Date.now() + 7200 * 1000
+    }
+  },
+  [types.UPDATE_WXTOKEN](state, payload) {
+    state.wx.accessToken = {
+      code: payload.token,
+      expiry: Date.now() + 7200 * 1000
+    }
   }
 };

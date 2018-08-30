@@ -13,6 +13,8 @@ import utils from './libs/js/util.js'
 import VueI18n from 'vue-i18n';
 import messages from './locales';
 import store from './store'
+window.wx = require('./assets/js/wexin')
+// import './assets/js/wexin'
 
 require('es6-promise').polyfill();
 window.Vue = Vue;

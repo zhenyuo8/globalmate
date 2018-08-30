@@ -137,9 +137,9 @@ p {
     <div class="identify_type">
       <h3>{{$t('personaPage.selectidentify')}}</h3>
       <div class="identify_type_select">
-        <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')" :key=''>{{$t('personaPage.idcard')}}</span>
-        <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')" :key=''>{{$t('personaPage.studentcard')}}</span>
-        <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')" :key=''>{{$t('personaPage.passport')}}</span>
+        <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
+        <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
+        <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')">{{$t('personaPage.passport')}}</span>
       </div>
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
@@ -251,7 +251,8 @@ export default {
       id_student_img: "",
       id_student_opposite_img: "",
       id_passport_img: "",
-      id_passport_opposite_img: ""
+      id_passport_opposite_img: "",
+      isWXVerified: false
     };
   },
   components: {
@@ -666,6 +667,38 @@ export default {
     showImage(id1, id2, pic) {
       this[id1 + "_img"] = pic[0];
       this[id2 + "_img"] = pic[1];
+    },
+    loadWxSign () {
+      let str =  String(Math.random()).slice(3),
+          timeStamp =  Date.now();
+      this.axios.get('http://glmate.cuibq.com/getSignature', {
+        params: {
+          str,
+          timeStamp,
+          url: location.href,
+          appId: this.userInfo.appId || 'wx4107d508cc1d5171',
+          appSecret: '2d437dabf5d45f5bbaed8f727631c6cb'
+        }
+      }).then(res => {
+        res = JSON.parse(res)
+        this.updateWXSign(res.sign)
+        this.updateWXToken(res.token)
+        this.wxConfig(str, timeStamp, res.sign)
+      }).catch(msg => {
+      })
+    },
+    wxConfig (str, timestamp, signature) {
+      wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: this.userInfo.appId, // 必填，公众号的唯一标识
+        timestamp: timestamp || Date.now(), // 必填，生成签名的时间戳
+        nonceStr: str || String(Math.random()).slice(3), // 必填，生成签名的随机串
+        signature: signature || this.wxSign.code,// 必填，签名
+        jsApiList: ['chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'getLocalImgData'] // 必填，需要使用的JS接口列表
+      });
+      wx.ready(() => {
+        this.isWXVerified = true
+      })
     }
   },
   activated() {
@@ -685,6 +718,12 @@ export default {
     clearInterval(this.timer);
   },
   watch: {},
-  created() {}
+  created() {
+    if (this.wxSign.code && this.wxSign.expiry && Date.now() < this.wxSign.expiry) {
+      this.wxConfig()
+    } else {
+      this.loadWxSign()
+    }
+  }
 };
 </script>

@@ -303,6 +303,12 @@ export default {
     } else {
       // window.location.replace("/dist/static/login.html");
     }
+    let appId = this.getStrMsg('appid')
+    if (appId) {
+      this.updateUserInfo({
+        appId
+      })
+    }
     let router = this.getStrMsg("router");
     if (router) {
       this.$router.push({
