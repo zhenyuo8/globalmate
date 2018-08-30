@@ -7,12 +7,12 @@ export default {
     // userInfo: function () {
     //   return this.$store.state.globalmate.userInfo
     // },
-    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList','userList']),
+    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList', 'userList']),
     ...mapState(['ip']),
-    wxSign () {
+    wxSign() {
       return this.$store.state.globalmate.wx.signature
     },
-    wxToken () {
+    wxToken() {
       return this.$store.state.globalmate.wx.accessToken
     }
   },
@@ -34,24 +34,24 @@ export default {
         type: "globalmate/UPDATE_MSGLIST",
         msgList: list
       });
-   },
-  updateUserList: function (list) {
+    },
+    updateUserList: function (list) {
       this.$store.commit({
         type: "globalmate/UPDATE_USERLIST",
         userList: list
       });
-   },
-   updateWXSign: function (sign) {
-     this.$store.commit({
-       type: 'globalmate/UPDATE_WXSIGN',
-       sign
-     })
-   },
-   updateWXToken: function (token) {
+    },
+    updateWXSign: function (sign) {
+      this.$store.commit({
+        type: 'globalmate/UPDATE_WXSIGN',
+        sign
+      })
+    },
+    updateWXToken: function (token) {
       this.$store.commit({
         type: 'globalmate/UPDATE_WXTOKEN',
         token
       })
-    }
+    },
   }
 }

@@ -11,7 +11,6 @@ app.all('*', function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With")
   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS")
   res.header("X-Powered-By", ' 3.2.1')
-  res.header("Content-Type", "application/json;charset=utf-8")
   next()
 })
 app.use(compression({ filter: shouldCompress }))
@@ -55,7 +54,7 @@ function getAccessToken (res, appId, appSecret, callback1, callback2) {
       if (tempt["access_token"]) {
         callback1(res, tempt["access_token"], callback2)
       } else {
-        res.send('error')
+        res.send('error1')
       }
     });
   });
@@ -80,7 +79,7 @@ function getTicket (res, token, callback) {
       if (tempt && tempt.ticket) {
         callback(tempt.ticket, token)
       } else {
-        res.send('error')
+        res.send('error2')
       }
     });
   });
@@ -93,14 +92,11 @@ function generateSign (options, ticket, token) {
   let str = `jsapi_ticket=${ticket}&noncestr=${options.str}&timestamp=${options.timeStamp}&url=${options.url}`
   let sha1 = crypto.createHash('sha1')
   sha1.update(str)
-  // options.res.send(JSON.stringify({
-  //   sign: sha1.digest('hex'),
-  //   token
-  // }))
   let sign = sha1.digest('hex');
   options.res.json(JSON.stringify({
     sign: sign,
-    token: token
+    token: token,
+    ticket: ticket
   }))
 }
 app.get('/getSignature', (request, res) => {

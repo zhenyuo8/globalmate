@@ -675,8 +675,8 @@ export default {
         params: {
           str,
           timeStamp,
-          url: location.href,
-          appId: this.userInfo.appId || 'wx4107d508cc1d5171',
+          url: location.href.split('#')[0],
+          appId: 'wx4107d508cc1d5171',
           appSecret: '2d437dabf5d45f5bbaed8f727631c6cb'
         }
       }).then(res => {
@@ -688,9 +688,10 @@ export default {
       })
     },
     wxConfig (str, timestamp, signature) {
+      if (this.isWXVerified) return
       wx.config({
         debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        appId: this.userInfo.appId, // 必填，公众号的唯一标识
+        appId: 'wx4107d508cc1d5171', // 必填，公众号的唯一标识
         timestamp: timestamp || Date.now(), // 必填，生成签名的时间戳
         nonceStr: str || String(Math.random()).slice(3), // 必填，生成签名的随机串
         signature: signature || this.wxSign.code,// 必填，签名
@@ -699,9 +700,18 @@ export default {
       wx.ready(() => {
         this.isWXVerified = true
       })
+      wx.error(msg => {
+      })
     }
   },
   activated() {
+    if (this.wxSign.code && this.wxSign.expiry && Date.now() < this.wxSign.expiry) {
+      if(!this.isWXVerified) {
+        this.wxConfig()
+      }
+    } else {
+      this.loadWxSign()
+    }
     this.identifyType = [];
     if (this.userInfo.token) {
       this.loadData();
@@ -718,12 +728,5 @@ export default {
     clearInterval(this.timer);
   },
   watch: {},
-  created() {
-    if (this.wxSign.code && this.wxSign.expiry && Date.now() < this.wxSign.expiry) {
-      this.wxConfig()
-    } else {
-      this.loadWxSign()
-    }
-  }
 };
 </script>
