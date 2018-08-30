@@ -825,7 +825,7 @@ ul {
   left: 0;
   right: 0;
   background: rgba(250, 250, 250, 0.9);
-  box-shadow: 0px 1px 0px 0px rgba(178, 178, 178, 1);
+  box-shadow: 0px 2px 2px 1px rgba(178, 178, 178, 1);
 }
 #index .buttom_action ul {
   height: 24px;
