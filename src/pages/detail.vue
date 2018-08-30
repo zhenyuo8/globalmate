@@ -327,15 +327,18 @@ export default {
                   var status = data.need[key] + "";
                   list[key] = status;
                   switch (status) {
-                    case "1":
-                      list["status"] = "开放中";
-                      break;
-                    case "2":
-                      list["status"] = "帮助中";
-                      break;
-                    case "0":
-                      list["status"] = "关闭";
-                      break;
+                    case '1':
+                        data[i].need.status=this.$t('status.open');
+                        break;
+                    case '2':
+                        data[i].need.status=this.$t('status.execute');
+                        break;
+                    case '0':
+                        data[i].need.status=this.$t('status.closed');
+                        break;
+                    case '6':
+                        data[i].need.status=this.$t('status.complete');
+                        break;
                     case "3":
                       list["status"] = "编辑中";
                       break;
@@ -344,9 +347,6 @@ export default {
                       break;
                     case "5":
                       list["status"] = "执行中";
-                      break;
-                    case "6":
-                      list["status"] = "已完成";
                       break;
                     default:
                   }

@@ -356,6 +356,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+　overflow-scrolling: touch;
 }
 .slide-right-enter-active,
 .slide-right-leave-active,

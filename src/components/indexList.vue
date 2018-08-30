@@ -98,10 +98,10 @@ li {
 .mint-cell {
   display: inline-block !important;
   height: 32px;
-  min-height: 32px;
-  max-height: 32px;
-  margin: 4px 2.1667%;
-  width: 29%;
+  min-height: 32px!important;
+  max-height: 32px!important;
+  margin: 4px 2.667%;
+  width: 28%;
   border-radius: 4px;
   border: 1px solid #eee;
   box-sizing: border-box;
@@ -144,7 +144,8 @@ li {
   background: #fff;
 }
 .mint-indexsection-index + ul {
-  padding: 10px 0.2rem;
+  padding: 10px 2%;
+  width: 96%;
   text-align: left;
 }
 
