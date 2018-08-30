@@ -161,9 +161,9 @@
 
   <div class="detail">
     <div class="detail_content">
-      <div class="detail_top">
+      <div class="detail_top" @click='goDetail($event,listData)'>
         <div class="image_user">
-          <img :src="listData.othersImage+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" alt="">
+          <img :src="listData.othersImage" alt="">
         </div>
         <div class="name_user">
           <span class="name">{{listData.userName}}</span>
@@ -193,7 +193,7 @@
       <div class="list_repeat_pushed" v-if="pushList.length!=0&&userId==otherUserId">
           <p>{{$t('formTitle.pushTitle')}}</p>
           <div class="list_repeat_pushed_item">
-              <div class="" v-for="(item,index) in pushList" :key='index'>
+              <div class="" v-for="(item,index) in pushList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
                   <span>{{item.userInfo.nikename}}</span>
@@ -203,7 +203,7 @@
       <div class="list_repeat_pushed" v-if="assistList.length!=0&&userId==otherUserId">
           <p>{{$t('formTitle.helpMan')}}</p>
           <div class="list_repeat_pushed_item">
-              <div class="" v-for="(item,index) in assistList" :key='index'>
+              <div class="" v-for="(item,index) in assistList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
                   <span>{{item.userInfo.nikename}}</span>
@@ -287,8 +287,6 @@ export default {
             let data = res.data;
             this.detail = data;
             this.otherUserId = data.need.userId;
-            console.log(this.userId);
-            console.log(this.otherUserId);
             for (var key in data.conceretNeed) {
               if (
                 key == "tag" ||
@@ -441,7 +439,34 @@ export default {
         .catch(e => {
           console.log(e);
         });
-    }
+    },
+    goChat(item, items) {
+      this.$router.push({
+        path: "im",
+        query: {
+          token: this.userInfo.token,
+          title: items.userInfo.nikename,
+          id: item.id,
+          toChartUser: items.userInfo.id,
+          toChartId: items.userInfo.id
+        }
+      });
+  },
+    goDetail(e, item) {
+      e.preventDefault;
+      e.cancelBubble = true;
+      this.$router.push({
+        path: "mineInformation",
+        query: {
+          token: this.userInfo.token,
+          title: item.userName,
+          otherUserId: this.otherUserId,
+          currentuser: this.userInfo.userId,
+          seeOther: true
+        }
+      });
+    },
+
   },
   created() {}
 };

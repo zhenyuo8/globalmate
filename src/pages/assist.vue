@@ -81,7 +81,6 @@
 import List from "../components/list.vue";
 import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
-let pinyin = require("pinyin");
 import Vue from 'vue'
 import loading from "../components/loading.vue";
 import { Toast, DatetimePicker } from "mint-ui";
@@ -152,40 +151,11 @@ export default {
       let postData = this.getListData();
       this.submitUrl = "/globalmate/rest/need/addCommon";
       postData['type']=this.type;
-    //   switch (this.$route.query.key) {
-    //     case "buy":
-    //       this.submitUrl = "/globalmate/rest/need/buy/add";
-    //       break;
-    //     case "accompany":
-    //       this.submitUrl = "/globalmate/rest/need/accompany/add";
-    //       postData['where']=postData.country+'_'+postData.city;
-    //       break;
-    //     case "carryAssist":
-    //       this.submitUrl = "/globalmate/rest/need/carry/add";
-    //       break;
-    //     case "learnco":
-    //       this.submitUrl = "/globalmate/rest/need/learnco/add";
-    //       break;
-    //     case "carry":
-    //       this.submitUrl = "/globalmate/rest/need/carry/add";
-    //       break;
-    //     case "other":
-    //       this.submitUrl = "/globalmate/rest/need/other/add";
-    //       break;
-    //     default:
-    //       this.submitUrl = "/globalmate/rest/need/addCommon";
-    //       postData['type']=this.type;
-    //       postData['reward']=postData.rewardAmount;
-    //       break;
-    //   }
       if (postData) {
         this.loadingShow = true;
-        this.axios
-          .post(
-            this.ip + this.submitUrl + "?token=" + this.userInfo['token'],
+        this.axios.post(this.ip + this.submitUrl + "?token=" + this.userInfo['token'],
             postData
-          )
-          .then(res => {
+          ).then(res => {
             if (res.success) {
                 this.loadingShow = false;
                 Toast({
@@ -201,8 +171,7 @@ export default {
                   duration: 2000
                 });
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             console.log(e);
           });
       }
@@ -310,15 +279,13 @@ export default {
         let isEN=/^zh/.test(lang)?false:/^en/.test(lang)?true:/^es/.test(lang)?true:true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
-        this.axios
-          .get(this.ip + url, {
+        this.axios.get(this.ip + url, {
             params: {
               token: this.userInfo.token,
               countryregion: this.country,
               isEN:isEN
             }
-          })
-          .then(res => {
+          }).then(res => {
             if (res.success) {
               let result = res.data,
                 resultArr = [];
@@ -330,8 +297,7 @@ export default {
               });
               _this.buildItem(resultArr, key);
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             Toast({
               message: e.msg,
               duration: 2000
@@ -339,19 +305,16 @@ export default {
           });
       } else if (key == "country") {
         url = "/globalmate/rest/user/country";
-        this.axios
-          .get(this.ip + url, {
+        this.axios.get(this.ip + url, {
             params: {
               token: this.userInfo.token,
               isEN:isEN
             }
-          })
-          .then(res => {
+          }).then(res => {
             if (res.success) {
               _this.buildItem(res.data, key);
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             Toast({
               message: e.msg,
               duration: 2000
@@ -365,13 +328,13 @@ export default {
       }
     },
     buildItem(data, key) {
-      let letter = this.buildLetter();
+      let letter = this.$utils.buildLetter();
       let _this = this;
       for (let i = 0; i < 26; i++) {
         letter[i].citylist = [];
       }
       for (let i = 0; i < data.length; i++) {
-        let _index = Number(_this.getFirstLetter(data[i]).charCodeAt() - 65);
+        let _index = Number(_this.$utils.getFirstLetter(data[i]).charCodeAt() - 65);
         if (_index >= 0 && _index < 26) {
           letter[_index].citylist.push(data[i]);
         }
@@ -380,25 +343,112 @@ export default {
         let len = value.citylist.length;
         return len > 0;
       });
+      if(key=="country"){
+          let hotcountry=this.getCountryHot();
+          showCity.unshift(hotcountry);
+      }else{
+          let hotcity=this.getHotCity(this.country);
+          showCity.unshift(hotcity)
+      }
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
       this.updateTodoList(this.selectItem);
     },
-    buildLetter() {
-      let letter = [];
-      for (let i = 0; i < 26; i++) {
-        let obj = {};
-        obj.letter = String.fromCharCode(65 + i);
-        obj.citylist = [];
-        letter.push(obj);
-      }
-      return letter;
+    getCountryHot(){
+        let obj={};
+        obj['letter']='热门国家';
+        obj['citylist']=[this.$t('country.china'),this.$t('country.korea'),this.$t('country.japan'),this.$t('country.singapore'),this.$t('country.uk'),this.$t('country.us'),this.$t('country.thailand'),this.$t('country.vietnam'),this.$t('country.germany'),this.$t('country.canada'),this.$t('country.australia'),this.$t('country.france'),this.$t('country.malaysia')];
+        return obj;
     },
-    getFirstLetter(str) {
-      return pinyin(str)[0][0]
-        .charAt(0)
-        .toUpperCase();
+    getHotCity(country){
+        let obj={};
+        obj['letter']='热门城市';
+        switch (country) {
+            case '中国':
+                obj['citylist']=[this.$t('city.Beijing'),this.$t('city.Shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.Shenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')];
+                break;
+             case 'China':
+                 obj['citylist']=[this.$t('city.beijing'),this.$t('city.shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.sShenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')]
+                 break;
+             case '韩国':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case 'Korea':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case '日本':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case 'Japan':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case '新加坡':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case 'Singapore':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case '泰国':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case 'Thailand':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case '越南':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case 'Vietnam':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case '美国':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
+             case 'US':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
+
+              case '德国':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case 'Germany':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case '加拿大':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case 'Canada':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case '英国':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case 'UK':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case '澳大利亚':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case 'Australia':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case '法国':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case 'France':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case '马来西亚':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+              case 'Malaysia':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+            default:
+
+
+        }
+        return obj;
     },
     // 获取发布所需要的数据
     getListData() {
@@ -516,23 +566,18 @@ export default {
     loadDataEdit(id) {
       let _this = this;
       this.listRepeat = [];
-      this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/need/list/" +
-            id, {
+      this.axios.get(this.ip +"/globalmate/rest/need/list/" +id, {
             // onlyCurrentUser: true,
             params: {
               token: this.userInfo['token'],
               onlyCurrentUser: true
             }
           }
-        )
-        .then(res => {
+        ).then(res => {
           if (res.success) {
             let data = res.data;
             this.listRepeatProcess();
-            this.myReward.text = data.conceretNeed.rewardAmount;
+            this.myReward.text = data.conceretNeed.reward;
             this.myReward.isPlacehold = false;
             this.title.text = data.conceretNeed.title;
             this.title.isPlacehold = false
@@ -556,22 +601,15 @@ export default {
                   item.isPlacehold=false;
               }
               if (item.componentKey == "endTime" && data.conceretNeed.endTime) {
-                item.text = _this
-                  .moment(data.conceretNeed.endTime)
-                  .format("YYYY-MM-DD");
+                item.text = _this.moment(data.conceretNeed.endTime).format("YYYY-MM-DD");
                   item.isPlacehold=false;
               }
               if (data.conceretNeed.description) {
-                _this.$el.querySelector(
-                  ".main_decription_area textarea"
-                ).value =
-                  data.conceretNeed.description;
+                _this.$el.querySelector(".main_decription_area textarea").value =data.conceretNeed.description;
               }
             });
-          } else {
           }
-        })
-        .catch(e => {
+        }).catch(e => {
           console.log(e);
         });
     },
@@ -689,6 +727,7 @@ export default {
   activated() {
     this.show = false;
     this.filesHasUpload=[];
+    this.selectItem = [];
     this.type=this.$route.query.key;
     $(".repeat_content input").val("");
     $(".main_decription_area textarea").val("");
