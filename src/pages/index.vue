@@ -54,11 +54,13 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
+    <!-- <protocol></protocol> -->
   </div>
 </template>
 
 <script>
 import loading from "../components/loading.vue";
+import protocol from "../components/protocol.vue";
 import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
 import Vue from "vue";
 Vue.component(Toast.name, Toast);
@@ -70,7 +72,7 @@ export default {
   name: "index",
   mixins: [userMix],
   components: {
-    loading
+    loading,protocol
   },
   data() {
     return {

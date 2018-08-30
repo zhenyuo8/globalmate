@@ -129,7 +129,7 @@
                 <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
                 <p class="created_time" >{{item.need.time}}</p>
             </div>
-            <div class="list_repeat_pushed">
+            <div class="list_repeat_pushed" v-if="!mySolove">
                 <p>{{$t('formTitle.pushTitle')}}</p>
                 <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0" >
                     <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
@@ -139,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0">
+            <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0&&!mySolove">
                 <p>{{$t('formTitle.helpMan')}}</p>
                 <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
                     <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
@@ -149,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            <div class="action_list" v-if="item.conceretNeed.status!='Closed'">
+            <div class="action_list" v-if="item.conceretNeed.status!='Closed'&&!mySolove">
                 <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
                 <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
                 <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
@@ -189,7 +189,8 @@ export default {
       nodataFlag: false,
       noDataTips: "",
       loadingShow: true,
-      currentUserImgae: ""
+      currentUserImgae: "",
+      mySolove:false,
     };
   },
   methods: {
@@ -447,6 +448,9 @@ export default {
                             case '0':
                                 data[i].need.status=this.$t('status.closed');
                                 break;
+                            case '6':
+                                data[i].need.status=this.$t('status.complete');
+                                break;
                             case '3':
                                 data[i].need.status='编辑中';
                                 break;
@@ -456,32 +460,48 @@ export default {
                             case '5':
                                 data[i].need.status='执行中';
                                 break;
-                            case '6':
-                                data[i].need.status=this.$t('status.complete');
-                                break;
+
                             default:
 
                         }
                         let curData=data[i];
                         curData.need.time=this.moment(curData.need.createTime).format('YYYY/MM/DD HH:mm');
-                        (function (curData) {
-                            _this.getPushItem(curData,function (result) {
-                                _this.myAssistList.push(result);
-                                let len = _this.myAssistList.length;
-            　　                 let minIndex, temp;
-                                for(var i=0;i<len;i++){
-                                    minIndex = i;
-                            　　　　 for (var j = i + 1; j < len; j++) {
-                            　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
-                            　　　　　 　　　minIndex = j;
-                            　　　　　 　}
-                            　　　　 }
-                                    temp = _this.myAssistList[i];
-            　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
-            　　　　                 _this.myAssistList[minIndex] = temp;
-                                }
-                            })
-                        })(curData);
+                        if(!_this.mySolove){
+                            (function (curData) {
+                                _this.getPushItem(curData,function (result) {
+                                    _this.myAssistList.push(result);
+                                    let len = _this.myAssistList.length;
+                　　                 let minIndex, temp;
+                                    for(var i=0;i<len;i++){
+                                        minIndex = i;
+                                　　　　 for (var j = i + 1; j < len; j++) {
+                                　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
+                                　　　　　 　　　minIndex = j;
+                                　　　　　 　}
+                                　　　　 }
+                                        temp = _this.myAssistList[i];
+                　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
+                　　　　                 _this.myAssistList[minIndex] = temp;
+                                    }
+                                })
+                            })(curData);
+                        }else{
+                            _this.myAssistList.push(curData);
+                            let len = _this.myAssistList.length;
+        　　                 let minIndex, temp;
+                            for(var i=0;i<len;i++){
+                                minIndex = i;
+                        　　　　 for (var j = i + 1; j < len; j++) {
+                        　　　　 　　if (_this.myAssistList[j].need.createTime> _this.myAssistList[minIndex].need.createTime) {
+                        　　　　　 　　　minIndex = j;
+                        　　　　　 　}
+                        　　　　 }
+                                temp = _this.myAssistList[i];
+        　　　                   _this.myAssistList[i] = _this.myAssistList[minIndex];
+        　　　　                 _this.myAssistList[minIndex] = temp;
+                            }
+                        }
+
                     }
                 }
                 this.loadingShow=false;
@@ -513,6 +533,7 @@ export default {
     this.myAssistList=[];
     this.nodataFlag=false;
     this.noDataTips='';
+    this.mySolove=this.$route.query.id=='solove'?true:false;
     if (this.userInfo && this.userInfo.token) {
       this.loadData(this.userInfo.token)
     } else {

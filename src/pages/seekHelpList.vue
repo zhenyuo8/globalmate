@@ -193,6 +193,10 @@
       font-size: 15px;
       color: #333;
       font-weight: 500;
+      max-width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .list_repeat_action {
       text-align: right;
@@ -590,6 +594,7 @@ export default {
       let url = "",
         _this = this,
         postData = {};
+         this.show=true;
       let lang = navigator.language || "zh-CN";
       let isEN = /^zh/.test(lang)
         ? false
@@ -845,15 +850,18 @@ export default {
                   }
                   var status = data[i].need.enable + "";
                   switch (status) {
-                    case "1":
-                      data[i].need.status = "开放中";
-                      break;
-                    case "2":
-                      data[i].need.status = "帮助中";
-                      break;
-                    case "0":
-                      data[i].need.status = "关闭";
-                      break;
+                    case '1':
+                        data[i].need.status=this.$t('status.open');
+                        break;
+                    case '2':
+                        data[i].need.status=this.$t('status.execute');
+                        break;
+                    case '0':
+                        data[i].need.status=this.$t('status.closed');
+                        break;
+                    case '6':
+                        data[i].need.status=this.$t('status.complete');
+                        break;
                     case "3":
                       data[i].need.status = "编辑中";
                       break;
@@ -862,9 +870,6 @@ export default {
                       break;
                     case "5":
                       data[i].need.status = "执行中";
-                      break;
-                    case "6":
-                      data[i].need.status = "已完成";
                       break;
                     default:
                   }
@@ -878,7 +883,10 @@ export default {
                     for(var n=0;n<this.userList.length;n++){
                         if(curData.need.userId==this.userList[n].id){
                             curData.need.pic=this.userList[n].pic;
-                            _this.myAssistList.push(curData);
+                            if(curData.need.enable!=0&&curData.need.enable!=6){
+                                 _this.myAssistList.push(curData);
+                            }
+
                             let len = _this.myAssistList.length;
                             let minIndex, temp;
                             for (var ii = 0; ii < len; ii++) {

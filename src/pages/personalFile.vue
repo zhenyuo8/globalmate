@@ -281,6 +281,7 @@ export default {
       let url = "",
         _this = this,
         postData = {};
+        this.show=true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
@@ -669,6 +670,7 @@ export default {
           }
           if (data.country) {
             this.$el.querySelector("#countrysignup").value = data.country;
+            this.country=data.country;
           }
           if (data.city) {
             this.$el.querySelector("#citysignup").value = data.city;
