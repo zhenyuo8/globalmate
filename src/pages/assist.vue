@@ -275,6 +275,7 @@ export default {
       let url = "",
         _this = this,
         postData = {};
+        this.show = true;
         let lang=navigator.language||'zh-CN';
         let isEN=/^zh/.test(lang)?false:/^en/.test(lang)?true:/^es/.test(lang)?true:true;
       if (key == "city" && this.country) {
@@ -350,7 +351,7 @@ export default {
           let hotcity=this.getHotCity(this.country);
           showCity.unshift(hotcity)
       }
-      this.show = true;
+
       this.listType = key;
       this.selectItem = showCity;
       this.updateTodoList(this.selectItem);
