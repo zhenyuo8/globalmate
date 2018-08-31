@@ -6,6 +6,7 @@
   right: 0;
   bottom: 0;
   top: 0;
+  background-color: #fff;
 }
 .identify_body {
   width: 90%;
@@ -144,90 +145,106 @@ p {
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
     <div class="identify_warp">
-      <div class="" v-show="showIDCARD">
-        <div class="identify_body IDCARD">
-          <div class="warp">
-            <div class="identify_face_page">
-              <div class="" id='id_face'>
-                <img :src="id_face_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传人像面</span>
+      <template>
+        <div class="" v-show='identifyType.includes("IDCARD")'>
+          <div class="identify_body IDCARD">
+            <div class="warp">
+              <div class="identify_face_page">
+                <!-- <div class="" id='id_face' @click='uploadImg("id_face_img")'> -->
+                <div class="" id='id_face'>
+                  <img v-show='false' v-if='id_face_imgId || id_face_img' :src="id_face_imgId || id_face_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传人像面</span>
+                  </template>
+                </div>
+              </div>
+            </div>
+            <div class="warp">
+              <div class="identify_opposite_page">
+                <div class="" id='id_opposite' @click='uploadImg("id_opposite_img")'>
+                  <img v-if='id_opposite_imgId || id_opposite_img' :src="id_opposite_imgId ||id_opposite_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传国徽面</span>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
-          <div class="warp">
-            <div class="identify_opposite_page">
-              <div class="" id='id_opposite'>
-                <img :src="id_opposite_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传国徽面</span>
-              </div>
-            </div>
-          </div>
+          <p>{{$t('personaPage.idcard')}}</p>
         </div>
-        <p>{{$t('personaPage.idcard')}}</p>
-      </div>
-      <div class="line_separeat" v-show="showIDCARD">
-      </div>
-      <div class="" v-show="showSTUDENTID">
-        <div class="identify_body STUDENTID">
-          <div class="warp">
-            <div class="identify_face_page">
-
-              <div class="" id='id_student'>
-                <img :src="id_student_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传人像面</span>
-              </div>
-            </div>
-          </div>
-          <div class="warp">
-            <div class="identify_opposite_page">
-
-              <div class="" id='id_student_opposite'>
-                <img :src="id_student_opposite_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传文字面</span>
-              </div>
-            </div>
-          </div>
+        <div class="line_separeat" v-show='identifyType.includes("IDCARD")'>
         </div>
-        <p>{{$t('personaPage.studentcard')}}</p>
-      </div>
-      <div class="line_separeat" v-show="showSTUDENTID">
-      </div>
-      <div class="" v-show="showPASSPORT">
-        <div class="identify_body PASSPORT">
-          <div class="warp">
-            <div class="identify_face_page">
-              <div class="" id='id_passport'>
-                <img :src="id_passport_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传第一页</span>
+      </template>
+      <template>
+        <div v-show='identifyType.includes("STUDENTID")'>
+          <div class="identify_body STUDENTID">
+            <div class="warp">
+              <div class="identify_face_page">
+                <div class="" id='id_student' @click='uploadImg("id_student_img")'>
+                  <img v-if='id_student_imgId || id_student_img' :src="id_student_imgId || id_student_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传人像面</span>
+                  </template>
+                </div>
+              </div>
+            </div>
+            <div class="warp">
+              <div class="identify_opposite_page">
+                <div class="" id='id_student_opposite' @click='uploadImg("id_student_opposite_img")'>
+                  <img v-if='id_student_opposite_img || id_student_opposite_imgId' :src="id_student_opposite_imgId || id_student_opposite_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传文字面</span>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
-          <div class="warp">
-            <div class="identify_opposite_page">
-              <div class="" id='id_passport_opposite'>
-                <img :src="id_passport_opposite_img" alt="">
-                <span class="icon-camera2"></span>
-                <span class="icon-tips">点击拍照/上传第二页</span>
-              </div>
-            </div>
-          </div>
+          <p>{{$t('personaPage.studentcard')}}</p>
         </div>
-        <p>{{$t('personaPage.passport')}}</p>
-      </div>
-      <div class="line_separeat" v-show="showPASSPORT">
-      </div>
+        <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
+        </div>
+      </template>
+      <template>
+        <div class="" v-show='identifyType.includes("PASSPORT")'>
+          <div class="identify_body PASSPORT">
+            <div class="warp">
+              <div class="identify_face_page">
+                <div class="" id='id_passport' @click='uploadImg("id_passport_img")'>
+                  <img v-if='id_passport_imgId || id_passport_img' :src="id_passport_imgId || id_passport_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传第一页</span>
+                  </template>
+                </div>
+              </div>
+            </div>
+            <div class="warp">
+              <div class="identify_opposite_page">
+                <div class="" id='id_passport_opposite' @click='uploadImg("id_passport_opposite_img")'>
+                  <img v-if='id_passport_opposite_img || id_passport_opposite_imgId' :src="id_passport_opposite_imgId || id_passport_opposite_img" alt="">
+                  <template>
+                    <span class="icon-camera2"></span>
+                    <span class="icon-tips">点击拍照/上传第二页</span>
+                  </template>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p>{{$t('personaPage.passport')}}</p>
+        </div>
+        <div class="line_separeat" v-show='identifyType.includes("PASSPORT")'>
+        </div>
+      </template>
     </div>
     <button type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -247,42 +264,34 @@ export default {
       hasAreadyUpload: false,
       loadingShow: true,
       id_face_img: "",
+      id_face_imgId: "",
       id_opposite_img: "",
+      id_opposite_imgId: "",
       id_student_img: "",
+      id_student_imgId: "",
       id_student_opposite_img: "",
+      id_student_opposite_imgId: "",
       id_passport_img: "",
+      id_passport_imgId: "",
       id_passport_opposite_img: "",
-      isWXVerified: false
+      id_passport_opposite_imgId: "",
+      isWXVerified: false,
     };
   },
   components: {
     loading
   },
-  computed: {},
+  computed: {
+    isIOS () {
+      return !window.navigator.userAgent.toLowerCase().includes('android')
+    }
+  },
   methods: {
     selectType(e, type) {
-      let _this = this;
-      if ($(e.target).hasClass("select_class")) {
-        this.identifyType = this.identifyType.filter((item, index) => {
-          return item != type;
-        });
-        this["show" + type] = false;
-        $(e.target).removeClass("select_class");
+      if (this.identifyType.includes(type)) {
+        this.identifyType.splice(this.identifyType.indexOf(type), 1)
       } else {
-        this["show" + type] = true;
-        if (!this.identifyType.includes(type)) {
-          this.identifyType.push(type);
-        }
-        $(e.target).addClass("select_class");
-      }
-      if (type == "STUDENTID") {
-        if (!this["id_student"]) {
-          this.initUploader("id_student", "id_student_opposite");
-        }
-      } else if (type == "PASSPORT") {
-        if (!this["id_passport"]) {
-          this.initUploader("id_passport", "id_passport_opposite");
-        }
+        this.identifyType.push(type)
       }
     },
     previewImage(file, callback) {
@@ -310,7 +319,72 @@ export default {
         preloader.load(file.getSource());
       }
     },
+    loadOssPolicy (ossMap, callback) {
+      this.axios.get(`${this.ip}/globalmate/rest/file/ossPolicy`,{
+        params: {
+          token: this.userInfo.token
+        }
+      }).then(res => {
+        if (res.success) {
+          ossMap.accessid = res.data.accessid;
+          ossMap.policy = res.data.policy;
+          ossMap.signature = res.data.signature;
+          ossMap.key = res.data.dir;
+          ossMap.host = res.data.host;
+          ossMap.success_action_status = 200;
+          callback.call(this)
+        }
+      }).catch(e => {});
+    },
+    uploadToAli (localData, key, localId) {
+      let obj = {}
+      let url = "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/"
+      let form = new FormData()
+      // _this.multipart_params = {
+      //     key: ossMap.key + "_" + file.name,
+      //     policy: ossMap.policy,
+      //     OSSAccessKeyId: ossMap.accessid,
+      //     success_action_status: "200",
+      //     signature: ossMap.signature
+      //   };
+      //   up.setOption({
+      //     url: ossMap.host,
+      //     multipart_params: _this.multipart_params
+      //   });
+      this.loadOssPolicy(obj, () => {
+        form.append('key', obj.key + '_' + localId)
+        form.append('policy', obj.policy)
+        form.append('OSSAccessKeyId', obj.accessid)
+        form.append('success_action_status', '200')
+        form.append('signature', obj.signature)
+        this.axios.post(obj.host, form).then(res => {
 
+        })
+      })
+    },
+    uploadImg (key) {
+      return
+      wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: res => {
+          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          // this[key] = localIds[0]
+          if (!this.isIOS) {
+            this[key + "Id"] = localIds[0]
+          }
+          wx.getLocalImgData({
+            localId: localIds[0], // 图片的localID
+            success: res => {
+              var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+              this[key] = localData
+              this.uploadToAli(localData,key, localIds[0])
+            }
+          });
+        }
+      });
+    },
     initUploader(id1, id2) {
       let _this = this;
       let ossMap = {};
@@ -418,7 +492,6 @@ export default {
       this.id1.init();
       this.id2.init();
     },
-
     submitData() {
       let postData = [];
       if (this.identifyType.length == 0) {
@@ -596,7 +669,6 @@ export default {
           if (res.success) {
             let list = res.data;
             let showList = [];
-            this.loadingShow = false;
             if (list.length != 0) {
               this.identifyType = [];
               this.hasAreadyUpload = true;
@@ -609,7 +681,6 @@ export default {
                   } catch (e) {
                     pic = list[i].certifyPhoto.split(";");
                   }
-
                   if (!showList.includes(type)) {
                     showList.push(type);
                     if (!this.identifyType.includes(type)) {
@@ -619,27 +690,15 @@ export default {
                     this["show" + type] = true;
                     switch (type) {
                       case "IDCARD":
-                        this.initUploader("id_face", "id_opposite");
-                        this.showImage("id_face", "id_opposite", pic);
+                        // this.showImage("id_face", "id_opposite", pic);
+                        initUploader('id_face', 'id_opposite')
                         break;
                       case "STUDENTID":
-                        this.initUploader("id_student", "id_student_opposite");
-                        this.showImage(
-                          "id_student",
-                          "id_student_opposite",
-                          pic
-                        );
+                        // this.showImage("id_student", "id_student_opposite", pic);
+                        initUploader('id_student', 'id_student_opposite')
                         break;
                       case "PASSPORT":
-                        this.initUploader(
-                          "id_passport",
-                          "id_passport_opposite"
-                        );
-                        this.showImage(
-                          "id_passport",
-                          "id_passport_opposite",
-                          pic
-                        );
+                        this.showImage( "id_passport", "id_passport_opposite", pic);
                         break;
                       default:
                     }
@@ -648,21 +707,18 @@ export default {
               }
             } else {
               this.identifyType = ["IDCARD"];
-              this.initUploader("id_face", "id_opposite");
             }
-            this.loadingShow = false;
           } else {
-            this.loadingShow = false;
             Toast({
               message: res.msg,
               duration: 2000
             });
           }
-        })
-        .catch(e => {
-          this.loadingShow = false;
+        }).catch(e => {
           console.log(e);
-        });
+        }).finally(() => {
+          this.loadingShow = false;
+        })
     },
     showImage(id1, id2, pic) {
       this[id1 + "_img"] = pic[0];

@@ -28,6 +28,7 @@ app.get('/dist/static/login.*', function (request, res) {
       str += chunk;
     });
     response.on('end', function () {
+      console.log(str)
       let tempt = JSON.parse(str)
       res.redirect(tempt.data);
     });
@@ -38,66 +39,72 @@ app.get('/dist/static/login.*', function (request, res) {
   req.end();
 })
 
-function getAccessToken (res, appId, appSecret, callback1, callback2) {
-  let options = {
-    host: 'api.weixin.qq.com',
-    path: `/cgi-bin/token?grant_type=client_credential&appid=${appId}&secret=${appSecret}`
-  }
-  var req = https.get(options, function (response) {
-    var str = '';
-    response.setEncoding('utf8');
-    response.on('data', function (chunk) {
-      str += chunk;
+function getAccessToken (appId, appSecret) {
+  return new Promise((resolve, reject) => {
+    let options = {
+      host: 'api.weixin.qq.com',
+      path: `/cgi-bin/token?grant_type=client_credential&appid=${appId}&secret=${appSecret}`
+    }
+    var req = https.get(options, function (response) {
+      var str = '';
+      response.setEncoding('utf8');
+      response.on('data', function (chunk) {
+        str += chunk;
+      });
+      response.on('end', function () {
+        let tempt = JSON.parse(str)
+        if (tempt["access_token"]) {
+          resolve(tempt["access_token"])
+        } else {
+          reject('error1')
+        }
+      });
     });
-    response.on('end', function () {
-      let tempt = JSON.parse(str)
-      if (tempt["access_token"]) {
-        callback1(res, tempt["access_token"], callback2)
-      } else {
-        res.send('error1')
-      }
+    req.on('error', (e) => {
+      console.log(e);
     });
-  });
-  req.on('error', (e) => {
-    console.log(e);
-  });
-  req.end();
+    req.end();
+  })
 }
-function getTicket (res, token, callback) {
-  let options = {
-    host: 'api.weixin.qq.com',
-    path: `/cgi-bin/ticket/getticket?access_token=${token}&type=jsapi`
-  }
-  var req = https.get(options, function (response) {
-    var str = '';
-    response.setEncoding('utf8');
-    response.on('data', function (chunk) {
-      str += chunk;
+function getTicket (token) {
+  return new Promise((resolve, reject) => {
+    let options = {
+      host: 'api.weixin.qq.com',
+      path: `/cgi-bin/ticket/getticket?access_token=${token}&type=jsapi`
+    }
+    var req = https.get(options, function (response) {
+      var str = '';
+      response.setEncoding('utf8');
+      response.on('data', function (chunk) {
+        str += chunk;
+      });
+      response.on('end', function () {
+        let tempt = JSON.parse(str)
+        if (tempt && tempt.ticket) {
+          resolve({ticket: tempt.ticket, token})
+        } else {
+          reject('error2')
+        }
+      });
     });
-    response.on('end', function () {
-      let tempt = JSON.parse(str)
-      if (tempt && tempt.ticket) {
-        callback(tempt.ticket, token)
-      } else {
-        res.send('error2')
-      }
+    req.on('error', (e) => {
+      console.log(e);
     });
-  });
-  req.on('error', (e) => {
-    console.log(e);
-  });
-  req.end();
+    req.end();
+  })
 }
-function generateSign (options, ticket, token) {
-  let str = `jsapi_ticket=${ticket}&noncestr=${options.str}&timestamp=${options.timeStamp}&url=${options.url}`
-  let sha1 = crypto.createHash('sha1')
-  sha1.update(str)
-  let sign = sha1.digest('hex');
-  options.res.json(JSON.stringify({
-    sign: sign,
-    token: token,
-    ticket: ticket
-  }))
+function generateSign (ticket, token, noncestr, timeStamp, url) {
+  return new Promise((resolve, reject) => {
+    let str = `jsapi_ticket=${ticket}&noncestr=${noncestr}&timestamp=${timeStamp}&url=${url}`
+    let sha1 = crypto.createHash('sha1')
+    sha1.update(str)
+    let sign = sha1.digest('hex');
+    resolve(JSON.stringify({
+      sign: sign,
+      token: token,
+      ticket: ticket
+    }))
+  })
 }
 app.get('/getSignature', (request, res) => {
   let str = request.query.str;
@@ -105,14 +112,19 @@ app.get('/getSignature', (request, res) => {
   let url = request.query.url;
   let appId = request.query.appId;
   let appSecret = request.query.appSecret;
-  getAccessToken(res, appId, appSecret, getTicket, generateSign.bind(null, {
-    res,
-    str,
-    timeStamp,
-    appId,
-    appSecret,
-    url
-  }))
+  getAccessToken(appId, appSecret).then(token => {
+    return getTicket(token)
+  }).then(({ticket, token}) => {
+    return generateSign(ticket, token, str, timeStamp, url)
+  }).then(sign => {
+    res.json(sign)
+  }).catch(msg => {
+    res.send(JSON.stringify(msg))
+  })
+})
+app.get('getCode', (req, res) => {
+  console.log(req.query.code)
+  res.send()
 })
 
 app.use(express.static('./'))
