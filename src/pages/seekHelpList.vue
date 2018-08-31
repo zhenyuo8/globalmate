@@ -823,6 +823,7 @@ export default {
     },
     loadBottom() {
         this.allLoaded = true;
+        this.loadTopFlag=false;
         this.$refs.loadmore.onBottomLoaded();
         this.pageNum+=1;
         this.loadData();
@@ -873,9 +874,6 @@ export default {
                 this.myAssistList=[];
             }
             if (data) {
-              let ClosedArr = [];
-              let normalArr = [];
-
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (
@@ -950,7 +948,7 @@ export default {
               }
               this.loadingShow = false;
             } else {
-              if (this.myAssistList.length === 0) {
+              if (this.myAssistList.length=== 0) {
                 setTimeout(() => {
                   this.loadingShow = false;
                   this.nodataFlag = true;
@@ -959,7 +957,7 @@ export default {
               }
             }
           } else {
-            if (this.myAssistList.length === 0) {
+            if (this.myAssistList.length == 0) {
               setTimeout(() => {
                 this.nodataFlag = true;
                 this.loadingShow = false;
@@ -969,7 +967,7 @@ export default {
           }
         })
         .catch(e => {
-          if (this.myAssistList.length === 0) {
+          if (this.myAssistList.length == 0) {
             setTimeout(() => {
               this.nodataFlag = true;
               this.loadingShow = false;
