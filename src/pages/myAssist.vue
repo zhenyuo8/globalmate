@@ -550,6 +550,10 @@ export default {
     this.myAssistList=[];
     this.nodataFlag=false;
     this.noDataTips='';
+    this.allLoaded=false,
+    this.pageNum=1,
+    this.pageSize=5,
+    this.canNotLoadMore=false,
     this.mySolove=this.$route.query.id=='solove'?true:false;
     if (this.userInfo && this.userInfo.token) {
       this.loadData(this.userInfo.token)
@@ -561,7 +565,6 @@ export default {
         }
       })
     }
-    // this.getToken(this.loadData);
   },
   deactivated () {
     clearInterval(this.timer)
