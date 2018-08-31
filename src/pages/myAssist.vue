@@ -121,41 +121,43 @@
 <template>
   <div class="gl_list">
     <div class="list_warp">
-        <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
-            <div class="list_repeat_content" @click='showDetail(item)'>
-                <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
-                <p>{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
-                <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
-                <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
-                <p class="created_time" >{{item.need.time}}</p>
-            </div>
-            <div class="list_repeat_pushed" v-if="!mySolove">
-                <p>{{$t('formTitle.pushTitle')}}</p>
-                <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0" >
-                    <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
-                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
-                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                        <span>{{items.userInfo.nikename}}</span>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+            <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
+                <div class="list_repeat_content" @click='showDetail(item)'>
+                    <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
+                    <p>{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
+                    <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
+                    <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
+                    <p class="created_time" >{{item.need.time}}</p>
+                </div>
+                <div class="list_repeat_pushed" v-if="!mySolove">
+                    <p>{{$t('formTitle.pushTitle')}}</p>
+                    <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0" >
+                        <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
+                            <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
+                            <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                            <span>{{items.userInfo.nikename}}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0&&!mySolove">
-                <p>{{$t('formTitle.helpMan')}}</p>
-                <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
-                    <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
-                        <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
-                        <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                        <span>{{items.userInfo.nikename}}</span>
+                <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0&&!mySolove">
+                    <p>{{$t('formTitle.helpMan')}}</p>
+                    <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
+                        <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
+                            <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
+                            <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
+                            <span>{{items.userInfo.nikename}}</span>
+                        </div>
                     </div>
                 </div>
+                <div class="action_list" v-if="item.conceretNeed.status!='Closed'&&!mySolove">
+                    <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
+                    <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
+                    <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
+                </div>
             </div>
-            <div class="action_list" v-if="item.conceretNeed.status!='Closed'&&!mySolove">
-                <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
-                <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
-                <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
-            </div>
+        </mt-loadmore>
 
-        </div>
         <div v-if="nodataFlag" class="yy_nodata_class" style="">
           <div class="yy_icon_img">
             <img src="../assets/images/business_nodata.png" alt="">
@@ -173,7 +175,8 @@
 <script>
 import Vue from 'vue'
 import loading from "../components/loading.vue";
-import { MessageBox, Toast } from "mint-ui";
+import { MessageBox, Toast,Loadmore } from "mint-ui";
+Vue.component(Loadmore.name, Loadmore);
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
@@ -191,6 +194,7 @@ export default {
       loadingShow: true,
       currentUserImgae: "",
       mySolove:false,
+      allLoaded:false
     };
   },
   methods: {
@@ -416,18 +420,28 @@ export default {
           callback && callback(data);
         });
     },
-
+    //下拉加载
+    loadTop() {
+        this.$refs.loadmore.onTopLoaded();
+    },
+    loadBottom() {
+        this.allLoaded = true;
+        this.$refs.loadmore.onBottomLoaded();
+    },
     loadData(token) {
       let url = "/globalmate/rest/need/list";
       let _this = this;
       if (this.$route.query.id === "solove") {
         url = "/globalmate/rest//assist/listService";
       }
-      this.axios
-        .get(this.ip + url + "?token=" + token + "&onlyCurrentUser=true", {
-          onlyCurrentUser: true
-        })
-        .then(res => {
+      this.axios.get(this.ip + url, {
+          params:{
+              token:token,
+              onlyCurrentUser:true,
+              pageNum:1,
+              pageSize:5,
+          }
+        }) .then(res => {
           if (res.success) {
             let data = res.data;
             this.listm=[];
@@ -519,8 +533,7 @@ export default {
             }, 500);
             this.noDataTips = "暂无相关数据";
           }
-        })
-        .catch(e => {
+        }).catch(e => {
           setTimeout(() => {
             this.nodataFlag = true;
             this.loadingShow = false;
