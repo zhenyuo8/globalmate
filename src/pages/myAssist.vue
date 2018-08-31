@@ -416,6 +416,7 @@ export default {
     },
     loadBottom() {
         this.allLoaded = true;
+        this.loadTopFlag=false;
         this.$refs.loadmore.onBottomLoaded();
         this.pageNum+=1;
         this.loadData(this.userInfo.token);
