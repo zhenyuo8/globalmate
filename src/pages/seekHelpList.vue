@@ -177,6 +177,7 @@
 <style media="screen" lang='less'>
 .list_wrap {
   background: #f7f5f3;
+  overflow: scroll;
   .list_repeat {
     background: #fff;
     padding: 0.2rem 0.4rem;
@@ -309,35 +310,40 @@
     <!--搜索框-->
     <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
     <div class="list_wrap">
-      <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
-        <div class="list_repeat_user">
-          <div class="image_user" @click='goDetail($event,item)'>
-            <img :src="item.need.pic" alt="">
-          </div>
-          <div class="name_user">
-            <span class="name">{{item.need.userName}}</span>
-            <span class="type">{{item.conceretNeed.tag}}</span>
-            <span class="type">{{$t('formTitle.reward')}}(￥)
-              <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
-              <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
-            </span>
-          </div>
-          <div class="status_user" >
-            <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
-            <span class="created_time">{{item.need.time}}</span>
-          </div>
-        </div>
-        <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
-        <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
-          <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
-            <img :src="items" alt="" v-if="indexs<3" @click='previewImage($event,items)'>
-          </div>
-        </div>
-        <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
-          <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
-        </div>
-      </div>
-    </div>
+         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
+             <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
+               <div class="list_repeat_user">
+                 <div class="image_user" @click='goDetail($event,item)'>
+                   <img :src="item.need.pic" alt="">
+                 </div>
+                 <div class="name_user">
+                   <span class="name">{{item.need.userName}}</span>
+                   <span class="type">{{item.conceretNeed.tag}}</span>
+                   <span class="type">{{$t('formTitle.reward')}}(￥)
+                     <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                     <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                   </span>
+                 </div>
+                 <div class="status_user" >
+                   <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                   <span class="created_time">{{item.need.time}}</span>
+                 </div>
+               </div>
+               <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
+               <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
+                 <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
+                   <img :src="items" alt="" v-if="indexs<3" @click='previewImage($event,items)'>
+                 </div>
+               </div>
+               <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
+                 <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
+               </div>
+             </div>
+           <div class="show_all_data" v-show="canNotLoadMore">
+               已加载所有数据
+           </div>
+         </mt-loadmore>
+     </div>
 
     <div v-if="nodataFlag" class="yy_nodata_class" style="">
       <div class="yy_icon_img">
@@ -396,7 +402,8 @@
 import searchInput from "../components/searchInput.vue";
 import loading from "../components/loading.vue";
 import indexList from "../components/indexList.vue";
-import { MessageBox, Toast } from "mint-ui";
+import { MessageBox, Toast, Loadmore} from "mint-ui";
+Vue.component(Loadmore.name, Loadmore);
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
@@ -429,7 +436,12 @@ export default {
       loadingShow: true,
       show: false,
       selectItem: [],
-      listType: ""
+      listType: "",
+      allLoaded:false,
+      pageNum:1,
+      pageSize:5,
+      canNotLoadMore:false,
+      bottomPullText:'上拉加载'
     };
   },
   methods: {
@@ -803,9 +815,19 @@ export default {
           }
         });
     },
-
+    loadTop() {
+        this.pageNum=1;
+        this.loadTopFlag=true;
+        this.$refs.loadmore.onTopLoaded();
+        this.loadData();
+    },
+    loadBottom() {
+        this.allLoaded = true;
+        this.$refs.loadmore.onBottomLoaded();
+        this.pageNum+=1;
+        this.loadData();
+    },
     loadData() {
-      this.myAssistList = [];
       this.rightIn = false;
       this.selectFlag = false;
       this.nodataFlag = false;
@@ -829,13 +851,31 @@ export default {
         postData["type"] = this.searchContent.type || "";
         postData["where"] = this.searchContent.where || "";
       }
-      this.axios.get(this.ip +url +"?token=" +this.userInfo.token +"&type=" +this.searchContent.type + "&where=" +this.searchContent.where,JSON.stringify(postData)).then(res => {
+      this.axios.get(this.ip +url,{
+          params:{
+              token:this.userInfo.token,
+              type:this.searchContent.type,
+              where:this.searchContent.where,
+              pageNum:this.pageNum,
+              pageSize:this.pageSize
+          }
+      }).then(res => {
           if (res.success) {
-            let data = res.data;
+            let data = res.data?res.data:[];
             this.listm = [];
+            if(data.length>=this.pageSize){
+                this.allLoaded=false;
+            }
+            if(data.length<this.pageSize&&this.myAssistList.leng!=0){
+                this.canNotLoadMore=true;
+            }
+            if(this.loadTopFlag){
+                this.myAssistList=[];
+            }
             if (data) {
               let ClosedArr = [];
               let normalArr = [];
+
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (
@@ -960,6 +1000,7 @@ export default {
     }
   },
   activated() {
+      this.myAssistList = [];
     if (this.userInfo.token) {
         if(!this.previewImageFlag){
              this.loadData();
