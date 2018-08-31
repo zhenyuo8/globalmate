@@ -304,7 +304,7 @@ export default {
     this.mainmenu = [
       {
         title: this.$t("formName.study"),
-        key: "learnco",
+        key: "learn_cooperation",
         type: "assist",
         form: "assist",
         icon: "icon-pen"

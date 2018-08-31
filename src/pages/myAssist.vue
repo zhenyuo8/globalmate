@@ -13,6 +13,7 @@
         overflow-y: auto;
         .list_warp{
             background: #f7f5f3;
+            overflow: scroll;
             .list_repeat{
                 background: #fff;
                 margin-bottom: 10px;
@@ -113,6 +114,7 @@
                     bottom: 10px;
                 }
             }
+
         }
     }
 </style>
@@ -121,7 +123,7 @@
 <template>
   <div class="gl_list">
     <div class="list_warp">
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
             <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
                 <div class="list_repeat_content" @click='showDetail(item)'>
                     <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
@@ -155,6 +157,9 @@
                     <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
                     <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
                 </div>
+            </div>
+            <div class="show_all_data" v-show="canNotLoadMore">
+                已加载所有数据
             </div>
         </mt-loadmore>
 
@@ -194,7 +199,11 @@ export default {
       loadingShow: true,
       currentUserImgae: "",
       mySolove:false,
-      allLoaded:false
+      allLoaded:false,
+      pageNum:1,
+      pageSize:5,
+      canNotLoadMore:false,
+      bottomPullText:'上拉加载'
     };
   },
   methods: {
@@ -358,28 +367,6 @@ export default {
       });
     },
 
-    getPushItemInfo(data, callback) {
-      this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/user/list/" +
-            data.providerId +
-            "?token=" +
-            this.userInfo.token,
-          {}
-        )
-        .then(res => {
-          if (res.success) {
-            data.userInfo = res.data;
-            callback && callback(data);
-          } else {
-            callback && callback(data);
-          }
-        })
-        .catch(() => {
-          callback && callback(data);
-        });
-    },
     getPushItem(data, callback) {
       data.pushList = [];
       data.assistList=[];
@@ -422,11 +409,16 @@ export default {
     },
     //下拉加载
     loadTop() {
+        this.pageNum=1;
+        this.loadTopFlag=true;
         this.$refs.loadmore.onTopLoaded();
+        this.loadData(this.userInfo.token);
     },
     loadBottom() {
         this.allLoaded = true;
         this.$refs.loadmore.onBottomLoaded();
+        this.pageNum+=1;
+        this.loadData(this.userInfo.token);
     },
     loadData(token) {
       let url = "/globalmate/rest/need/list";
@@ -438,13 +430,23 @@ export default {
           params:{
               token:token,
               onlyCurrentUser:true,
-              pageNum:1,
-              pageSize:5,
+              pageNum:this.pageNum,
+              pageSize:this.pageSize,
           }
         }) .then(res => {
           if (res.success) {
             let data = res.data;
+
             this.listm=[];
+            if(data.length>=this.pageSize){
+                this.allLoaded=false;
+            }
+            if(data.length<this.pageSize&&this.myAssistList.leng!=0){
+                this.canNotLoadMore=true;
+            }
+            if(this.loadTopFlag){
+                this.myAssistList=[];
+            }
             if(data.length!=0){
                 for(var i=0;i<data.length;i++){
                     if(data[i].conceretNeed&&data[i].conceretNeed.title){
@@ -520,11 +522,13 @@ export default {
                 }
                 this.loadingShow=false;
             }else{
-                setTimeout(()=>{
-                    this.nodataFlag=true;
-                    this.loadingShow=false;
-                },500)
-                this.noDataTips='暂无相关数据';
+                if(_this.myAssistList.leng==0){
+                    setTimeout(()=>{
+                        this.nodataFlag=true;
+                        this.loadingShow=false;
+                    },500)
+                    this.noDataTips='暂无相关数据';
+                }
             }
           } else {
             setTimeout(() => {
