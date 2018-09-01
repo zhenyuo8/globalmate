@@ -439,7 +439,7 @@ export default {
       listType: "",
       allLoaded:false,
       pageNum:1,
-      pageSize:5,
+      pageSize:10,
       canNotLoadMore:false,
       bottomPullText:'上拉加载'
     };
@@ -823,7 +823,6 @@ export default {
     },
     loadBottom() {
         this.allLoaded = true;
-        this.loadTopFlag=false;
         this.$refs.loadmore.onBottomLoaded();
         this.pageNum+=1;
         this.loadData();
@@ -870,10 +869,13 @@ export default {
             if(data.length<this.pageSize&&this.myAssistList.leng!=0){
                 this.canNotLoadMore=true;
             }
-            if(this.loadTopFlag){
+            if(this.loadTopFlag||this.pageSize==1){
                 this.myAssistList=[];
             }
             if (data) {
+              let ClosedArr = [];
+              let normalArr = [];
+
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (
@@ -948,7 +950,7 @@ export default {
               }
               this.loadingShow = false;
             } else {
-              if (this.myAssistList.length=== 0) {
+              if (this.myAssistList.length === 0) {
                 setTimeout(() => {
                   this.loadingShow = false;
                   this.nodataFlag = true;
@@ -957,7 +959,7 @@ export default {
               }
             }
           } else {
-            if (this.myAssistList.length == 0) {
+            if (this.myAssistList.length === 0) {
               setTimeout(() => {
                 this.nodataFlag = true;
                 this.loadingShow = false;
@@ -967,7 +969,7 @@ export default {
           }
         })
         .catch(e => {
-          if (this.myAssistList.length == 0) {
+          if (this.myAssistList.length === 0) {
             setTimeout(() => {
               this.nodataFlag = true;
               this.loadingShow = false;
@@ -998,7 +1000,10 @@ export default {
     }
   },
   activated() {
-      this.myAssistList = [];
+      this.allLoaded=false;
+      this.pageNum=1;
+      this.pageSize=10;
+      this.canNotLoadMore=false;
     if (this.userInfo.token) {
         if(!this.previewImageFlag){
              this.loadData();

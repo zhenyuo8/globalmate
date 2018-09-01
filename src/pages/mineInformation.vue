@@ -326,7 +326,7 @@
                 </div>
                 <div class="mineInformation_hobby_offer">
                     <span class="title">{{$t('formTitle.helpAvailable')}}</span>
-                    <div class="">
+                    <div class="" v-show="helpAvailable.length!=0">
                         <span v-for="item in helpAvailable">{{item}}</span>
                     </div>
                 </div>
@@ -538,7 +538,7 @@ export default {
                     this.nice=data.nice;
                     if(data.helpAvailable&&data.helpAvailable.indexOf('、')>-1){
                         this.helpAvailable=data.helpAvailable.split('、');
-                    }else{
+                    }else if(data.helpAvailable){
                         this.helpAvailable=data.helpAvailable.split(',');
                     }
 
