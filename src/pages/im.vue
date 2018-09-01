@@ -328,16 +328,16 @@ export default {
             var status = data.need.enable + "";
             switch (status) {
               case '1':
-                  data[i].need.status=this.$t('status.open');
+                  this.detail["status"]=this.$t('status.open');
                   break;
               case '2':
-                  data[i].need.status=this.$t('status.execute');
+                  this.detail["status"]=this.$t('status.execute');
                   break;
               case '0':
-                  data[i].need.status=this.$t('status.closed');
+                  this.detail["status"]=this.$t('status.closed');
                   break;
               case '6':
-                  data[i].need.status=this.$t('status.complete');
+                  this.detail["status"]=this.$t('status.complete');
                   break;
               case "3":
                 this.detail["status"] = "编辑中";
