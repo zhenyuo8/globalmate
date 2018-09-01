@@ -14,7 +14,6 @@ export default new Vuex.Store({
   },
   mutations: {
     updateWxVertified (state, payload) {
-      debugger
       state.isWXVerified = payload.isWXVerified
     }
   },
