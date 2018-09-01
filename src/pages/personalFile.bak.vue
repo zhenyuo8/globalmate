@@ -6,27 +6,27 @@
         <p>
           <label for="nicknamesignup" class="nickname" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.nikname')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="nicknamesignup" name="nicknamesignup" required="required" type="text" :placeholder="$t('formTitle.nikname')" v-model='userMsg.nickName' />
+          <input id="nicknamesignup" name="nicknamesignup" required="required" type="text" :placeholder="$t('formTitle.nikname')" />
         </p>
         <p>
           <label for="truenamesignup" class="truename" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.name')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="truenamesignup" name="truenamesignup" required="required" type="text" :placeholder="$t('formTitle.name')" v-model='userMsg.name' />
+          <input id="truenamesignup" name="truenamesignup" required="required" type="text" :placeholder="$t('formTitle.name')" />
         </p>
         <p>
           <label for="phonesignup" class="phone" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.phone')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="phonesignup" name="phonesignup" required="required" type="text" :placeholder="$t('formTitle.phone')" v-model='userMsg.phone' />
+          <input id="phonesignup" name="phonesignup" required="required" type="text" :placeholder="$t('formTitle.phone')" />
         </p>
         <p @click="getSelectItem('country')">
           <label for="countrysignup" class="country" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' disabled='disabled' v-model='userMsg.country' />
+          <input id="countrysignup" name="countrysignup" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' disabled='disabled' />
         </p>
         <p @click="getSelectItem('city')">
           <label for="citysignup" class="city" data-icon="u">
             <i class="gl_required_class">*</i>{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' disabled='disabled' v-model='userMsg.city' />
+          <input id="citysignup" name="citysignup" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' disabled='disabled' />
         </p>
       </div>
       <div class="image">
@@ -55,12 +55,11 @@
       <p>
         <label for="">
           <i class="gl_required_class">*</i>{{$t('formTitle.intrest')}}:</label>
-        <input id="hobbysignup" v-model='userMsg.hobby' type="text" name="" value="" placeholder='请输入'>
+        <input id="hobbysignup" type="text" name="" value="" placeholder='请输入'>
       </p>
       <p id='' @click='selectHelpType'>
         <label for="">
-          <!-- <i class="gl_required_class">*</i> -->
-          {{$t('formTitle.helpAvailable')}}:</label>
+          <i class="gl_required_class">*</i>{{$t('formTitle.helpAvailable')}}:</label>
         <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled' style='text-align:center'>
       </p>
     </div>
@@ -111,9 +110,8 @@
 <script>
 import indexList from "../components/indexList.vue";
 import Vue from "vue";
-import { DatetimePicker, Toast } from "mint-ui";
+import { DatetimePicker } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
-Vue.component(Toast.name, Toast);
 import userMix from "../mixins/userInfo";
 export default {
   mixins: [userMix],
@@ -144,107 +142,17 @@ export default {
       educationValue: [],
       showEducationValue: false,
       userId: "",
+      headerImgae: "",
       showTipsText: "",
       startDate: new Date("1970/01/01"),
       endDate: new Date("2100/12/31"),
       pickerValue: this.moment(new Date()).format("YYYY-MM-DD"),
       show: false,
       selectItem: [],
-      listType: "",
-      userMsg: {
-        nickName: '',
-        name: '',
-        phone: '',
-        country: '',
-        city: '',
-        hobby: ''
-      }
+      listType: ""
     };
   },
   methods: {
-    loadOssPolicy(ossMap, callback) {
-      this.axios
-        .get(`${this.ip}/globalmate/rest/file/ossPolicy`, {
-          params: {
-            token: this.userInfo.token
-          }
-        })
-        .then(res => {
-          if (res.success) {
-            ossMap.accessid = res.data.accessid;
-            ossMap.policy = res.data.policy;
-            ossMap.signature = res.data.signature;
-            ossMap.key = res.data.dir;
-            ossMap.host = res.data.host;
-            ossMap.success_action_status = 200;
-            callback.call(this);
-          }
-        })
-        .catch(e => {});
-    },
-    uploadToAli(localData) {
-      let form = new FormData();
-      let array = [];
-      let bytes = window.atob(localData.split(",")[1]);
-      let blob;
-      try {
-        for (let i = 0; i < bytes.length; i++) {
-          array.push(bytes.charCodeAt(i));
-        }
-        blob = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
-      } catch (e) {}
-      let obj = {};
-      this.loadOssPolicy(obj, () => {
-        let ran = Date.now();
-        form.append("key", obj.key + "_" + ran + ".jpg");
-        form.append("policy", obj.policy);
-        form.append("OSSAccessKeyId", obj.accessid);
-        form.append("success_action_status", "200");
-        form.append("signature", obj.signature);
-        form.append("file", blob, ran + ".jpg");
-        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key +
-          "_" +
-          ran +
-          ".jpg"}`;
-        this.axios
-          .post(obj.host, form, {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          })
-          .then(res => {
-            this.headerImgae = url;
-          });
-      });
-    },
-    uploadImage() {
-      wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: res => {
-          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          if (!this.isIOS) {
-            this['headerImgae'] = localIds[0];
-          }
-          wx.getLocalImgData({
-            localId: localIds[0], // 图片的localID
-            success: res => {
-              var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-              if (localData.indexOf("data:image") != 0) {
-                //判断是否有这样的头部
-                localData = "data:image/jpeg;base64," + localData;
-              }
-              localData = localData
-                .replace(/\r|\n/g, "")
-                .replace("data:image/jgp", "data:image/jpeg");
-              this['headerImgae'] = localData;
-              this.uploadToAli(localData);
-            }
-          });
-        }
-      });
-    },
     openPicker() {
       this.$refs.picker.open();
     },
@@ -302,6 +210,7 @@ export default {
         professional: this.$el.querySelector("#schoolprofessionalsignup").value,
         grade: this.$el.querySelector("#schoolgradesignup").value
       };
+
       if (!education.schoolname) {
         this.showTipsText = "请输入学校名称";
         setTimeout(() => {
@@ -361,10 +270,10 @@ export default {
       if (value) {
         if (items == "country") {
           this.country = value;
-          this.userMsg.country = value;
-          this.userMsg.city = '';
+          this.$el.querySelector("#countrysignup").value = value;
+          this.$el.querySelector("#citysignup").value = "";
         } else {
-          this.userMsg.city = value;
+          this.$el.querySelector("#citysignup").value = value;
         }
       }
     },
@@ -372,7 +281,7 @@ export default {
       let url = "",
         _this = this,
         postData = {};
-      this.show = true;
+        this.show=true;
       if (key == "city" && this.country) {
         url = "/globalmate/rest/user/city";
         this.axios
@@ -428,13 +337,12 @@ export default {
     },
     buildItem(data, key) {
       let letter = this.$utils.buildLetter();
+      let _this = this;
       for (let i = 0; i < 26; i++) {
         letter[i].citylist = [];
       }
       for (let i = 0; i < data.length; i++) {
-        let _index = Number(
-          this.$utils.getFirstLetter(data[i]).charCodeAt() - 65
-        );
+        let _index = Number(_this.$utils.getFirstLetter(data[i]).charCodeAt() - 65);
         if (_index >= 0 && _index < 26) {
           letter[_index].citylist.push(data[i]);
         }
@@ -443,224 +351,173 @@ export default {
         let len = value.citylist.length;
         return len > 0;
       });
-      if (key == "country") {
-        let hotcountry = this.getCountryHot();
-        showCity.unshift(hotcountry);
-      } else {
-        let hotcity = this.getHotCity(this.country);
-        showCity.unshift(hotcity);
+      if(key=="country"){
+          let hotcountry=this.getCountryHot();
+          showCity.unshift(hotcountry);
+      }else{
+          let hotcity=this.getHotCity(this.country);
+          showCity.unshift(hotcity)
       }
       this.show = true;
       this.listType = key;
       this.selectItem = showCity;
       this.updateTodoList(this.selectItem);
+  },
+    getCountryHot(){
+        let obj={};
+        obj['letter']='热门国家';
+        obj['citylist']=[this.$t('country.china'),this.$t('country.korea'),this.$t('country.japan'),this.$t('country.singapore'),this.$t('country.uk'),this.$t('country.us'),this.$t('country.thailand'),this.$t('country.vietnam'),this.$t('country.germany'),this.$t('country.canada'),this.$t('country.australia'),this.$t('country.france'),this.$t('country.malaysia')];
+        return obj;
     },
-    getCountryHot() {
-      let obj = {};
-      obj["letter"] = "热门国家";
-      obj["citylist"] = [
-        this.$t("country.china"),
-        this.$t("country.korea"),
-        this.$t("country.japan"),
-        this.$t("country.singapore"),
-        this.$t("country.uk"),
-        this.$t("country.us"),
-        this.$t("country.thailand"),
-        this.$t("country.vietnam"),
-        this.$t("country.germany"),
-        this.$t("country.canada"),
-        this.$t("country.australia"),
-        this.$t("country.france"),
-        this.$t("country.malaysia")
-      ];
-      return obj;
-    },
-    getHotCity(country) {
-      let obj = {};
-      obj["letter"] = "热门城市";
-      switch (country) {
-        case "中国":
-          obj["citylist"] = [
-            this.$t("city.Beijing"),
-            this.$t("city.Shanghai"),
-            this.$t("city.Guangzhou"),
-            this.$t("city.Shenzhen"),
-            this.$t("city.Hongkong"),
-            this.$t("city.Macow"),
-            this.$t("city.Taipei"),
-            this.$t("city.Hangzhou"),
-            this.$t("city.Xiamen"),
-            this.$t("city.Nanjing"),
-            this.$t("city.Qingdao"),
-            this.$t("city.Chengdu"),
-            this.$t("city.Chongqing"),
-            this.$t("city.Tianjin"),
-            this.$t("city.Dalian"),
-            this.$t("city.Shenyang"),
-            this.$t("city.Fuzhou"),
-            this.$t("city.Kunming"),
-            this.$t("city.Wuhan"),
-            this.$t("city.Ningbo"),
-            this.$t("city.Wuxi"),
-            this.$t("city.Jinjiang"),
-            this.$t("city.Sanya"),
-            this.$t("city.Xian")
-          ];
-          break;
-        case "China":
-          obj["citylist"] = [
-            this.$t("city.beijing"),
-            this.$t("city.shanghai"),
-            this.$t("city.Guangzhou"),
-            this.$t("city.Shenzhen"),
-            this.$t("city.Hongkong"),
-            this.$t("city.Macow"),
-            this.$t("city.Taipei"),
-            this.$t("city.Hangzhou"),
-            this.$t("city.Xiamen"),
-            this.$t("city.Nanjing"),
-            this.$t("city.Qingdao"),
-            this.$t("city.Chengdu"),
-            this.$t("city.Chongqing"),
-            this.$t("city.Tianjin"),
-            this.$t("city.Dalian"),
-            this.$t("city.sShenyang"),
-            this.$t("city.Fuzhou"),
-            this.$t("city.Kunming"),
-            this.$t("city.Wuhan"),
-            this.$t("city.Ningbo"),
-            this.$t("city.Wuxi"),
-            this.$t("city.Jinjiang"),
-            this.$t("city.Sanya"),
-            this.$t("city.Xian")
-          ];
-          break;
-        case "韩国":
-          obj["citylist"] = [this.$t("city.Seoul"), this.$t("city.Busan")];
-          break;
-        case "Korea":
-          obj["citylist"] = [this.$t("city.Seoul"), this.$t("city.Busan")];
-          break;
-        case "日本":
-          obj["citylist"] = [
-            this.$t("city.Tokyo"),
-            this.$t("city.Nagoya"),
-            this.$t("city.Osaka")
-          ];
-          break;
-        case "Japan":
-          obj["citylist"] = [
-            this.$t("city.Tokyo"),
-            this.$t("city.Nagoya"),
-            this.$t("city.Osaka")
-          ];
-          break;
-        case "新加坡":
-          obj["citylist"] = [this.$t("city.Singapore")];
-          break;
-        case "Singapore":
-          obj["citylist"] = [this.$t("city.Singapore")];
-          break;
-        case "泰国":
-          obj["citylist"] = [this.$t("city.Bangkok")];
-          break;
-        case "Thailand":
-          obj["citylist"] = [this.$t("city.Bangkok")];
-          break;
-        case "越南":
-          obj["citylist"] = [this.$t("city.HoChiMinhCity")];
-          break;
-        case "Vietnam":
-          obj["citylist"] = [this.$t("city.HoChiMinhCity")];
-          break;
-        case "美国":
-          obj["citylist"] = [
-            this.$t("city.NewYork"),
-            this.$t("city.LosAngeles"),
-            this.$t("city.Hawaii")
-          ];
-          break;
-        case "US":
-          obj["citylist"] = [
-            this.$t("city.NewYork"),
-            this.$t("city.LosAngeles"),
-            this.$t("city.Hawaii")
-          ];
-          break;
+    getHotCity(country){
+        let obj={};
+        obj['letter']='热门城市';
+        switch (country) {
+            case '中国':
+                obj['citylist']=[this.$t('city.Beijing'),this.$t('city.Shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.Shenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')];
+                break;
+             case 'China':
+                 obj['citylist']=[this.$t('city.beijing'),this.$t('city.shanghai'),this.$t('city.Guangzhou'),this.$t('city.Shenzhen'),this.$t('city.Hongkong'),this.$t('city.Macow'),this.$t('city.Taipei'),this.$t('city.Hangzhou'),this.$t('city.Xiamen'),this.$t('city.Nanjing'),this.$t('city.Qingdao'),this.$t('city.Chengdu'),this.$t('city.Chongqing'),this.$t('city.Tianjin'),this.$t('city.Dalian'),this.$t('city.sShenyang'),this.$t('city.Fuzhou'),this.$t('city.Kunming'),this.$t('city.Wuhan'),this.$t('city.Ningbo'),this.$t('city.Wuxi'),this.$t('city.Jinjiang'),this.$t('city.Sanya'),this.$t('city.Xian')]
+                 break;
+             case '韩国':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case 'Korea':
+                 obj['citylist']=[this.$t('city.Seoul'),this.$t('city.Busan')]
+                 break;
+             case '日本':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case 'Japan':
+                 obj['citylist']=[this.$t('city.Tokyo'),this.$t('city.Nagoya'),this.$t('city.Osaka')]
+                 break;
+             case '新加坡':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case 'Singapore':
+                 obj['citylist']=[this.$t('city.Singapore')]
+                 break;
+             case '泰国':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case 'Thailand':
+                 obj['citylist']=[this.$t('city.Bangkok')]
+                 break;
+             case '越南':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case 'Vietnam':
+                 obj['citylist']=[this.$t('city.HoChiMinhCity')]
+                 break;
+             case '美国':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
+             case 'US':
+                 obj['citylist']=[this.$t('city.NewYork'),this.$t('city.LosAngeles'),this.$t('city.Hawaii')]
+                 break;
 
-        case "德国":
-          obj["citylist"] = [this.$t("city.Frankfurt")];
-          break;
-        case "Germany":
-          obj["citylist"] = [this.$t("city.Frankfurt")];
-          break;
-        case "加拿大":
-          obj["citylist"] = [this.$t("city.Vancouver")];
-          break;
-        case "Canada":
-          obj["citylist"] = [this.$t("city.Vancouver")];
-          break;
-        case "英国":
-          obj["citylist"] = [this.$t("city.Landon")];
-          break;
-        case "UK":
-          obj["citylist"] = [this.$t("city.Landon")];
-          break;
-        case "澳大利亚":
-          obj["citylist"] = [this.$t("city.Sydney")];
-          break;
-        case "Australia":
-          obj["citylist"] = [this.$t("city.Sydney")];
-          break;
-        case "法国":
-          obj["citylist"] = [this.$t("city.Paris")];
-          break;
-        case "France":
-          obj["citylist"] = [this.$t("city.Paris")];
-          break;
-        case "马来西亚":
-          obj["citylist"] = [this.$t("city.KualaLumpur")];
-          break;
-        case "Malaysia":
-          obj["citylist"] = [this.$t("city.KualaLumpur")];
-          break;
-      }
-      return obj;
+              case '德国':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case 'Germany':
+                  obj['citylist']=[this.$t('city.Frankfurt')]
+                  break;
+              case '加拿大':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case 'Canada':
+                  obj['citylist']=[this.$t('city.Vancouver')]
+                  break;
+              case '英国':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case 'UK':
+                  obj['citylist']=[this.$t('city.Landon')]
+                  break;
+              case '澳大利亚':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case 'Australia':
+                  obj['citylist']=[this.$t('city.Sydney')]
+                  break;
+              case '法国':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case 'France':
+                  obj['citylist']=[this.$t('city.Paris')]
+                  break;
+              case '马来西亚':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+              case 'Malaysia':
+                  obj['citylist']=[this.$t('city.KualaLumpur')]
+                  break;
+            default:
+
+
+        }
+        return obj;
     },
     submit() {
-      let {nickName, name, phone, country, city, hobby} = this.userMsg;
-      if (!nickName || !name || !phone || !country || !city || !hobby) {
-        Toast({
-          message: "请完成必填项",
-          duration: 1000
-        })
-        return;
-      }
-      if (this.headerImgae && !this.headerImgae.includes('http')) {
-        Toast({
-          message: "头像正在上传,请稍候",
-          duration: 1000
-        })
-        return;
-      }
       let postData = {
+        name: "",
+        nikename: "",
+        phone: "",
+        country: "",
+        city: "",
         pic: "",
         school: "",
+        hobby: "",
         helpAvailable: "",
         id: this.userId
       };
-      Object.assign(postData, {
-        nickname: nickName,
-        nikename: nickName,
-        name,
-        phone,
-        country,
-        city,
-        hobby
-      })
+      postData.nikename = this.$el.querySelector("#nicknamesignup").value;
+      postData.name = this.$el.querySelector("#truenamesignup").value;
+      postData.phone = this.$el.querySelector("#phonesignup").value;
+      postData.country = this.$el.querySelector("#countrysignup").value;
+      postData.city = this.$el.querySelector("#citysignup").value;
+      postData.hobby = this.$el.querySelector("#hobbysignup").value;
       postData.school = JSON.stringify(this.educationValue);
       postData.helpAvailable = this.selectHelpTypeValue;
       postData.pic = this.headerImgae || "";
+      for (var key in postData) {
+        if (!postData[key] || postData[key] == "[]") {
+          switch (key) {
+            case "name":
+              this.showTipsText = "请输入您的真实姓名";
+              break;
+            case "nikname":
+              this.showTipsText = "请输入您的昵称";
+              break;
+            case "phone":
+              this.showTipsText = "请选择您的联系方式";
+              break;
+            case "country":
+              this.showTipsText = "请选择您的国家";
+              break;
+            case "city":
+              this.showTipsText = "请选择您所在城市";
+              break;
+            case "school":
+              this.showTipsText = "请填写您的圈子（例如：毕业大学）";
+              break;
+            case "helpAvailable":
+              this.showTipsText = "请设置您可提供的帮助";
+              break;
+            case "hobby":
+              this.showTipsText = "请填写您的兴趣爱好";
+              break;
+            case "pic":
+              this.showTipsText = "请上传头像";
+              break;
+            default:
+          }
+          setTimeout(() => {
+            this.showTipsText = "";
+          }, 2000);
+          return;
+        }
+      }
       this.axios
         .put(
           this.ip +
@@ -701,6 +558,78 @@ export default {
         preloader.load(file.getSource());
       }
     },
+    initUploader() {
+      let _this = this;
+      let ossMap = {};
+      this.filesHasUpload = [];
+      this.multipart_params = {
+        key: "",
+        policy: "",
+        OSSAccessKeyId: "",
+        success_action_status: "",
+        signature: ""
+      };
+      this.axios
+        .get(
+          this.ip +
+            "/globalmate/rest/file/ossPolicy" +
+            "?token=" +
+            this.$route.query.token,
+          ""
+        )
+        .then(res => {
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
+            ossMap.success_action_status = 200;
+          }
+        })
+        .catch(e => {});
+      this.fileUploader = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: "uploader_header", //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.fileUploader.bind("FilesAdded", function(uploader, files) {
+        for (var i = 0, len = files.length; i < len; i++) {
+          var file_name = files[i].name;
+          !(function(i) {
+            _this.previewImage(files[i], function(imgsrc) {
+              $("#uploader_header")
+                .find("img")
+                .attr("src", imgsrc);
+            });
+          })(i);
+        }
+        _this.fileUploader.start();
+      });
+      this.fileUploader.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.fileUploader.bind("FileUploaded", function(up, file, info) {
+        _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
+      });
+      this.fileUploader.init();
+      setTimeout(() => {
+        this.uploadAttr();
+      }, 1000);
+    },
     uploadAttr() {
       const ua = navigator.userAgent.toLowerCase();
       const isIos = ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1; //判断是否是苹果手机，是则是true
@@ -720,48 +649,61 @@ export default {
       }
     }
   },
+
   activated() {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    this.axios
-      .get(
-        this.ip +
-          "/globalmate/rest/user/getUserByToken" +
-          "?token=" +
-          this.$route.query.token,
-        {}
-      )
-      .then(res => {
+    this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken" +"?token=" +this.$route.query.token,
+        {}).then(res => {
         if (res.success) {
           let data = res.data;
           this.userId = data.id;
           if (data.school) {
             this.educationValue = JSON.parse(data.school);
           }
-          this.userMsg.nickName = data.nickname || data.nikename || ""
-          this.userMsg.name = data.name || ""
-          this.userMsg.phone = data.phone || ""
-          this.userMsg.country = data.country || ""
-          this.userMsg.city = data.city || ""
-          this.userMsg.hobby = data.hobby;
-          this.selectHelpTypeValue = data.helpAvailable || "";
-          this.headerImgae = data.pic || '';
+          if (data.name) {
+            this.$el.querySelector("#truenamesignup").value = data.name;
+          }
+          if (data.phone) {
+            this.$el.querySelector("#phonesignup").value = data.phone;
+          }
+          if (data.country) {
+            this.$el.querySelector("#countrysignup").value = data.country;
+            this.country=data.country;
+          }
+          if (data.city) {
+            this.$el.querySelector("#citysignup").value = data.city;
+          }
+          if (data.nikename) {
+            this.$el.querySelector("#nicknamesignup").value = data.nikename;
+          }
+          if (data.hobby) {
+            this.$el.querySelector("#hobbysignup").value = data.hobby;
+          }
+          if (data.helpAvailable) {
+            this.selectHelpTypeValue = data.helpAvailable;
+          }
+          if (data.pic) {
+            this.headerImgae = data.pic;
+          }
         }
-      })
-      .catch(e => {
+      }).catch(e => {
         console.log(e);
       });
   },
-  deactivated() {
-    this.show = false;
-    this.selectItem = [];
+  deactivated () {
+    this.show=false;
+    this.selectItem=[];
   },
   created() {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
     this.selectFlag = false;
+    setTimeout(() => {
+      this.initUploader();
+    }, 500);
   }
 };
 </script>

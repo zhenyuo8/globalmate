@@ -288,9 +288,66 @@ export default {
           }
         })
         .catch();
+    },
+    loadWxSign() {
+      let str = String(Math.random()).slice(3),
+        timeStamp = Date.now();
+      this.axios
+        .get(`http://glmate.cuibq.com/getSignature`, {
+          params: {
+            str,
+            timeStamp,
+            url: location.href.split("#")[0],
+            appId: this.wxAppId,
+            appSecret: this.wxAppSecret
+          }
+        })
+        .then(res => {
+          res = JSON.parse(res);
+          this.updateWXSign(res.sign);
+          this.updateWXToken(res.token);
+          this.wxConfig(str, timeStamp, res.sign);
+        })
+        .catch(msg => {});
+    },
+    wxConfig(str, timestamp, signature) {
+      if (this.isWXVerified) return;
+      wx.config({
+        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: this.wxAppId, // 必填，公众号的唯一标识
+        timestamp: timestamp || Date.now(), // 必填，生成签名的时间戳
+        nonceStr: str || String(Math.random()).slice(3), // 必填，生成签名的随机串
+        signature: signature || this.wxSign.code, // 必填，签名
+        jsApiList: [
+          "chooseImage",
+          "previewImage",
+          "uploadImage",
+          "downloadImage",
+          "getLocalImgData"
+        ] // 必填，需要使用的JS接口列表
+      });
+      wx.ready(() => {
+        // this.isWXVerified = true;
+        this.updateWXVertifyState(true)
+      });
+      wx.error(msg => {});
+    },
+    handleWxVertify () {
+      this.loadWxSign();
+      setInterval(() => {
+        // 定期检查一下
+        if ( this.wxSign.code && this.wxSign.expiry && Date.now() < this.wxSign.expiry) {
+          if (!this.isWXVerified) {
+            this.wxConfig();
+          }
+        } else if (!this.isWXVerified) {
+          this.loadWxSign();
+        }
+      }, 100000)
     }
   },
   created() {
+    this.handleWxVertify()
     let code = this.getStrMsg("code");
     let userId = this.getStrMsg("userId");
     let openId = this.getStrMsg("openId");

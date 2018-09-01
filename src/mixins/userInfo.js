@@ -8,7 +8,7 @@ export default {
     //   return this.$store.state.globalmate.userInfo
     // },
     ...mapState('globalmate', ['userInfo', 'todoList', 'msgList', 'userList']),
-    ...mapState(['ip', 'wxAppId', 'wxAppSecret']),
+    ...mapState(['ip', 'wxAppId', 'wxAppSecret', 'isWXVerified']),
     wxSign() {
       return this.$store.state.globalmate.wx.signature
     },
@@ -53,5 +53,11 @@ export default {
         token
       })
     },
+    updateWXVertifyState (status) {
+      this.$store.commit({
+        type: 'updateWxVertified',
+        isWXVerified: status
+      })
+    }
   }
 }

@@ -150,8 +150,8 @@ p {
           <div class="identify_body IDCARD">
             <div class="warp">
               <div class="identify_face_page">
-                <div class="" id='id_face' @click='uploadImg("idCardFront")'>
-                  <img v-if='idCardFrontId || idCardFront' :src="idCardFrontId || idCardFront" alt="">
+                <div class="" id='id_face' @click='uploadImg("id_face_img")'>
+                  <img v-if='id_face_imgId || id_face_img' :src="id_face_imgId || id_face_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传人像面</span>
@@ -161,8 +161,8 @@ p {
             </div>
             <div class="warp">
               <div class="identify_opposite_page">
-                <div class="" id='id_opposite' @click='uploadImg("idCardBack")'>
-                  <img v-if='idCardBackId || idCardBack' :src="idCardBackId ||idCardBack" alt="">
+                <div class="" id='id_opposite' @click='uploadImg("id_opposite_img")'>
+                  <img v-if='id_opposite_imgId || id_opposite_img' :src="id_opposite_imgId ||id_opposite_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传国徽面</span>
@@ -181,8 +181,8 @@ p {
           <div class="identify_body STUDENTID">
             <div class="warp">
               <div class="identify_face_page">
-                <div class="" id='id_student' @click='uploadImg("studentFront")'>
-                  <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
+                <div class="" id='id_student' @click='uploadImg("id_student_img")'>
+                  <img v-if='id_student_imgId || id_student_img' :src="id_student_imgId || id_student_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传人像面</span>
@@ -192,8 +192,8 @@ p {
             </div>
             <div class="warp">
               <div class="identify_opposite_page">
-                <div class="" id='id_student_opposite' @click='uploadImg("studentBack")'>
-                  <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
+                <div class="" id='id_student_opposite' @click='uploadImg("id_student_opposite_img")'>
+                  <img v-if='id_student_opposite_img || id_student_opposite_imgId' :src="id_student_opposite_imgId || id_student_opposite_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传文字面</span>
@@ -212,8 +212,8 @@ p {
           <div class="identify_body PASSPORT">
             <div class="warp">
               <div class="identify_face_page">
-                <div class="" id='id_passport' @click='uploadImg("passPortFront")'>
-                  <img v-if='passPortFrontId || passPortFront' :src="passPortFrontId || passPortFront" alt="">
+                <div class="" id='id_passport' @click='uploadImg("id_passport_img")'>
+                  <img v-if='id_passport_imgId || id_passport_img' :src="id_passport_imgId || id_passport_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传第一页</span>
@@ -223,8 +223,8 @@ p {
             </div>
             <div class="warp">
               <div class="identify_opposite_page">
-                <div class="" id='id_passport_opposite' @click='uploadImg("passPortBack")'>
-                  <img v-if='passPortBack || passPortBackId' :src="passPortBackId || passPortBack" alt="">
+                <div class="" id='id_passport_opposite' @click='uploadImg("id_passport_opposite_img")'>
+                  <img v-if='id_passport_opposite_img || id_passport_opposite_imgId' :src="id_passport_opposite_imgId || id_passport_opposite_img" alt="">
                   <template>
                     <span class="icon-camera2"></span>
                     <span class="icon-tips">点击拍照/上传第二页</span>
@@ -248,8 +248,6 @@ p {
 
 <script>
 import { Toast } from "mint-ui";
-import Vue from 'vue'
-Vue.component(Toast.name, Toast)
 import loading from "../components/loading.vue";
 import userMix from "../mixins/userInfo";
 export default {
@@ -264,19 +262,20 @@ export default {
       showPASSPORT: false,
       hasAreadyUpload: false,
       loadingShow: true,
-      idCardFront: "",
-      idCardFrontId: "",
-      idCardBack: "",
-      idCardBackId: "",
-      studentFront: "",
-      studentFrontId: "",
-      studentBack: "",
-      studentBackId: "",
-      passPortFront: "",
-      passPortFrontId: "",
-      passPortBack: "",
-      passPortBackId: "",
-      // isWXVerified: false,
+      id_face_img: "",
+      id_face_imgId: "",
+      id_opposite_img: "",
+      id_opposite_imgId: "",
+      id_student_img: "",
+      id_student_imgId: "",
+      id_student_opposite_img: "",
+      id_student_opposite_imgId: "",
+      id_passport_img: "",
+      id_passport_imgId: "",
+      id_passport_opposite_img: "",
+      id_passport_opposite_imgId: "",
+      isWXVerified: false,
+      test: ""
     };
   },
   components: {
@@ -382,6 +381,7 @@ export default {
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: res => {
           var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          // this[key] = localIds[0]
           if (!this.isIOS) {
             this[key + "Id"] = localIds[0];
           }
@@ -403,44 +403,140 @@ export default {
         }
       });
     },
-    handleData(arr, key1, key2, type) {
-      if (this[key1] && this[key2]) {
-        if (!this[key1].includes('http') || !this[key1].includes('http')) {
-          Toast({
-            message: "图片正在上传,请稍候",
-            duration: 1000
-          })
-          return false;
-        }
+    initUploader(id1, id2) {
+      let _this = this;
+      let ossMap = {};
+      this.filesHasUpload = [];
+      this.multipart_params = {
+        key: "",
+        policy: "",
+        OSSAccessKeyId: "",
+        success_action_status: "",
+        signature: ""
+      };
+      this.axios
+        .get(
+          this.ip +
+            "/globalmate/rest/file/ossPolicy" +
+            "?token=" +
+            this.userInfo.token,
+          ""
+        )
+        .then(res => {
+          if (res.data.success) {
+            ossMap.accessid = res.data.data.accessid;
+            ossMap.policy = res.data.data.policy;
+            ossMap.signature = res.data.data.signature;
+            ossMap.key = res.data.data.dir;
+            ossMap.host = res.data.data.host;
+            ossMap.success_action_status = 200;
+          }
+        })
+        .catch(e => {});
+      this.id1 = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: id1, //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.id1.bind("FilesAdded", function(uploader, files) {
+        _this.id1.start();
+      });
+      this.id1.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.id1.bind("FileUploaded", function(up, file, info) {
+        _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
+        $("#" + id1)
+          .find("img")
+          .attr("src", _this.headerImgae);
+        $("#" + id1)
+          .find("img")
+          .attr("data-src", _this.headerImgae);
+        $("#" + id1)
+          .find("img")
+          .css("display", "inline-block");
+      });
+
+      this.id2 = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: id2, //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.id2.bind("FilesAdded", function(uploader, files) {
+        _this.id2.start();
+      });
+      this.id2.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.id2.bind("FileUploaded", function(up, file, info) {
+        _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
+        $("#" + id2)
+          .find("img")
+          .attr("src", _this.headerImgae);
+        $("#" + id2)
+          .find("img")
+          .attr("data-src", _this.headerImgae);
+        $("#" + id2)
+          .find("img")
+          .css("display", "inline-block");
+      });
+
+      this.id1.init();
+      this.id2.init();
+    },
+    handleData(key1, key2, type) {
+      if (this[key1] || this[key2]) {
         let obj = {
           cetifyType: type,
           certifyPhoto: [this[key1], this[key2]].join(";")
         };
         this[type] && (obj["id"] = this[type]);
-        arr.push(obj)
-      } else if (this[key1] || this[key2]) {
-        Toast({
-          message: "请确认已选认证方式图片是否上传完整",
-          duration: 2000
-        })
-        return false
+        return obj;
       }
+      return;
     },
     submitData() {
       let data = [];
-      let res = this.handleData(data, "idCardFront", "idCardBack", "IDCARD");
-      if (res === false) return
-      res = this.handleData(data, "studentFront", "studentBack", "STUDENTID");
-      if (res === false) return
-      res = this.handleData(data, "passPortFront", "passPortBack", "PASSPORT");
-      if (res === false) return
-      if (data.length === 0) {
-        Toast({
-          message: "请至少选择一种认证方式！谢谢...",
-          duration: 2000
-        });
-        return
-      }
+      let tempt = this.handleData("id_face_img", "id_opposite_img", "IDCARD");
+      tempt && data.push(tempt);
+      tempt = this.handleData(
+        "id_student_img",
+        "id_student_opposite_img",
+        "STUDENTID"
+      );
+      tempt && data.push(tempt);
+      tempt = this.handleData(
+        "id_passport_img",
+        "id_passport_opposite_img",
+        "PASSPORT"
+      );
+      tempt && data.push(tempt);
       this.loadingShow = true;
       this.axios
         .post(
@@ -470,14 +566,180 @@ export default {
           this.loadingShow = false;
           console.log(e);
         });
+      return;
+      let postData = [];
+      if (this.identifyType.length == 0) {
+        Toast({
+          message: "请至少选择一种认证方式！谢谢...",
+          duration: 2000
+        });
+        return;
+      }
+      for (var i = 0; i < this.identifyType.length; i++) {
+        var obj = {
+          cetifyType: "",
+          certifyPhoto: []
+        };
+        obj.cetifyType = this.identifyType[i];
+        let img = $("." + this.identifyType[i]).find("img");
+        if (img.length !== 0) {
+          for (var j = 0; j < img.length; j++) {
+            if (!img[j].getAttribute("src")) {
+              Toast({
+                message: "请确认已选认证方式图片是否上传!",
+                duration: 2000
+              });
+              return;
+            }
+            obj.certifyPhoto.push(img[j].src);
+          }
+        }
+        if (this.hasAreadyUpload && this[this.identifyType[i]]) {
+          obj["id"] = this[this.identifyType[i]];
+        }
+        obj.certifyPhoto = obj.certifyPhoto.join(";");
+        postData.push(obj);
+      }
+      if (this.hasAreadyUpload) {
+        if (postData.length == 1) {
+          this.loadingShow = true;
+          this.axios
+            .put(
+              this.ip +
+                "/globalmate/rest/certify/update" +
+                "?token=" +
+                this.userInfo.token,
+              postData[0]
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "认证资料更新成功，我们会尽快重新审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        } else {
+          this.loadingShow = true;
+          this.axios
+            .put(
+              this.ip +
+                "/globalmate/rest/certify/updateList" +
+                "?token=" +
+                this.userInfo.token,
+              postData
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "认证资料更新成功，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        }
+      } else {
+        if (postData.length == 1) {
+          this.loadingShow = true;
+          this.axios
+            .post(
+              this.ip +
+                "/globalmate/rest/certify/add" +
+                "?token=" +
+                this.userInfo.token,
+              postData[0]
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "感谢您的配合，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        } else {
+          this.loadingShow = true;
+          this.axios
+            .post(
+              this.ip +
+                "/globalmate/rest/certify/addList" +
+                "?token=" +
+                this.userInfo.token,
+              postData
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "感谢您的配合，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        }
+      }
     },
     loadData() {
-      this.axios.get( this.ip + "/globalmate/rest/certify/list", {
-        params: {
-          token: this.userInfo.token,
-          onlyCurrentUser: true
-        }
-      }).then(res => {
+      this.axios
+        .get(
+          this.ip +
+            "/globalmate/rest/certify/list" +
+            "?token=" +
+            this.userInfo.token +
+            "&onlyCurrentUser=true",
+          {}
+        )
+        .then(res => {
           if (res.success) {
             let list = res.data;
             let showList = [];
@@ -502,19 +764,21 @@ export default {
                     this["show" + type] = true;
                     switch (type) {
                       case "IDCARD":
-                        this.showImage("idCardFront", "idCardBack", pic);
+                        this.showImage("id_face", "id_opposite", pic);
+                        // initUploader('id_face', 'id_opposite')
                         break;
                       case "STUDENTID":
                         this.showImage(
-                          "studentFront",
-                          "studentBack",
+                          "id_student",
+                          "id_student_opposite",
                           pic
                         );
+                        // initUploader('id_student', 'id_student_opposite')
                         break;
                       case "PASSPORT":
                         this.showImage(
-                          "passPortFront",
-                          "passPortBack",
+                          "id_passport",
+                          "id_passport_opposite",
                           pic
                         );
                         break;
@@ -541,12 +805,13 @@ export default {
         });
     },
     showImage(id1, id2, pic) {
-      this[id1] = pic[0];
-      this[id2] = pic[1];
+      this[id1 + "_img"] = pic[0];
+      this[id2 + "_img"] = pic[1];
     },
     loadWxSign() {
       let str = String(Math.random()).slice(3),
         timeStamp = Date.now();
+      // this.axios.get(`${location.protocol}\\${location.host}/getSignature`, {
       this.axios
         .get(`http://glmate.cuibq.com/getSignature`, {
           params: {
@@ -568,7 +833,7 @@ export default {
     wxConfig(str, timestamp, signature) {
       if (this.isWXVerified) return;
       wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: this.wxAppId, // 必填，公众号的唯一标识
         timestamp: timestamp || Date.now(), // 必填，生成签名的时间戳
         nonceStr: str || String(Math.random()).slice(3), // 必填，生成签名的随机串
@@ -582,13 +847,23 @@ export default {
         ] // 必填，需要使用的JS接口列表
       });
       wx.ready(() => {
-        // this.isWXVerified = true;
-        this.updateWXVertifyState(true)
+        this.isWXVerified = true;
       });
       wx.error(msg => {});
     }
   },
   activated() {
+    if (
+      this.wxSign.code &&
+      this.wxSign.expiry &&
+      Date.now() < this.wxSign.expiry
+    ) {
+      if (!this.isWXVerified) {
+        this.wxConfig();
+      }
+    } else if (!this.isWXVerified) {
+      this.loadWxSign();
+    }
     this.identifyType = [];
     if (this.userInfo.token) {
       this.loadData();

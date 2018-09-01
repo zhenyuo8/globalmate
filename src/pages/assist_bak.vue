@@ -18,13 +18,14 @@
         </div>
         <div class="main_decription_uploader">
           <div class="hide_space">
-            <div class="main_decription_uploader_container_img" v-for="(item,index) in filesHasUpload" :key='index' @click='removeItem(index)'>
+            <div class="main_decription_uploader_container_img" v-for="(item,index) in filesHasUpload" :key='index'>
               <img :src="item" class="prev_imgae" alt="">
             </div>
-            <div class="main_decription_uploader_container" @click='chosenImage'>
-              <span class="icon-add" id='uploader'></span>
+            <div class="main_decription_uploader_container">
+              <span class="icon-add" id='uploader' @click='chosenImage'></span>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -40,10 +41,6 @@
     <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
     <mt-datetime-picker ref="picker" type="date" :startDate="startDate" :endDate="endDate" :cancelText="$t('button.cancel')" :confirmText="$t('button.confirm')" @confirm="handleConfirm" v-model="pickerValue">
     </mt-datetime-picker>
-    <mt-actionsheet
-      :actions="actions"
-      v-model="removeShow">
-    </mt-actionsheet>
   </div>
 </template>
 
@@ -53,10 +50,9 @@ import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
-import { Toast, DatetimePicker, Actionsheet } from "mint-ui";
+import { Toast, DatetimePicker } from "mint-ui";
 Vue.component(Toast.name, Toast);
 Vue.component(DatetimePicker.name, DatetimePicker);
-Vue.component(Actionsheet.name, Actionsheet);
 import userMix from "../mixins/userInfo";
 export default {
   name: "assist",
@@ -96,31 +92,8 @@ export default {
       isEditType: false,
       startDate: new Date("1970/01/01"),
       endDate: new Date("2100/12/31"),
-      pickerValue: this.moment(new Date()).format("YYYY-MM-DD"),
-      removeShow: false,
-      actions: [{
-        name: '删除',
-        method: this.removePic
-      }],
-      removeIndex: undefined
+      pickerValue: this.moment(new Date()).format("YYYY-MM-DD")
     };
-  },
-  watch: {
-    form: function(newvalue, old) {
-      if (newvalue && old) {
-        this.listRepeatProcess();
-      }
-    },
-    key: function(newvalue, old) {
-      if (newvalue && old) {
-        this.type = this.$route.query.newvalue;
-      }
-    },
-    removeShow (val) {
-      if (!val) {
-        this.removeIndex = undefined
-      }
-    }
   },
   components: {
     List,
@@ -131,10 +104,6 @@ export default {
     DatetimePicker
   },
   methods: {
-    removeItem(index) {
-      this.removeShow = true
-      this.removeIndex = index
-    },
     openPicker(item) {
       this["datePick"] = item;
       this.$refs.picker.open();
@@ -587,7 +556,7 @@ export default {
         ).value;
       }
       if (this.filesHasUpload.length !== 0) {
-        postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
+        postData["pic"] = this.filesHasUpload.join(";");
       }
       return postData;
     },
@@ -719,11 +688,10 @@ export default {
           console.log(e);
         });
     },
-    removePic () {
-      this.removeShow = false
-      if (this.removeIndex !== undefined) {
-        this.filesHasUpload.splice(this.removeIndex, 1)
-        this.removeIndex = undefined
+    removeFile(e) {
+      if (e.target.className === "prev_imgae") {
+        $(e.target.parentNode).remove();
+        this.filesHasUpload.splice($(e.target.parentNode).index(), 1);
       }
     },
     previewImage(file, callback) {
@@ -751,6 +719,68 @@ export default {
         preloader.load(file.getSource());
       }
     },
+    initUploader() {
+      let _this = this;
+      let ossMap = {};
+      this.filesHasUpload = [];
+      this.multipart_params = {
+        key: "",
+        policy: "",
+        OSSAccessKeyId: "",
+        success_action_status: "",
+        signature: ""
+      };
+      this.axios
+        .get(this.ip + "/globalmate/rest/file/ossPolicy", {
+          params: {
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            ossMap.accessid = res.data.accessid;
+            ossMap.policy = res.data.policy;
+            ossMap.signature = res.data.signature;
+            ossMap.key = res.data.dir;
+            ossMap.host = res.data.host;
+            ossMap.success_action_status = 200;
+          }
+        })
+        .catch(e => {});
+      this.fileUploader = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: "uploader", //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.fileUploader.bind("FilesAdded", function(uploader, files) {
+        _this.fileUploader.start();
+      });
+      this.fileUploader.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.fileUploader.bind("FileUploaded", function(up, file, info) {
+        _this.filesHasUpload.push(
+          ossMap.host + "/" + _this.multipart_params.key
+        );
+      });
+      this.fileUploader.init();
+      setTimeout(() => {
+        this.uploadAttr();
+      }, 1000);
+    },
     uploadAttr() {
       const ua = navigator.userAgent.toLowerCase();
       const isIos = ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1; //判断是否是苹果手机，是则是true
@@ -768,88 +798,6 @@ export default {
           }
         }, 300);
       }
-    },
-    loadOssPolicy(ossMap, callback) {
-      this.axios
-        .get(`${this.ip}/globalmate/rest/file/ossPolicy`, {
-          params: {
-            token: this.userInfo.token
-          }
-        })
-        .then(res => {
-          if (res.success) {
-            ossMap.accessid = res.data.accessid;
-            ossMap.policy = res.data.policy;
-            ossMap.signature = res.data.signature;
-            ossMap.key = res.data.dir;
-            ossMap.host = res.data.host;
-            ossMap.success_action_status = 200;
-            callback.call(this);
-          }
-        })
-        .catch(e => {});
-    },
-    uploadToAli(localData, len) {
-      let form = new FormData();
-      let array = [];
-      let bytes = window.atob(localData.split(",")[1]);
-      let blob;
-      try {
-        for (let i = 0; i < bytes.length; i++) {
-          array.push(bytes.charCodeAt(i));
-        }
-        blob = new Blob([new Uint8Array(array)], { type: "image/jpeg" });
-      } catch (e) {}
-      let obj = {};
-      this.loadOssPolicy(obj, () => {
-        let ran = Date.now();
-        form.append("key", obj.key + "_" + ran + ".jpg");
-        form.append("policy", obj.policy);
-        form.append("OSSAccessKeyId", obj.accessid);
-        form.append("success_action_status", "200");
-        form.append("signature", obj.signature);
-        form.append("file", blob, ran + ".jpg");
-        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key +
-          "_" +
-          ran +
-          ".jpg"}`;
-        this.axios
-          .post(obj.host, form, {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            }
-          })
-          .then(res => {
-            // this[key] = url;
-            this.filesHasUpload[len] = url
-          });
-      });
-    },
-    chosenImage () {
-      wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: res => {
-          // let len = this.filesHasUpload.length;
-          var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          wx.getLocalImgData({
-            localId: localIds[0], // 图片的localID
-            success: res => {
-              var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-              if (localData.indexOf("data:image") != 0) {
-                //判断是否有这样的头部
-                localData = "data:image/jpeg;base64," + localData;
-              }
-              localData = localData
-                .replace(/\r|\n/g, "")
-                .replace("data:image/jgp", "data:image/jpeg");
-              this.filesHasUpload.push(localData);
-              this.uploadToAli(localData, this.filesHasUpload.length - 1);
-            }
-          });
-        }
-      });
     }
   },
   activated() {
@@ -877,8 +825,23 @@ export default {
       return this.$route.query.key || "";
     }
   },
+  watch: {
+    form: function(newvalue, old) {
+      if (newvalue && old) {
+        this.listRepeatProcess();
+      }
+    },
+    key: function(newvalue, old) {
+      if (newvalue && old) {
+        this.type = this.$route.query.newvalue;
+      }
+    }
+  },
   created() {
     this.listRepeatProcess();
+    setTimeout(() => {
+      this.initUploader();
+    }, 1000);
   }
 };
 </script>
