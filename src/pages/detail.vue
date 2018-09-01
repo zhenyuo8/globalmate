@@ -328,16 +328,16 @@ export default {
                   list[key] = status;
                   switch (status) {
                     case '1':
-                        data[i].need.status=this.$t('status.open');
+                        list["status"]=this.$t('status.open');
                         break;
                     case '2':
-                        data[i].need.status=this.$t('status.execute');
+                        list["status"]=this.$t('status.execute');
                         break;
                     case '0':
-                        data[i].need.status=this.$t('status.closed');
+                        list["status"]=this.$t('status.closed');
                         break;
                     case '6':
-                        data[i].need.status=this.$t('status.complete');
+                        list["status"]=this.$t('status.complete');
                         break;
                     case "3":
                       list["status"] = "编辑中";
