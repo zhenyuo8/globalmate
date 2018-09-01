@@ -1003,17 +1003,14 @@ export default {
       this.allLoaded=false;
       this.pageNum=1;
       this.pageSize=10;
+      this.myAssistList=[];
       this.canNotLoadMore=false;
     if (this.userInfo.token) {
-        if(!this.previewImageFlag){
-             this.loadData();
-        }
+        this.loadData();
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
-          if(!this.previewImageFlag){
-               this.loadData();
-          }
+          this.loadData();
           clearInterval(this.timer);
         }
       }, 200);

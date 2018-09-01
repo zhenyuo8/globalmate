@@ -552,6 +552,7 @@ export default {
     this.noDataTips='';
     this.allLoaded=false;
     this.pageNum=1;
+    this.myAssistList=[];
     this.pageSize=10;
     this.canNotLoadMore=false;
     this.mySolove=this.$route.query.id=='solove'?true:false;
