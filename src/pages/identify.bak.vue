@@ -243,7 +243,6 @@ p {
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <img v-if='test' :src="test" alt="">
   </div>
 </template>
 
@@ -256,7 +255,6 @@ export default {
   mixins: [userMix],
   data() {
     return {
-      test: '',
       title: "",
       identifyType: ["IDCARD"],
       showIDCARD: true,
@@ -264,36 +262,6 @@ export default {
       showPASSPORT: false,
       hasAreadyUpload: false,
       loadingShow: true,
-      idCard: {
-        front: {
-          imgUrl: '',
-          imgId: ''
-        },
-        back: {
-          imgUrl: '',
-          imgId: ''
-        }
-      },
-      studentCard: {
-        front: {
-          imgUrl: '',
-          imgId: ''
-        },
-        back: {
-          imgUrl: '',
-          imgId: ''
-        }
-      },
-      passportCard: {
-        front: {
-          imgUrl: '',
-          imgId: ''
-        },
-        back: {
-          imgUrl: '',
-          imgId: ''
-        }
-      },
       id_face_img: "",
       id_face_imgId: "",
       id_opposite_img: "",
@@ -307,6 +275,7 @@ export default {
       id_passport_opposite_img: "",
       id_passport_opposite_imgId: "",
       isWXVerified: false,
+      test: ""
     };
   },
   components: {
@@ -412,6 +381,7 @@ export default {
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: res => {
           var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+          // this[key] = localIds[0]
           if (!this.isIOS) {
             this[key + "Id"] = localIds[0];
           }
@@ -427,12 +397,118 @@ export default {
                 .replace(/\r|\n/g, "")
                 .replace("data:image/jgp", "data:image/jpeg");
               this[key] = localData;
-              this.test = localData
               this.uploadToAli(localData, key, localIds[0]);
             }
           });
         }
       });
+    },
+    initUploader(id1, id2) {
+      let _this = this;
+      let ossMap = {};
+      this.filesHasUpload = [];
+      this.multipart_params = {
+        key: "",
+        policy: "",
+        OSSAccessKeyId: "",
+        success_action_status: "",
+        signature: ""
+      };
+      this.axios
+        .get(
+          this.ip +
+            "/globalmate/rest/file/ossPolicy" +
+            "?token=" +
+            this.userInfo.token,
+          ""
+        )
+        .then(res => {
+          if (res.data.success) {
+            ossMap.accessid = res.data.data.accessid;
+            ossMap.policy = res.data.data.policy;
+            ossMap.signature = res.data.data.signature;
+            ossMap.key = res.data.data.dir;
+            ossMap.host = res.data.data.host;
+            ossMap.success_action_status = 200;
+          }
+        })
+        .catch(e => {});
+      this.id1 = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: id1, //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.id1.bind("FilesAdded", function(uploader, files) {
+        _this.id1.start();
+      });
+      this.id1.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.id1.bind("FileUploaded", function(up, file, info) {
+        _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
+        $("#" + id1)
+          .find("img")
+          .attr("src", _this.headerImgae);
+        $("#" + id1)
+          .find("img")
+          .attr("data-src", _this.headerImgae);
+        $("#" + id1)
+          .find("img")
+          .css("display", "inline-block");
+      });
+
+      this.id2 = new plupload.Uploader({
+        runtimes: "html5,flash,silverlight,html4",
+        browse_button: id2, //触发文件选择对话框的按钮，为那个元素id
+        url: "http://ncc-ys-prod-oss-xingjjc.oss-cn-beijing.aliyuncs.com/", //服务器端的上传页面地址
+        flash_swf_url: "../libs/plupload/Moxie.swf", //swf文件，当需要使用swf方式进行上传时需要配置该参数
+        silverlight_xap_url: "../libs/plupload/Moxie.xap" //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+      });
+      this.id2.bind("FilesAdded", function(uploader, files) {
+        _this.id2.start();
+      });
+      this.id2.bind("BeforeUpload", function(up, file) {
+        file.name = new Date().getTime() + "_" + file.name;
+        _this.multipart_params = {
+          key: ossMap.key + "_" + file.name,
+          policy: ossMap.policy,
+          OSSAccessKeyId: ossMap.accessid,
+          success_action_status: "200",
+          signature: ossMap.signature
+        };
+        up.setOption({
+          url: ossMap.host,
+          multipart_params: _this.multipart_params
+        });
+      });
+      this.id2.bind("FileUploaded", function(up, file, info) {
+        _this.headerImgae = ossMap.host + "/" + _this.multipart_params.key;
+        $("#" + id2)
+          .find("img")
+          .attr("src", _this.headerImgae);
+        $("#" + id2)
+          .find("img")
+          .attr("data-src", _this.headerImgae);
+        $("#" + id2)
+          .find("img")
+          .css("display", "inline-block");
+      });
+
+      this.id1.init();
+      this.id2.init();
     },
     handleData(key1, key2, type) {
       if (this[key1] || this[key2]) {
@@ -490,6 +566,168 @@ export default {
           this.loadingShow = false;
           console.log(e);
         });
+      return;
+      let postData = [];
+      if (this.identifyType.length == 0) {
+        Toast({
+          message: "请至少选择一种认证方式！谢谢...",
+          duration: 2000
+        });
+        return;
+      }
+      for (var i = 0; i < this.identifyType.length; i++) {
+        var obj = {
+          cetifyType: "",
+          certifyPhoto: []
+        };
+        obj.cetifyType = this.identifyType[i];
+        let img = $("." + this.identifyType[i]).find("img");
+        if (img.length !== 0) {
+          for (var j = 0; j < img.length; j++) {
+            if (!img[j].getAttribute("src")) {
+              Toast({
+                message: "请确认已选认证方式图片是否上传!",
+                duration: 2000
+              });
+              return;
+            }
+            obj.certifyPhoto.push(img[j].src);
+          }
+        }
+        if (this.hasAreadyUpload && this[this.identifyType[i]]) {
+          obj["id"] = this[this.identifyType[i]];
+        }
+        obj.certifyPhoto = obj.certifyPhoto.join(";");
+        postData.push(obj);
+      }
+      if (this.hasAreadyUpload) {
+        if (postData.length == 1) {
+          this.loadingShow = true;
+          this.axios
+            .put(
+              this.ip +
+                "/globalmate/rest/certify/update" +
+                "?token=" +
+                this.userInfo.token,
+              postData[0]
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "认证资料更新成功，我们会尽快重新审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              console.log(e);
+            });
+        } else {
+          this.loadingShow = true;
+          this.axios
+            .put(
+              this.ip +
+                "/globalmate/rest/certify/updateList" +
+                "?token=" +
+                this.userInfo.token,
+              postData
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "认证资料更新成功，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        }
+      } else {
+        if (postData.length == 1) {
+          this.loadingShow = true;
+          this.axios
+            .post(
+              this.ip +
+                "/globalmate/rest/certify/add" +
+                "?token=" +
+                this.userInfo.token,
+              postData[0]
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "感谢您的配合，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        } else {
+          this.loadingShow = true;
+          this.axios
+            .post(
+              this.ip +
+                "/globalmate/rest/certify/addList" +
+                "?token=" +
+                this.userInfo.token,
+              postData
+            )
+            .then(res => {
+              this.loadingShow = false;
+              if (res.success) {
+                Toast({
+                  message: "感谢您的配合，我们会尽快审核你的认证信息!",
+                  duration: 2000
+                });
+                setTimeout(() => {
+                  window.history.go(-1);
+                }, 2000);
+              } else {
+                Toast({
+                  message: res.msg,
+                  duration: 2000
+                });
+              }
+            })
+            .catch(e => {
+              this.loadingShow = false;
+              console.log(e);
+            });
+        }
+      }
     },
     loadData() {
       this.axios
@@ -527,6 +765,7 @@ export default {
                     switch (type) {
                       case "IDCARD":
                         this.showImage("id_face", "id_opposite", pic);
+                        // initUploader('id_face', 'id_opposite')
                         break;
                       case "STUDENTID":
                         this.showImage(
@@ -534,6 +773,7 @@ export default {
                           "id_student_opposite",
                           pic
                         );
+                        // initUploader('id_student', 'id_student_opposite')
                         break;
                       case "PASSPORT":
                         this.showImage(
@@ -571,6 +811,7 @@ export default {
     loadWxSign() {
       let str = String(Math.random()).slice(3),
         timeStamp = Date.now();
+      // this.axios.get(`${location.protocol}\\${location.host}/getSignature`, {
       this.axios
         .get(`http://glmate.cuibq.com/getSignature`, {
           params: {
@@ -592,7 +833,7 @@ export default {
     wxConfig(str, timestamp, signature) {
       if (this.isWXVerified) return;
       wx.config({
-        debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: this.wxAppId, // 必填，公众号的唯一标识
         timestamp: timestamp || Date.now(), // 必填，生成签名的时间戳
         nonceStr: str || String(Math.random()).slice(3), // 必填，生成签名的随机串
@@ -612,6 +853,17 @@ export default {
     }
   },
   activated() {
+    if (
+      this.wxSign.code &&
+      this.wxSign.expiry &&
+      Date.now() < this.wxSign.expiry
+    ) {
+      if (!this.isWXVerified) {
+        this.wxConfig();
+      }
+    } else if (!this.isWXVerified) {
+      this.loadWxSign();
+    }
     this.identifyType = [];
     if (this.userInfo.token) {
       this.loadData();
