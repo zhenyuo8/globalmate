@@ -248,6 +248,8 @@ p {
 
 <script>
 import { Toast } from "mint-ui";
+import Vue from 'vue'
+Vue.component(Toast.name, Toast)
 import loading from "../components/loading.vue";
 import userMix from "../mixins/userInfo";
 export default {
@@ -403,6 +405,13 @@ export default {
     },
     handleData(arr, key1, key2, type) {
       if (this[key1] && this[key2]) {
+        if (!this[key1].includes('http') || !this[key1].includes('http')) {
+          Toast({
+            message: "图片正在上传,请稍候",
+            duration: 1000
+          })
+          return false;
+        }
         let obj = {
           cetifyType: type,
           certifyPhoto: [this[key1], this[key2]].join(";")

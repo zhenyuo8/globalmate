@@ -587,7 +587,7 @@ export default {
         ).value;
       }
       if (this.filesHasUpload.length !== 0) {
-        postData["pic"] = this.filesHasUpload.join(";");
+        postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
       }
       return postData;
     },
