@@ -58,6 +58,7 @@ export default {
     //val改变时触发
     getChangeVal() {
       this.keyWordsSearch(this.searchVal);
+      this.$emit('search')
     },
     //清除内容
     cleanVal() {
@@ -90,7 +91,8 @@ export default {
   opacity: 0.82;
   overflow: hidden;
   // margin:0px 0.24rem;
-  padding: 0.16rem;
+  // padding: 0.16rem;
+  padding: 8px;
   .search_icon {
     position: absolute !important;
     height: 16px;
