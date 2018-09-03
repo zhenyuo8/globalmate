@@ -74,12 +74,12 @@ export default {
       noDataTips: "",
       loadingShow: true,
       currentUserImgae: "",
-      mySolove: false,
-      allLoaded: false,
-      pageNum: 1,
-      pageSize: 5,
-      canNotLoadMore: false,
-      bottomPullText: "上拉加载"
+      mySolove:false,
+      allLoaded:false,
+      pageNum:1,
+      pageSize:10,
+      canNotLoadMore:false,
+      bottomPullText:'上拉加载'
     };
   },
   methods: {
@@ -334,7 +334,7 @@ export default {
             if (data.length < this.pageSize && this.myAssistList.leng != 0) {
               this.canNotLoadMore = true;
             }
-            if (this.loadTopFlag) {
+            if(this.loadTopFlag || this.pageSize==1){
               this.myAssistList = [];
             }
             if (data.length != 0) {
@@ -444,14 +444,14 @@ export default {
     }
   },
   activated() {
-    this.myAssistList = [];
-    this.nodataFlag = false;
-    this.noDataTips = "";
-    (this.allLoaded = false),
-      (this.pageNum = 1),
-      (this.pageSize = 5),
-      (this.canNotLoadMore = false),
-      (this.mySolove = this.$route.query.id == "solove" ? true : false);
+    this.nodataFlag=false;
+    this.noDataTips='';
+    this.allLoaded=false;
+    this.pageNum=1;
+    this.myAssistList=[];
+    this.pageSize=10;
+    this.canNotLoadMore=false;
+    this.mySolove=this.$route.query.id=='solove'?true:false;
     if (this.userInfo && this.userInfo.token) {
       this.loadData();
     } else {

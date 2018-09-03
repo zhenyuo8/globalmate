@@ -138,11 +138,11 @@ export default {
       show: false,
       selectItem: [],
       listType: "",
-      allLoaded: false,
-      pageNum: 1,
-      pageSize: 5,
-      canNotLoadMore: false,
-      bottomPullText: "上拉加载"
+      allLoaded:false,
+      pageNum:1,
+      pageSize:10,
+      canNotLoadMore:false,
+      bottomPullText:'上拉加载'
     };
   },
   methods: {

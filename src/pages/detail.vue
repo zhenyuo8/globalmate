@@ -434,6 +434,9 @@ export default {
         .then(res => {
           callback && callback(res.data.pic);
           this.detail.country = res.data.country;
+          if(!this.listData.userName){
+              this.listData.userName=res.data.nikename;
+          }
           this.othersInfo = res.data;
         })
         .catch(e => {
