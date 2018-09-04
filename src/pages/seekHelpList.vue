@@ -1169,7 +1169,7 @@ export default {
     }
     .search-input {
       /*width: 6.3rem;*/
-      width: 100%;
+      width: 90%;
       height: 30px;
       border: none;
       border-radius: 6px;
