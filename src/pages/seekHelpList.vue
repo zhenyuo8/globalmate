@@ -1,17 +1,8 @@
 <template>
   <div class="gl_list seek-help-list">
     <!--搜索框-->
-    <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" v-if="!isSOS"></searchInput>
-    <div v-if='false' class="search-box">
-      <div class="search_icon">
-        <img src="../assets/images/search_icon@2x.png" alt="">
-      </div>
-      <!-- 虚拟键盘换行  搜索 -->
-      <form onsubmit="return false">
-        <input type="search" class="search-input" :placeholder="$t('button.search')" @keyup.enter="searchForContent" v-model='searchVal' />
-      </form>
-    </div>
-    <div class="list_wrap">
+    <searchInput :searchCallBack="searchCallBack" :childMsg='msg' v-if="!isSOS" @search='searchForContent'></searchInput>
+    <div class="list_wrap" :class="{dataLoaded: allLoaded, notAllLoad: !allLoaded}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
         <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
           <div class="list_repeat_user">
@@ -65,11 +56,19 @@
         <div class="name">
           <p @click="getSelectItem('country')">
             <label for="countrysearch" class="country" data-icon="u">{{$t('formTitle.country')}}</label>&nbsp;&nbsp;&nbsp;
-            <input id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' disabled='disabled' />
+            <!-- <input v-model='searchCountry' id="countrysearch" name="countrysearch" required="required" type="text" :placeholder="$t('formTitle.country')" readonly='readonly' disabled='disabled' /> -->
+            <span class='ipt'>
+              <i class='remove' v-if='searchCountry' @click.capture.stop.prevent='searchCountry = "";searchCity=""'>x</i>
+              <span>{{searchCountry}}</span>
+            </span>
           </p>
-          <p @click="getSelectItem('city')">
+          <p @click.capture="getSelectItem('city')">
             <label for="citysearch" class="city" data-icon="u">{{$t('formTitle.city')}}</label>&nbsp;&nbsp;&nbsp;
-            <input id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' disabled='disabled' />
+            <span class='ipt'>
+              <i class='remove' v-if='searchCity' @click.capture.stop.prevent='searchCity = ""'>x</i>
+              <span>{{searchCity}}</span>
+            </span>
+            <!-- <input v-model='searchCity' id="citysearch" name="citysearch" required="required" type="text" :placeholder="$t('formTitle.city')" readonly='readonly' disabled='disabled' /> -->
           </p>
           <p @click='selectHelpType'>
             <label for="typesearch" class="type" data-icon="u">{{$t('formTitle.type')}}</label>&nbsp;&nbsp;&nbsp;
@@ -133,6 +132,8 @@ export default {
         type: "",
         where: ""
       },
+      searchCountry: '',
+      searchCity: '',
       isSOS: false,
       loadingShow: true,
       show: false,
@@ -146,7 +147,12 @@ export default {
     };
   },
   methods: {
-    searchForContent() {},
+    searchForContent(val) {
+      this.searchVal = val;
+      this.pageNum = 1;
+      this.loadTopFlag = true;
+      this.loadData()
+    },
     showDetail(item) {
       this.$router.push({
         path: "detail",
@@ -243,11 +249,17 @@ export default {
       this.noDataTips = "";
       this.rightIn = !this.rightIn;
       this.searchContent = {};
-      this.searchContent["type"] = this.$el.querySelector("#typesearch").value;
-      this.searchContent["where"] =
-        this.$el.querySelector("#countrysearch").value +
-        "_" +
-        this.$el.querySelector("#citysearch").value;
+      // this.searchContent["type"] = this.$el.querySelector("#typesearch").value;
+      // this.searchContent["where"] =
+      //   this.$el.querySelector("#countrysearch").value +
+      //   "_" +
+      //   this.$el.querySelector("#citysearch").value;
+      if (this.searchCountry || this.searchCity) {
+        this.searchContent["where"] =
+        this.searchCountry + "_" + this.searchCity;
+      } else {
+        this.searchContent["where"] = ''
+      }
       this.myAssistList = [];
       this.loadData();
     },
@@ -297,10 +309,13 @@ export default {
       if (value) {
         if (items == "country") {
           this.country = value;
-          this.$el.querySelector("#countrysearch").value = value;
-          this.$el.querySelector("#citysearch").value = "";
+          // this.$el.querySelector("#countrysearch").value = value;
+          this.searchCountry = value;
+          this.searchCity = '';
+          // this.$el.querySelector("#citysearch").value = "";
         } else {
-          this.$el.querySelector("#citysearch").value = value;
+          // this.$el.querySelector("#citysearch").value = value;
+          this.searchCity = value;
         }
       }
     },
@@ -577,7 +592,6 @@ export default {
       }
       return obj;
     },
-
     keyWordsSearch(keywords) {
       this.searchVal = keywords;
       if (!keywords) {
@@ -611,7 +625,7 @@ export default {
       this.loadData();
     },
     loadBottom() {
-      this.allLoaded = true;
+      this.allLoaded = false;
       this.loadTopFlag = false;
       this.$refs.loadmore.onBottomLoaded();
       this.pageNum += 1;
@@ -648,11 +662,17 @@ export default {
             type: this.searchContent.type,
             where: this.searchContent.where,
             pageNum: this.pageNum,
-            pageSize: this.pageSize
+            pageSize: this.pageSize,
+            searchText: this.searchVal
           }
         })
         .then(res => {
           if (res.success) {
+            if (!res.data) {
+              this.loadingShow = false;
+              this.myAssistList = [];
+              return;
+            }
             let data = res.data ? res.data : [];
             this.listm = [];
             // if (data.length >= this.pageSize) {
@@ -725,23 +745,10 @@ export default {
                         ) {
                           _this.myAssistList.push(curData);
                         }
-
                         let len = _this.myAssistList.length;
-                        let minIndex, temp;
-                        for (var ii = 0; ii < len; ii++) {
-                          minIndex = ii;
-                          for (var j = ii + 1; j < len; j++) {
-                            if (
-                              _this.myAssistList[j].need.createTime >
-                              _this.myAssistList[minIndex].need.createTime
-                            ) {
-                              minIndex = j;
-                            }
-                          }
-                          temp = _this.myAssistList[ii];
-                          _this.myAssistList[ii] = _this.myAssistList[minIndex];
-                          _this.myAssistList[minIndex] = temp;
-                        }
+                        _this.myAssistList.sort((a,b) => {
+                          return b.need.createTime - a.need.createTime
+                        })
                       }
                     }
                   }
@@ -820,6 +827,11 @@ export default {
     this.show = false;
     this.selectItem = [];
     clearInterval(this.timer);
+    this.searchContent.type = ''
+    this.searchContent.where = ''
+    this.searchCountry = ''
+    this.searchCity = ''
+    this.searchVal = ''
   },
   created() {}
 };
@@ -996,6 +1008,27 @@ export default {
 }
 </style>
 <style media="screen" lang='less'>
+form.rightIn_form {
+  div {
+    p {
+      span.ipt {
+        display: inline-block;
+        flex: 1;
+        box-sizing: border-box;
+        border: 1px solid #ededed;
+        position: relative;
+        i {
+          position: absolute;
+          right: 0;
+          top: 0;
+          padding: 0 10px;
+          line-height: 28px;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
 .list_wrap {
   background: #f7f5f3;
   overflow: scroll;
@@ -1136,6 +1169,16 @@ export default {
     left: 0;
     right: 0;
     overflow: auto;
+    &.dataLoaded {
+      .mint-loadmore-bottom {
+        display: none;
+      }
+    }
+    &.notAllLoad {
+      .show_all_data {
+        display: none;
+      }
+    }
     .mint-loadmore {
       min-height: 100%;
       // position: absolute;

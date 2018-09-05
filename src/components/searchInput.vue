@@ -29,11 +29,15 @@ export default {
   props: {
     searchCallBack: {
       type: Function,
-      default: function() {}
+      default: () => {
+        return function() {}
+      }
     },
     keyWordsSearch: {
       type: Function,
-      default: function() {}
+      default: () => {
+        return function() {}
+      }
     },
     focusStatus: {
       type: Boolean,
@@ -58,12 +62,13 @@ export default {
     //val改变时触发
     getChangeVal() {
       this.keyWordsSearch(this.searchVal);
-      this.$emit('search')
+      this.$emit('search', this.searchVal)
     },
     //清除内容
     cleanVal() {
       this.searchVal = "";
       this.keyWordsSearch(this.searchVal);
+      this.$emit('search', '')
     },
     showCondition() {
       this.searchCallBack(this.msg);
