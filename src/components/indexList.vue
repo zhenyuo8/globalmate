@@ -10,7 +10,7 @@
 
     <mt-index-list>
       <mt-index-section :index="item.letter" v-for="(item,index) in selectItem " :key='index' :name='item'>
-        <mt-cell :title="items" v-for="(items,indexs) in item.citylist" :key='indexs' :name='items' @click.native='pickCountry($event,items)'></mt-cell>
+        <mt-cell :title="items.countryregion||items.city" v-for="(items,indexs) in item.list" :key='indexs' :name='items.countryregion||items.city' @click.native='pickCountry($event,items)'></mt-cell>
       </mt-index-section>
     </mt-index-list>
   </div>
@@ -70,7 +70,7 @@ export default {
       }
     },
     pickCountry(e, item) {
-      this.countrySityCallBack(this.listType, item);
+      this.countrySityCallBack(this.listType, item.city||item.countryregion);
     },
     back() {
       this.countrySityCallBack(this.listType, "");
@@ -79,7 +79,9 @@ export default {
 
   activated() {
   },
-  created() {}
+  created() {
+      console.log(this.selectItem)
+  }
 };
 </script>
 <style media="screen">

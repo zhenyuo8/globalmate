@@ -112,7 +112,7 @@ input {
 <template>
 
   <div class="repeat" @click='clickBack(itemRepeat)'>
-    <mt-switch v-model="value" @change="turn($event,itemRepeat)" v-if="itemRepeat.componentKey==='rewardAmount'"></mt-switch>
+    <mt-switch v-model="value" @change="turn($event,itemRepeat)" v-if="itemRepeat.componentKey==='reward'"></mt-switch>
     <div class="repeat_title">
       <span style="color:red" v-if="itemRepeat.isRequire">*</span>
       <span>{{itemRepeat.title}}</span>
@@ -133,7 +133,7 @@ input {
       </div>
     </div>
     <div class="repeat_content" v-if="itemRepeat.type&&itemRepeat.type=='input'">
-      <input :type="itemRepeat.componentKey==='rewardAmount'?'number':'text'" :disabled='itemRepeat.componentKey==="rewardAmount"&& !value' name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
+      <input :type="itemRepeat.componentKey==='reward'?'number':'text'" :disabled='itemRepeat.componentKey==="reward"&& !value' name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
     </div>
   </div>
 
