@@ -279,7 +279,6 @@ export default {
         }
       });
     },
-
     processFriendsList(friends) {
       let mess = friends;
       this.friends = [];
@@ -459,21 +458,13 @@ export default {
       });
     },
     getUserByToken() {
-      let _this = this;
       this.axios
-        .get(
-          this.ip +
-            "/globalmate/rest/user/getUserByToken" +
-            "?token=" +
-            _this.$route.query.token,
-          {}
-        )
-        .then(res => {
+        .get(this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + this.$route.query.token).then(res => {
           if (res.success) {
             this.CURRENTUSER = res.data;
             this.currentUserId = res.data.id;
-            _this.getFriendsInIM();
-            _this.getFriendsInGlohelp();
+            this.getFriendsInIM();
+            this.getFriendsInGlohelp();
           }
         })
         .catch(e => {

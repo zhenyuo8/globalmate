@@ -6,7 +6,7 @@
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
         <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
           <div class="list_repeat_user">
-            <div class="image_user" @click='goDetail($event,item)'>
+            <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
               <img :src="item.need.pic" alt="">
             </div>
             <div class="name_user">
@@ -25,7 +25,7 @@
           <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
           <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
             <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
-              <img :src="items" alt="" v-if="indexs<3" @click='previewImage($event,items)'>
+              <img :src="items" alt="" v-if="indexs<3" @click.stop.prevent='previewImage($event,items, item.conceretNeed.pic)'>
             </div>
           </div>
           <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
@@ -166,9 +166,7 @@ export default {
       });
     },
     goDetail(e, item) {
-      e.preventDefault;
-      e.cancelBubble = true;
-      this.previewImageFlag = true;
+      // this.previewImageFlag = true;
       this.$router.push({
         path: "mineInformation",
         query: {
@@ -654,16 +652,22 @@ export default {
         this.listData = this.loadData(obj);
       }
     },
-    previewImage(e, item) {
-      e.preventDefault();
-      e.cancelBubble = true;
-      this.previewImageFlag = true;
-      this.$router.push({
-        path: "previewImage",
-        query: {
-          url: item
-        }
+    previewImage(e, item, pics) {
+      if (!item || !pics || !pics.length) return
+      wx.previewImage({
+        current: item, // 当前显示图片的http链接
+        urls: pics || [item] // 需要预览的图片http链接列表
       });
+      return;
+      // e.preventDefault();
+      // e.cancelBubble = true;
+      // this.previewImageFlag = true;
+      // this.$router.push({
+      //   path: "previewImage",
+      //   query: {
+      //     url: item
+      //   }
+      // });
     },
     loadTop() {
       this.pageNum = 1;
@@ -856,11 +860,15 @@ export default {
   activated() {
     this.myAssistList = [];
     if (this.userInfo.token) {
+      // if (!this.previewImageFlag) {
         this.loadData();
+      // }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
+          // if (!this.previewImageFlag) {
             this.loadData();
+          // }
           clearInterval(this.timer);
         }
       }, 200);
