@@ -179,7 +179,7 @@
           <i v-if="listData.city">_</i> {{listData.city}}</p>
         <p>{{$t('formTitle.time')}} : {{listData.startTime}}
           <i v-if="listData.endTime">{{$t('formTitle.toWord')}}</i> {{listData.endTime}}</p>
-        <p>{{$t('formTitle.reward')}}(￥) :
+        <p>{{$t('formTitle.reward')}} :
           <i style="color:red">{{listData.rewardAmount||listData.reward}}</i>
         </p>
         <p>{{$t('formTitle.decription')}}{{listData.description}}</p>

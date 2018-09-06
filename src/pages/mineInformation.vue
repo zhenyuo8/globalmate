@@ -498,19 +498,9 @@ export default {
                  }
                 _this.commentList.push(curData);
             }
-            let len = _this.commentList.length;
-　　                 let minIndex, temp;
-            for(var i=0;i<len;i++){
-                minIndex = i;
-        　　　　 for (var j = i + 1; j < len; j++) {
-        　　　　 　　if (_this.commentList[j].evaluation.score> _this.commentList[minIndex].evaluation.score) {
-        　　　　　 　　　minIndex = j;
-        　　　　　 　}
-        　　　　 }
-                temp = _this.commentList[i];
-　　　           _this.commentList[i] = _this.commentList[minIndex];
-　　　　         _this.commentList[minIndex] = temp;
-            }
+            _this.commentList.sort(function (a,b) {
+                return b.evaluation.score- a.evaluation.score
+            });
         },
         viewAllComments(){
             this.$router.push({

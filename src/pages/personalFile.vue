@@ -372,93 +372,127 @@ export default {
       let url = "",
         _this = this,
         postData = {};
-      this.show = true;
+      let lang = navigator.language || "zh-CN";
+      let isEN = /^zh/.test(lang)
+        ? false
+        : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
       if (key == "city" && this.country) {
-        url = "/globalmate/rest/user/city";
+           this.listType = key;
+           this.show=true;
+        url = "/globalmate/rest/user/cityWithInitials";
         this.axios
-          .get(
-            this.ip +
-              url +
-              "?token=" +
-              this.$route.query.token +
-              "&countryregion=" +
-              this.country,
-            ""
-          )
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token,
+              countryregion: this.country,
+              isEN: isEN
+            }
+          })
           .then(res => {
             if (res.success) {
-              let result = res.data,
-                resultArr = [];
-              if (this.country == "中国") {
-                resultArr = ["北京", "天津", "上海", "重庆"];
+              let list=[],obj={};
+              for(var key in res.data){
+                  obj={};
+                  obj['letter']=key;
+                  obj['list']=res.data[key];
+                  if (this.country == "中国" || this.country == "China") {
+                    if(key==='B'){
+                        obj['list'].unshift({
+                            city:this.$t("cityName.beijing"),
+                            cityInitials:'B',
+                            countryInitials:'',
+                            countryregion:'',
+                            id:'',
+                            state:''
+                        })
+                    }
+                    if(key==='C'){
+                        obj['list'].unshift({
+                            city:this.$t("cityName.chongqing"),
+                            cityInitials:'C',
+                            countryInitials:'',
+                            countryregion:'',
+                            id:'',
+                            state:''
+                        })
+                    }
+                    if(key==='S'){
+                        obj['list'].unshift({
+                            city:this.$t("cityName.shanghai"),
+                            cityInitials:'S',
+                            countryInitials:'',
+                            countryregion:'',
+                            id:'',
+                            state:''
+                        })
+                    }
+                    if(key==='T'){
+                        obj['list'].unshift({
+                            city:this.$t("cityName.tianjin"),
+                            cityInitials:'T',
+                            countryInitials:'',
+                            countryregion:'',
+                            id:'',
+                            state:''
+                        })
+                    }
+                  }
+                  list.push(obj);
               }
-              result.forEach(function(item, index) {
-                resultArr.push(item.city);
-              });
-              _this.buildItem(resultArr, key);
+              let city=this.getHotCity(this.country);
+              list.unshift(city);
+              this.selectItem = list;
             }
           })
           .catch(e => {
-            this.showTipsText = e.msg;
-            setTimeout(() => {
-              this.showTipsText = "";
-            }, 2000);
+            Toast({
+              message: e.msg,
+              duration: 2000
+            });
           });
       } else if (key == "country") {
-        url = "/globalmate/rest/user/country";
+          this.listType = key;
+          this.show=true;
+        url = "/globalmate/rest/user/countryWithInitials";
         this.axios
-          .get(this.ip + url + "?token=" + this.$route.query.token, "")
+          .get(this.ip + url, {
+            params: {
+              token: this.userInfo.token,
+              isEN: isEN
+            }
+          })
           .then(res => {
             if (res.success) {
-              _this.buildItem(res.data, key);
+                let list=[],obj={};
+                for(var key in res.data){
+                    obj={};
+                    obj['letter']=key;
+                    obj['list']=res.data[key];
+                    list.push(obj);
+                }
+                let hotcity=this.getCountryHot();
+                list.unshift(hotcity);
+                this.selectItem = list;
             }
           })
           .catch(e => {
-            this.showTipsText = e.msg;
-            setTimeout(() => {
-              this.showTipsText = "";
-            }, 2000);
+            Toast({
+              message: e.msg,
+              duration: 2000
+            });
           });
       } else {
-        this.showTipsText = "请先选择国家！";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 2000);
+        Toast({
+          message: "请先选择国家！",
+          duration: 2000
+        });
       }
-    },
-    buildItem(data, key) {
-      let letter = this.$utils.buildLetter();
-      for (let i = 0; i < 26; i++) {
-        letter[i].citylist = [];
-      }
-      for (let i = 0; i < data.length; i++) {
-        let _index = Number(
-          this.$utils.getFirstLetter(data[i]).charCodeAt() - 65
-        );
-        if (_index >= 0 && _index < 26) {
-          letter[_index].citylist.push(data[i]);
-        }
-      }
-      let showCity = letter.filter(function(value) {
-        let len = value.citylist.length;
-        return len > 0;
-      });
-      if (key == "country") {
-        let hotcountry = this.getCountryHot();
-        showCity.unshift(hotcountry);
-      } else {
-        let hotcity = this.getHotCity(this.country);
-        showCity.unshift(hotcity);
-      }
-      this.show = true;
-      this.listType = key;
-      this.selectItem = showCity;
-      this.updateTodoList(this.selectItem);
     },
     getCountryHot() {
       let obj = {};
       obj["letter"] = "热门国家";
-      obj["citylist"] = [
+      obj['list']=[];
+      let list = [
         this.$t("country.china"),
         this.$t("country.korea"),
         this.$t("country.japan"),
@@ -473,14 +507,28 @@ export default {
         this.$t("country.france"),
         this.$t("country.malaysia")
       ];
+
+      for(var i=0;i<list.length;i++){
+          let commonObj={
+              city:"",
+              cityInitials:"",
+              countryInitials:"",
+              countryregion:"埃及",
+              id:"",
+              state:""
+          }
+          commonObj.countryregion=list[i];
+          obj['list'].push(commonObj);
+      }
       return obj;
     },
     getHotCity(country) {
-      let obj = {};
+      let obj = {},list=[];
       obj["letter"] = "热门城市";
+      obj['list']=[];
       switch (country) {
         case "中国":
-          obj["citylist"] = [
+          list = [
             this.$t("city.Beijing"),
             this.$t("city.Shanghai"),
             this.$t("city.Guangzhou"),
@@ -508,7 +556,7 @@ export default {
           ];
           break;
         case "China":
-          obj["citylist"] = [
+          list = [
             this.$t("city.beijing"),
             this.$t("city.shanghai"),
             this.$t("city.Guangzhou"),
@@ -536,52 +584,52 @@ export default {
           ];
           break;
         case "韩国":
-          obj["citylist"] = [this.$t("city.Seoul"), this.$t("city.Busan")];
+          list = [this.$t("city.Seoul"), this.$t("city.Busan")];
           break;
         case "Korea":
-          obj["citylist"] = [this.$t("city.Seoul"), this.$t("city.Busan")];
+          list = [this.$t("city.Seoul"), this.$t("city.Busan")];
           break;
         case "日本":
-          obj["citylist"] = [
+          list = [
             this.$t("city.Tokyo"),
             this.$t("city.Nagoya"),
             this.$t("city.Osaka")
           ];
           break;
         case "Japan":
-          obj["citylist"] = [
+          list = [
             this.$t("city.Tokyo"),
             this.$t("city.Nagoya"),
             this.$t("city.Osaka")
           ];
           break;
         case "新加坡":
-          obj["citylist"] = [this.$t("city.Singapore")];
+            list= [this.$t("city.Singapore")];
           break;
         case "Singapore":
-          obj["citylist"] = [this.$t("city.Singapore")];
+          list = [this.$t("city.Singapore")];
           break;
         case "泰国":
-          obj["citylist"] = [this.$t("city.Bangkok")];
+          list = [this.$t("city.Bangkok")];
           break;
         case "Thailand":
-          obj["citylist"] = [this.$t("city.Bangkok")];
+          list = [this.$t("city.Bangkok")];
           break;
         case "越南":
-          obj["citylist"] = [this.$t("city.HoChiMinhCity")];
+          list = [this.$t("city.HoChiMinhCity")];
           break;
         case "Vietnam":
-          obj["citylist"] = [this.$t("city.HoChiMinhCity")];
+          list = [this.$t("city.HoChiMinhCity")];
           break;
         case "美国":
-          obj["citylist"] = [
+          list = [
             this.$t("city.NewYork"),
             this.$t("city.LosAngeles"),
             this.$t("city.Hawaii")
           ];
           break;
         case "US":
-          obj["citylist"] = [
+          list = [
             this.$t("city.NewYork"),
             this.$t("city.LosAngeles"),
             this.$t("city.Hawaii")
@@ -589,41 +637,54 @@ export default {
           break;
 
         case "德国":
-          obj["citylist"] = [this.$t("city.Frankfurt")];
+          list= [this.$t("city.Frankfurt")];
           break;
         case "Germany":
-          obj["citylist"] = [this.$t("city.Frankfurt")];
+          list= [this.$t("city.Frankfurt")];
           break;
         case "加拿大":
-          obj["citylist"] = [this.$t("city.Vancouver")];
+          list = [this.$t("city.Vancouver")];
           break;
         case "Canada":
-          obj["citylist"] = [this.$t("city.Vancouver")];
+          list = [this.$t("city.Vancouver")];
           break;
         case "英国":
-          obj["citylist"] = [this.$t("city.Landon")];
+          list= [this.$t("city.Landon")];
           break;
         case "UK":
-          obj["citylist"] = [this.$t("city.Landon")];
+          list= [this.$t("city.Landon")];
           break;
         case "澳大利亚":
-          obj["citylist"] = [this.$t("city.Sydney")];
+          list = [this.$t("city.Sydney")];
           break;
         case "Australia":
-          obj["citylist"] = [this.$t("city.Sydney")];
+          list = [this.$t("city.Sydney")];
           break;
         case "法国":
-          obj["citylist"] = [this.$t("city.Paris")];
+          list = [this.$t("city.Paris")];
           break;
         case "France":
-          obj["citylist"] = [this.$t("city.Paris")];
+          list = [this.$t("city.Paris")];
           break;
         case "马来西亚":
-          obj["citylist"] = [this.$t("city.KualaLumpur")];
+          list = [this.$t("city.KualaLumpur")];
           break;
         case "Malaysia":
-          obj["citylist"] = [this.$t("city.KualaLumpur")];
+          list= [this.$t("city.KualaLumpur")];
           break;
+        default:
+      }
+      for(var i=0;i<list.length;i++){
+          let commonObj={
+              city:"",
+              cityInitials:"",
+              countryInitials:"",
+              countryregion:"",
+              id:"",
+              state:""
+          }
+          commonObj.city=list[i];
+          obj['list'].push(commonObj);
       }
       return obj;
     },
