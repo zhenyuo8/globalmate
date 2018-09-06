@@ -144,7 +144,7 @@ export default {
                     &.rank{
                         width: 6%;
                         text-align: left;
-                        line-height: 36px;
+                        line-height: .72rem;
                         padding: 0rem 0 0.2rem;
                     }
                     &.rank_0{
@@ -167,9 +167,9 @@ export default {
                         padding: 0.2rem 0 0.2rem;
                         position: relative;
                          .userImage{
-                             width: 12%;
+                             width: .72rem;
                              float: left;
-                             max-height: 36px;
+                             height: .72rem;
                              overflow: hidden;
                              border-radius: 4px;
                              img{
@@ -203,7 +203,7 @@ export default {
                         }
                          &>.nice{
                              float: right;
-                             line-height: 36px;
+                             line-height: .72rem;
                              margin-right: 0.4rem;
                          }
                     }

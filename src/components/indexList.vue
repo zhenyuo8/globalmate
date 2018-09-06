@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="gl_city" id="gl_city">
     <div class="">
       <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" :hideFilter='hideFilter'></searchInput>
       <div class="back" @click='back'>
@@ -84,86 +84,79 @@ export default {
   }
 };
 </script>
-<style media="screen">
-li {
-  list-style: none;
-}
-.back {
-  position: absolute;
-  right: 0.08rem;
-  top: 0;
-  font-size: 14px;
-  color: blue;
-  height: 44px;
-  line-height: 44px;
-}
-.mint-cell {
-  display: inline-block !important;
-  height: 32px;
-  min-height: 32px!important;
-  max-height: 32px!important;
-  margin: 4px 2.667%;
-  width: 28%;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  box-sizing: border-box;
-  background-image: none !important;
-}
-.picked {
-  border-color: red;
-}
-.mint-cell-title {
-  /*height: 32px;*/
-  text-align: center;
+<style media="screen" lang='less'>
+#gl_city{
+    li {
+      list-style: none;
+    }
+    .back {
+      position: absolute;
+      right: 0.08rem;
+      top: 0;
+      font-size: 14px;
+      color: blue;
+      height: 44px;
+      line-height: 44px;
+    }
+    .mint-cell {
+      display: inline-block !important;
+      height: 32px;
+      min-height: 32px!important;
+      max-height: 32px!important;
+      margin: 4px 2.667%;
+      width: 28%;
+      border-radius: 4px;
+      border: 1px solid #eee;
+      box-sizing: border-box;
+      background-image: none !important;
+    }
+    .picked {
+      border-color: red;
+    }
+    .mint-cell-title {
+      /*height: 32px;*/
+      text-align: center;
+    }
+
+    .mint-cell-wrapper {
+      background: none;
+      height: 100%;
+      padding: 0 0.04rem;
+      background-image: none !important;
+    }
+    .mint-cell-text {
+      font-size: 13px !important;
+      /*line-height: 32px;*/
+      max-width: 1.4rem;
+      /*height: 32px;*/
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      margin: auto;
+      -webkit-line-clamp: 2;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .mint-indexsection-index {
+      font-size: 14px;
+      text-align: left;
+      font-weight: 600;
+      color: #c38230;
+      padding: 4px 0.2rem;
+      background: #fff;
+    }
+    .mint-indexsection-index + ul {
+      padding: 10px 2%;
+      width: 96%;
+      text-align: left;
+    }
+
+    .mint-indexlist-navitem {
+      font-size: 12px;
+      width: .58rem;
+      padding: 4px 0px;
+    }
 }
 
-.mint-cell-wrapper {
-  background: none;
-  height: 100%;
-  padding: 0 0.04rem;
-  background-image: none !important;
-}
-.mint-cell-text {
-  font-size: 13px !important;
-  /*line-height: 32px;*/
-  max-width: 1.4rem;
-  /*height: 32px;*/
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  margin: auto;
-  -webkit-line-clamp: 2;
-  vertical-align: middle;
-  text-align: center;
-}
-.mint-indexsection-index {
-  font-size: 14px;
-  text-align: left;
-  font-weight: 600;
-  color: #c38230;
-  padding: 4px 0.2rem;
-  background: #fff;
-}
-.mint-indexsection-index + ul {
-  padding: 10px 2%;
-  width: 96%;
-  text-align: left;
-}
-
-.mint-indexlist-nav {
-    /*justify-content: flex-start!important;*/
-    color: #077fc5;
-}
-.mint-indexlist-navlist{
-    /*margin-top: 18px;*/
-}
-.mint-indexlist-navitem {
-  font-size: 12px;
-  width: .58rem;
-  padding: 4px 0px;
-}
-</style>
-
-<style scoped>
 </style>

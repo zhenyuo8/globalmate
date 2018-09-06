@@ -148,7 +148,7 @@ export default {
       this.previewImageFlag = false;
       let postData = this.getListData();
       this.submitUrl = "/globalmate/rest/need/addCommon";
-      postData["type"] = this.type;
+
       if (postData) {
         this.loadingShow = true;
         this.axios
@@ -616,7 +616,8 @@ export default {
         }
       }
       if (!this.myReward.isPlacehold) {
-        postData[this.myReward.componentKey] = this.myReward.text;
+          let moneyType=$('.gl_reward_type').text();
+        postData[this.myReward.componentKey] = this.myReward.text+' '+moneyType;
       } else {
         hasParaRequired = true;
       }
@@ -637,6 +638,7 @@ export default {
       if (this.filesHasUpload.length !== 0) {
         postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
       }
+      postData["type"] = this.type;
       return postData;
     },
     // 发布页面显示字段根据form显示不同字段
@@ -649,7 +651,8 @@ export default {
         key: "reward",
         isRequire: false,
         isPlacehold: true,
-        componentKey: "reward"
+        componentKey: "reward",
+        rewardType:'人民币'
       };
       this.title = {
         title: this.$t("formTitle.head"),
@@ -725,7 +728,13 @@ export default {
           if (res.success) {
             let data = res.data;
             this.listRepeatProcess();
-            this.myReward.text = data.conceretNeed.reward;
+            if(isNaN(data.conceretNeed.reward)){
+                this.myReward.text = data.conceretNeed.reward.split(' ')[0];
+                this.myReward.rewardType = data.conceretNeed.reward.split(' ')[1];
+            }else{
+                this.myReward.text = data.conceretNeed.reward;
+            }
+
             this.myReward.isPlacehold = false;
             this.title.text = data.conceretNeed.title;
             this.title.isPlacehold = false;
