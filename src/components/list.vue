@@ -124,7 +124,9 @@ input {
   -webkit-transition: all 0.3s ease-in;
   -moz-transition: all 0.3s ease-in;
   transition: all 0.3s ease-in;
+
 }
+
 
 </style>
 <style media="screen" lang="less">
@@ -155,6 +157,14 @@ input {
   }
 }
 
+.gl_reward_type_warp{
+    .mint-cell-title{
+        text-align: left!important;
+    }
+    .mint-radio-core{
+        display: none!important
+    }
+}
 </style>
 
 <template>

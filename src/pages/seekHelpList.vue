@@ -856,15 +856,11 @@ export default {
   activated() {
     this.myAssistList = [];
     if (this.userInfo.token) {
-      if (!this.previewImageFlag) {
         this.loadData();
-      }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
-          if (!this.previewImageFlag) {
             this.loadData();
-          }
           clearInterval(this.timer);
         }
       }, 200);
@@ -873,6 +869,7 @@ export default {
   deactivated() {
     this.pageNum = 1;
     this.show = false;
+    this.allLoaded = false;
     this.selectItem = [];
     clearInterval(this.timer);
     this.searchContent.type = ''
