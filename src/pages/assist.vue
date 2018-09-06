@@ -14,7 +14,7 @@
           <List :itemRepeat='title' :clickCallBack='clickCallBack'></List>
         </div>
         <div class="main_decription_area">
-          <textarea name="name" :placeholder="$t('formTitle.descriptionTips')" style='width:100%'></textarea>
+          <textarea name="name" :placeholder="$t('formTitle.descriptionTips')" style='width:100%' v-model='description'></textarea>
         </div>
         <div class="main_decription_uploader">
           <div class="hide_space">
@@ -102,7 +102,8 @@ export default {
         name: '删除',
         method: this.removePic
       }],
-      removeIndex: undefined
+      removeIndex: undefined,
+      description: ''
     };
   },
   watch: {
@@ -581,11 +582,12 @@ export default {
         });
         return false;
       }
-      if (this.$el.querySelector(".main_decription_area textarea")) {
-        postData["description"] = this.$el.querySelector(
-          ".main_decription_area textarea"
-        ).value;
-      }
+      // if (this.$el.querySelector(".main_decription_area textarea")) {
+      //   postData["description"] = this.$el.querySelector(
+      //     ".main_decription_area textarea"
+      //   ).value;
+      // }
+      postData["description"] = this.description;
       if (this.filesHasUpload.length !== 0) {
         postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
       }
@@ -681,6 +683,9 @@ export default {
             this.myReward.isPlacehold = false;
             this.title.text = data.conceretNeed.title;
             this.title.isPlacehold = false;
+            if (data.conceretNeed.pic) {
+              this.filesHasUpload = data.conceretNeed.pic.split(';')
+            }
             this.listRepeat.forEach(function(item, index) {
               if (item.componentKey == "country" && data.conceretNeed.country) {
                 item.text = data.conceretNeed.country;
@@ -706,12 +711,13 @@ export default {
                   .format("YYYY-MM-DD");
                 item.isPlacehold = false;
               }
-              if (data.conceretNeed.description) {
-                _this.$el.querySelector(
-                  ".main_decription_area textarea"
-                ).value =
-                  data.conceretNeed.description;
-              }
+              this.description = data.conceretNeed.description || ''
+              // if (data.conceretNeed.description) {
+              //   _this.$el.querySelector(
+              //     ".main_decription_area textarea"
+              //   ).value =
+              //     data.conceretNeed.description;
+              // }
             });
           }
         })
@@ -858,7 +864,8 @@ export default {
     this.selectItem = [];
     this.type = this.$route.query.key;
     $(".repeat_content input").val("");
-    $(".main_decription_area textarea").val("");
+    // $(".main_decription_area textarea").val("");
+    this.description = '';
     if (this.$route.query.mode && this.$route.query.mode == "MODIFY") {
       this.isEditType = true;
       this.loadDataEdit(this.$route.query.id);

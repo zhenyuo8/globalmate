@@ -25,7 +25,7 @@
       </div>
       <div id="convo" class="convo" :class="id?'':'gl_no_item'">
         <ul class="chat-thread" id="chat-thread">
-          <li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)'>
+          <li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)' :key='index'>
             <img :src="item.pic" alt="">
             <div class="chat-item-text">
               {{item.chatContent}}
@@ -82,6 +82,10 @@ export default {
       }
     },
     showDetail(detail) {
+      if (this.$route.query && this.$route.query.fromDetail === 'true') {
+        this.$router.go(-1)
+        return
+      }
       this.$router.push({
         path: "detail",
         query: {
@@ -488,6 +492,10 @@ export default {
 
 <style lang='less'>
 @import "../assets/css/im.css";
+.chat-thread li img, .chat-thread .img-name {
+  width: 0.6rem;
+  height: 0.6rem;
+}
 #main {
   background-color: #f4f4f4;
 }
@@ -501,6 +509,10 @@ export default {
   width: 100%;
   right: 0;
   left: 0;
+  .chart_main_content {
+    // height: 1.4rem;
+    // overflow: hidden;
+  }
 }
 
 .convo {

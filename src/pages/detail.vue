@@ -186,7 +186,7 @@
       </div>
       <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
         <div class="detail_content_img" v-for="(items,indexs) in listData.pic" :key='indexs'>
-          <img :src="items" alt="" v-if="indexs<3">
+          <img :src="items" alt="">
         </div>
       </div>
 
@@ -418,7 +418,8 @@ export default {
           title: this.othersInfo.nikename,
           id: this.$route.query.id,
           toChartUser: this.othersInfo.nikename,
-          toChartId: this.othersInfo.id
+          toChartId: this.othersInfo.id,
+          fromDetail: 'true'
         }
       });
     },
@@ -451,7 +452,8 @@ export default {
           title: items.userInfo.nikename,
           id: item.id,
           toChartUser: items.userInfo.id,
-          toChartId: items.userInfo.id
+          toChartId: items.userInfo.id,
+          fromDetail: 'true'
         }
       });
   },
