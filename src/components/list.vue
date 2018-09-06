@@ -90,7 +90,18 @@ input {
 .gl_reward_type{
     font-size: 14px;
     padding-right: 0.2rem;
-    // overflow: hidden;
+    position: relative;
+    &:after{
+        content: '';
+        clear: both;
+        position: absolute;
+         width: 0;
+         height: 0;
+         border-bottom: 8px solid #54698d;
+         bottom: 20%;
+         right: .08rem;
+         border-left: 8px solid transparent;
+    }
 }
 .gl_mask{
     position: fixed;
