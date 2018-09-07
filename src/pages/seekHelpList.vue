@@ -221,6 +221,7 @@ export default {
         })
         .catch(e => {});
     },
+
     searchCallBack(data) {
       this.msg = !this.msg;
       this.list = [
@@ -692,8 +693,10 @@ export default {
       this.noDataTips = "";
       this.type = this.$route.query.id;
       if (this.type && this.type.toLocaleLowerCase() == "sos") {
+          $('.list_wrap').css('top',0);
         this.isSOS = true;
       } else {
+          $('.list_wrap').css('top','46px');
         this.isSOS = false;
       }
       let _this = this;
@@ -703,6 +706,7 @@ export default {
       };
       if (this.isSOS) {
         url = "/globalmate/rest/assist/listSOS";
+
       } else {
         postData["type"] = this.searchContent.type || "";
         postData["where"] = this.searchContent.where || "";
@@ -741,7 +745,7 @@ export default {
             if (this.loadTopFlag) {
               this.myAssistList = [];
             }
-            if (data) {
+            if (data.length!==0) {
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (

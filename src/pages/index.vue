@@ -207,7 +207,6 @@ export default {
       }
     },
     offer() {
-      // this.userId = .getItem("USERID");
       this.userId = this.userInfo["userId"];
       if (this.userInfo["curUser"]) {
         this.userId = this.userInfo["curUser"].id;
@@ -248,7 +247,7 @@ export default {
       }
     },
     toMessage() {
-    //   this.updateMsgList(this.messageList);
+      $(".message_tips").hide();
       this.$router.push({
         path: "messageList",
         query: {

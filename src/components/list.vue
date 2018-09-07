@@ -42,7 +42,6 @@
 .repeat_content input {
   text-align: right;
   padding-right: 0.2rem;
-  line-height: 44px;
 }
 .repeate_content_text span {
   /*margin-right: .4rem;*/
@@ -88,19 +87,23 @@ input {
     padding-right: 0!important;
 }
 .gl_reward_type{
-    font-size: 14px;
-    padding-right: 0.2rem;
+    font-size: 12px;
+    color: #f97426;
     position: relative;
+    display: inline;
+    padding: 2px 0.1rem 2px 0.1rem;
+    border: 1px solid #f97426;
+    border-radius: 4px;
     &:after{
         content: '';
         clear: both;
         position: absolute;
          width: 0;
          height: 0;
-         border-bottom: 8px solid #54698d;
-         bottom: 20%;
-         right: .08rem;
-         border-left: 8px solid transparent;
+         border-bottom: 6px solid #f97426;
+         bottom: 10%;
+         right: .02rem;
+         border-left: 6px solid transparent;
     }
 }
 .gl_mask{
@@ -167,7 +170,13 @@ input {
     display: none !important;
   }
 }
-
+.gl_reward_title{
+    width: 100px;
+    flex: 1!important;
+}
+.gl_reward_content{
+    flex: 2!important
+}
 .gl_reward_type_warp{
     .mint-cell-title{
         text-align: left!important;
@@ -182,7 +191,7 @@ input {
 
   <div class="repeat" @click='clickBack(itemRepeat)'>
     <mt-switch v-model="values" @change="turn($event,itemRepeat)" v-if="itemRepeat.componentKey==='reward'"></mt-switch>
-    <div class="repeat_title repeat_common">
+    <div class="repeat_title repeat_common" :class="itemRepeat.componentKey=='reward'?'gl_reward_title':''">
       <span style="color:red" v-if="itemRepeat.isRequire">*</span>
       <span>{{itemRepeat.title}}</span>
     </div>
@@ -201,7 +210,7 @@ input {
         </div>
       </div>
     </div>
-    <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'">
+    <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'" :class="itemRepeat.componentKey=='reward'?'gl_reward_content':''">
       <input :type="itemRepeat.componentKey==='reward'?'number':'text'" :disabled='itemRepeat.componentKey==="reward"&& !values' :class="itemRepeat.componentKey=='reward'?'gl_reward':''" name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
       <span v-show="itemRepeat.componentKey=='reward'" class="gl_reward_type" @click='selectRewardType'>{{itemRepeat.rewardType}}</span>
     </div>
