@@ -852,7 +852,7 @@ export default {
         })
         .catch(e => {});
     },
-    uploadToAli(localData, len) {
+    uploadToAli(localData) {
       let form = new FormData();
       let array = [];
       let bytes = window.atob(localData.split(",")[1]);
@@ -872,45 +872,60 @@ export default {
         form.append("success_action_status", "200");
         form.append("signature", obj.signature);
         form.append("file", blob, ran + ".jpg");
-        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key +
-          "_" +
-          ran +
-          ".jpg"}`;
-        this.axios
-          .post(obj.host, form, {
+        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key + "_" + ran + ".jpg"}`;
+        this.axios.post(obj.host, form, {
             headers: {
               "Content-Type": "multipart/form-data"
             }
-          })
-          .then(res => {
+          }).then(res => {
             // this[key] = url;
-            this.filesHasUpload[len] = url
+            this.filesHasUpload.some((item, index) => {
+              if (item === localData) {
+                this.filesHasUpload[index] = url
+              }
+            })
+            // this.filesHasUpload[len] = url
           });
+      });
+    },
+    getImgBase64 (localId) {
+      wx.getLocalImgData({
+        localId, // 图片的localID
+        success: res => {
+          var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+          if (localData.indexOf("data:image") != 0) {
+            localData = "data:image/jpeg;base64," + localData;
+          }
+          localData = localData.replace(/\r|\n/g, "").replace("data:image/jgp", "data:image/jpeg");
+          this.filesHasUpload.push(localData);
+          this.uploadToAli(localData);
+        }
       });
     },
     chosenImage () {
       wx.chooseImage({
-        count: 1, // 默认9
+        count: 9, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
         success: res => {
           // let len = this.filesHasUpload.length;
           var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
-          wx.getLocalImgData({
-            localId: localIds[0], // 图片的localID
-            success: res => {
-              var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
-              if (localData.indexOf("data:image") != 0) {
-                //判断是否有这样的头部
-                localData = "data:image/jpeg;base64," + localData;
-              }
-              localData = localData
-                .replace(/\r|\n/g, "")
-                .replace("data:image/jgp", "data:image/jpeg");
-              this.filesHasUpload.push(localData);
-              this.uploadToAli(localData, this.filesHasUpload.length - 1);
-            }
-          });
+          localIds.forEach(item => {
+            this.getImgBase64(item)
+          })
+          return;
+          // wx.getLocalImgData({
+          //   localId: localIds[0], // 图片的localID
+          //   success: res => {
+          //     var localData = res.localData; // localData是图片的base64数据，可以用img标签显示
+          //     if (localData.indexOf("data:image") != 0) {
+          //       localData = "data:image/jpeg;base64," + localData;
+          //     }
+          //     localData = localData.replace(/\r|\n/g, "").replace("data:image/jgp", "data:image/jpeg");
+          //     this.filesHasUpload.push(localData);
+          //     this.uploadToAli(localData);
+          //   }
+          // });
         }
       });
     }

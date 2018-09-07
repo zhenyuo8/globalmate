@@ -364,13 +364,11 @@ export default {
           "_" +
           ran +
           ".jpg"}`;
-        this.axios
-          .post(obj.host, form, {
+        this.axios.post(obj.host, form, {
             headers: {
               "Content-Type": "multipart/form-data"
             }
-          })
-          .then(res => {
+          }).then(res => {
             this[key] = url;
           });
       });
