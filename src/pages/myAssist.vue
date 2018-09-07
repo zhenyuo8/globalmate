@@ -372,6 +372,7 @@ export default {
                     )[0];
                   }
                   var status = data[i].need.enable + "";
+                  console.log(data[i].need.enable);
                   switch (status) {
                     case "1":
                       data[i].need.status = this.$t("status.open");

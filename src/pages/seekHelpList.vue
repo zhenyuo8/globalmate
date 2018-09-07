@@ -12,7 +12,7 @@
             <div class="name_user">
               <span class="name">{{item.need.userName}}</span>
               <span class="type">{{item.conceretNeed.tag}}</span>
-              <span class="type">{{$t('formTitle.reward')}}(￥)
+              <span class="type">{{$t('formTitle.reward')}}
                 <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
                 <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
               </span>
