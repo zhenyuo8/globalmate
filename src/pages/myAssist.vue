@@ -161,7 +161,20 @@ export default {
             .then(res => {
               this.myAssistList = [];
               this.loadingShow = true;
-              this.loadData();
+              let assistMan = item.assistList[0].providerId;
+              this.$router.push({
+                path: "evaluate",
+                query: {
+                  token: this.userInfo.token,
+                  title: this.$t("button.evaluate"),
+                  id: "evaluate",
+                  evaluateId: assistMan,
+                  businessId: item.need.id,
+                  uNeedId: item.assistList[0].uNeedId,
+                  uNeedName: item.assistList[0].uNeedName
+                }
+              });
+            //   this.loadData();
             })
             .catch(e => {
               console.log(e);
@@ -183,7 +196,20 @@ export default {
           .then(res => {
             this.myAssistList = [];
             this.loadingShow = true;
-            this.loadData();
+            let assistMan = item.assistList[0].providerId;
+            this.$router.push({
+              path: "evaluate",
+              query: {
+                token: this.userInfo.token,
+                title: this.$t("button.evaluate"),
+                id: "evaluate",
+                evaluateId: assistMan,
+                businessId: item.need.id,
+                uNeedId: item.assistList[0].uNeedId,
+                uNeedName: item.assistList[0].uNeedName
+              }
+            });
+            // this.loadData();
           })
           .catch(e => {
             console.log(e);
@@ -577,7 +603,7 @@ export default {
           &.can_be_done {
             opacity: 1;
           }
-          &.can_be_evalute {
+          &.can_be_evaluate {
             opacity: 1;
           }
         }

@@ -212,6 +212,7 @@ export default {
      * @return {[type]} [description]
      */
     getFriendsInGlohelp() {
+        let _this=this;
       this.axios
         .get(
           this.ip +
@@ -226,6 +227,7 @@ export default {
         .then(res => {
           if (res.success) {
             console.log(res.data, 11111);
+            console.log(_this.msgList);
             this.loadingShow = false;
           }
         })
@@ -268,6 +270,7 @@ export default {
           chatItemId = "";
         }
       }
+
       this.$router.push({
         path: "im",
         query: {

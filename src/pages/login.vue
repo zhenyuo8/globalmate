@@ -192,6 +192,17 @@ export default {
               console.log(err);
             }
           });
+          YYIMChat.getRosterItems({
+            success: function(data) {
+              if (data) {
+                // _this.updateFriendsList(JSON.parse(data));
+              }
+            },
+            error: function(err) {
+              console.log(err);
+            },
+            complete: function() {}
+          });
         },
         onExpiration: function(callback) {
           //自动更新token

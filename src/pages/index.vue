@@ -36,7 +36,7 @@
         </div>
       </div>
       <ul>
-        <li v-for="(item,index) in rankUserList" :key="index">
+        <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
           <a href="javascript:;"><img :src="item.pic" alt=""></a>
           <span>{{item.name}}</span>
           <img src="../assets/images/goden.png" alt="" v-if="index==0">
@@ -143,6 +143,19 @@ export default {
           }
         });
     },
+    goDetail(item) {
+      this.$router.push({
+        path: "mineInformation",
+        query: {
+          token: this.userInfo.token,
+          title: item.nikename,
+          otherUserId: item.id,
+          id: '',
+          currentuser: this.userInfo.userId,
+          seeOther: true
+        }
+      });
+    },
     publishHandler(item) {
       if (item.key == "carry") {
         Toast({
@@ -235,7 +248,7 @@ export default {
       }
     },
     toMessage() {
-      this.updateMsgList(this.messageList);
+    //   this.updateMsgList(this.messageList);
       this.$router.push({
         path: "messageList",
         query: {

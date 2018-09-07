@@ -35,6 +35,12 @@ export default {
         msgList: list
       });
     },
+    updateFriendsList: function (list) {
+      this.$store.commit({
+        type: "globalmate/UPDATE_FRIENDSLIST",
+        friendsList: list
+      });
+    },
     updateUserList: function (list) {
       this.$store.commit({
         type: "globalmate/UPDATE_USERLIST",
