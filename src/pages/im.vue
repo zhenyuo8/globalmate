@@ -415,7 +415,7 @@ export default {
                 result[i].pic = _this.othersInfo.pic;
                 try {
                   _this.chatItemId = JSON.parse(result[i].data.content).item;
-                  if (!_this.id) {
+                  if (!_this.id&&i==0) {
                     _this.id = _this.chatItemId;
                   }
                 } catch (e) {}

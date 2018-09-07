@@ -3,7 +3,7 @@
       <p class="title">排行榜</p>
       <div class="rank_warp">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
-              <div class="rank_repeat" v-for="(item,index) in userList" :key='index'>
+              <div class="rank_repeat" v-for="(item,index) in userLists" :key='index' @click='goDetail(item)'>
                   <div class="rank" :class="'rank_'+index">
                       {{index+1}}
                   </div>
@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-        userList:[],
+        userLists:[],
         loadingShow:true,
         allLoaded:true
     };
@@ -71,7 +71,7 @@ export default {
 　　　                   data[i] = data[minIndex];
 　　　　                 data[minIndex] = temp;
                   }
-                  this.userList=data;
+                  this.userLists=data;
                   this.loadingShow=false;
               }else {
                   this.loadingShow=false;
@@ -88,11 +88,24 @@ export default {
       loadBottom() {
           this.allLoaded = true;
           this.$refs.loadmore.onBottomLoaded();
-      }
+      },
+      goDetail(item) {
+        this.$router.push({
+          path: "mineInformation",
+          query: {
+            token: this.userInfo.token,
+            title: item.nikename,
+            otherUserId: item.id,
+            id: '',
+            currentuser: this.userInfo.userId,
+            seeOther: true
+          }
+        });
+      },
 
   },
   activated(){
-      this.userList=[];
+      this.userLists=[];
       if (this.userInfo.token) {
          this.loadData();
       } else {
