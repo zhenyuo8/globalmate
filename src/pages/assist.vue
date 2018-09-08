@@ -733,8 +733,8 @@ export default {
             let data = res.data;
             this.listRepeatProcess();
             if(isNaN(data.conceretNeed.reward)){
-                this.myReward.text = data.conceretNeed.reward.split(' ')[0];
-                this.myReward.rewardType = data.conceretNeed.reward.split(' ')[1];
+                this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
+                this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||'人民币';
             }else{
                 this.myReward.text = data.conceretNeed.reward;
             }
@@ -743,7 +743,7 @@ export default {
             this.title.text = data.conceretNeed.title;
             this.title.isPlacehold = false;
             if (data.conceretNeed.pic) {
-              this.filesHasUpload = data.conceretNeed.pic.split(';')
+              this.filesHasUpload = data.conceretNeed.pic&&data.conceretNeed.pic.split(';')
             }
             this.listRepeat.forEach(function(item, index) {
               if (item.componentKey == "country" && data.conceretNeed.country) {
@@ -770,13 +770,9 @@ export default {
                   .format("YYYY-MM-DD");
                 item.isPlacehold = false;
               }
-              this.description = data.conceretNeed.description || ''
-              // if (data.conceretNeed.description) {
-              //   _this.$el.querySelector(
-              //     ".main_decription_area textarea"
-              //   ).value =
-              //     data.conceretNeed.description;
-              // }
+              if (data.conceretNeed.description) {
+                _this.$el.querySelector(".main_decription_area textarea").value =data.conceretNeed.description;
+              }
             });
           }
         })

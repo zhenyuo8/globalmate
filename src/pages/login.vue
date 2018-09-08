@@ -182,26 +182,28 @@ export default {
           YYIMChat.getVCard({
             success: function(res) {}
           });
-          YYIMChat.getRecentDigset({
-            startDate: 0,
-            size: 100,
-            success: function(data) {
-              _this.updateMsgList(data.list);
-            },
-            error: function(err) {
-              console.log(err);
-            }
-          });
+
           YYIMChat.getRosterItems({
             success: function(data) {
               if (data) {
-                // _this.updateFriendsList(JSON.parse(data));
+                _this.updateFriendsList(JSON.parse(data));
               }
             },
             error: function(err) {
               console.log(err);
             },
-            complete: function() {}
+            complete: function() {
+                YYIMChat.getRecentDigset({
+                  startDate: 0,
+                  size: 100,
+                  success: function(data) {
+                      _this.updateMsgList(data.list);
+                  },
+                  error: function(err) {
+                    console.log(err);
+                  }
+                });
+            }
           });
         },
         onExpiration: function(callback) {

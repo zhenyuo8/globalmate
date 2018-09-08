@@ -249,7 +249,7 @@ export default {
       }
       if (item.assistList.length == 0) {
         Toast({
-          message: "当前困难不是由别人完成",
+          message: "不能对自己进行评价",
           duration: 2000
         });
         return;
@@ -372,6 +372,7 @@ export default {
                     )[0];
                   }
                   var status = data[i].need.enable + "";
+                  console.log(data[i].need.enable);
                   switch (status) {
                     case "1":
                       data[i].need.status = this.$t("status.open");

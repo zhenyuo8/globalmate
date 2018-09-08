@@ -7,7 +7,7 @@ export default {
     // userInfo: function () {
     //   return this.$store.state.globalmate.userInfo
     // },
-    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList', 'userList']),
+    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList','friendsList', 'userList']),
     ...mapState(['ip', 'wxAppId', 'wxAppSecret', 'isWXVerified']),
     wxSign() {
       return this.$store.state.globalmate.wx.signature

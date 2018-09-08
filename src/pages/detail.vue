@@ -250,7 +250,6 @@ export default {
     };
   },
   activated() {
-    let url = window.location.href;
     this.listData = {};
     this.pushList = [];
     this.assistList = [];

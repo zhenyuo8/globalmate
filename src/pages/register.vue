@@ -34,7 +34,9 @@
 </template>
 
 <script>
+import userMix from "../mixins/userInfo";
 export default {
+     mixins: [userMix],
   data() {
     return {};
   },

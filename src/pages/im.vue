@@ -606,6 +606,6 @@ export default {
   }
 }
 .mint-toast {
-  padding: 20px 0.2rem !important;
+  padding: 10px 0.2rem !important;
 }
 </style>

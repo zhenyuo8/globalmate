@@ -3,7 +3,82 @@
     <!--搜索框-->
     <searchInput :searchCallBack="searchCallBack" :childMsg='msg' v-if="!isSOS" @search='searchForContent'></searchInput>
     <div class="list_wrap" :class="{dataLoaded: allLoaded, notAllLoad: !allLoaded}">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
+        <mt-navbar v-model="selected">
+            <mt-tab-item id="1">进行中</mt-tab-item>
+            <mt-tab-item id="2">已完成</mt-tab-item>
+        </mt-navbar>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
+           <mt-tab-container v-model="selected">
+               <mt-tab-container-item id="1">
+                   <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
+                     <div class="list_repeat_user">
+                       <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
+                         <img :src="item.need.pic" alt="">
+                       </div>
+                       <div class="name_user">
+                         <span class="name">{{item.need.userName}}</span>
+                         <span class="type">{{item.conceretNeed.tag}}</span>
+                         <span class="type">{{$t('formTitle.reward')}}
+                           <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                           <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                         </span>
+                       </div>
+                       <div class="status_user">
+                         <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                         <span class="created_time">{{item.need.time}}</span>
+                       </div>
+                     </div>
+                     <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
+                     <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
+                       <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
+                         <img :src="items" alt="" v-if="indexs<3" @click.stop.prevent='previewImage($event,items, item.conceretNeed.pic)'>
+                       </div>
+                     </div>
+                     <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
+                       <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
+                     </div>
+                   </div>
+                   <div class="show_all_data" v-show="canNotLoadMore">
+                     已加载所有数据
+                   </div>
+               </mt-tab-container-item>
+               <mt-tab-container-item id="2">
+                   <div class="list_repeat" v-for="(item,index) in myAssistListDone" @click='showDetail(item)' :key='index'>
+                     <div class="list_repeat_user">
+                       <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
+                         <img :src="item.need.pic" alt="">
+                       </div>
+                       <div class="name_user">
+                         <span class="name">{{item.need.userName}}</span>
+                         <span class="type">{{item.conceretNeed.tag}}</span>
+                         <span class="type">{{$t('formTitle.reward')}}
+                           <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                           <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                         </span>
+                       </div>
+                       <div class="status_user">
+                         <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                         <span class="created_time">{{item.need.time}}</span>
+                       </div>
+                     </div>
+                     <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
+                     <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
+                       <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
+                         <img :src="items" alt="" v-if="indexs<3" @click.stop.prevent='previewImage($event,items, item.conceretNeed.pic)'>
+                       </div>
+                     </div>
+                     <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
+                       <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
+                     </div>
+                   </div>
+                   <div class="show_all_data" v-show="canNotLoadMore">
+                     已加载所有数据
+                   </div>
+               </mt-tab-container-item>
+           </mt-tab-container>
+        </mt-loadmore>
+
+      <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
         <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
           <div class="list_repeat_user">
             <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
@@ -12,7 +87,7 @@
             <div class="name_user">
               <span class="name">{{item.need.userName}}</span>
               <span class="type">{{item.conceretNeed.tag}}</span>
-              <span class="type">{{$t('formTitle.reward')}}(￥)
+              <span class="type">{{$t('formTitle.reward')}}
                 <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
                 <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
               </span>
@@ -35,7 +110,7 @@
         <div class="show_all_data" v-show="canNotLoadMore">
           已加载所有数据
         </div>
-      </mt-loadmore>
+      </mt-loadmore> -->
     </div>
 
     <div v-if="nodataFlag" class="yy_nodata_class" style="">
@@ -102,10 +177,14 @@
 import searchInput from "../components/searchInput.vue";
 import loading from "../components/loading.vue";
 import indexList from "../components/indexList.vue";
-import { MessageBox, Toast, Loadmore } from "mint-ui";
+import { MessageBox, Toast, Loadmore ,Navbar, TabItem ,TabContainer, TabContainerItem} from "mint-ui";
 Vue.component(Loadmore.name, Loadmore);
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
+Vue.component(Navbar.name, Navbar);
+Vue.component(TabItem.name, TabItem);
+Vue.component(TabContainer.name, TabContainer);
+Vue.component(TabContainerItem.name, TabContainerItem);
 import userMix from "../mixins/userInfo";
 export default {
   name: "seekHelpList",
@@ -118,6 +197,7 @@ export default {
   data() {
     return {
       myAssistList: [],
+      myAssistListDone:[],
       searchVal: "",
       msg: false,
       nodataFlag: false,
@@ -143,7 +223,8 @@ export default {
       pageNum:1,
       pageSize:10,
       canNotLoadMore:false,
-      bottomPullText:'上拉加载'
+      bottomPullText:'上拉加载',
+      selected:'1'
     };
   },
   methods: {
@@ -221,6 +302,7 @@ export default {
         })
         .catch(e => {});
     },
+
     searchCallBack(data) {
       this.msg = !this.msg;
       this.list = [
@@ -692,8 +774,10 @@ export default {
       this.noDataTips = "";
       this.type = this.$route.query.id;
       if (this.type && this.type.toLocaleLowerCase() == "sos") {
+          $('.list_wrap').css('top',0);
         this.isSOS = true;
       } else {
+          $('.list_wrap').css('top','46px');
         this.isSOS = false;
       }
       let _this = this;
@@ -703,6 +787,7 @@ export default {
       };
       if (this.isSOS) {
         url = "/globalmate/rest/assist/listSOS";
+
       } else {
         postData["type"] = this.searchContent.type || "";
         postData["where"] = this.searchContent.where || "";
@@ -740,8 +825,9 @@ export default {
             }
             if (this.loadTopFlag) {
               this.myAssistList = [];
+              this.myAssistListDone = [];
             }
-            if (data) {
+            if (data.length!==0) {
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (
@@ -791,14 +877,15 @@ export default {
                     for (var n = 0; n < this.userList.length; n++) {
                       if (curData.need.userId == this.userList[n].id) {
                         curData.need.pic = this.userList[n].pic;
-                        if (
-                          curData.need.enable != 0 &&
-                          curData.need.enable != 6
-                        ) {
+                        if (curData.need.enable != 0 &&curData.need.enable != 6) {
                           _this.myAssistList.push(curData);
-                        }
-                        let len = _this.myAssistList.length;
+                      }else{
+                          _this.myAssistListDone.push(curData);
+                      }
                         _this.myAssistList.sort((a,b) => {
+                          return b.need.createTime - a.need.createTime
+                        })
+                        _this.myAssistListDone.sort((a,b) => {
                           return b.need.createTime - a.need.createTime
                         })
                       }
@@ -859,6 +946,7 @@ export default {
   },
   activated() {
     this.myAssistList = [];
+    this.myAssistListDone = [];
     if (this.userInfo.token && this.userList && this.userList.length) {
       // if (!this.previewImageFlag) {
         this.loadData();
@@ -1090,6 +1178,7 @@ form.rightIn_form {
     padding: 0.2rem 0.4rem;
     margin: auto;
     margin-bottom: 10px;
+    margin-top: 10px;
     position: relative;
     & > div {
       margin-top: 10px;
@@ -1234,24 +1323,17 @@ form.rightIn_form {
     }
     .mint-loadmore {
       min-height: 100%;
-      // position: absolute;
-      // top: 0;
-      // bottom: 0;
-      // left: 0;
-      // right: 0;
-      // overflow: auto;
     }
+  }
+  .mint-navbar .mint-tab-item{
+      padding: 10px 0!important;
   }
   .search-box {
     position: relative;
-    /*width: 315px;*/
-    /*height:100%;*/
     line-height: 0;
     background: #eee;
     opacity: 0.82;
     overflow: hidden;
-    // margin:0px 0.24rem;
-    // padding: 0.16rem;
     padding: 8px;
     .search_icon {
       position: absolute !important;
@@ -1264,7 +1346,6 @@ form.rightIn_form {
       }
     }
     .search-input {
-      /*width: 6.3rem;*/
       width: 90%;
       height: 30px;
       border: none;
@@ -1320,7 +1401,6 @@ form.rightIn_form {
       float: right;
       height: 24px;
       padding: 3px 0;
-      /*display:none;*/
       img {
         width: 23px;
         height: 23px;
