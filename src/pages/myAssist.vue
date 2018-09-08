@@ -249,7 +249,7 @@ export default {
       }
       if (item.assistList.length == 0) {
         Toast({
-          message: "当前困难不是由别人完成",
+          message: "不能对自己进行评价",
           duration: 2000
         });
         return;
