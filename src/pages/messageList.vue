@@ -25,7 +25,7 @@
   height: 100%;
 }
 .message_warp ul {
-  margin-left: 0.2rem;
+  padding-left: 0.2rem;
 }
 .message_warp ul li {
   display: flex;
@@ -90,14 +90,16 @@ ul > li:last-child {
 </style>
 <style media="screen" lang="less">
     .message_warp{
+        background: #eee;
         .mint-navbar .mint-tab-item{
             padding: 10px 0;
         }
         .mint-tab-item .mint-tab-item-label{
             font-size: 14px!important;
         }
-        .mint-tab-container-item{
-            margin-top: 8px;
+        .mint-tab-container{
+            margin-top: 10px;
+            background: #fff;
         }
         .gl_receive_new:before{
             content: '';

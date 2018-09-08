@@ -104,7 +104,7 @@ export default new Router({
       name: 'rankAll',
       component: () => import('@/pages/rankAll.vue'),
       meta: {
-        index: 28
+        index: 6
       }
     },
     {
