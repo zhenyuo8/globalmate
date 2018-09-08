@@ -400,10 +400,6 @@ export default {
   deactivated() {
     clearInterval(this.timer);
   },
-
-  created() {
-
-  }
 };
 </script>
 

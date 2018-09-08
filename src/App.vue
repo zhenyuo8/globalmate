@@ -251,6 +251,18 @@ export default {
           }
         });
     },
+    loadUserList (token) {
+      this.axios.get(this.ip+'/globalmate/rest/user/list',{
+            params:{
+                token,
+                onlyCurrentUser:false,
+            }
+        }).then((res)=>{
+            if(res.success){
+                this.updateUserList(res.data);
+            }
+        })
+    },
     getToken(paramName, val) {
       this.axios
         .get(this.ip + "/globalmate/rest/user/getToken", {
@@ -264,6 +276,7 @@ export default {
             this.updateUserInfo({
               token: res.data
             });
+            this.loadUserList(res.data)
           }
         })
         .catch();
@@ -284,6 +297,7 @@ export default {
               userId,
               openId
             });
+            this.loadUserList(token)
             this.loadIsCertified();
           }
         })

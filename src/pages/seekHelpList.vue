@@ -859,13 +859,13 @@ export default {
   },
   activated() {
     this.myAssistList = [];
-    if (this.userInfo.token) {
+    if (this.userInfo.token && this.userList && this.userList.length) {
       // if (!this.previewImageFlag) {
         this.loadData();
       // }
     } else {
       this.timer = setInterval(() => {
-        if (this.userInfo.token) {
+        if (this.userInfo.token && this.userList && this.userList.length) {
           // if (!this.previewImageFlag) {
             this.loadData();
           // }
