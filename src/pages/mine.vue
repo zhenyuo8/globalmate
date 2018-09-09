@@ -130,7 +130,6 @@ html,body {
 
 <script>
 import List from "../components/list.vue";
-import selectList from "../components/selectList.vue";
 import userMix from "../mixins/userInfo";
 export default {
   name: "mine",
@@ -157,7 +156,7 @@ export default {
           mineType: "sos"
         },
         {
-          title: "我帮助的",
+          title: this.$t('personaPage.offers'),
           text: "",
           arrow: true,
           mineType: "solove"
@@ -187,7 +186,6 @@ export default {
   },
   components: {
     List,
-    selectList
   },
   computed: {
     token: function () {
@@ -200,7 +198,6 @@ export default {
         path: "mineInformation",
         query: {
           token: this.token,
-          title: "个人信息",
           id: "mineInformation",
           seeOther:false,
         }
@@ -214,7 +211,6 @@ export default {
             path: "myAssist",
             query: {
               token: this.token,
-              title: "求助列表",
               id: "myAssist"
             }
           });
@@ -224,7 +220,6 @@ export default {
             path: "myAssist",
             query: {
               token: this.token,
-              title: "我帮助的",
               id: "solove"
             }
           });
@@ -234,7 +229,6 @@ export default {
             path: "feedback",
             query: {
               token: this.token,
-              title: "意见反馈",
               id: "feedback"
             }
           });
@@ -254,7 +248,6 @@ export default {
             path: "identify",
             query: {
               token: this.token,
-              title: "身份认证",
               id: "identify"
             }
           });
@@ -264,7 +257,6 @@ export default {
             path: "messageList",
             query: {
               token: this.token,
-              title: "我的好友",
               id: "message"
             }
           });
@@ -277,7 +269,6 @@ export default {
         path: "personalFile",
         query: {
           token: this.token,
-          title: "个人资料编辑",
           id: "personalFile"
         }
       });

@@ -46,7 +46,6 @@
 
 <script>
 import List from "../components/list.vue";
-import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
@@ -97,7 +96,6 @@ export default {
   },
   components: {
     List,
-    selectList,
     Toast,
     indexList,
     loading,

@@ -1,5 +1,6 @@
 export default{
     allDataDisplayed: '已显示所有数据',
+    noDataDisplay: '暂无相关数据',
     button:{
         'myPublished':'我发布的',
         'OthersPublished':'提供帮助',
@@ -17,7 +18,9 @@ export default{
         'edit':'重新编辑',
         'gohelp':'去帮助',
         'send':'发送',
-        'back':'返回'
+        'back':'返回',
+        'contact':'联系Ta',
+        'addFriends':'+好友'
     },
     cityName:{
         'beijing':'北京',
@@ -71,6 +74,7 @@ export default{
         raty:'整体评分',
         evaluateTips:'对她/他的评价',
         score:'分',
+        scoreAction:'评分',
         pushTitle:'推送名单',
         helpMan:'提供帮助方',
         toWord:'至',
@@ -78,6 +82,15 @@ export default{
         time:'时间',
         decription:'详细内容：',
         indexnotice:'点击下列应用类型可发布对应的需求',
+        rankTitle:'排行榜',
+        viewAllComments:'查看全部评价',
+        takePhotoUpload:'拍照/上传',
+        noContact:'暂无联系人！',
+        noFriends:'暂无朋友关系！',
+        agreeAddFriendRequest:'同意加好友请求?',
+        befriends:'我想和您成为好朋友!',
+        hotCountry:'热门国家',
+        hotCity:'热门城市',
     },
     personaPage:{
         edit:'编辑',
@@ -85,6 +98,7 @@ export default{
         posted:'我发布的',
         received:'我收到的',
         friends:'我的朋友',
+        offers:'我帮助的',
         feedback:'意见反馈',
         idcard:'身份证',
         passport:'护照',
@@ -101,7 +115,7 @@ export default{
         execute:'帮助中',
         closed:'关闭',
         open:'开放中',
-        complete:'已完成'
+        complete:'已完成',
 
     },
     country:{
@@ -161,5 +175,45 @@ export default{
         Sydney:'悉尼',
         Paris:'巴黎',
         KualaLumpur:'吉隆坡'
+    },
+    totastTips:{
+        'selectCountry':'请先选择国家！',
+        'submissionF':'发布失败',
+        'confirmIdentify':'请您先完成身份认证',
+        'comingSoon':'对不起，该功能暂未上线，敬请关注...',
+        'loginTips':'请先登入...',
+        'indentifySelect':'请至少选择一种认证方式！谢谢...',
+        'confirmPicture':'请确认已选认证方式图片是否上传!',
+        'reviewIdentify':'感谢您的配合，我们会尽快审核你的认证信息!',
+        'reviewUpdateIdentify':'认证资料更新成功，我们会尽快重新审核你的认证信息',
+        'confirmCloseN':'确定当前困难已解决?',
+        'reEditedTips':'当前任务正在执行中，暂不能编辑!',
+        'confirmCloseY':'您是否确定要关闭？',
+        'commentsTips':'当前任务还未完成，暂不能评价！',
+        'submitedSuccess':'您的信息已提交！',
+        'requiredTips':'为必填项',
+        'commentYet':'当前任务已评价！',
+        'commentSelf':'不能对自己进行评价',
+        'missionCompleted':'当前任务已经完成',
+        'allRequiredTips':'请填写必填项！',
+        'waitUpload':'头像正在上传,请稍候',
+        'completedOrExecution':'当前任务已完成或者正在执行中',
+        'confirmSendFriend':'确定发送加好友请求?',
+        'areadyFriend':'已经是你的朋友了',
+        'uploadedTwo':'请确定每种认证类型都已上传两张图片!',
+        'receiveNewMessages':'收到新消息！'
+    },
+    moneyType:{
+        'chinaType':'人民币',
+        'USA':'美元',
+        'japan':'日元',
+        'yingbang':'英镑',
+        'ouyuan':'欧元',
+        'currency':'单位'
+    },
+    loadText:{
+        'loadMore':'上拉加载',
+        'refresh':'下拉刷新',
+        'loading':'加载中...'
     }
 }

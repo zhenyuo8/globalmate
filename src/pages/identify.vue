@@ -154,7 +154,7 @@ p {
                   <img v-if='idCardFrontId || idCardFront' :src="idCardFrontId || idCardFront" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传人像面</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -165,7 +165,7 @@ p {
                   <img v-if='idCardBackId || idCardBack' :src="idCardBackId ||idCardBack" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传国徽面</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -185,7 +185,7 @@ p {
                   <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传人像面</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -196,7 +196,7 @@ p {
                   <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传文字面</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -216,7 +216,7 @@ p {
                   <img v-if='passPortFrontId || passPortFront' :src="passPortFrontId || passPortFront" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传第一页</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -227,7 +227,7 @@ p {
                   <img v-if='passPortBack || passPortBackId' :src="passPortBackId || passPortBack" alt="">
                   <template>
                     <span class="icon-camera2"></span>
-                    <span class="icon-tips">点击拍照/上传第二页</span>
+                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
                   </template>
                 </div>
               </div>
@@ -405,7 +405,7 @@ export default {
       if (this[key1] && this[key2]) {
         if (!this[key1].includes('http') || !this[key1].includes('http')) {
           Toast({
-            message: "图片正在上传,请稍候",
+            message: this.$t('totastTips.waitUpload'),
             duration: 1000
           })
           return false;
@@ -418,7 +418,7 @@ export default {
         arr.push(obj)
       } else if (this[key1] || this[key2]) {
         Toast({
-          message: "请确认已选认证方式图片是否上传完整",
+          message: this.$t('totastTips.uploadedTwo'),
           duration: 2000
         })
         return false
@@ -434,7 +434,7 @@ export default {
       if (res === false) return
       if (data.length === 0) {
         Toast({
-          message: "请至少选择一种认证方式！谢谢...",
+          message: this.$t('totastTips.indentifySelect'),
           duration: 2000
         });
         return
@@ -451,7 +451,7 @@ export default {
           this.loadingShow = false;
           if (res.success) {
             Toast({
-              message: "感谢您的配合，我们会尽快审核你的认证信息!",
+              message: this.$t('totastTips.reviewIdentify'),
               duration: 2000
             });
             setTimeout(() => {

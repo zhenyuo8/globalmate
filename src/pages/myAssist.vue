@@ -1,7 +1,7 @@
 <template>
   <div class="gl_list">
     <div class="list_warp">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
         <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
           <div class="list_repeat_content" @click='showDetail(item)'>
             <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="show_all_data" v-show="canNotLoadMore">
-          已加载所有数据
+          {{$t('allDataDisplayed')}}
         </div>
       </mt-loadmore>
       <div v-if="nodataFlag" class="yy_nodata_class" style="">
@@ -79,7 +79,11 @@ export default {
       pageNum:1,
       pageSize:10,
       canNotLoadMore:false,
-      bottomPullText:'上拉加载'
+      bottomPullText:this.$t('loadText.loadMore.'),
+      topPullText:this.$t('loadText.refresh'),
+      topLoadingText:this.$t('loadText.loading'),
+      topDropText:'',
+      bottomDropText:''
     };
   },
   methods: {
@@ -90,14 +94,14 @@ export default {
       e.cancelBubble = true;
       if (item.need.enable == 0 || item.need.enable == 6) {
         Toast({
-          message: "当前任务已经完成",
+          message: this.$t('totastTips.missionCompleted'),
           duration: 2000
         });
         return;
       }
       if (item.need.enable != 1 && item.need.enable != 3) {
         Toast({
-          message: "当前任务正在执行中，暂不能编辑!",
+          message: this.$t('totastTips.reEditedTips'),
           duration: 2000
         });
         return;
@@ -120,14 +124,14 @@ export default {
       let _this = this;
       if (item.need.enable == 0 || item.need.enable == 6) {
         Toast({
-          message: "当前任务已经完成",
+          message: this.$t('totastTips.missionCompleted'),
           duration: 2000
         });
         return;
       }
       MessageBox.confirm("", {
         title: "",
-        message: "确定当前求助已完成?",
+        message: this.$t('totastTips.confirmCloseN'),
         confirmButtonText: this.$t("button.confirm"),
         cancelButtonText: this.$t("button.cancel"),
         showCancelButton: true
@@ -235,21 +239,21 @@ export default {
       e.cancelBubble = true;
       if (item.need.enable == 6) {
         Toast({
-          message: "当前任务已评价！",
+          message: this.$t('totastTips.commentYet'),
           duration: 2000
         });
         return;
       }
       if (item.need.enable != 0) {
         Toast({
-          message: "当前任务还未完成，暂不能评价！",
+          message: this.$t('totastTips.commentsTips'),
           duration: 2000
         });
         return;
       }
       if (item.assistList.length == 0) {
         Toast({
-          message: "不能对自己进行评价",
+          message: this.$t('totastTips.commentSelf'),
           duration: 2000
         });
         return;
@@ -372,7 +376,6 @@ export default {
                     )[0];
                   }
                   var status = data[i].need.enable + "";
-                  console.log(data[i].need.enable);
                   switch (status) {
                     case "1":
                       data[i].need.status = this.$t("status.open");
@@ -450,7 +453,7 @@ export default {
                   this.nodataFlag = true;
                   this.loadingShow = false;
                 }, 500);
-                this.noDataTips = "暂无相关数据";
+                this.noDataTips = this.$t('noDataDisplay');
               }
             }
           } else {
@@ -458,7 +461,7 @@ export default {
               this.nodataFlag = true;
               this.loadingShow = false;
             }, 500);
-            this.noDataTips = "暂无相关数据";
+            this.noDataTips = this.$t('noDataDisplay');
           }
         })
         .catch(e => {
@@ -466,7 +469,7 @@ export default {
             this.nodataFlag = true;
             this.loadingShow = false;
           }, 500);
-          this.noDataTips = "暂无相关数据";
+          this.noDataTips = this.$t('noDataDisplay');
         });
     }
   },

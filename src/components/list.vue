@@ -175,7 +175,7 @@ input {
     flex: 1!important;
 }
 .gl_reward_content{
-    flex: 2!important
+    flex: 3!important
 }
 .gl_reward_type_warp{
     .mint-cell-title{
@@ -237,24 +237,8 @@ export default {
     return {
       values: true,
       selectFlag:false,
-      list:[{
-		    label: '人民币',
-		    value: '人民币'
-        },{
-  		    label: '美元',
-  		    value: '美元'
-        },{
-  		    label: '欧元',
-  		    value: '欧元'
-        },{
-  		    label: '英镑',
-  		    value: '英镑'
-        },{
-  		    label: '日元',
-  		    value: '日元'
-  			}
-        ],
-      value:'人民币'
+      list:[],
+      value:''
     };
   },
   props: {
@@ -297,7 +281,28 @@ export default {
         this.selectFlag=!this.selectFlag;
     }
    },
+   activated(){
+       this.list=[{
+ 		    label: this.$t('moneyType.chinaType'),
+ 		    value: this.$t('moneyType.chinaType')
+         },{
+   		    label: this.$t('moneyType.USA'),
+   		    value: this.$t('moneyType.USA')
+         },{
+   		    label: this.$t('moneyType.ouyuan'),
+   		    value: this.$t('moneyType.ouyuan')
+         },{
+   		    label: this.$t('moneyType.yingbang'),
+   		    value: this.$t('moneyType.yingbang')
+         },{
+   		    label: this.$t('moneyType.japan'),
+   		    value: this.$t('moneyType.japan')
+   			}
+        ],
+        this.value=this.$t('moneyType.currency')
+   },
    created(){
+
        this.value=this.itemRepeat.rewardType;
    }
 };

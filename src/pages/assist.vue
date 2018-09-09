@@ -49,7 +49,6 @@
 
 <script>
 import List from "../components/list.vue";
-import selectList from "../components/selectList.vue";
 import indexList from "../components/indexList.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
@@ -125,7 +124,6 @@ export default {
   },
   components: {
     List,
-    selectList,
     Toast,
     indexList,
     loading,
@@ -161,7 +159,7 @@ export default {
             if (res.success) {
               this.loadingShow = false;
               Toast({
-                message: "您的信息已提交",
+                message: this.$t(totastTips.submitedSuccess),
                 duration: 2000
               });
               setTimeout(() => {
@@ -393,14 +391,14 @@ export default {
           });
       } else {
         Toast({
-          message: "请先选择国家！",
+          message: this.$t('totastTips.selectCountry'),
           duration: 2000
         });
       }
     },
     getCountryHot() {
       let obj = {};
-      obj["letter"] = "热门国家";
+      obj["letter"] = this.$t('formTitle.hotCountry');
       obj['list']=[];
       let list = [
         this.$t("country.china"),
@@ -434,7 +432,7 @@ export default {
     },
     getHotCity(country) {
       let obj = {},list=[];
-      obj["letter"] = "热门城市";
+      obj["letter"] = this.$t('formTitle.hotCity');;
       obj['list']=[];
       switch (country) {
         case "中国":
@@ -608,7 +606,7 @@ export default {
           postData[listRepeat[i].componentKey] = "";
           hasParaRequired = true;
           Toast({
-            message: listRepeat[i].title + "为必填项",
+            message: listRepeat[i].title + this.$t('totastTips.requiredTips'),
             duration: 2000
           });
           return false;
@@ -618,6 +616,9 @@ export default {
       }
       if (!this.myReward.isPlacehold) {
           let moneyType=$('.gl_reward_type').text();
+          if(moneyType=='单位'||moneyType=='Currencies'){
+              moneyType=this.$t('moneyType.chinaType');
+          }
         postData[this.myReward.componentKey] = this.myReward.text+' '+moneyType;
       } else {
         hasParaRequired = true;
@@ -626,7 +627,7 @@ export default {
         postData[this.title.componentKey] = this.title.text;
       } else {
         Toast({
-          message: this.title.title + "为必填项",
+          message: this.title.title + this.$t('totastTips.requiredTips'),
           duration: 2000
         });
         return false;
@@ -654,7 +655,7 @@ export default {
         isRequire: false,
         isPlacehold: true,
         componentKey: "reward",
-        rewardType:'人民币'
+        rewardType:this.$t('moneyType.currency')
       };
       this.title = {
         title: this.$t("formTitle.head"),
@@ -732,7 +733,7 @@ export default {
             this.listRepeatProcess();
             if(isNaN(data.conceretNeed.reward)){
                 this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
-                this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||'人民币';
+                this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||this.$t('moneyType.chinaType');
             }else{
                 this.myReward.text = data.conceretNeed.reward;
             }

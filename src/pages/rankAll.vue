@@ -1,6 +1,6 @@
 <template>
   <div class="rank_all" id='rank_all'>
-      <p class="title">排行榜</p>
+      <p class="title">{{$t('formTitle.rankTitle')}}</p>
       <div class="rank_warp">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
               <div class="rank_repeat" v-for="(item,index) in userLists" :key='index' @click='goDetail(item)'>
@@ -22,7 +22,7 @@
                   </div>
               </div>
           </mt-loadmore>
-          <span>已显示所有排名</span>
+          <span>{{$t('allDataDisplayed')}}</span>
       </div>
       <div class="defindloadig" v-if="loadingShow">
         <loading></loading>

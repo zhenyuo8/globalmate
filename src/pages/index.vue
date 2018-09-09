@@ -15,7 +15,7 @@
             </mt-swipe>
         </div>
     <div class="">
-      <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
+      <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
       <ul class="mainmenu">
         <li v-for="(item,index) in mainmenu" :key='index'>
           <a href="javascript:;">
@@ -129,7 +129,7 @@ export default {
             });
             if (!flag) {
               Toast({
-                message: "请您先完成身份认证",
+                message: this.$t('totastTips.confirmIdentify'),
                 duration: 1000
               });
               return;
@@ -137,7 +137,7 @@ export default {
             flag && callback && callback();
           } else {
             Toast({
-              message: "请您先完成身份认证",
+              message: this.$t('totastTips.confirmIdentify'),
               duration: 1000
             });
           }
@@ -159,7 +159,7 @@ export default {
     publishHandler(item) {
       if (item.key == "carry") {
         Toast({
-          message: "对不起，该功能暂未上线，敬请关注...",
+          message: this.$t('totastTips.comingSoon'),
           duration: 2000
         });
       } else {
@@ -178,7 +178,7 @@ export default {
     publish(item) {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
         return;
@@ -193,7 +193,7 @@ export default {
     goPersonalCenter() {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -201,7 +201,6 @@ export default {
           path: "mine",
           query: {
             token: this.token,
-            title: "个人中心"
           }
         });
       }
@@ -213,7 +212,7 @@ export default {
       }
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -221,7 +220,6 @@ export default {
           path: "seekHelpList",
           query: {
             token: this.token,
-            title: "求助列表",
             id: "offer",
             userId: this.userId
           }
@@ -231,7 +229,7 @@ export default {
     seekHelp() {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -239,7 +237,6 @@ export default {
           path: "myAssist",
           query: {
             token: this.token,
-            title: "求助列表",
             id: "seek",
             userId: this.userId
           }
@@ -252,7 +249,6 @@ export default {
         path: "messageList",
         query: {
           token: this.token,
-          title: "消息列表",
           id: "message"
         }
       });
@@ -260,7 +256,7 @@ export default {
     goRankAll(key) {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -268,7 +264,6 @@ export default {
           path: "rankAll",
           query: {
             token: this.token,
-            title: "榜单",
             type: key
           }
         });
@@ -873,7 +868,7 @@ ul {
   line-height: 20px;
   text-align: left;
   background: #f9f8f4;
-  padding-left: 20px;
+  padding-left: .4rem;
   font-size: 12px;
 }
 #index .icon-exclamation::before {

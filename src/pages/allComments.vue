@@ -5,10 +5,10 @@
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
                     <span>{{item.evaluation.uEvluatorName}}</span>
-                    <span class="score">评分:{{item.evaluation.score}}</span>
+                    <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
                 <p class="comment_repeat_middle">
-                    {{item.evaluation.createTime}} 标题:{{item.needAggEntity.conceretNeed.title}} 悬赏金额:{{item.needAggEntity.conceretNeed.rewardAmount}}
+                    {{item.evaluation.createTime}} {{$t('formTitle.head')}}:{{item.needAggEntity.conceretNeed.title}} {{$t('formTitle.reward')}}:{{item.needAggEntity.conceretNeed.rewardAmount}}
                 </p>
                 <p class="comment_repeat_bottom">
                     {{item.evaluation.content}}
