@@ -907,11 +907,11 @@ export default {
   activated() {
     this.myAssistList = [];
     this.myAssistListDone = [];
-    if (this.userInfo.token) {
+    if (this.userInfo.token && this.userList && this.userList.length) {
         this.loadData();
     } else {
       this.timer = setInterval(() => {
-        if (this.userInfo.token) {
+        if (this.userInfo.token && this.userList && this.userList.length) {
             this.loadData();
           clearInterval(this.timer);
         }

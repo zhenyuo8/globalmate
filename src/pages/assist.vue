@@ -100,6 +100,9 @@ export default {
       actions: [{
         name: '删除',
         method: this.removePic
+      }, {
+        name: '预览',
+        method: this.previewImg
       }],
       removeIndex: undefined,
       description: ''
@@ -144,7 +147,6 @@ export default {
     },
     // 点击发布按钮逻辑
     publish() {
-      this.previewImageFlag = false;
       let postData = this.getListData();
       this.submitUrl = "/globalmate/rest/need/addCommon";
 
@@ -786,30 +788,12 @@ export default {
         this.removeIndex = undefined
       }
     },
-    previewImage(file, callback) {
-      if (!file || !/image\//.test(file.type)) return;
-      if (file.type == "image/gif") {
-        var fr = new mOxie.FileReader();
-        fr.onload = function() {
-          callback(fr.result);
-          fr.destroy();
-          fr = null;
-        };
-        fr.readAsDataURL(file.getSource());
-      } else {
-        var preloader = new mOxie.Image();
-        preloader.onload = function() {
-          preloader.downsize(100, 100);
-          var imgsrc =
-            preloader.type == "image/jpeg"
-              ? preloader.getAsDataURL("image/jpeg", 80)
-              : preloader.getAsDataURL();
-          callback && callback(imgsrc);
-          preloader.destroy();
-          preloader = null;
-        };
-        preloader.load(file.getSource());
-      }
+    previewImg () {
+      wx.previewImage({
+        current: this.filesHasUpload[this.removeIndex], // 当前显示图片的http链接
+        urls: this.filesHasUpload // 需要预览的图片http链接列表
+      });
+      this.removeIndex = undefined
     },
     uploadAttr() {
       const ua = navigator.userAgent.toLowerCase();
