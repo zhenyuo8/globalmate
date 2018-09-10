@@ -73,8 +73,8 @@
 </style>
 
 <template>
-	<div class="protocol" id="protocol" :class="isEN?'gl_english':''">
-		<div class="protocol_warp" v-show="!isEN">
+	<div class="protocol" id="protocol" :class="isENAgreement?'gl_english':''">
+		<div class="protocol_warp" v-show="!isENAgreement">
 			<h2>Glohelp 用户使用协议</h2>
 			<h6>一、总则</h6>
 			<p>1.1、Glohelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议</p>
@@ -135,7 +135,7 @@
 			<p>10.1、 本协议及其规则的有效性、履行和与本协议及其规则效力有关的所有事宜，将受中华人民共和国法律管辖，任何争议解决仅适用中华人民共和国法律。</p>
 
 		</div>
-		<div class="protocol_warp" v-show="isEN">
+		<div class="protocol_warp" v-show="isENAgreement">
 			<h2>Glohelp User Agreement</h2>
 			<h6>1. General Rules</h6>
 			<p>1.1. The Glohelp Network Service Platform (hereinafter referred to as “the platform”) has formulated this Agreement in accordance with the relevant provisions of the laws of the People's Republic of China. This agreement is a contract. Please read this agreement carefully and choose to accept or not accept this agreement when users register the platform.</p>
@@ -204,7 +204,6 @@
 
 		</div>
 		<div class="bottom_action">
-
 			<button type="button" name="button" class="ignore" @click='ignore'>{{$t('button.ignore')}}</button>
 			<button type="button" name="button" class="accept" @click='accept'>{{$t('button.agreeAccept')}}</button>
 		</div>
@@ -212,6 +211,9 @@
 </template>
 
 <script>
+import Vue from "vue";
+import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
+Vue.component(MessageBox.name, MessageBox);
 export default {
   data() {
     return {
@@ -223,6 +225,10 @@ export default {
 	  userIdAgreement:{
 		  type:String,
 		  default:''
+	  },
+	  isENAgreement:{
+		  type:Boolean,
+		  default:false
 	  },
 	  agreementCallback:{
 		  type:Function,
@@ -241,18 +247,25 @@ export default {
 		  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
 	  },
 	  ignore(){
-		  this.agreementCallback(true)
-		  let notReadAgreement={
-			  userId:this.userIdAgreement,
-			  accept:false
-		  }
-		  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
+		  let _this=this;
+		  MessageBox.confirm("", {
+	        title: "",
+	        message: '<div style="color:red;font-size:16px;">'+this.$t('totastTips.ignoreAgreement')+'</div>',
+	        confirmButtonText: this.$t("button.confirm"),
+	        cancelButtonText: this.$t("button.cancel"),
+	        showCancelButton: true
+	      }).then(action => {
+	          _this.agreementCallback(true);
+			  let notReadAgreement={
+				  userId:_this.userIdAgreement,
+				  accept:false
+			  }
+			  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
+	        }).catch(cancel => {});
 	  }
   },
   activated(){
-	  if(navigator.language.indexOf('zh')==-1){
-		  this.isEN=true;
-	  }
+
   },
   created() {}
 };

@@ -203,6 +203,8 @@ export default{
         'areadyFriend':' is your friend already.',
         'uploadedTwo':'Please confirm that each type of authentication has uploaded two pictures.',
         'receiveNewMessages':'Receive new messages',
+        'ignoreAgreement':'If you skip this agreement, you could not access to any service we provide！',
+        'personalFileTips':'Please complete your personal information and identity in "My GloHelp".'
     },
     moneyType:{
         'chinaType':'RMB',

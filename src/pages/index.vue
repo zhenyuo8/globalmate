@@ -55,7 +55,7 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback'></protocol>
+    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback' :isENAgreement='isENAgreement'></protocol>
   </div>
 </template>
 
@@ -69,7 +69,8 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-let url=require('../assets/images/index_swiper1.jpeg')
+let url1=require('../assets/images/index_swiper1.jpeg')
+let url2=require('../assets/images/index_swiper2.jpeg')
 export default {
   name: "index",
   mixins: [userMix],
@@ -78,27 +79,15 @@ export default {
   },
   data() {
     return {
-      slides: [
-          {
-              url:url,
-              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-          },
-          {
-              url:url,
-              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-          },
-          {
-              url:url,
-              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-          },
-      ],
+      slides: [],
       mainmenu: [],
       code: "",
       hasReceiveMessage: false,
       messageList: [],
       loadingShow: false,
       rankUserList:[],
-      notReadAgreement:true
+      notReadAgreement:true,
+      isENAgreement:this.language=='en'?true:false
     };
   },
   computed: {
@@ -114,9 +103,11 @@ export default {
       if (!token) {
         token = this.userInfo["token"];
       }
-      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
-          {}
-        ).then(res => {
+      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken",{
+          params:{
+              token:token
+          }
+      }).then(res => {
           if (res.success) {
             this.updateUserInfo({
               curUser: res.data
@@ -187,7 +178,7 @@ export default {
               key: item.key
             }
           });
-      }
+       }
     },
     publish(item) {
       if (!this.token) {
@@ -196,6 +187,18 @@ export default {
           duration: 2000
         });
         return;
+      }
+      let hasReadAgreement=this.readAgreement();
+      if(!hasReadAgreement){
+          return;
+      }
+      let hasCompletePersonal=this.completePersonal();
+      if(!hasCompletePersonal) {
+          Toast({
+            message: this.$t('totastTips.personalFileTips'),
+            duration: 2000
+          });
+          return;
       }
       var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
@@ -230,6 +233,18 @@ export default {
           duration: 2000
         });
       } else {
+          let hasReadAgreement=this.readAgreement();
+          if(!hasReadAgreement){
+              return;
+          }
+          let hasCompletePersonal=this.completePersonal();
+          if(!hasCompletePersonal) {
+              Toast({
+                message: this.$t('totastTips.personalFileTips'),
+                duration: 2000
+              });
+              return;
+          }
         this.$router.push({
           path: "seekHelpList",
           query: {
@@ -247,6 +262,18 @@ export default {
           duration: 2000
         });
       } else {
+          let hasReadAgreement=this.readAgreement();
+          if(!hasReadAgreement){
+              return;
+          }
+          let hasCompletePersonal=this.completePersonal();
+          if(!hasCompletePersonal) {
+              Toast({
+                message: this.$t('totastTips.personalFileTips'),
+                duration: 2000
+              });
+              return;
+          }
         this.$router.push({
           path: "myAssist",
           query: {
@@ -299,6 +326,33 @@ export default {
     },
     goSwiperItem(url){
         window.open(url);
+    },
+    readAgreement(){
+        let hasReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
+        if(!hasReadAgreement){
+            this.notReadAgreement=false;
+            return false;
+        }else{
+            hasReadAgreement=JSON.parse(hasReadAgreement);
+            if(hasReadAgreement.userId!=this.userInfo.userId||!hasReadAgreement.accept){
+                this.notReadAgreement=false;
+                return false;
+            }else {
+                return true;
+            }
+        }
+    },
+    completePersonal(){
+        let curUser=this.userInfo.curUser
+        let flag=true;
+        for(var key in curUser){
+            if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'||key=='email'){
+                if(!curUser[key]){
+                    flag=false;
+                }
+            }
+        }
+        return flag;
     }
   },
   activated() {
@@ -374,27 +428,74 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
+
+    if(this.language&&this.language.indexOf('en')>-1){
+        this.isENAgreement=true;
+        this.slides=[
+            {
+                url:url1,
+                href:'https://filec4e884dad905.iamh5.cn/v3/idea/Z6UpbDQ5?from=groupmessage&suid=EADC8388-55F4-4C64-BD68-8AD6CB1DBD73&sl=1'
+            },
+            {
+                url:url2,
+                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+            },
+            {
+                url:url1,
+                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+            },
+        ]
+    }else{
+         this.slides=[
+             {
+                 url:url1,
+                 href:'https://filec4e884dad905.iamh5.cn/v3/idea/oJCwKPB3?suid=873B60AF-FFBA-48AD-B9D0-4611756E7F51&sl=0'
+             },
+             {
+                 url:url2,
+                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+             },
+             {
+                 url:url1,
+                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+             },
+         ]
+        this.isENAgreement=false;
+    }
+    let ReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
+       if(!ReadAgreement){
+           this.notReadAgreement=false;
+       }else{
+           ReadAgreement=JSON.parse(ReadAgreement);
+           if(ReadAgreement.userId!=this.userInfo.userId){
+               this.notReadAgreement=false;
+           }else{
+               this.notReadAgreement=true;
+           }
+       }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
+          if(!ReadAgreement){
+              this.notReadAgreement=false;
+          }else{
+              ReadAgreement=JSON.parse(ReadAgreement);
+              if(ReadAgreement.userId!=this.userInfo.userId){
+                  this.notReadAgreement=false;
+              }else{
+                  this.notReadAgreement=true;
+              }
+
+          }
           clearInterval(this.timer);
         }
       }, 200);
     }
-    let ReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
-    if(!ReadAgreement){
-        this.notReadAgreement=false;
-    }else{
-        ReadAgreement=JSON.parse(ReadAgreement);
-        if(ReadAgreement.userId!=this.userInfo.userId||!ReadAgreement.accept){
-            this.notReadAgreement=false;
-        }else{
-            this.notReadAgreement=true;
-        }
-    }
+
+
   },
   deactivated() {
     clearInterval(this.timer);

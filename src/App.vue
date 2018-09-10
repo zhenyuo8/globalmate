@@ -243,7 +243,7 @@ export default {
         })
         .then(res => {
           if (res.data && res.data.length) {
-            let flag = res.data.some(item => item.isEffective !== 0);
+            let flag = res.data.some(item => item.isEffective == 1);
             this.updateUserInfo({
               certifyMsg: res.data,
               identified: flag // 判断是否通过认证了
