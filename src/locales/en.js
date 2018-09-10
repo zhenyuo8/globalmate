@@ -20,7 +20,9 @@ export default{
         'send':'Send',
         'back':'Back',
         'contact':'Contact',
-        'addFriends':'+ Friends'
+        'addFriends':'+ Friends',
+        'ignore':'Ignore',
+        'agreeAccept':'Read & Accept'
     },
     cityName:{
         'beijing':'Beijing',

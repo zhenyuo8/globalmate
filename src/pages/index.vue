@@ -11,7 +11,8 @@
         </div>
         <div class="swpier_container" >
             <mt-swipe :auto="3000">
-                <mt-swipe-item v-for="(item,index) in slides" :key='index'><img :src="item" :key='index' alt=""></mt-swipe-item>
+                <mt-swipe-item v-for="(item,index) in slides" :key='index' @click.native='goSwiperItem(item.href)'><img :src="item.url" :key='index' alt=""  >
+                </mt-swipe-item>
             </mt-swipe>
         </div>
     <div class="">
@@ -54,7 +55,7 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <!-- <protocol></protocol> -->
+    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback'></protocol>
   </div>
 </template>
 
@@ -78,21 +79,34 @@ export default {
   data() {
     return {
       slides: [
-        url,
-        url,
-        url
+          {
+              url:url,
+              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+          },
+          {
+              url:url,
+              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+          },
+          {
+              url:url,
+              href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+          },
       ],
       mainmenu: [],
       code: "",
       hasReceiveMessage: false,
       messageList: [],
       loadingShow: false,
-      rankUserList:[]
+      rankUserList:[],
+      notReadAgreement:true
     };
   },
   computed: {
     token: function () {
       return this.userInfo && this.userInfo.token? this.userInfo.token: ''
+    },
+    userIdAgreement: function () {
+      return this.userInfo && this.userInfo.userId? this.userInfo.userId: ''
     }
   },
   methods: {
@@ -122,8 +136,7 @@ export default {
         })
         .then(res => {
           if (res.data && res.data.length) {
-            // let flag = res.data.some(item => item.isEffective !== 0);
-            let flag = res.data.some(item => item.certifyPhoto!=='');
+            let flag = res.data.some(item => item.isEffective == 1);
             this.updateUserInfo({
               certifyMsg: res.data,
               identified: flag // 判断是否通过认证了
@@ -269,44 +282,24 @@ export default {
           }
         });
       }
-  },
-    getRank(){
-        this.axios.get(this.ip+'/globalmate/rest/user/list',{
-            params:{
-                token:this.userInfo.token,
-                onlyCurrentUser:false,
-            }
-        }).then((res)=>{
-            if(res.success){
-                let data=res.data;
-                this.updateUserList(data);
-                let len = data.length;
-　　             let minIndex, temp;
-                for(var i=0;i<len;i++){
-                    minIndex = i;
-            　　　　 for (var j = i + 1; j < len; j++) {
-            　　　　 　　if (data[j].nice> data[minIndex].nice) {
-            　　　　　 　　　minIndex = j;
-            　　　　　 　}
-            　　　　 }
-                    temp = data[i];
-　　　               data[i] = data[minIndex];
-　　　　             data[minIndex] = temp;
-                }
-                if(data.length>3){
-                    this.rankUserList=data.slice(0,3);
-                }else{
-                    this.rankUserList=data;
-                }
-            }else {
-                this.loadingShow=false;
-            }
-
-        }).catch((e)=>{
-            this.loadingShow=false;
-            console.log(e);
-        })
     },
+    getRank(){
+        let list=this.userList;
+        list=list.sort(function (a,b) {
+            return b.nice-a.nice;
+        });
+        if(list.length>3){
+            this.rankUserList=list.slice(0,3)
+        }else{
+            this.rankUserList=list
+        }
+    },
+    agreementCallback(params){
+        this.notReadAgreement=params
+    },
+    goSwiperItem(url){
+        window.open(url);
+    }
   },
   activated() {
     this.mainmenu = [
@@ -381,15 +374,26 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
-    if (this.userInfo.token) {
+    if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
     } else {
       this.timer = setInterval(() => {
-        if (this.userInfo.token) {
+        if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
           clearInterval(this.timer);
         }
       }, 200);
+    }
+    let ReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
+    if(!ReadAgreement){
+        this.notReadAgreement=false;
+    }else{
+        ReadAgreement=JSON.parse(ReadAgreement);
+        if(ReadAgreement.userId!=this.userInfo.userId||!ReadAgreement.accept){
+            this.notReadAgreement=false;
+        }else{
+            this.notReadAgreement=true;
+        }
     }
   },
   deactivated() {
@@ -849,7 +853,7 @@ ul {
 }
 .need_help {
   box-sizing: border-box;
-  border-right: 2px solid #979797;
+  border-right: 2px solid #eee;
 }
 #index .icon-arrow_right_samll {
   font-size: 12px;

@@ -427,7 +427,7 @@ export default {
                         }else{
                             MessageBox.confirm('',{
                                 title: '',
-                                message: this.$t('totastTips.confirmSendFriend'),
+                                message: _this.$t('totastTips.confirmSendFriend'),
                                 confirmButtonText:_this.$t('button.confirm'),
                                 cancelButtonText:_this.$t('button.cancel'),
                                 showCancelButton: true

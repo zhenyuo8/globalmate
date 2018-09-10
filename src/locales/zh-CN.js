@@ -20,7 +20,9 @@ export default{
         'send':'发送',
         'back':'返回',
         'contact':'联系Ta',
-        'addFriends':'+好友'
+        'addFriends':'+好友',
+        'ignore':'忽略',
+        'agreeAccept':'已读&接受'
     },
     cityName:{
         'beijing':'北京',
