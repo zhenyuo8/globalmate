@@ -50,7 +50,7 @@ export default {
         // this.appVue(arg)
       } else {
         Toast({
-          message: "收到新消息，前往消息列表查看",
+          message: this.$t('totastTips.receiveNewMessages'),
           duration: 2000
         });
       }

@@ -125,7 +125,7 @@ export default {
       let _this = this;
       if (this.detail.enable != 1) {
         Toast({
-          message: "当前求助正在执行中",
+          message: this.$t('totastTips.completedOrExecution'),
           duration: 2000
         });
         return;

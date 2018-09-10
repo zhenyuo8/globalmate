@@ -118,8 +118,7 @@ import userMix from "../mixins/userInfo";
           clearInterval(this.timer)
         },
 		created(){
-            console.log(this.userInfo);
-            console.log(this.$route);
+
 		}
 	}
 </script>

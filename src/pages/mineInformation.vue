@@ -408,7 +408,7 @@ export default {
             let _this=this;
             let content={
                 'item':'',
-                'chatContent':"<i style='color:red'>我想和您成为好朋友!</i>",
+                'chatContent':"<i style='color:red'>"+this.$t('formTitle.befriends')+"!</i>",
                 'chatType':'add_friends_request',
                 'request_person':this.userInfo.userId
             }

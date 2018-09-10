@@ -22,7 +22,9 @@ export default{
         'contact':'Contact',
         'addFriends':'+ Friends',
         'ignore':'Ignore',
-        'agreeAccept':'Read & Accept'
+        'agreeAccept':'Read & Accept',
+        'delete':'Delete',
+        'preview':'Preview'
     },
     cityName:{
         'beijing':'Beijing',
@@ -204,7 +206,9 @@ export default{
         'uploadedTwo':'Please confirm that each type of authentication has uploaded two pictures.',
         'receiveNewMessages':'Receive new messages',
         'ignoreAgreement':'If you skip this agreement, you could not access to any service we provide！',
-        'personalFileTips':'Please complete your personal information and identity in "My GloHelp".'
+        'personalFileTips':'Please complete your personal information and identity in "My GloHelp".',
+        'moreThan':'结束时间必须大于开始时间',
+        'lessThan':'开始时间必须小于结束时间'
     },
     moneyType:{
         'chinaType':'RMB',

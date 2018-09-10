@@ -22,7 +22,9 @@ export default{
         'contact':'联系Ta',
         'addFriends':'+好友',
         'ignore':'忽略',
-        'agreeAccept':'已读&接受'
+        'agreeAccept':'已读&接受',
+        'delete':'删除',
+        'preview':'预览'
     },
     cityName:{
         'beijing':'北京',
@@ -205,7 +207,9 @@ export default{
         'uploadedTwo':'请确定每种认证类型都已上传两张图片!',
         'receiveNewMessages':'收到新消息！',
         'ignoreAgreement':'忽略此用户协议，您将无法使用本平台所提供的任何服务!',
-        'personalFileTips':'请您在用户中心完善个人资料并且完成实名认证'
+        'personalFileTips':'请您在用户中心完善个人资料并且完成实名认证',
+        'moreThan':'结束时间必须大于开始时间',
+        'lessThan':'开始时间必须小于结束时间'
     },
     moneyType:{
         'chinaType':'人民币',

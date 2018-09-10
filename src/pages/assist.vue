@@ -98,10 +98,10 @@ export default {
       pickerValue: this.moment(new Date()).format("YYYY-MM-DD"),
       removeShow: false,
       actions: [{
-        name: '删除',
+        name: this.$t('button.delete'),
         method: this.removePic
       }, {
-        name: '预览',
+        name: this.$t('button.preview'),
         method: this.previewImg
       }],
       removeIndex: undefined,
@@ -222,7 +222,7 @@ export default {
                   _this.startTime = _this.moment(value).valueOf();
                   if (_this.endTime && _this.endTime < _this.startTime) {
                     Toast({
-                      message: "开始时间必须小于结束时间",
+                      message: this.$t('totastTips.lessThan'),
                       duration: 2000
                     });
                     return;
@@ -232,7 +232,7 @@ export default {
                   _this.endTime = _this.moment(value).valueOf();
                   if (_this.startTime && _this.endTime < _this.startTime) {
                     Toast({
-                      message: "结束时间必须大于开始时间",
+                      message: this.$t('totastTips.moreThan'),
                       duration: 2000
                     });
                     return;
