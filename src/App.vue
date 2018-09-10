@@ -374,6 +374,11 @@ export default {
     } else {
       // window.location.replace("/dist/static/login.html");
     }
+    if (userId) {
+      this.updateUserInfo({
+        userId
+      })
+    }
     let router = this.getStrMsg("router");
     if (router) {
       this.$router.push({
