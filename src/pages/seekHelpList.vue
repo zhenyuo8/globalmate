@@ -4,10 +4,10 @@
     <searchInput :searchCallBack="searchCallBack" :childMsg='msg' v-if="!isSOS" @search='searchForContent'></searchInput>
     <div class="list_wrap" :class="{dataLoaded: allLoaded, notAllLoad: !allLoaded}">
         <mt-navbar v-model="selected">
-            <mt-tab-item id="1">进行中</mt-tab-item>
-            <mt-tab-item id="2">已完成</mt-tab-item>
+            <mt-tab-item id="1">{{$t('status.open')}}</mt-tab-item>
+            <mt-tab-item id="2">{{$t('status.complete')}}</mt-tab-item>
         </mt-navbar>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
            <mt-tab-container v-model="selected">
                <mt-tab-container-item id="1">
                    <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
@@ -39,7 +39,7 @@
                      </div>
                    </div>
                    <div class="show_all_data" v-show="canNotLoadMore">
-                     已加载所有数据
+                     {{$t('allDataDisplayed')}}
                    </div>
                </mt-tab-container-item>
                <mt-tab-container-item id="2">
@@ -72,45 +72,11 @@
                      </div>
                    </div>
                    <div class="show_all_data" v-show="canNotLoadMore">
-                     已加载所有数据
+                     {{$t('allDataDisplayed')}}
                    </div>
                </mt-tab-container-item>
            </mt-tab-container>
         </mt-loadmore>
-
-      <!-- <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText">
-        <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
-          <div class="list_repeat_user">
-            <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
-              <img :src="item.need.pic" alt="">
-            </div>
-            <div class="name_user">
-              <span class="name">{{item.need.userName}}</span>
-              <span class="type">{{item.conceretNeed.tag}}</span>
-              <span class="type">{{$t('formTitle.reward')}}
-                <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
-                <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
-              </span>
-            </div>
-            <div class="status_user">
-              <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
-              <span class="created_time">{{item.need.time}}</span>
-            </div>
-          </div>
-          <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
-          <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
-            <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
-              <img :src="items" alt="" v-if="indexs<3" @click.stop.prevent='previewImage($event,items, item.conceretNeed.pic)'>
-            </div>
-          </div>
-          <div class="list_repeat_action" v-if="item.need.enable==1&&!item.self">
-            <span @click='goHelp($event,item)'>{{$t('button.gohelp')}}</span>
-          </div>
-        </div>
-        <div class="show_all_data" v-show="canNotLoadMore">
-          已加载所有数据
-        </div>
-      </mt-loadmore> -->
     </div>
 
     <div v-if="nodataFlag" class="yy_nodata_class" style="">
@@ -223,7 +189,11 @@ export default {
       pageNum:1,
       pageSize:10,
       canNotLoadMore:false,
-      bottomPullText:'上拉加载',
+      bottomPullText:this.$t('loadText.loadMore'),
+      topPullText:this.$t('loadText.refresh'),
+      topLoadingText:this.$t('loadText.loading'),
+      topDropText:'',
+      bottomDropText:'',
       selected:'1'
     };
   },
@@ -247,7 +217,6 @@ export default {
       });
     },
     goDetail(e, item) {
-      // this.previewImageFlag = true;
       this.$router.push({
         path: "mineInformation",
         query: {
@@ -266,7 +235,7 @@ export default {
       let _this = this;
       if (item.need.enable != 1) {
         Toast({
-          message: "当前任务已完成或者正在执行中！",
+          message: this.$t('totastTips.completedOrExecution'),
           duration: 2000
         });
         return;
@@ -514,7 +483,7 @@ export default {
           });
       } else {
         Toast({
-          message: "请先选择国家！",
+          message: this.$t('totastTips.selectCountry'),
           duration: 2000
         });
       }
@@ -522,7 +491,7 @@ export default {
 
     getCountryHot() {
       let obj = {};
-      obj["letter"] = "热门国家";
+      obj["letter"] = this.$t('formTitle.hotCountry');
       obj['list']=[];
       let list = [
         this.$t("country.china"),
@@ -556,7 +525,7 @@ export default {
     },
     getHotCity(country) {
       let obj = {},list=[];
-      obj["letter"] = "热门城市";
+      obj["letter"] = this.$t('formTitle.hotCity');
       obj['list']=[];
       switch (country) {
         case "中国":
@@ -741,15 +710,6 @@ export default {
         urls: pics || [item] // 需要预览的图片http链接列表
       });
       return;
-      // e.preventDefault();
-      // e.cancelBubble = true;
-      // this.previewImageFlag = true;
-      // this.$router.push({
-      //   path: "previewImage",
-      //   query: {
-      //     url: item
-      //   }
-      // });
     },
     loadTop() {
       this.pageNum = 1;
@@ -900,7 +860,7 @@ export default {
                   this.loadingShow = false;
                   this.nodataFlag = true;
                 }, 500);
-                this.noDataTips = "暂无相关数据";
+                this.noDataTips = this.$t('noDataDisplay');
               }
             }
           } else {
@@ -909,7 +869,7 @@ export default {
                 this.nodataFlag = true;
                 this.loadingShow = false;
               }, 500);
-              this.noDataTips = "暂无相关数据";
+              this.noDataTips = this.$t('noDataDisplay');
             }
           }
         })
@@ -919,7 +879,7 @@ export default {
               this.nodataFlag = true;
               this.loadingShow = false;
             }, 500);
-            this.noDataTips = "暂无相关数据";
+            this.noDataTips = this.$t('noDataDisplay');
           }
           console.log(e);
         });
@@ -948,15 +908,11 @@ export default {
     this.myAssistList = [];
     this.myAssistListDone = [];
     if (this.userInfo.token && this.userList && this.userList.length) {
-      // if (!this.previewImageFlag) {
         this.loadData();
-      // }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token && this.userList && this.userList.length) {
-          // if (!this.previewImageFlag) {
             this.loadData();
-          // }
           clearInterval(this.timer);
         }
       }, 200);

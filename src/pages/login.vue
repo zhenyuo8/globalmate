@@ -51,6 +51,7 @@ export default {
               userPhone: postData.phone
             });
             this.getUserByToken(res.data);
+            this.getUserList(res.data);
             setTimeout(() => {
               window.history.go(-1);
             }, 1000);
@@ -94,6 +95,17 @@ export default {
       postData.password = this.$el.querySelector("#passwordsignup").value;
       postData.phone = this.$el.querySelector("#phonesignup").value;
       return postData;
+    },
+    getUserList(token){
+        this.axios.get(this.ip+'/globalmate/rest/user/list',{
+            params:{
+                token:token
+            }
+        }).then((res)=>{
+            this.updateUserList(res.data);
+        }).catch(e=>{
+
+        })
     },
     goRegister() {
       this.$router.push({

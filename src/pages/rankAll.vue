@@ -1,28 +1,26 @@
 <template>
   <div class="rank_all" id='rank_all'>
-      <p class="title">排行榜</p>
+      <p class="title">{{$t('formTitle.rankTitle')}}</p>
       <div class="rank_warp">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
-              <div class="rank_repeat" v-for="(item,index) in userLists" :key='index' @click='goDetail(item)'>
-                  <div class="rank" :class="'rank_'+index">
-                      {{index+1}}
+          <div class="rank_repeat" v-for="(item,index) in userLists" :key='index' @click='goDetail(item)'>
+              <div class="rank" :class="'rank_'+index">
+                  {{index+1}}
+              </div>
+              <div class="userInfo">
+                  <div class="userImage">
+                      <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
+                      <img :src="item.pic" v-if="item.pic" alt="">
                   </div>
-                  <div class="userInfo">
-                      <div class="userImage">
-                          <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
-                          <img :src="item.pic" v-if="item.pic" alt="">
-                      </div>
-                      <div class="userInfo_name">
-                          <span class="name">{{item.nikename}}</span>
-                          <span class="age">{{item.country}}</span>
-                      </div>
-                      <div class="nice">
-                          {{item.nice}}
-                      </div>
+                  <div class="userInfo_name">
+                      <span class="name">{{item.nikename}}</span>
+                      <span class="age">{{item.country}}</span>
+                  </div>
+                  <div class="nice">
+                      {{item.nice}}
                   </div>
               </div>
-          </mt-loadmore>
-          <span>已显示所有排名</span>
+          </div>
+          <span>{{$t('allDataDisplayed')}}</span>
       </div>
       <div class="defindloadig" v-if="loadingShow">
         <loading></loading>
@@ -34,8 +32,6 @@
 import Vue from 'vue'
 import userMix from "../mixins/userInfo";
 import loading from "../components/loading.vue";
-import { Loadmore } from 'mint-ui';
-Vue.component(Loadmore.name, Loadmore);
 export default {
   mixins: [userMix],
   components: {
@@ -45,49 +41,16 @@ export default {
     return {
         userLists:[],
         loadingShow:true,
-        allLoaded:true
     };
   },
   methods: {
       loadData(){
-          this.axios.get(this.ip+'/globalmate/rest/user/list',{
-              params:{
-                  token:this.userInfo.token,
-                  onlyCurrentUser:false,
-              }
-          }).then((res)=>{
-              if(res.success){
-                  let data=res.data;
-                  let len = data.length;
-　　               let minIndex, temp;
-                  for(var i=0;i<len;i++){
-                      minIndex = i;
-              　　　　 for (var j = i + 1; j < len; j++) {
-              　　　　 　　if (data[j].nice> data[minIndex].nice) {
-              　　　　　 　　　minIndex = j;
-              　　　　　 　}
-              　　　　 }
-                      temp = data[i];
-　　　                   data[i] = data[minIndex];
-　　　　                 data[minIndex] = temp;
-                  }
-                  this.userLists=data;
-                  this.loadingShow=false;
-              }else {
-                  this.loadingShow=false;
-              }
-
-          }).catch((e)=>{
-              this.loadingShow=false;
-              console.log(e);
-          })
-      },
-      loadTop() {
-          this.$refs.loadmore.onTopLoaded();
-      },
-      loadBottom() {
-          this.allLoaded = true;
-          this.$refs.loadmore.onBottomLoaded();
+          let list=this.userList;
+          list=list.sort(function (a,b) {
+              return b.nice-a.nice;
+          });
+          this.userLists=list
+          this.loadingShow=false;
       },
       goDetail(item) {
         this.$router.push({
@@ -106,11 +69,11 @@ export default {
   },
   activated(){
       this.userLists=[];
-      if (this.userInfo.token) {
+      if (this.userInfo.token&& this.userList && this.userList.length) {
          this.loadData();
       } else {
         this.timer = setInterval(() => {
-          if (this.userInfo.token) {
+          if (this.userInfo.token&& this.userList && this.userList.length) {
             this.loadData();
             clearInterval(this.timer);
           }

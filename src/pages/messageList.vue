@@ -139,7 +139,7 @@ ul > li:last-child {
                 </div>
               </li>
             </ul>
-            <span v-if="friends.length==0">暂未添加好友</span>
+            <span v-if="friends.length==0">{{$t('formTitle.noFriends')}}</span>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
             <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
@@ -159,7 +159,7 @@ ul > li:last-child {
                 </div>
               </li>
             </ul>
-            <span v-if="list.length==0">暂无联系人</span>
+            <span v-if="list.length==0">{{$t('formTitle.noContact')}}</span>
           </mt-tab-container-item>
         </mt-tab-container>
     </div>
@@ -211,7 +211,7 @@ export default {
       let _this = this;
       MessageBox.confirm("", {
         title: "",
-        message: "确定同意 " + item.users.nikename + " 的好友请求？",
+        message: this.$t('formTitle.agreeAddFriendRequest'),
         confirmButtonText: this.$t("button.confirm"),
         cancelButtonText: this.$t("button.cancel"),
         showCancelButton: true
@@ -397,7 +397,7 @@ export default {
                       temp.lastMessage.data.content
                     ).chatContent;
                     if (temp["lastMessageContent"].indexOf("style=") > -1) {
-                      temp["lastMessageContent"] = "我想和您成为好朋友!";
+                      temp["lastMessageContent"] = this.$t('formTitle.befriends');
                     }
                   } catch (e) {
                     temp["lastMessageContent"] = temp.lastMessage.data.content;
@@ -437,7 +437,7 @@ export default {
         this.appVue(arg)
       } else {
         Toast({
-          message: "收到新消息，前往消息列表查看",
+          message: this.$t('totastTips.receiveNewMessages'),
           duration: 2000
         });
       }

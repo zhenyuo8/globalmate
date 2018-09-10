@@ -55,13 +55,13 @@
       <p>
         <label for="">
           <i class="gl_required_class">*</i>{{$t('formTitle.intrest')}}:</label>
-        <input id="hobbysignup" v-model='userMsg.hobby' type="text" name="" value="" placeholder='请输入'>
+        <input id="hobbysignup" v-model='userMsg.hobby' type="text" name="" value="" :placeholder="$t('formTitle.inputPlace')">
       </p>
       <p id='' @click='selectHelpType'>
         <label for="">
           <!-- <i class="gl_required_class">*</i> -->
           {{$t('formTitle.helpAvailable')}}:</label>
-        <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" placeholder='请选择' readonly='readonly' disabled='disabled' style='text-align:center'>
+        <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled' style='text-align:center'>
       </p>
     </div>
     <div class="submitbtn" @click='submit'>
@@ -303,31 +303,31 @@ export default {
         grade: this.$el.querySelector("#schoolgradesignup").value
       };
       if (!education.schoolname) {
-        this.showTipsText = "请输入学校名称";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 1500);
+       Toast({
+         message: this.$t('formTitle.schoolname')+this.$t('totastTips.requiredTips'),
+         duration: 2000
+       });
         return;
       }
       if (!education.schooldate) {
-        this.showTipsText = "请选择入学年份";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 1500);
+        Toast({
+          message: this.$t('formTitle.schooldate')+this.$t('totastTips.requiredTips'),
+          duration: 2000
+        });
         return;
       }
       if (!education.professional) {
-        this.showTipsText = "请输入专业信息";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 1500);
+        Toast({
+          message: this.$t('formTitle.major')+this.$t('totastTips.requiredTips'),
+          duration: 2000
+        });
         return;
       }
       if (!education.grade) {
-        this.showTipsText = "请输入所在班级";
-        setTimeout(() => {
-          this.showTipsText = "";
-        }, 1500);
+          Toast({
+            message: this.$t('formTitle.schoolclass')+this.$t('totastTips.requiredTips'),
+            duration: 2000
+          });
         return;
       }
       this.educationFlag = false;
@@ -483,14 +483,14 @@ export default {
           });
       } else {
         Toast({
-          message: "请先选择国家！",
+          message: this.$t('totastTips.selectCountry'),
           duration: 2000
         });
       }
     },
     getCountryHot() {
       let obj = {};
-      obj["letter"] = "热门国家";
+      obj["letter"] = this.$t('formTitle.hotCountry');
       obj['list']=[];
       let list = [
         this.$t("country.china"),
@@ -524,7 +524,7 @@ export default {
     },
     getHotCity(country) {
       let obj = {},list=[];
-      obj["letter"] = "热门城市";
+      obj["letter"] = this.$t('formTitle.hotCity');
       obj['list']=[];
       switch (country) {
         case "中国":
@@ -692,14 +692,14 @@ export default {
       let {nickName, name, phone, country, city, hobby} = this.userMsg;
       if (!nickName || !name || !phone || !country || !city || !hobby) {
         Toast({
-          message: "请完成必填项",
+          message: this.$t('totastTips.allRequiredTips'),
           duration: 1000
         })
         return;
       }
       if (this.headerImgae && !this.headerImgae.includes('http')) {
         Toast({
-          message: "头像正在上传,请稍候",
+          message: this.$t('totastTips.waitUpload'),
           duration: 1000
         })
         return;
@@ -737,49 +737,7 @@ export default {
         })
         .catch(e => {});
     },
-    previewImage(file, callback) {
-      if (!file || !/image\//.test(file.type)) return;
-      if (file.type == "image/gif") {
-        var fr = new mOxie.FileReader();
-        fr.onload = function() {
-          callback(fr.result);
-          fr.destroy();
-          fr = null;
-        };
-        fr.readAsDataURL(file.getSource());
-      } else {
-        var preloader = new mOxie.Image();
-        preloader.onload = function() {
-          preloader.downsize(100, 100);
-          var imgsrc =
-            preloader.type == "image/jpeg"
-              ? preloader.getAsDataURL("image/jpeg", 80)
-              : preloader.getAsDataURL();
-          callback && callback(imgsrc);
-          preloader.destroy();
-          preloader = null;
-        };
-        preloader.load(file.getSource());
-      }
-    },
-    uploadAttr() {
-      const ua = navigator.userAgent.toLowerCase();
-      const isIos = ua.indexOf("iphone") != -1 || ua.indexOf("ipad") != -1; //判断是否是苹果手机，是则是true
-      if (this.fileUploader) {
-        if (isIos) {
-          $("input:file").removeAttr("capture");
-        }
-      } else {
-        this.timer2 = setInterval(() => {
-          if (this.fileUploader) {
-            if (isIos) {
-              $("input:file").removeAttr("capture");
-            }
-            clearInterval(this.timer2);
-          }
-        }, 300);
-      }
-    }
+
   },
   activated() {
     this.selectFlag = false;

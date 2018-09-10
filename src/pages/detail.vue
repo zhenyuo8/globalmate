@@ -404,7 +404,7 @@ export default {
     goChart() {
       if (this.listData.enable != 1) {
         Toast({
-          message: "当前任务已完成或者正在执行中",
+          message: this.$t('totastTips.completedOrExecution'),
           duration: 2000
         });
         return;

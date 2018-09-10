@@ -3,7 +3,7 @@
     <div class="">
       <searchInput :searchCallBack="searchCallBack" :childMsg='msg' :keyWordsSearch="keyWordsSearch" :searchVal="searchVal" :hideFilter='hideFilter'></searchInput>
       <div class="back" @click='back'>
-        返回
+        {{$t('button.back')}}
       </div>
     </div>
 
@@ -59,13 +59,11 @@ export default {
     keyWordsSearch(keywords) {
       if (keywords) {
         keywords = keywords.toUpperCase();
-        // let list = JSON.parse(.getItem("LIST"));
         let list = this.todoList;
         this.selectItem = list.filter(function(item) {
           return item.letter == keywords;
         });
       } else {
-        // this.selectItem = JSON.parse(.getItem("LIST"));
         this.selectItem = this.todoList;
       }
     },
@@ -76,12 +74,6 @@ export default {
       this.countrySityCallBack(this.listType, "");
     }
   },
-
-  activated() {
-  },
-  created() {
-      console.log(this.selectItem)
-  }
 };
 </script>
 <style media="screen" lang='less'>

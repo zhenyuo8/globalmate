@@ -11,11 +11,12 @@
         </div>
         <div class="swpier_container" >
             <mt-swipe :auto="3000">
-                <mt-swipe-item v-for="(item,index) in slides" :key='index'><img :src="item" :key='index' alt=""></mt-swipe-item>
+                <mt-swipe-item v-for="(item,index) in slides" :key='index' @click.native='goSwiperItem(item.href)'><img :src="item.url" :key='index' alt=""  >
+                </mt-swipe-item>
             </mt-swipe>
         </div>
     <div class="">
-      <p class="index_notice icon-exclamation">点击下列应用类型可发布对应的需求</p>
+      <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
       <ul class="mainmenu">
         <li v-for="(item,index) in mainmenu" :key='index'>
           <a href="javascript:;">
@@ -54,7 +55,7 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <!-- <protocol></protocol> -->
+    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback' :isENAgreement='isENAgreement'></protocol>
   </div>
 </template>
 
@@ -68,6 +69,8 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
+let url1=require('../assets/images/index_swiper1.jpeg')
+let url2=require('../assets/images/index_swiper2.jpeg')
 export default {
   name: "index",
   mixins: [userMix],
@@ -76,22 +79,23 @@ export default {
   },
   data() {
     return {
-      slides: [
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180050&di=0d2ee92eead284e8133d6df07535d75a&imgtype=0&src=http%3A%2F%2Fimg.sc115.com%2Fuploads1%2Fsc%2Fjpgs%2F1512%2Fapic16988_sc115.com.jpg",
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=7412fd486c47c15f1d27485be0d7bd28&imgtype=0&src=http%3A%2F%2Fwww.duoxinqi.com%2Fimages%2F2012%2F06%2F20120605_8.jpg",
-        "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1511015180167&di=3bcedd33a30129b9951be2a81f9b505c&imgtype=0&src=http%3A%2F%2Fpic1.5442.com%2F2015%2F0420%2F06%2F05.jpg"
-      ],
+      slides: [],
       mainmenu: [],
       code: "",
       hasReceiveMessage: false,
       messageList: [],
       loadingShow: false,
-      rankUserList:[]
+      rankUserList:[],
+      notReadAgreement:true,
+      isENAgreement:this.language=='en'?true:false
     };
   },
   computed: {
     token: function () {
       return this.userInfo && this.userInfo.token? this.userInfo.token: ''
+    },
+    userIdAgreement: function () {
+      return this.userInfo && this.userInfo.userId? this.userInfo.userId: ''
     }
   },
   methods: {
@@ -99,9 +103,11 @@ export default {
       if (!token) {
         token = this.userInfo["token"];
       }
-      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
-          {}
-        ).then(res => {
+      this.axios.get(this.ip + "/globalmate/rest/user/getUserByToken",{
+          params:{
+              token:token
+          }
+      }).then(res => {
           if (res.success) {
             this.updateUserInfo({
               curUser: res.data
@@ -121,15 +127,14 @@ export default {
         })
         .then(res => {
           if (res.data && res.data.length) {
-            // let flag = res.data.some(item => item.isEffective !== 0);
-            let flag = res.data.some(item => item.certifyPhoto!=='');
+            let flag = res.data.some(item => item.isEffective == 1);
             this.updateUserInfo({
               certifyMsg: res.data,
               identified: flag // 判断是否通过认证了
             });
             if (!flag) {
               Toast({
-                message: "请您先完成身份认证",
+                message: this.$t('totastTips.confirmIdentify'),
                 duration: 1000
               });
               return;
@@ -137,7 +142,7 @@ export default {
             flag && callback && callback();
           } else {
             Toast({
-              message: "请您先完成身份认证",
+              message: this.$t('totastTips.confirmIdentify'),
               duration: 1000
             });
           }
@@ -159,7 +164,7 @@ export default {
     publishHandler(item) {
       if (item.key == "carry") {
         Toast({
-          message: "对不起，该功能暂未上线，敬请关注...",
+          message: this.$t('totastTips.comingSoon'),
           duration: 2000
         });
       } else {
@@ -173,15 +178,27 @@ export default {
               key: item.key
             }
           });
-      }
+       }
     },
     publish(item) {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
         return;
+      }
+      let hasReadAgreement=this.readAgreement();
+      if(!hasReadAgreement){
+          return;
+      }
+      let hasCompletePersonal=this.completePersonal();
+      if(!hasCompletePersonal) {
+          Toast({
+            message: this.$t('totastTips.personalFileTips'),
+            duration: 2000
+          });
+          return;
       }
       var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
@@ -193,7 +210,7 @@ export default {
     goPersonalCenter() {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -201,7 +218,6 @@ export default {
           path: "mine",
           query: {
             token: this.token,
-            title: "个人中心"
           }
         });
       }
@@ -213,15 +229,26 @@ export default {
       }
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
+          let hasReadAgreement=this.readAgreement();
+          if(!hasReadAgreement){
+              return;
+          }
+          let hasCompletePersonal=this.completePersonal();
+          if(!hasCompletePersonal) {
+              Toast({
+                message: this.$t('totastTips.personalFileTips'),
+                duration: 2000
+              });
+              return;
+          }
         this.$router.push({
           path: "seekHelpList",
           query: {
             token: this.token,
-            title: "求助列表",
             id: "offer",
             userId: this.userId
           }
@@ -231,15 +258,26 @@ export default {
     seekHelp() {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
+          let hasReadAgreement=this.readAgreement();
+          if(!hasReadAgreement){
+              return;
+          }
+          let hasCompletePersonal=this.completePersonal();
+          if(!hasCompletePersonal) {
+              Toast({
+                message: this.$t('totastTips.personalFileTips'),
+                duration: 2000
+              });
+              return;
+          }
         this.$router.push({
           path: "myAssist",
           query: {
             token: this.token,
-            title: "求助列表",
             id: "seek",
             userId: this.userId
           }
@@ -252,7 +290,6 @@ export default {
         path: "messageList",
         query: {
           token: this.token,
-          title: "消息列表",
           id: "message"
         }
       });
@@ -260,7 +297,7 @@ export default {
     goRankAll(key) {
       if (!this.token) {
         Toast({
-          message: "请先登入...",
+          message: this.$t('totastTips.loginTips'),
           duration: 2000
         });
       } else {
@@ -268,49 +305,55 @@ export default {
           path: "rankAll",
           query: {
             token: this.token,
-            title: "榜单",
             type: key
           }
         });
       }
-  },
-    getRank(){
-        this.axios.get(this.ip+'/globalmate/rest/user/list',{
-            params:{
-                token:this.userInfo.token,
-                onlyCurrentUser:false,
-            }
-        }).then((res)=>{
-            if(res.success){
-                let data=res.data;
-                this.updateUserList(data);
-                let len = data.length;
-　　             let minIndex, temp;
-                for(var i=0;i<len;i++){
-                    minIndex = i;
-            　　　　 for (var j = i + 1; j < len; j++) {
-            　　　　 　　if (data[j].nice> data[minIndex].nice) {
-            　　　　　 　　　minIndex = j;
-            　　　　　 　}
-            　　　　 }
-                    temp = data[i];
-　　　               data[i] = data[minIndex];
-　　　　             data[minIndex] = temp;
-                }
-                if(data.length>3){
-                    this.rankUserList=data.slice(0,3);
-                }else{
-                    this.rankUserList=data;
-                }
-            }else {
-                this.loadingShow=false;
-            }
-
-        }).catch((e)=>{
-            this.loadingShow=false;
-            console.log(e);
-        })
     },
+    getRank(){
+        let list=this.userList;
+        list=list.sort(function (a,b) {
+            return b.nice-a.nice;
+        });
+        if(list.length>3){
+            this.rankUserList=list.slice(0,3)
+        }else{
+            this.rankUserList=list
+        }
+    },
+    agreementCallback(params){
+        this.notReadAgreement=params
+    },
+    goSwiperItem(url){
+        window.open(url);
+    },
+    readAgreement(){
+        let hasReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
+        if(!hasReadAgreement){
+            this.notReadAgreement=false;
+            return false;
+        }else{
+            hasReadAgreement=JSON.parse(hasReadAgreement);
+            if(hasReadAgreement.userId!=this.userInfo.userId||!hasReadAgreement.accept){
+                this.notReadAgreement=false;
+                return false;
+            }else {
+                return true;
+            }
+        }
+    },
+    completePersonal(){
+        let curUser=this.userInfo.curUser
+        let flag=true;
+        for(var key in curUser){
+            if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'||key=='email'){
+                if(!curUser[key]){
+                    flag=false;
+                }
+            }
+        }
+        return flag;
+    }
   },
   activated() {
     this.mainmenu = [
@@ -385,16 +428,74 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
-    if (this.userInfo.token) {
+
+    if(this.language&&this.language.indexOf('en')>-1){
+        this.isENAgreement=true;
+        this.slides=[
+            {
+                url:url1,
+                href:'https://filec4e884dad905.iamh5.cn/v3/idea/Z6UpbDQ5?from=groupmessage&suid=EADC8388-55F4-4C64-BD68-8AD6CB1DBD73&sl=1'
+            },
+            {
+                url:url2,
+                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+            },
+            {
+                url:url1,
+                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+            },
+        ]
+    }else{
+         this.slides=[
+             {
+                 url:url1,
+                 href:'https://filec4e884dad905.iamh5.cn/v3/idea/oJCwKPB3?suid=873B60AF-FFBA-48AD-B9D0-4611756E7F51&sl=0'
+             },
+             {
+                 url:url2,
+                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+             },
+             {
+                 url:url1,
+                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+             },
+         ]
+        this.isENAgreement=false;
+    }
+    let ReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
+    if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
+       if(!ReadAgreement){
+           this.notReadAgreement=false;
+       }else{
+           ReadAgreement=JSON.parse(ReadAgreement);
+           if(ReadAgreement.userId!=this.userInfo.userId){
+               this.notReadAgreement=false;
+           }else{
+               this.notReadAgreement=true;
+           }
+       }
     } else {
       this.timer = setInterval(() => {
-        if (this.userInfo.token) {
+        if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
+          if(!ReadAgreement){
+              this.notReadAgreement=false;
+          }else{
+              ReadAgreement=JSON.parse(ReadAgreement);
+              if(ReadAgreement.userId!=this.userInfo.userId){
+                  this.notReadAgreement=false;
+              }else{
+                  this.notReadAgreement=true;
+              }
+
+          }
           clearInterval(this.timer);
         }
       }, 200);
     }
+
+
   },
   deactivated() {
     clearInterval(this.timer);
@@ -853,7 +954,7 @@ ul {
 }
 .need_help {
   box-sizing: border-box;
-  border-right: 2px solid #979797;
+  border-right: 2px solid #eee;
 }
 #index .icon-arrow_right_samll {
   font-size: 12px;
@@ -869,7 +970,7 @@ ul {
   line-height: 20px;
   text-align: left;
   background: #f9f8f4;
-  padding-left: 20px;
+  padding-left: .4rem;
   font-size: 12px;
 }
 #index .icon-exclamation::before {

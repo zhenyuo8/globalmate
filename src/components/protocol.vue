@@ -10,17 +10,26 @@
 	 	font-size: 16px;
 		overflow: scroll;
 		box-shadow: 0px 1px 2px #888888;
-		border-radius: 6px;
+		border-radius: 4px;
+		-webkit-transition: all 0.2s ease-in;
+	    -moz-transition: all 0.2s ease-in;
+	    transition: all 0.2s ease-in;
+		&.gl_english{
+			font-family: Arial;
+		}
 		.protocol_warp{
 			position: relative;
 			padding: 10px .4rem 36px;
 			h2{
 				font-weight: bold;
+				text-decoration:underline;
 			}
 			h6{
 				margin-top: 10px;
 				margin-bottom: 6px;
-				font-weight: 500;
+				font-weight: 600;
+				font-size: 14px;
+				color: #555;
 			}
 			p{
 				font-size: 12px;
@@ -64,8 +73,8 @@
 </style>
 
 <template>
-	<div class="protocol" id="protocol">
-		<div class="protocol_warp">
+	<div class="protocol" id="protocol" :class="isENAgreement?'gl_english':''">
+		<div class="protocol_warp" v-show="!isENAgreement">
 			<h2>Glohelp 用户使用协议</h2>
 			<h6>一、总则</h6>
 			<p>1.1、Glohelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议</p>
@@ -126,23 +135,138 @@
 			<p>10.1、 本协议及其规则的有效性、履行和与本协议及其规则效力有关的所有事宜，将受中华人民共和国法律管辖，任何争议解决仅适用中华人民共和国法律。</p>
 
 		</div>
-		<div class="bottom_action">
+		<div class="protocol_warp" v-show="isENAgreement">
+			<h2>Glohelp User Agreement</h2>
+			<h6>1. General Rules</h6>
+			<p>1.1. The Glohelp Network Service Platform (hereinafter referred to as “the platform”) has formulated this Agreement in accordance with the relevant provisions of the laws of the People's Republic of China. This agreement is a contract. Please read this agreement carefully and choose to accept or not accept this agreement when users register the platform.</p>
+			<p>1.2. The platform includes any officially announced application product such as its official website, APP, and WeChat enterprise service number.</p>
+			<p>1.3. Users’ registration of the platform (including third-party platform login) represents the agreement to the full terms of this agreement. This agreement has legal effect between the user and the platform and is legally binding on both parties.</p>
+			<p>1.4. After the successful registration (including third-party platform login), the user will have an account, and the user should bear the corresponding legal responsibility for the declaration of will of the account.</p>
+			<p>1.5. The platform has the right to change this agreement. The content of the effective agreement is subject to the latest version published by the platform. After the terms of this agreement are changed, the platform will prompt the user immediately, and the user may choose to accept or not accept the revised agreement.</p>
+			<p>1.6. The content of this agreement contains the text of this agreement and all the rules of use that the platform has made for users during its operation process. These rules have the same legal effect as the text of this agreement.</p>
+			<h6>2. Rights and Obligations of Users</h6>
+			<p>2.1. Users should abide by the laws of the People's Republic of China and relevant countries and not use the platform to engage in any activity that is against social morality, public interest or laws. Those activities include but not limited to racial discrimination, pornography, cults, intellectual property infringement, fraud, money laundering, smuggling, terrorist activities, subversion of state power, etc. If the user engages in the above activities, he or she should bear full legal responsibility. The platform does not assume any direct, indirect, or joint liability.</p>
+			<p>2.2. During the use of the platform, users should provide true and accurate registration information to the platform, including but not limited to natural person or legal person information such as name , age, gender, country, ID card, passport, etc. The information should be updated on time on the platform by users.</p>
+			<p>2.3. The user is obliged to ensure that the information published on the platform is true, accurate and not misleading, and does not infringe on the legitimate rights and interests of others.</p>
+			<p>2.4. If a user has a dispute with other users during the use of the platform, it can be submitted to the platform for settlement in terms of feedback, report, complaint, etc. The platform will deal with the dispute in accordance with relevant laws, this agreement and other rules of the platform.</p>
+			<p>2.5. In order to improve the service quality of the platform, the user is assumed to agree to authorize the platform to use the intellectual property rights of the content uploaded and published on the platform, unless the user expressly revokes some or all of the above authorizations.</p>
+			<p>2.6. The user can choose whether to receive the information that the platform unilaterally pushes to the user, including but not limited to help information, help-seeking information, activity information, transaction information, ranking list information, and the like.</p>
+			<h6>3. Rights and Obligations of The Platform</h6>
+			<p>3.1. The platform is obliged to continuously improve the technical level, strive to ensure the normal operation of users' online communication and mutual assistance activities, and try to avoid service interruption or limit the interruption to the shortest time.</p>
+			<p>3.2. The platform has the right to suspend the service when the platform is revised, the service system is upgraded, or the service function is added (or adjusted). The platform will make an announcement when taking the above actions as the case may be.</p>
+			<p>3.3. The platform has the right to review the registration and updated information of the user. For any information that has any doubt, the platform has the right to prompt the user and ask for explanation and correction.</p>
+			<p>3.4. For users who provide false information to register or update, and users who use this platform to engage in any activity that is against social morality, public interest or laws, the platform reserves the right to take actions like restricting accounts, closing accounts, etc., and to investigate users' legal responsibility according to law.</p>
+			<p>3.5. According to laws and regulations, the relevant provisions of the platform and the factual basis learned by the platform, if the platform holds that the user has violated the law or maliciously harmed the interests of other users, the platform has the right to make the user public in the platform. </p>
+			<p>3.6. This platform is a third-party neutral information publishing platform. The platform does not provide guarantee for the legality, authenticity, validity, and user performance of related help or help-seeking information issued by users.</p>
 
-			<button type="button" name="button" class="ignore">忽略</button>
-			<button type="button" name="button" class="accept">接受</button>
+			<h6>4. Rights and Obligations Between Users</h6>
+			<p>4.1. Users of this platform, including “helpers” and “help seekers”, refer to users who offer help and release demand.</p>
+			<p>4.2. When users use the platform to offer help and release demand, they should understand and abide by the following:</p>
+			<p>a) Helpers and help seekers should use their own discretion to judge the authenticity, legitimacy, and accuracy of the helping object and related information; for the loss caused by one party to the other between the helper and the help seeker, the platform does not assume any direct, indirect, or joint liability.</p>
+			<p>b) Helpers and help seekers should resolve the disputes caused by helping issues based on honesty and friendliness. The platform can participate in mediation and provide evidence. If consultation or mediation fails, helpers and help seekers can resort to the law. The platform will fully cooperate with the relevant work of the judicial organs.</p>
+			<p>c) Helpers and help seekers should bear the cost of helping or seeking help related issues.</p>
+			<p>4.3. The rights and obligations of the helper</p>
+			<p>4.3.1. After the helper accepts the invitation from the help seeker, the helper is obliged to communicate in advance about the questions asked by the helper and helping related issues, and to facilitate the helping process.</p>
+			<p>4.3.2. After the helper and the help seeker reach the helping consensus, if the helping contract is established and effective, neither party is allowed to unilaterally default. During the performance of the contract, both parties have the right to investigate the legal responsibility of the default party.</p>
+			<p>4.4. The rights and obligations of the help seeker</p>
+			<p>4.4.1. The demand information issued by the help seeker should be truthful, accurate and legitimate. The help seeker is obliged to communicate in advance about the questions asked by the helper and the helping related issues, and to facilitate the helping process.</p>
+			<p>4.4.2 The help seeker issuing the demand information, is equal to authorize the platform to disclose the necessary information to the helper and agree to accept the matchmaking service provided by the platform.</p>
+			<p>4.4.3 In order to better meet the needs of the help-seekers and improve the information matching efficiency between the supply and demand, the platform will push the demands issued by the help seekers during their validity period. The helper can choose whether to accept the push.</p>
+
+			<h6>5. Intellectual Property Rights</h6>
+			<p>5.1. Intellectual property rights of all information published by the user on the platform including but not limited to texts, pictures and videos, except for the right of authorship, publication and modification, are exclusively and freely authorized to the platform to use and so are the rights to maintain the above intellectual property rights. This Agreement has constituted a written agreement stipulated in Article 25 of the Copyright Law of the People's Republic of China, the validity of which covers the content of any work protected by the copyright law issued by the user on the platform, regardless of whether the content is formed before the signing of this agreement. The user may contact us to expressly revoke some or all of the above authorizations.</p>
+
+			<h6>6. Notice and announcement</h6>
+			<p>6.1. The platform sends notifications or announcements to users through the platform page announcement or application push or mobile phone text messages from time to time. All notices or announcements take effect from the time of arriving.</p>
+
+			<h6>7. Force Majeure</h6>
+			<p>7.1. Due to force majeure or other accidents, when the performance of this Agreement is impossible, unnecessary or meaningless, neither party is held responsible. The term "force majeure" used in this agreement means an objective situation that cannot be foreseen, avoided, or overcome, including but not limited to network failures, computer, communication or other system failures, power failures, strikes, riots, disturbances, catastrophic weather, explosions, wars, government actions or any other natural or man-made disaster.</p>
+
+			<h6>8. Disclaimer</h6>
+			<p>8.1. The Platform is not responsible for any of the following:</p>
+			<p>8.1.1. The user informs others of the account number and password or shares the registered account with others, resulting in leakage of information. Any other leakage of information caused by non-platform reasons.</p>
+			<p>8.1.2. Personal information is leaked, lost, stolen or tampered due to the abnormal operation of network caused by hacker attacks, computer virus intrusion or temporary closure by government regulation, and any other non-platform reason.</p>
+			<p>8.1.3. Any other exemptions listed in this agreement made by the platform.</p>
+
+			<h6>9. Platform Security</h6>
+			<p>9.1. The platform attaches great importance to the protection of user information. When accepting this agreement, users should understand and agree to the following:</p>
+			<p>9.1.1. The Platform has the right to use the relevant information of users within the platform.</p>
+			<p>9.1.2. The platform will not sell or lend users’ information to any third party unless prior permission is obtained from the user.</p>
+			<p>9.1.3. It is strictly forbidden for any user to infringe other user information through the platform. The platform also does not allow users to collect, edit, sell or distribute other users’ information through any third party means.</p>
+			<p>9.2. The personal or legal person information of the user on the platform may be disclosed in part or in whole under the following circumstances:</p>
+			<p>9.2.1. Disclosed to third parties with the consent of the user.</p>
+			<p>9.2.2. According to the relevant provisions of the law, disclose to other parties under the requirements of the administrative or judicial organs.</p>
+			<p>9.2.3. The personal or legal person information of the user must be shared with the third party, in order to provide the helping information requested by the users of the platform.</p>
+			<p>9.2.4. Other disclosures in accordance with the law.</p>
+
+			<h6>10. Dispute Resolution</h6>
+			<p>10.1 The validity, performance and all matters relating to the validity of this agreement and its rules are subject to the laws of the People's Republic of China. Any dispute resolution shall be governed only by the laws of the People's Republic of China.</p>
+
+		</div>
+		<div class="bottom_action">
+			<button type="button" name="button" class="ignore" @click='ignore'>{{$t('button.ignore')}}</button>
+			<button type="button" name="button" class="accept" @click='accept'>{{$t('button.agreeAccept')}}</button>
 		</div>
 	</div>
 </template>
 
 <script>
+import Vue from "vue";
+import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
+Vue.component(MessageBox.name, MessageBox);
 export default {
   data() {
-    return {};
+    return {
+		isEN:false,
+		notReadAgreement:true
+	}
   },
   props: {
+	  userIdAgreement:{
+		  type:String,
+		  default:''
+	  },
+	  isENAgreement:{
+		  type:Boolean,
+		  default:false
+	  },
+	  agreementCallback:{
+		  type:Function,
+		  default:function () {
+
+		  }
+	  }
+  },
+  methods: {
+	  accept(){
+		  this.agreementCallback(true)
+		  let notReadAgreement={
+			  userId:this.userIdAgreement,
+			  accept:true
+		  }
+		  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
+	  },
+	  ignore(){
+		  let _this=this;
+		  MessageBox.confirm("", {
+	        title: "",
+	        message: '<div style="color:red;font-size:16px;">'+this.$t('totastTips.ignoreAgreement')+'</div>',
+	        confirmButtonText: this.$t("button.confirm"),
+	        cancelButtonText: this.$t("button.cancel"),
+	        showCancelButton: true
+	      }).then(action => {
+	          _this.agreementCallback(true);
+			  let notReadAgreement={
+				  userId:_this.userIdAgreement,
+				  accept:false
+			  }
+			  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
+	        }).catch(cancel => {});
+	  }
+  },
+  activated(){
 
   },
-  methods: {},
   created() {}
 };
 </script>

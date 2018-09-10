@@ -291,8 +291,8 @@
                 </div>
             </div>
             <div class="mineInformation_chart_button"  v-show="isOthers">
-                <span class="chat" @click='chartWith'>联系Ta</span>
-                <span class="friends" @click='addIMFriend'>+好友</span>
+                <span class="chat" @click='chartWith'>{{$t('button.contact')}}</span>
+                <span class="friends" @click='addIMFriend'>{{$t('button.addFriends')}}</span>
             </div>
         </div>
 
@@ -309,11 +309,8 @@
             <div class="mineInformation_school_content">
                 <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
                     <span class="scholl_name">{{item.schoolname}}</span>
-                    <!-- <span class="scholl_time">{{item.schooldate}}</span>
-                    <span class="scholl_professional">{{item.professional}}</span>
-                    <span class="scholl_grade">{{item.grade}}</span> -->
                 </div>
-                <p v-if="school.length==0">暂未添加圈子</p>
+                <p v-if="school.length==0">{{$t('noDataDisplay')}}</p>
             </div>
         </div>
         <div class="mineInformation_hobby_warp">
@@ -340,17 +337,17 @@
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
                     <span>{{item.evaluation.uEvluatorName}}</span>
-                    <span class="score">评分:{{item.evaluation.score}}</span>
+                    <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
                 <p class="comment_repeat_middle">
-                    {{item.evaluation.createTime}} 标题:{{item.needAggEntity.conceretNeed.title}} 悬赏金额:{{item.needAggEntity.conceretNeed.rewardAmount}}
+                    {{item.evaluation.createTime}} {{$t('formTitle.head')}}:{{item.needAggEntity.conceretNeed.title}} {{$t('formTitle.reward')}}:{{item.needAggEntity.conceretNeed.rewardAmount}}
                 </p>
                 <p class="comment_repeat_bottom">
                     {{item.evaluation.content}}
                 </p>
             </div>
 
-            <p v-show="total>3" @click='viewAllComments'>查看全部评价</p>
+            <p v-show="total>3" @click='viewAllComments'>{{this.$t('formTitle.viewAllComments')}}</p>
         </div>
     </div>
     <div class="defindloadig" v-if="loadingShow">
@@ -392,7 +389,6 @@ export default {
                 path: 'personalFile',
                 query: {
                     'token': this.$route.query.token,
-                    'title': '个人资料',
                 }
             });
         },
@@ -425,13 +421,13 @@ export default {
                         });
                         if(isFriend){
                             Toast({
-              					message: '您和'+_this.information.nikename+'已经是好友关系了！',
+              					message: _this.information.nikename+this.$t('totastTips.areadyFriend'),
               					duration: 2000
             				});
                         }else{
                             MessageBox.confirm('',{
                                 title: '',
-                                message: '确定发送加好友请求?',
+                                message: _this.$t('totastTips.confirmSendFriend'),
                                 confirmButtonText:_this.$t('button.confirm'),
                                 cancelButtonText:_this.$t('button.cancel'),
                                 showCancelButton: true
@@ -507,7 +503,6 @@ export default {
                 path: 'allComments',
                 query: {
                     'token': this.$route.query.token,
-                    'title': "全部评价",
                     'isOthers':this.isOthers
                 }
             });
@@ -577,9 +572,6 @@ export default {
     deactivated() {
       clearInterval(this.timer);
     },
-    created(){
-    }
-
 }
 
 </script>
