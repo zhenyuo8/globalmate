@@ -124,3 +124,6 @@ input[disabled]{
 * html input.disabled{
     border: 1px solid #eee;
 }
+.gl_title_color{
+    color: #888;
+}

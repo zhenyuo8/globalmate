@@ -4,8 +4,8 @@
     <searchInput :searchCallBack="searchCallBack" :childMsg='msg' v-if="!isSOS" @search='searchForContent'></searchInput>
     <div class="list_wrap" :class="{dataLoaded: allLoaded, notAllLoad: !allLoaded}">
         <mt-navbar v-model="selected">
-            <mt-tab-item id="1">{{$t('status.open')}}</mt-tab-item>
-            <mt-tab-item id="2">{{$t('status.complete')}}</mt-tab-item>
+            <mt-tab-item id="1" @click.native="TabChange('1')">{{$t('status.open')}}</mt-tab-item>
+            <mt-tab-item id="2" @click.native="TabChange('2')">{{$t('status.complete')}}</mt-tab-item>
         </mt-navbar>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
            <mt-tab-container v-model="selected">
@@ -28,7 +28,7 @@
                          <span class="created_time">{{item.need.time}}</span>
                        </div>
                      </div>
-                     <p class="list_repeat_title">{{$t('formTitle.head')}}：{{item.conceretNeed.title}}</p>
+                     <p class="list_repeat_title"><span class="gl_title_color">{{$t('formTitle.head')}}：</span>{{item.conceretNeed.title}}</p>
                      <div class="list_repeat_img" v-if="item.conceretNeed.pic&&item.conceretNeed.pic.length!=0">
                        <div class="list_content_img" v-for="(items,indexs) in item.conceretNeed.pic" :key='indexs'>
                          <img :src="items" alt="" v-if="indexs<3" @click.stop.prevent='previewImage($event,items, item.conceretNeed.pic)'>
@@ -194,10 +194,23 @@ export default {
       topLoadingText:this.$t('loadText.loading'),
       topDropText:'',
       bottomDropText:'',
-      selected:'1'
+      selected:'1',
+      loadCompleted:false
     };
   },
   methods: {
+      TabChange(number){
+          if(number=='2'){
+              this.loadCompleted=true;
+              this.myAssistListDone=[];
+              this.loadData()
+          }else{
+              this.pageNum=1;
+              this.canNotLoadMore=false;
+              this.allLoaded=false;
+              this.loadCompleted=false;
+          }
+      },
     searchForContent(val) {
       this.searchVal = val;
       this.pageNum = 1;
@@ -748,20 +761,26 @@ export default {
       if (this.isSOS) {
         url = "/globalmate/rest/assist/listSOS";
 
-      } else {
-        postData["type"] = this.searchContent.type || "";
-        postData["where"] = this.searchContent.where || "";
+      }
+
+      postData={
+        token: this.userInfo.token,
+        type: this.searchContent.type,
+        where: this.searchContent.where,
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        searchText: this.searchVal,
+      }
+      if(this.loadCompleted){
+          postData['enable']='0,6';
+      }else{
+          if(postData['enable']){
+              delete postData['enable'];
+          }
       }
       this.axios
         .get(this.ip + url, {
-          params: {
-            token: this.userInfo.token,
-            type: this.searchContent.type,
-            where: this.searchContent.where,
-            pageNum: this.pageNum,
-            pageSize: this.pageSize,
-            searchText: this.searchVal
-          }
+          params: postData
         })
         .then(res => {
           if (res.success) {
@@ -837,17 +856,27 @@ export default {
                     for (var n = 0; n < this.userList.length; n++) {
                       if (curData.need.userId == this.userList[n].id) {
                         curData.need.pic = this.userList[n].pic;
+                        if(this.loadCompleted){
+                            _this.myAssistListDone.push(curData);
+                            _this.myAssistListDone.sort((a,b) => {
+                              return b.need.createTime - a.need.createTime
+                            })
+                        }else{
+                            if (curData.need.enable != 0 &&curData.need.enable != 6) {
+                               _this.myAssistList.push(curData);
+                            }
+                            _this.myAssistList.sort((a,b) => {
+                              return b.need.createTime - a.need.createTime
+                            })
+
+                        }
                         if (curData.need.enable != 0 &&curData.need.enable != 6) {
-                          _this.myAssistList.push(curData);
-                      }else{
-                          _this.myAssistListDone.push(curData);
-                      }
-                        _this.myAssistList.sort((a,b) => {
-                          return b.need.createTime - a.need.createTime
-                        })
-                        _this.myAssistListDone.sort((a,b) => {
-                          return b.need.createTime - a.need.createTime
-                        })
+
+                        }else{
+
+                        }
+
+
                       }
                     }
                   }

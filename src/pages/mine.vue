@@ -296,6 +296,9 @@ export default {
           this.userInfo1.country = data.country;
           this.userInfo1.call = data.enable;
           this.userInfo1.pic = data.pic || "../assets/images/icon.png";
+          this.updateUserInfo({
+            curUser: data,
+          });
         }
       }).catch();
    },
