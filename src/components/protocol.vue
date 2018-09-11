@@ -75,9 +75,9 @@
 <template>
 	<div class="protocol" id="protocol" :class="isENAgreement?'gl_english':''">
 		<div class="protocol_warp" v-show="!isENAgreement">
-			<h2>Glohelp 用户使用协议</h2>
+			<h2>GloHelp 用户使用协议</h2>
 			<h6>一、总则</h6>
-			<p>1.1、Glohelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议</p>
+			<p>1.1、GloHelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议</p>
 			<p>1.2、 本平台包括其官网、APP、微信企业服务号等其官方公布的任一应用产品</p>
 			<p>1.3、 用户注册本平台（包含第三方平台登录）即代表同意本协议的全部条款，本协议即在用户与本平台之间产生法律效力，对双方均具有法律约束力。</p>
 			<p>1.4、 用户注册成功后（包含第三方平台登录），将会拥有独立账号，用户应当对其账号的意思表示承担相应的法律责任。</p>
@@ -136,9 +136,9 @@
 
 		</div>
 		<div class="protocol_warp" v-show="isENAgreement">
-			<h2>Glohelp User Agreement</h2>
+			<h2>GloHelp User Agreement</h2>
 			<h6>1. General Rules</h6>
-			<p>1.1. The Glohelp Network Service Platform (hereinafter referred to as “the platform”) has formulated this Agreement in accordance with the relevant provisions of the laws of the People's Republic of China. This agreement is a contract. Please read this agreement carefully and choose to accept or not accept this agreement when users register the platform.</p>
+			<p>1.1. The GloHelp Network Service Platform (hereinafter referred to as “the platform”) has formulated this Agreement in accordance with the relevant provisions of the laws of the People's Republic of China. This agreement is a contract. Please read this agreement carefully and choose to accept or not accept this agreement when users register the platform.</p>
 			<p>1.2. The platform includes any officially announced application product such as its official website, APP, and WeChat enterprise service number.</p>
 			<p>1.3. Users’ registration of the platform (including third-party platform login) represents the agreement to the full terms of this agreement. This agreement has legal effect between the user and the platform and is legally binding on both parties.</p>
 			<p>1.4. After the successful registration (including third-party platform login), the user will have an account, and the user should bear the corresponding legal responsibility for the declaration of will of the account.</p>

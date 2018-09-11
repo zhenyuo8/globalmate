@@ -131,6 +131,9 @@ html,body {
 <script>
 import List from "../components/list.vue";
 import userMix from "../mixins/userInfo";
+import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
+import Vue from "vue";
+Vue.component(Toast.name, Toast);
 export default {
   name: "mine",
   mixins: [userMix],
@@ -244,6 +247,14 @@ export default {
           });
           break;
         case "identify":
+            let hasCompletePersonal=this.completePersonal();
+            if(!hasCompletePersonal) {
+                Toast({
+                  message: this.$t('totastTips.personalFileTips'),
+                  duration: 2000
+                });
+                return;
+            }
           this.$router.push({
             path: "identify",
             query: {
@@ -287,7 +298,20 @@ export default {
           this.userInfo1.pic = data.pic || "../assets/images/icon.png";
         }
       }).catch();
-    }
+   },
+   completePersonal(){
+       let curUser=this.userInfo.curUser
+       let flag=true;
+       for(var key in curUser){
+           if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'||key=='email'||key=='language'){
+               if(!curUser[key]){
+                   flag=false;
+               }
+           }
+       }
+       return flag;
+   }
+
   },
   activated() {
     if (this.userInfo && this.userInfo.token) {

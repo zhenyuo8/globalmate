@@ -198,7 +198,7 @@ export default {
             message: this.$t('totastTips.personalFileTips'),
             duration: 2000
           });
-          return;
+        //   return;
       }
       var isIdentify = this.userInfo["identified"];
       if (!isIdentify) {
