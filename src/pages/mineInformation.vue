@@ -244,7 +244,7 @@
 .comment_repeat_top span{
     line-height: 0.8rem;
     margin-left: .2rem;
-    color: #333;
+    color: #e28109;
 }
 .comment_repeat_top .score{
     position: absolute;

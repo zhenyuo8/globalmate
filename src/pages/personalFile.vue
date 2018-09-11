@@ -41,7 +41,7 @@
     <div class="personalFile_school">
       <div class="personalFile_school_add" @click='fillEducation'>
         <ul>
-          <li v-for="(item,index) in educationValue" @click='showEducationDetail(item)' :key='index'>
+          <li v-for="(item,index) in educationValue" @click='showEducationDetail(item,index)' :key='index'>
             <span class="fl">{{item.schoolname}}</span>
             <span class="fr icon-arrow_right_samll">{{item.schooldate}}</span>
           </li>
@@ -83,7 +83,7 @@
       <form class="" action="" method="post" onsubmit='return false'>
         <p>
           <label for="schoolsignup" class="schoolname" data-icon="u">{{$t('formTitle.schoolname')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="schoolsignup" name="schoolsignup" required="required" type="text" :readonly='showEducationValue' />
+          <input id="schoolsignup" name="schoolsignup" required="required" type="text"  />
         </p>
         <p @click='openPicker' id="schooldatesignup_p">
           <label for="schooldatesignup" class="schooldate" data-icon="u">{{$t('formTitle.schooldate')}}</label>&nbsp;&nbsp;&nbsp;
@@ -91,15 +91,17 @@
         </p>
         <p>
           <label for="schoolprofessionalsignup" class="professional" data-icon="u">{{$t('formTitle.major')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" :readonly='showEducationValue' />
+          <input id="schoolprofessionalsignup" name="schoolprofessionalsignup" required="required" type="text" />
         </p>
         <p>
           <label for="schoolgradesignup" class="grade" data-icon="u">{{$t('formTitle.schoolclass')}}</label>&nbsp;&nbsp;&nbsp;
-          <input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text" :readonly='showEducationValue' />
+          <input id="schoolgradesignup" name="schoolgradesignup" required="required" type="text"  />
         </p>
-        <p class="confirm_add" v-if="!showEducationValue">
-          <input type="button" :value="$t('button.confirm')" @click='addOneEducation()' />
+        <p class="confirm_add">
+          <input  v-if='!showEducationValue' type="button" :value="$t('button.confirm')" @click='addOneEducation()' />
+          <input v-if='showEducationValue' type="button" :value="$t('button.edit')" @click='addOneEducation()' />
         </p>
+
       </form>
     </div>
     <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
@@ -335,7 +337,11 @@ export default {
       this.$el.querySelector("#schooldatesignup").value = "";
       this.$el.querySelector("#schoolprofessionalsignup").value = "";
       this.$el.querySelector("#schoolgradesignup").value = "";
-      this.educationValue.push(education);
+      if(!this.showEducationValue){
+          this.educationValue.push(education);
+      }else{
+          this.educationValue[this.showEducationValueIndex]=education
+      }
     },
     hideThisModule(e) {
       if (e.target.className.indexOf("fillin_education") > -1) {
@@ -347,12 +353,12 @@ export default {
         this.$el.querySelector("#schoolgradesignup").value = "";
       }
     },
-    showEducationDetail(item) {
+    showEducationDetail(item,index) {
       this.showEducationValue = item;
+      this.showEducationValueIndex = index;
       this.$el.querySelector("#schoolsignup").value = item.schoolname;
       this.$el.querySelector("#schooldatesignup").value = item.schooldate;
-      this.$el.querySelector("#schoolprofessionalsignup").value =
-        item.professional;
+      this.$el.querySelector("#schoolprofessionalsignup").value =item.professional;
       this.$el.querySelector("#schoolgradesignup").value = item.grade;
     },
     countrySityCallBack(items, value) {
@@ -896,6 +902,8 @@ export default {
   padding: 0 0.2rem;
   border: 1px solid #eee;
   text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .personalFile_hobby .personalFile_hobby_title {
   font-size: 14px;
