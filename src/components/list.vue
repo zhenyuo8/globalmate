@@ -87,7 +87,7 @@ input {
     padding-right: 0!important;
 }
 .gl_reward_type{
-    font-size: 12px;
+    font-size: 14px;
     color: #f97426;
     position: relative;
     display: inline;

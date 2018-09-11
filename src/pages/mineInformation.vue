@@ -193,7 +193,7 @@
     position: relative;
     font-size: 14px;
     background: #f7f5f3;
-    padding: 10px 0;
+    padding: 10px 0 0;
 }
 .mineInformation_hobby_warp>div{
     background: #fff;
@@ -210,7 +210,7 @@
     padding: 4px;
 }
 .mineInformation_hobby_offer{
-    border: 1px solid #d3d3d3;
+    border: 1px solid #eee;
     border-radius: 10px;
     padding: 4px;
 }
@@ -220,7 +220,7 @@
     border-radius: 12px;
     margin: 4px .1rem;
     font-size: 12px;
-    color: #666;
+    color: #333;
 }
 .mineInformation_comment_warp>div{
     background: #fff;
@@ -319,10 +319,10 @@
             </div>
             <div class="mineInformation_hobby_content">
                 <div class="mineInformation_hobby_love">
-                    <span class="title">{{$t('formTitle.intrest')}} ：{{hobby}}</span>
+                    <span class="title"><i class="gl_title_color">{{$t('formTitle.intrest')}} ：</i>{{hobby}}</span>
                 </div>
                 <div class="mineInformation_hobby_offer">
-                    <span class="title">{{$t('formTitle.helpAvailable')}}</span>
+                    <span class="title gl_title_color">{{$t('formTitle.helpAvailable')}}</span>
                     <div class="" v-show="helpAvailable.length!=0">
                         <span v-for="item in helpAvailable">{{item}}</span>
                     </div>
@@ -333,13 +333,13 @@
             <div class="mineInformation_comment_header">
                 {{$t('formTitle.commentsme')}} ({{total}})
             </div>
-            <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2' :key='index'>
+            <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2' :key='index' @click='showNeddDetail(item)'>
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
-                <p class="comment_repeat_middle">
+                <p class="comment_repeat_middle" >
                     {{item.evaluation.createTime}} {{$t('formTitle.head')}}:{{item.needAggEntity.conceretNeed.title}} {{$t('formTitle.reward')}}:{{item.needAggEntity.conceretNeed.rewardAmount}}
                 </p>
                 <p class="comment_repeat_bottom">
@@ -384,6 +384,17 @@ export default {
         }
     },
     methods:{
+        showNeddDetail(item){
+          this.$router.push({
+            path: "detail",
+            query: {
+              token: this.userInfo.token,
+              id: item.evaluation.needId,
+              otherUserId: item.evaluation.uEvaluatorId,
+              userId: this.userInfo.userId
+            }
+          });
+        },
         goEditMineInfo(){
             this.$router.push({
                 path: 'personalFile',
