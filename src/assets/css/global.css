@@ -116,16 +116,19 @@
     padding: 6px 0;
 }
 input:disabled{
-     border: 1px solid #eee!important;
- color:#333!important;
+    border: 1px solid #eee!important;
+    color:#333!important;
+    opacity: 1!important;
 }
 input[disabled]{
-      border: 1px solid #eee!important;
- 	color:#333!important;
+    border: 1px solid #eee!important;
+    color:#333!important;
+    opacity: 1!important;
 }
 * html input.disabled{
     border: 1px solid #eee!important;
 	color:#333!important;
+    opacity: 1!important;
 }
 
 .gl_title_color{
