@@ -206,7 +206,7 @@ export default{
         'confirmSendFriend':'确定发送加好友请求?',
         'areadyFriend':'已经是你的朋友了',
         'uploadedTwo':'请确定每种认证类型都已上传两张图片!',
-        'receiveNewMessages':'收到新消息！',
+        'receiveNewMessages':'收到新消息,请到消息列表查看！',
         'ignoreAgreement':'忽略此用户协议，您将无法使用本平台所提供的任何服务!',
         'personalFileTips':'请您在用户中心完善个人资料并且完成实名认证',
         'moreThan':'结束时间必须大于开始时间',

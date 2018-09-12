@@ -411,7 +411,7 @@ export default {
                   if (this.country == "中国" || this.country == "China") {
                     if(key==='B'){
                         obj['list'].unshift({
-                            city:this.$t("cityName.beijing"),
+                            city:this.$t("city.Beijing"),
                             cityInitials:'B',
                             countryInitials:'',
                             countryregion:'',
@@ -421,7 +421,7 @@ export default {
                     }
                     if(key==='C'){
                         obj['list'].unshift({
-                            city:this.$t("cityName.chongqing"),
+                            city:this.$t("city.Chongqing"),
                             cityInitials:'C',
                             countryInitials:'',
                             countryregion:'',
@@ -431,7 +431,7 @@ export default {
                     }
                     if(key==='S'){
                         obj['list'].unshift({
-                            city:this.$t("cityName.shanghai"),
+                            city:this.$t("city.Shanghai"),
                             cityInitials:'S',
                             countryInitials:'',
                             countryregion:'',
@@ -441,7 +441,7 @@ export default {
                     }
                     if(key==='T'){
                         obj['list'].unshift({
-                            city:this.$t("cityName.tianjin"),
+                            city:this.$t("city.Tianjin"),
                             cityInitials:'T',
                             countryInitials:'',
                             countryregion:'',
@@ -571,8 +571,8 @@ export default {
           break;
         case "China":
           list = [
-            this.$t("city.beijing"),
-            this.$t("city.shanghai"),
+            this.$t("city.Beijing"),
+            this.$t("city.Shanghai"),
             this.$t("city.Guangzhou"),
             this.$t("city.Shenzhen"),
             this.$t("city.Hongkong"),
@@ -586,7 +586,7 @@ export default {
             this.$t("city.Chongqing"),
             this.$t("city.Tianjin"),
             this.$t("city.Dalian"),
-            this.$t("city.sShenyang"),
+            this.$t("city.Shenyang"),
             this.$t("city.Fuzhou"),
             this.$t("city.Kunming"),
             this.$t("city.Wuhan"),

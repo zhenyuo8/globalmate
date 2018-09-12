@@ -205,7 +205,7 @@ export default{
         'confirmSendFriend':'Confirm sending add friend request?',
         'areadyFriend':' is your friend already.',
         'uploadedTwo':'Please confirm that each type of authentication has uploaded two pictures.',
-        'receiveNewMessages':'Receive new messages',
+        'receiveNewMessages':'Receive new messages,read it in Message List!',
         'ignoreAgreement':'If you skip this agreement, you could not access to any service we provide！',
         'personalFileTips':'Please complete your personal information and identity in "My GloHelp".',
         'moreThan':'结束时间必须大于开始时间',

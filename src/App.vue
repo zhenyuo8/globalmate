@@ -49,9 +49,10 @@ export default {
       } else if (this.$route.name == "messageList") {
         // this.appVue(arg)
       } else {
+          $(".message_tips").show();
         Toast({
           message: this.$t('totastTips.receiveNewMessages'),
-          duration: 2000
+          duration: 4000
         });
       }
     },
