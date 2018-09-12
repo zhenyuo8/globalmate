@@ -174,15 +174,15 @@
         </div>
       </div>
       <div class="detail_middle">
-        <p>{{$t('formTitle.head')}} : {{listData.title}}</p>
-        <p>{{$t('formTitle.address')}} : {{listData.country}}
+        <p><span class="gl_title_color">{{$t('formTitle.head')}} :</span> {{listData.title}}</p>
+        <p><span class="gl_title_color">{{$t('formTitle.address')}} :</span> {{listData.country}}
           <i v-if="listData.city">_</i> {{listData.city}}</p>
-        <p>{{$t('formTitle.time')}} : {{listData.startTime}}
+        <p><span class="gl_title_color">{{$t('formTitle.time')}} :</span> {{listData.startTime}}
           <i v-if="listData.endTime">{{$t('formTitle.toWord')}}</i> {{listData.endTime}}</p>
-        <p>{{$t('formTitle.reward')}} :
+        <p><span class="gl_title_color">{{$t('formTitle.reward')}} :</span>
           <i style="color:red">{{listData.rewardAmount||listData.reward}}</i>
         </p>
-        <p>{{$t('formTitle.decription')}}{{listData.description}}</p>
+        <p><span class="gl_title_color">{{$t('formTitle.decription')}}</span>{{listData.description}}</p>
       </div>
       <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
         <div class="detail_content_img" v-for="(items,indexs) in listData.pic" :key='indexs'>

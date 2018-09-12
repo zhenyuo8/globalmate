@@ -139,7 +139,7 @@ ul > li:last-child {
                 </div>
               </li>
             </ul>
-            <span v-if="friends.length==0">{{$t('formTitle.noFriends')}}</span>
+            <span v-if="friends.length==0" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
             <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
@@ -159,7 +159,7 @@ ul > li:last-child {
                 </div>
               </li>
             </ul>
-            <span v-if="list.length==0">{{$t('formTitle.noContact')}}</span>
+            <span v-if="list.length==0" style="padding:10px;">{{$t('formTitle.noContact')}}</span>
           </mt-tab-container-item>
         </mt-tab-container>
     </div>

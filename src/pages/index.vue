@@ -346,7 +346,7 @@ export default {
         let curUser=this.userInfo.curUser
         let flag=true;
         for(var key in curUser){
-            if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'||key=='email'){
+            if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
                 if(!curUser[key]){
                     flag=false;
                 }

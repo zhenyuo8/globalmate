@@ -29,8 +29,8 @@
  }
 
  input::-webkit-input-placeholder {
-       color: #aab2bd;
-       font-size: 12px;
+       color: #9b9b9b;
+       font-size: 14px;
  }
 
 /**
@@ -116,11 +116,21 @@
     padding: 6px 0;
 }
 input:disabled{
-    border: 1px solid #eee;
+    border: 1px solid #eee!important;
+    color:#333!important;
+    opacity: 1!important;
 }
 input[disabled]{
-     border: 1px solid #eee;
+    border: 1px solid #eee!important;
+    color:#333!important;
+    opacity: 1!important;
 }
 * html input.disabled{
-    border: 1px solid #eee;
+    border: 1px solid #eee!important;
+	color:#333!important;
+    opacity: 1!important;
+}
+
+.gl_title_color{
+    color: #888;
 }

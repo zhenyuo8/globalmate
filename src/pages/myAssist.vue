@@ -4,9 +4,9 @@
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
         <div class="list_repeat" v-for="(item,index) in myAssistList" :key='index'>
           <div class="list_repeat_content" @click='showDetail(item)'>
-            <p>{{$t('formTitle.type')}}: {{item.conceretNeed.tag}}</p>
-            <p>{{$t('formTitle.address')}}: {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
-            <p>{{$t('formTitle.head')}}: {{item.conceretNeed.title}}</p>
+            <p><span class="gl_title_color">{{$t('formTitle.type')}}:</span> {{item.conceretNeed.tag}}</p>
+            <p><span class="gl_title_color">{{$t('formTitle.address')}}:</span> {{item.conceretNeed.country}}_{{item.conceretNeed.city}}</p>
+            <p><span class="gl_title_color">{{$t('formTitle.head')}}:</span> {{item.conceretNeed.title}}</p>
             <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
             <p class="created_time">{{item.need.time}}</p>
           </div>

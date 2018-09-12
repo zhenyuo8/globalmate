@@ -87,7 +87,6 @@ export default {
       show: false,
       selectItem: [],
       filesHasUpload: [],
-      formTitle: this.$route.query.title,
       listType: "",
       country: "",
       showTipsText: "",
@@ -105,7 +104,7 @@ export default {
         method: this.previewImg
       }],
       removeIndex: undefined,
-      description: ''
+      description: '',
     };
   },
   watch: {
@@ -222,7 +221,7 @@ export default {
                   _this.startTime = _this.moment(value).valueOf();
                   if (_this.endTime && _this.endTime < _this.startTime) {
                     Toast({
-                      message: this.$t('totastTips.lessThan'),
+                      message: _this.$t('totastTips.lessThan'),
                       duration: 2000
                     });
                     return;
@@ -232,7 +231,7 @@ export default {
                   _this.endTime = _this.moment(value).valueOf();
                   if (_this.startTime && _this.endTime < _this.startTime) {
                     Toast({
-                      message: this.$t('totastTips.moreThan'),
+                      message: _this.$t('totastTips.moreThan'),
                       duration: 2000
                     });
                     return;

@@ -87,7 +87,7 @@ input {
     padding-right: 0!important;
 }
 .gl_reward_type{
-    font-size: 12px;
+    font-size: 14px;
     color: #f97426;
     position: relative;
     display: inline;
@@ -119,12 +119,11 @@ input {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
-  top: 100%;
+  bottom: -100%;
   opacity: 0;
-  -webkit-transition: all 0.2s ease-out;
-  -moz-transition: all 0.2s ease-out;
-  transition: all 0.2s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
   background: #eee;
 }
  .select_in {
@@ -132,7 +131,6 @@ input {
   left: 0;
   right: 0;
   bottom: 0;
-  top: 57%;
   opacity: 1;
   z-index: 2;
   -webkit-transition: all 0.3s ease-in;
