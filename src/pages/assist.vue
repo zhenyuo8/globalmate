@@ -3,7 +3,8 @@
     <div class="body">
       <div class="main_view">
         <div class="main_view_repeat" v-for="(item,index) in listRepeat" :key='index'>
-          <List :itemRepeat='item' :clickCallBack='clickCallBack'></List>
+          <List :itemRepeat='item' :clickCallBack='clickCallBack' v-if="item.key!=='date'"></List>
+          <dateInterview :itemRepeat='item' :clickCallBack='clickCallBack' v-if="item.key=='date'"></dateInterview>
         </div>
       </div>
       <div class="main_style">
@@ -38,23 +39,22 @@
       <loading></loading>
     </div>
     <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
-    <mt-datetime-picker ref="picker" type="date" :startDate="startDate" :endDate="endDate" :cancelText="$t('button.cancel')" :confirmText="$t('button.confirm')" @confirm="handleConfirm" v-model="pickerValue">
-    </mt-datetime-picker>
     <mt-actionsheet
       :actions="actions"
       v-model="removeShow">
     </mt-actionsheet>
+
   </div>
 </template>
 
 <script>
 import List from "../components/list.vue";
 import indexList from "../components/indexList.vue";
+import dateInterview from "../components/dateInterview.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
-import { Toast, DatetimePicker, Actionsheet } from "mint-ui";
+import { Toast, Actionsheet } from "mint-ui";
 Vue.component(Toast.name, Toast);
-Vue.component(DatetimePicker.name, DatetimePicker);
 Vue.component(Actionsheet.name, Actionsheet);
 import userMix from "../mixins/userInfo";
 export default {
@@ -92,9 +92,6 @@ export default {
       showTipsText: "",
       loadingShow: true,
       isEditType: false,
-      startDate: new Date("1970/01/01"),
-      endDate: new Date("2100/12/31"),
-      pickerValue: this.moment(new Date()).format("YYYY-MM-DD"),
       removeShow: false,
       actions: [{
         name: this.$t('button.delete'),
@@ -129,20 +126,12 @@ export default {
     Toast,
     indexList,
     loading,
-    DatetimePicker
+    dateInterview
   },
   methods: {
     removeItem(index) {
       this.removeShow = true
       this.removeIndex = index
-    },
-    openPicker(item) {
-      this["datePick"] = item;
-      this.$refs.picker.open();
-    },
-    handleConfirm(value) {
-      value = this.moment(value).format("YYYY-MM-DD");
-      this.selectCallBack(value, this["datePick"]);
     },
     // 点击发布按钮逻辑
     publish() {
@@ -182,8 +171,7 @@ export default {
       let _this = this;
       if (!item.type) {
         if (item.key === "date") {
-          this.pickerValue = this.moment(new Date()).format("YYYY-MM-DD");
-          this.openPicker(item);
+            this.selectCallBack(e, item);
         } else {
           this.getSelectItem(item.key);
         }
@@ -213,35 +201,18 @@ export default {
         default:
           this.listRepeat.forEach(function(item, index) {
             if (item.key === "date") {
-              if (
-                item.key === selectItem.key &&
-                item.componentKey === selectItem.componentKey
-              ) {
-                if (selectItem.componentKey == "startTime") {
-                  _this.startTime = _this.moment(value).valueOf();
-                  if (_this.endTime && _this.endTime < _this.startTime) {
-                    Toast({
-                      message: _this.$t('totastTips.lessThan'),
-                      duration: 2000
-                    });
-                    return;
+              if (item.key === selectItem.key &&item.componentKey === selectItem.componentKey) {
+                  if(value.length==1){
+                      item.starttime = value[0];
+                      item.endtime = '';
+                      item.isPlacehold = false;
+                  }else{
+                      item.starttime = value[0];
+                      item.endtime = value[1];
+                      item.isPlacehold = false;
                   }
-                }
-                if (selectItem.componentKey == "endTime") {
-                  _this.endTime = _this.moment(value).valueOf();
-                  if (_this.startTime && _this.endTime < _this.startTime) {
-                    Toast({
-                      message: _this.$t('totastTips.moreThan'),
-                      duration: 2000
-                    });
-                    return;
-                  }
-                }
-                item.text = value;
-                item.isPlacehold = false;
               }
             } else {
-
               if (item.key === selectItem.key) {
                 item.text = value;
                 item.isPlacehold = false;
@@ -612,7 +583,13 @@ export default {
           });
           return false;
         } else if (!listRepeat[i].isPlacehold) {
-          postData[listRepeat[i].componentKey] = listRepeat[i].text;
+            if(listRepeat[i].key=='date'){
+                postData['startTime'] = listRepeat[i].starttime;
+                postData['endTime'] = listRepeat[i].endtime;
+            }else{
+                postData[listRepeat[i].componentKey] = listRepeat[i].text;
+            }
+
         }
       }
       if (!this.myReward.isPlacehold) {
@@ -633,11 +610,6 @@ export default {
         });
         return false;
       }
-      // if (this.$el.querySelector(".main_decription_area textarea")) {
-      //   postData["description"] = this.$el.querySelector(
-      //     ".main_decription_area textarea"
-      //   ).value;
-      // }
       postData["description"] = this.description;
       if (this.filesHasUpload.length !== 0) {
         postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
@@ -683,18 +655,11 @@ export default {
           text: this.$t("formTitle.selectPlace"),
           arrow: true,
           key: "date",
+          starttime:'',
+          endtime:'',
           isRequire: true,
           isPlacehold: true,
           componentKey: "startTime"
-        },
-        {
-          title: this.$t("formTitle.endtime"),
-          text: this.$t("formTitle.selectPlace"),
-          arrow: true,
-          key: "date",
-          isRequire: true,
-          isPlacehold: true,
-          componentKey: "endTime"
         },
         {
           title: this.$t("formTitle.country"),
@@ -755,20 +720,10 @@ export default {
                 item.text = data.conceretNeed.city;
                 item.isPlacehold = false;
               }
-              if (
-                item.componentKey == "startTime" &&
-                data.conceretNeed.startTime
-              ) {
-                item.text = _this
-                  .moment(data.conceretNeed.startTime)
-                  .format("YYYY-MM-DD");
-                item.isPlacehold = false;
-              }
-              if (item.componentKey == "endTime" && data.conceretNeed.endTime) {
-                item.text = _this
-                  .moment(data.conceretNeed.endTime)
-                  .format("YYYY-MM-DD");
-                item.isPlacehold = false;
+              if (item.componentKey == "startTime" &&data.conceretNeed.startTime) {
+                  item.starttime = _this.moment(data.conceretNeed.startTime).format("YYYY-MM-DD");
+                  item.endtime = _this.moment(data.conceretNeed.endTime).format("YYYY-MM-DD");
+                  item.isPlacehold = false;
               }
               if (data.conceretNeed.description) {
                 _this.$el.querySelector(".main_decription_area textarea").value =data.conceretNeed.description;
@@ -916,7 +871,6 @@ export default {
     this.selectItem = [];
     this.type = this.$route.query.key;
     $(".repeat_content input").val("");
-    // $(".main_decription_area textarea").val("");
     this.description = '';
     if (this.$route.query.mode && this.$route.query.mode == "MODIFY") {
       this.isEditType = true;

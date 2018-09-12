@@ -27,7 +27,7 @@
   height: 44px;
   line-height: 44px;
 }
-.repeat .repeat_common div{
+.repeat .repeat_common>div{
     line-height: 44px;
 }
 
@@ -183,6 +183,10 @@ input {
         display: none!important
     }
 }
+
+.icon-arrow_right_samll{
+    line-height: 44px;
+}
 </style>
 
 <template>
@@ -210,6 +214,7 @@ input {
     </div>
     <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'" :class="itemRepeat.componentKey=='reward'?'gl_reward_content':''">
       <input :type="itemRepeat.componentKey==='reward'?'number':'text'" :disabled='itemRepeat.componentKey==="reward"&& !values' :class="itemRepeat.componentKey=='reward'?'gl_reward':''" name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
+
       <span v-show="itemRepeat.componentKey=='reward'" class="gl_reward_type" @click='selectRewardType'>{{itemRepeat.rewardType}}</span>
     </div>
     <div class="gl_mask" v-if="selectFlag" @click='selectRewardType'>
@@ -218,6 +223,7 @@ input {
     <div :class="selectFlag?'select_in':'select_out'" class="gl_reward_type_warp">
        <mt-radio align="right" v-model="value" :options='list' @change='check'></mt-radio>
     </div>
+
   </div>
 
 </template>
@@ -226,17 +232,20 @@ input {
 import Vue from "vue";
 import {Switch ,Radio } from "mint-ui";
 import userMix from "../mixins/userInfo";
+
 Vue.component(Switch.name, Switch);
 Vue.component(Radio.name, Radio);
 export default {
-  components: {},
+  components: {
+  },
   mixins: [userMix],
   data() {
     return {
       values: true,
       selectFlag:false,
       list:[],
-      value:''
+      value:'',
+
     };
   },
   props: {
@@ -255,9 +264,10 @@ export default {
   },
   methods: {
     clickBack(item) {
-      if (item.key !== "style") {
-        this.clickCallBack(item);
-      }
+        this.curItem=item;
+        if (item.key !== "style"&&item.key!=='date') {
+            this.clickCallBack(item);
+        }
     },
     change(item, e) {
       this.clickCallBack(item, e);

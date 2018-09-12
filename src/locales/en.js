@@ -46,6 +46,7 @@ export default{
     },
     formTitle:{
         type:'Type',
+        date:'Date Range',
         starttime:'Start',
         endtime:'End',
         country:'Country',
@@ -222,5 +223,29 @@ export default{
         'loadMore':'Load more …',
         'refresh':'Refresh',
         'loading':'Loading …'
+    },
+
+    month:{
+        'January':'January',
+        'February':'February',
+        'March':'March',
+        'April':'April',
+        'May':'May',
+        'June':'June',
+        'July':'July',
+        'August':'August',
+        'September':'September',
+        'October':'October',
+        'November':'November',
+        'December':'December',
+    },
+    week:{
+        'Mo':'Mo',
+        'Tu':'Tu',
+        'We':'We',
+        'Th':'Th',
+        'Fr':'Fr',
+        'Sa':'Sa',
+        'Su':'Su',
     }
 }

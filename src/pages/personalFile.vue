@@ -59,7 +59,7 @@
       </p>
       <p id='' @click='selectHelpType'>
         <label for="">
-          <!-- <i class="gl_required_class">*</i> -->
+          <i class="gl_required_class">*</i>
           {{$t('formTitle.helpAvailable')}}:</label>
         <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled' style='text-align:center'>
       </p>
@@ -772,6 +772,9 @@ export default {
           this.userMsg.hobby = data.hobby;
           this.selectHelpTypeValue = data.helpAvailable || "";
           this.headerImgae = data.pic || '';
+          if(data.country){
+              this.country=data.country;
+          }
         }
       })
       .catch(e => {
@@ -988,11 +991,9 @@ export default {
   margin-bottom: 10px;
 }
 .personalFile .fillin_education form p input {
-  height: 34px;
-  line-height: 34px;
   box-sizing: border-box;
   border: 1px solid #eee;
-  padding: 0 0.2rem;
+  padding: 8px 0.2rem;
 }
 .personalFile .fillin_education form p label {
   width: 24%;

@@ -46,8 +46,9 @@ export default{
     },
     formTitle:{
         type:'类型',
-        starttime:'开始时间',
-        endtime:'结束时间',
+        date:'日期范围',
+        starttime:'开始日期',
+        endtime:'结束日期',
         country:'国家',
         city:'城市',
         reward:'我的悬赏',
@@ -223,5 +224,28 @@ export default{
         'loadMore':'上拉加载',
         'refresh':'下拉刷新',
         'loading':'加载中...'
-    }
+    },
+       month:{
+           'January':'01',
+           'February':'02',
+           'March':'03',
+           'April':'04',
+           'May':'05',
+           'June':'06',
+           'July':'07',
+           'August':'08',
+           'September':'09',
+           'October':'10',
+           'November':'11',
+           'December':'12',
+       },
+       week:{
+           'Mo':'一',
+           'Tu':'二',
+           'We':'三',
+           'Th':'四',
+           'Fr':'五',
+           'Sa':'六',
+           'Su':'日',
+       }
 }
