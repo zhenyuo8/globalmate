@@ -43,7 +43,7 @@
 				top: 0;
 				left: 47%;
 				font-size: 12px;
-				color: red;
+				color: #54698d;
 			}
 			.gl_date_warp{
 			    position: absolute;

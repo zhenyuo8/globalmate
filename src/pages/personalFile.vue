@@ -821,6 +821,7 @@ export default {
   height: 32px;
   line-height: 32px;
   margin-top: 10px;
+  position: relative;
 }
 .personalFile_form .name p label {
   width: 38%;

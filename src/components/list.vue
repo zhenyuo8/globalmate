@@ -7,7 +7,9 @@
   padding: 0 0.1rem 0 0.3rem;
   font-family: "PingFangSC-Regular";
 }
-
+.icon-arrow_right_samll{
+    line-height: 44px;
+}
 .repeat::before {
   content: "";
   clear: both;
@@ -173,7 +175,11 @@ input {
     flex: 1!important;
 }
 .gl_reward_content{
-    flex: 3!important
+    flex: 2!important;
+    input{
+        float:left;
+        padding:14px 0;
+    }
 }
 .gl_reward_type_warp{
     .mint-cell-title{
@@ -184,9 +190,6 @@ input {
     }
 }
 
-.icon-arrow_right_samll{
-    line-height: 44px;
-}
 </style>
 
 <template>

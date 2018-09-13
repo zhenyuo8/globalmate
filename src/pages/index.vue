@@ -913,7 +913,8 @@ ul {
   display: flex;
 }
 .service_star_title > div {
-  flex: 1;
+  /*flex: 1;*/
+  width: 50%;
 }
 .service_star_title .left {
   text-align: left;

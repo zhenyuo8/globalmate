@@ -209,6 +209,7 @@ export default {
               this.canNotLoadMore=false;
               this.allLoaded=false;
               this.loadCompleted=false;
+              this.loadData()
           }
       },
     searchForContent(val) {
