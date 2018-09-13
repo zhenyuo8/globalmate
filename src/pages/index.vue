@@ -69,8 +69,9 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-let url1=require('../assets/images/index_swiper1.jpeg')
-let url2=require('../assets/images/index_swiper2.jpeg')
+let url1=require('../assets/images/gl_index_1.jpeg')
+let url2=require('../assets/images/gl_index_2.jpeg')
+let url3=require('../assets/images/gl_index_3.jpeg')
 export default {
   name: "index",
   mixins: [userMix],
@@ -434,14 +435,14 @@ export default {
         this.slides=[
             {
                 url:url1,
-                href:'https://filec4e884dad905.iamh5.cn/v3/idea/Z6UpbDQ5?from=groupmessage&suid=EADC8388-55F4-4C64-BD68-8AD6CB1DBD73&sl=1'
+                href:'https://filec4e884dad905.iamh5.cn/v3/idea/Z6UpbDQ5?suid=873B60AF-FFBA-48AD-B9D0-4611756E7F51&sl=0'
             },
             {
                 url:url2,
                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
             },
             {
-                url:url1,
+                url:url3,
                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
             },
         ]
@@ -456,7 +457,7 @@ export default {
                  href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
              },
              {
-                 url:url1,
+                 url:url3,
                  href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
              },
          ]
