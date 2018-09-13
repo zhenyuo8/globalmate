@@ -112,7 +112,7 @@
 		<span>{{itemRepeat.title}}</span>
 	  </div>
 	  <div class="reward_input">
-		  <input type="text" name="" value="" :placeholder='itemRepeat.text' class="reward_input_fir">
+		  <input type="number" name="" value="" :placeholder='itemRepeat.text' class="reward_input_fir">
 	  </div>
 	  <div class="reward_type">
 		  <span @click='selectRewardType' class="gl_reward_type">{{itemRepeat.rewardType}}</span>
