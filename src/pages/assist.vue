@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="main_style">
-        <List :itemRepeat='myReward' :clickCallBack='clickCallBack'></List>
+        <Reward :itemRepeat='myReward' :clickCallBack='clickCallBack'></Reward>
       </div>
       <div class="main_decription">
         <div class="main_decription_title">
@@ -51,6 +51,7 @@
 import List from "../components/list.vue";
 import indexList from "../components/indexList.vue";
 import dateInterview from "../components/dateInterview.vue";
+import Reward from "../components/reward.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
 import { Toast, Actionsheet } from "mint-ui";
@@ -126,7 +127,8 @@ export default {
     Toast,
     indexList,
     loading,
-    dateInterview
+    dateInterview,
+    Reward
   },
   methods: {
     removeItem(index) {

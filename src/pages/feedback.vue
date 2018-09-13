@@ -18,7 +18,9 @@
 
 <script>
 import loading from "../components/loading.vue";
+import userMix from "../mixins/userInfo";
 export default {
+    mixins: [userMix],
   components: {
     loading
   },

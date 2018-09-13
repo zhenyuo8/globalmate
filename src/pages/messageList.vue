@@ -328,6 +328,7 @@ export default {
             _this.getContact();
         },
         error: function(err) {
+            this.loadingShow=false;
           console.log(err);
         },
         complete: function() {}
@@ -366,6 +367,7 @@ export default {
           return;
         },
         error: function(err) {
+            this.loadingShow=false;
           console.log(err);
         }
       });
@@ -556,6 +558,7 @@ export default {
           var list = _this.processList(data.list);
         },
         error: function(err) {
+            this.loadingShow=false;
           console.log(err);
         }
       });
@@ -601,6 +604,7 @@ export default {
               _this.updateMsgList(data.list);
             },
             error: function(err) {
+                this.loadingShow=false;
               console.log(err);
             }
           });

@@ -143,59 +143,11 @@ input {
 
 
 </style>
-<style media="screen" lang="less">
-.mint-switch {
-  margin-right: 0.08rem;
-  .mint-switch-core {
-    height: 0.5rem !important;
-    width: 0.76rem !important;
-  }
-  .mint-switch-core::after {
-    width: 0.43rem !important;
-    height: 0.43rem !important;
-    border-radius: 50% !important;
-  }
-  .mint-switch-input:checked + .mint-switch-core::after {
-    transform: translateX(12px) !important;
-  }
-  .mint-switch-core::before {
-    height: 0.46rem !important;
-    width: 0.70rem !important;
-  }
-  .mint-switch-input:checked + .mint-switch-core {
-    background: #66fd66 !important;
-    border-color: #66fd66 !important;
-  }
-  .mint-radio-core {
-    display: none !important;
-  }
-}
-.gl_reward_title{
-    width: 100px;
-    flex: 1!important;
-}
-.gl_reward_content{
-    flex: 2!important;
-    input{
-        float:left;
-        padding:14px 0;
-    }
-}
-.gl_reward_type_warp{
-    .mint-cell-title{
-        text-align: left!important;
-    }
-    .mint-radio-core{
-        display: none!important
-    }
-}
 
-</style>
 
 <template>
 
   <div class="repeat" @click='clickBack(itemRepeat)'>
-    <mt-switch v-model="values" @change="turn($event,itemRepeat)" v-if="itemRepeat.componentKey==='reward'"></mt-switch>
     <div class="repeat_title repeat_common" :class="itemRepeat.componentKey=='reward'?'gl_reward_title':''">
       <span style="color:red" v-if="itemRepeat.isRequire">*</span>
       <span>{{itemRepeat.title}}</span>
@@ -215,39 +167,23 @@ input {
         </div>
       </div>
     </div>
-    <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'" :class="itemRepeat.componentKey=='reward'?'gl_reward_content':''">
-      <input :type="itemRepeat.componentKey==='reward'?'number':'text'" :disabled='itemRepeat.componentKey==="reward"&& !values' :class="itemRepeat.componentKey=='reward'?'gl_reward':''" name="" value="" :placeholder='itemRepeat.text' @change='change(itemRepeat,$event)'>
-
-      <span v-show="itemRepeat.componentKey=='reward'" class="gl_reward_type" @click='selectRewardType'>{{itemRepeat.rewardType}}</span>
+    <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'" >
+        <input type="text" name="" value="" :placeholder="itemRepeat.text" @change="change(itemRepeat,$event)">
     </div>
-    <div class="gl_mask" v-if="selectFlag" @click='selectRewardType'>
-
-    </div>
-    <div :class="selectFlag?'select_in':'select_out'" class="gl_reward_type_warp">
-       <mt-radio align="right" v-model="value" :options='list' @change='check'></mt-radio>
-    </div>
-
   </div>
 
 </template>
 
 <script>
 import Vue from "vue";
-import {Switch ,Radio } from "mint-ui";
 import userMix from "../mixins/userInfo";
-
-Vue.component(Switch.name, Switch);
-Vue.component(Radio.name, Radio);
 export default {
   components: {
   },
   mixins: [userMix],
   data() {
     return {
-      values: true,
-      selectFlag:false,
-      list:[],
-      value:'',
+
 
     };
   },
@@ -272,49 +208,15 @@ export default {
             this.clickCallBack(item);
         }
     },
-    change(item, e) {
-      this.clickCallBack(item, e);
-    },
-    turn(e, item) {
-      this.itemRepeat.disabled = this.value;
-    },
-    selectRewardType(){
-        if(!this.values) return;
-        this.selectFlag=!this.selectFlag;
-    },
-    selectItemType(item,index){
-        this.type=item;
-        this.selectFlag=!this.selectFlag;
-    },
-    check(){
-        this.value=arguments[0];
-        this.itemRepeat.rewardType=arguments[0]
-        this.selectFlag=!this.selectFlag;
+    change(item,e){
+        this.clickCallBack(item,e);
     }
    },
    activated(){
-       this.list=[{
- 		    label: this.$t('moneyType.chinaType'),
- 		    value: this.$t('moneyType.chinaType')
-         },{
-   		    label: this.$t('moneyType.USA'),
-   		    value: this.$t('moneyType.USA')
-         },{
-   		    label: this.$t('moneyType.ouyuan'),
-   		    value: this.$t('moneyType.ouyuan')
-         },{
-   		    label: this.$t('moneyType.yingbang'),
-   		    value: this.$t('moneyType.yingbang')
-         },{
-   		    label: this.$t('moneyType.japan'),
-   		    value: this.$t('moneyType.japan')
-   			}
-        ],
-        this.value=this.$t('moneyType.currency')
+
    },
    created(){
 
-       this.value=this.itemRepeat.rewardType;
    }
 };
 </script>
