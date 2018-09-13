@@ -200,15 +200,15 @@ export default {
   },
   methods: {
       TabChange(number){
+          this.pageNum=1;
+          this.canNotLoadMore=false;
+          this.allLoaded=false;
+          this.loadCompleted=false;
           if(number=='2'){
               this.loadCompleted=true;
               this.myAssistListDone=[];
               this.loadData()
           }else{
-              this.pageNum=1;
-              this.canNotLoadMore=false;
-              this.allLoaded=false;
-              this.loadCompleted=false;
               this.loadData()
           }
       },
