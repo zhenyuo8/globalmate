@@ -17,6 +17,10 @@
   text-align: center;
   background-color: #f9f9f9;
   border-top: 1px solid #eeeeee;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
 }
 
 .um-footer-fixed {

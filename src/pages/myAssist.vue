@@ -311,13 +311,11 @@ export default {
                       data.assistList.push(curNowData);
                     }
                     data.pushList.push(curNowData);
-                    callback && callback(data);
                   }
                 }
               }
-            } else {
-              callback && callback(data);
             }
+            callback && callback(data);
           } else {
           }
         })
@@ -329,6 +327,7 @@ export default {
     loadTop() {
       this.pageNum = 1;
       this.loadTopFlag = true;
+      this.loadingShow=true;
       this.$refs.loadmore.onTopLoaded();
       this.loadData();
     },
@@ -443,6 +442,7 @@ export default {
                       _this.myAssistList[i] = _this.myAssistList[minIndex];
                       _this.myAssistList[minIndex] = temp;
                     }
+
                   }
                 }
               }
