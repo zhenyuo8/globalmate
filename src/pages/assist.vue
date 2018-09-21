@@ -139,7 +139,6 @@ export default {
     publish() {
       let postData = this.getListData();
       this.submitUrl = "/globalmate/rest/need/addCommon";
-
       if (postData&&!this.isSubmiting) {
           this.isSubmiting=true;
         this.loadingShow = true;
@@ -592,7 +591,12 @@ export default {
                 postData['startTime'] = listRepeat[i].starttime;
                 postData['endTime'] = listRepeat[i].endtime;
             }else{
-                postData[listRepeat[i].componentKey] = listRepeat[i].text;
+                if(listRepeat[i].key=='reward'){
+                    postData[listRepeat[i].componentKey] = listRepeat[i].text+' '+listRepeat[i].rewardType;
+                }else{
+                    postData[listRepeat[i].componentKey] = listRepeat[i].text;
+                }
+
             }
 
         }
@@ -690,6 +694,7 @@ export default {
     loadDataEdit(id) {
       let _this = this;
       this.listRepeat = [];
+      this.listRepeatProcess();
       this.axios
         .get(this.ip + "/globalmate/rest/need/list/" + id, {
           // onlyCurrentUser: true,
@@ -706,7 +711,7 @@ export default {
                 this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
                 this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||this.$t('moneyType.chinaType');
             }else{
-                this.myReward.text = data.conceretNeed.reward;
+                this.myReward.text = data.conceretNeed.reward||this.$t("formTitle.inputPlace");
             }
 
             this.myReward.isPlacehold = false;
@@ -874,6 +879,7 @@ export default {
     this.show = false;
     this.filesHasUpload = [];
     this.selectItem = [];
+    this.listRepeat = [];
     this.type = this.$route.query.key;
     $(".repeat_content input").val("");
     this.description = '';

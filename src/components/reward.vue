@@ -112,7 +112,7 @@
 		<span>{{itemRepeat.title}}</span>
 	  </div>
 	  <div class="reward_input">
-		  <input type="number" name="" value="" :placeholder='itemRepeat.text' class="reward_input_fir">
+		  <input type="number" name="" value="" :placeholder='itemRepeat.text' class="reward_input_fir" :disabled="!values" @keyup="getChangeVal(itemRepeat,$event)" >
 	  </div>
 	  <div class="reward_type">
 		  <span @click='selectRewardType' class="gl_reward_type">{{itemRepeat.rewardType}}</span>
@@ -159,9 +159,6 @@ export default {
     }
   },
    methods: {
-	   changeDate(val){
-		   this.clickCallBack(this.itemRepeat,val)
-	   },
 	   selectRewardType(){
            if(!this.values) return;
            this.selectFlag=!this.selectFlag;
@@ -170,6 +167,12 @@ export default {
 		   this.value=arguments[0];
 		   this.itemRepeat.rewardType=arguments[0]
 		   this.selectFlag=!this.selectFlag;
+	   },
+	   getChangeVal(itemRepeat,e){
+		   this.clickCallBack(this.itemRepeat,e)
+	   },
+	   turn(e,item){
+		   this.itemRepeat.disabled=this.value
 	   }
    },
    activated(){
@@ -189,8 +192,11 @@ export default {
    		    label: this.$t('moneyType.japan'),
    		    value: this.$t('moneyType.japan')
    			}
-        ],
-        this.value=this.$t('moneyType.currency')
+        ];
+		$('.reward_input input').val('');
+		this.values=true;
+		this.itemRepeat.text='';
+        this.value=this.itemRepeat.rewardType||this.$t('moneyType.currency')
    },
    created(){
 

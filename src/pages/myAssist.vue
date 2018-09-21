@@ -221,16 +221,28 @@ export default {
       }
     },
     goChat(item, items) {
-      this.$router.push({
-        path: "im",
-        query: {
-          token: this.userInfo.token,
-          title: items.userInfo.nikename,
-          id: item.need.id,
-          toChartUser: items.userInfo.id,
-          toChartId: items.userInfo.id
-        }
-      });
+        this.$router.push({
+          path: "mineInformation",
+          query: {
+            token: this.userInfo.token,
+            title: items.userInfo.nikename,
+            otherUserId: items.userInfo.id,
+            id: items.needId,
+            currentuser: this.userInfo.userId,
+            seeOther: true
+          }
+        });
+
+    //   this.$router.push({
+    //     path: "im",
+    //     query: {
+    //       token: this.userInfo.token,
+    //       title: items.userInfo.nikename,
+    //       id: item.need.id,
+    //       toChartUser: items.userInfo.id,
+    //       toChartId: items.userInfo.id
+    //     }
+    //   });
     },
     evaluate(e, item) {
       e = e ? e : window.event;

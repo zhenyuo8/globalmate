@@ -169,8 +169,7 @@ export default {
   data() {
     return {
       startTime: {
-        time: [new Date()]
-        // time: []
+        time: [this.moment(new Date).format('YYYY-MM-DD')]
       },
       // endtime: {
       //   time: ''

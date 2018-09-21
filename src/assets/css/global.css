@@ -135,6 +135,14 @@ input[disabled]{
 	color:#333!important;
     opacity: 1!important;
 }
+.reward_input input:disabled{
+    border: none!important;
+    opacity: 1!important;
+}
+.reward_input input[disabled]{
+     border: none!important;
+     opacity: 1!important;
+}
 
 .gl_title_color{
     color: #888;
