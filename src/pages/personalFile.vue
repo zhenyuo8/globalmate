@@ -738,48 +738,102 @@ export default {
         )
         .then(res => {
           if (res.success) {
-            window.history.back(-1);
+              this.loadCurrentUser(true);
+              var isIdentify = this.userInfo["identified"];
+              if (!isIdentify) {
+                this.loadIsCertified(this.toIdentify.bind(this)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
+                return;
+            }else{
+                window.history.back(-1);
+            }
           }
         })
         .catch(e => {});
     },
+    loadIsCertified(callback) {
+      this.axios
+        .get(this.ip + "/globalmate/rest/certify/list", {
+          params: {
+            onlyCurrentUser: true,
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          if (res.data && res.data.length) {
+            let flag = res.data.some(item => item.isEffective == 1);
+            this.updateUserInfo({
+              certifyMsg: res.data,
+              identified: flag // 判断是否通过认证了
+            });
+            if (!flag) {
+              Toast({
+                message: this.$t('totastTips.confirmIdentify'),
+                duration: 1000
+              });
+              return;
+            }
+            !flag && callback && callback();
+          } else {
+            Toast({
+              message: this.$t('totastTips.confirmIdentify'),
+              duration: 1000
+            });
+          }
+        });
+    },
+    toIdentify(){
+        this.$router.push({
+          path: "identify",
+          query: {
+            token: this.userInfo.token,
+            id: "identify"
+          }
+        });
+    },
+    loadCurrentUser(params){
+         this.axios.get(this.ip +"/globalmate/rest/user/getUserByToken",{
+             params:{
+                 token:this.userInfo.token
+             }
+         }).then(res => {
+             if (res.success) {
+               let data = res.data;
+               if(params){
+                //    window.history.back(-1);
+                   this.updateUserInfo({
+                     curUser: data,
+                   });
+               }else{
+                   this.userId = data.id;
+                   if (data.school) {
+                     this.educationValue = JSON.parse(data.school);
+                   }
+                   this.userMsg.nickName = data.nickname || data.nikename || ""
+                   this.userMsg.name = data.name || ""
+                   this.userMsg.phone = data.phone || ""
+                   this.userMsg.country = data.country || ""
+                   this.userMsg.city = data.city || ""
+                   this.userMsg.hobby = data.hobby;
+                   this.selectHelpTypeValue = data.helpAvailable || "";
+                   this.headerImgae = data.pic || '';
+                   if(data.country){
+                       this.country=data.country;
+                   }
+               }
+             }
+           })
+           .catch(e => {
+             console.log(e);
+           });
+    }
 
   },
   activated() {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    this.axios
-      .get(
-        this.ip +
-          "/globalmate/rest/user/getUserByToken" +
-          "?token=" +
-          this.$route.query.token,
-        {}
-      )
-      .then(res => {
-        if (res.success) {
-          let data = res.data;
-          this.userId = data.id;
-          if (data.school) {
-            this.educationValue = JSON.parse(data.school);
-          }
-          this.userMsg.nickName = data.nickname || data.nikename || ""
-          this.userMsg.name = data.name || ""
-          this.userMsg.phone = data.phone || ""
-          this.userMsg.country = data.country || ""
-          this.userMsg.city = data.city || ""
-          this.userMsg.hobby = data.hobby;
-          this.selectHelpTypeValue = data.helpAvailable || "";
-          this.headerImgae = data.pic || '';
-          if(data.country){
-              this.country=data.country;
-          }
-        }
-      })
-      .catch(e => {
-        console.log(e);
-      });
+    this.loadCurrentUser();
+
   },
   deactivated() {
     this.show = false;

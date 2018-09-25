@@ -245,12 +245,7 @@ export default {
   },
   methods: {
 	  accept(){
-		  this.agreementCallback(true)
-		  let notReadAgreement={
-			  userId:this.userIdAgreement,
-			  accept:true
-		  }
-		  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
+		  this.agreementCallback('accept')
 	  },
 	  ignore(){
 		  let _this=this;
@@ -262,11 +257,6 @@ export default {
 	        showCancelButton: true
 	      }).then(action => {
 	          _this.agreementCallback(true);
-			  let notReadAgreement={
-				  userId:_this.userIdAgreement,
-				  accept:false
-			  }
-			  window.localStorage.setItem('NOTREADAGREEMENT',JSON.stringify(notReadAgreement));
 	        }).catch(cancel => {});
 	  }
   },

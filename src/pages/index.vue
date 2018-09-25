@@ -189,16 +189,14 @@ export default {
         });
         return;
       }
-      let hasReadAgreement=this.readAgreement();
-      if(!hasReadAgreement){
-          return;
+
+      if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+          this.hasReadAgreementYet()
+          return
       }
       let hasCompletePersonal=this.completePersonal();
       if(!hasCompletePersonal) {
-          Toast({
-            message: this.$t('totastTips.personalFileTips'),
-            duration: 2000
-          });
+          this.toCompletePersonal();
           return;
       }
       var isIdentify = this.userInfo["identified"];
@@ -234,16 +232,13 @@ export default {
           duration: 2000
         });
       } else {
-          let hasReadAgreement=this.readAgreement();
-          if(!hasReadAgreement){
-              return;
+          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+              this.hasReadAgreementYet()
+              return
           }
           let hasCompletePersonal=this.completePersonal();
           if(!hasCompletePersonal) {
-              Toast({
-                message: this.$t('totastTips.personalFileTips'),
-                duration: 2000
-              });
+              this.toCompletePersonal();
               return;
           }
         this.$router.push({
@@ -263,16 +258,14 @@ export default {
           duration: 2000
         });
       } else {
-          let hasReadAgreement=this.readAgreement();
-          if(!hasReadAgreement){
-              return;
+          if(this.userInfo&&this.userInfo.curUser&&this.userInfo.curUser.uExt3){
+              this.hasReadAgreementYet()
+              return
           }
+
           let hasCompletePersonal=this.completePersonal();
           if(!hasCompletePersonal) {
-              Toast({
-                message: this.$t('totastTips.personalFileTips'),
-                duration: 2000
-              });
+              this.toCompletePersonal();
               return;
           }
         this.$router.push({
@@ -324,24 +317,45 @@ export default {
     },
     agreementCallback(params){
         this.notReadAgreement=params
+        if(params=='accept'){
+            this.readAgreement()
+        }
     },
     goSwiperItem(url){
         window.open(url);
     },
     readAgreement(){
-        let hasReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
-        if(!hasReadAgreement){
-            this.notReadAgreement=false;
-            return false;
-        }else{
-            hasReadAgreement=JSON.parse(hasReadAgreement);
-            if(hasReadAgreement.userId!=this.userInfo.userId||!hasReadAgreement.accept){
-                this.notReadAgreement=false;
-                return false;
-            }else {
-                return true;
-            }
+        let postData={
+            id:this.userInfo.userId,
+            uExt3:'hasReadAgreement'
         }
+        this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.userInfo.token,postData).then(res=> {
+            if (res.success) {
+                this.notReadAgreement=true;
+                if(this.completePersonal()){
+                    this.$router.push({
+                        path: 'personalFile',
+                        query: {
+                            'token': this.userInfo.token,
+                        }
+                    });
+                }
+            }
+          }).catch(e => {});
+    },
+    hasReadAgreementYet(){
+        let _this=this;
+        MessageBox.confirm('',{
+            title: '',
+            message: '您还未阅读GloHelp公众号的用户协议！是否前往阅读并同意该协议？',
+            confirmButtonText:_this.$t('button.confirm'),
+            cancelButtonText:_this.$t('button.cancel'),
+            showCancelButton: true
+        }).then(action => {
+            _this.notReadAgreement=false;
+        }).catch(cancel=>{
+
+        });
     },
     completePersonal(){
         let curUser=this.userInfo.curUser
@@ -354,6 +368,25 @@ export default {
             }
         }
         return flag;
+    },
+    toCompletePersonal(){
+        let _this=this;
+        MessageBox.confirm('',{
+            title: '',
+            message: '您的个人资料还未完善，请完善之后再使用,谢谢！',
+            confirmButtonText:_this.$t('button.confirm'),
+            cancelButtonText:_this.$t('button.cancel'),
+            showCancelButton: true
+        }).then(action => {
+            _this.$router.push({
+                path: 'personalFile',
+                query: {
+                    'token': _this.userInfo.token,
+                }
+            });
+        }).catch(cancel=>{
+
+        });
     }
   },
   activated() {
@@ -429,7 +462,6 @@ export default {
         icon: "icon-more-horizontal"
       }
     ];
-
     if(this.language&&this.language.indexOf('en')>-1){
         this.isENAgreement=true;
         this.slides=[
@@ -463,40 +495,22 @@ export default {
          ]
         this.isENAgreement=false;
     }
-    let ReadAgreement=window.localStorage.getItem('NOTREADAGREEMENT');
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
-       if(!ReadAgreement){
+       if(this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
            this.notReadAgreement=false;
-       }else{
-           ReadAgreement=JSON.parse(ReadAgreement);
-           if(ReadAgreement.userId!=this.userInfo.userId){
-               this.notReadAgreement=false;
-           }else{
-               this.notReadAgreement=true;
-           }
        }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
-          if(!ReadAgreement){
+          if(this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
               this.notReadAgreement=false;
-          }else{
-              ReadAgreement=JSON.parse(ReadAgreement);
-              if(ReadAgreement.userId!=this.userInfo.userId){
-                  this.notReadAgreement=false;
-              }else{
-                  this.notReadAgreement=true;
-              }
-
           }
           clearInterval(this.timer);
         }
       }, 200);
     }
-
-
   },
   deactivated() {
     clearInterval(this.timer);
