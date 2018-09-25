@@ -119,6 +119,7 @@ export default {
         });
     },
     loadIsCertified(callback) {
+        let _this=this;
       this.axios
         .get(this.ip + "/globalmate/rest/certify/list", {
           params: {
@@ -134,6 +135,17 @@ export default {
               identified: flag // 判断是否通过认证了
             });
             if (!flag) {
+                MessageBox.confirm('',{
+                    title: '',
+                    message: '您还未完成身份认证，是否进行身份认证？',
+                    confirmButtonText:_this.$t('button.confirm'),
+                    cancelButtonText:_this.$t('button.cancel'),
+                    showCancelButton: true
+                }).then(action => {
+                    _this.toIdentify();
+                }).catch(cancel=>{
+
+                });
               Toast({
                 message: this.$t('totastTips.confirmIdentify'),
                 duration: 1000
@@ -258,7 +270,7 @@ export default {
           duration: 2000
         });
       } else {
-          if(this.userInfo&&this.userInfo.curUser&&this.userInfo.curUser.uExt3){
+          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
               this.hasReadAgreementYet()
               return
           }
@@ -332,7 +344,7 @@ export default {
         this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.userInfo.token,postData).then(res=> {
             if (res.success) {
                 this.notReadAgreement=true;
-                if(this.completePersonal()){
+                if(!this.completePersonal()){
                     this.$router.push({
                         path: 'personalFile',
                         query: {
@@ -347,7 +359,7 @@ export default {
         let _this=this;
         MessageBox.confirm('',{
             title: '',
-            message: '您还未阅读GloHelp公众号的用户协议！是否前往阅读并同意该协议？',
+            message: '您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
             confirmButtonText:_this.$t('button.confirm'),
             cancelButtonText:_this.$t('button.cancel'),
             showCancelButton: true
@@ -387,7 +399,16 @@ export default {
         }).catch(cancel=>{
 
         });
-    }
+    },
+    toIdentify(){
+        this.$router.push({
+          path: "identify",
+          query: {
+            token: this.userInfo.token,
+            id: "identify"
+          }
+        });
+    },
   },
   activated() {
     this.mainmenu = [
