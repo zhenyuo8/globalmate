@@ -367,107 +367,113 @@ export default {
         })
         .then(res => {
           if (res.success) {
-            let data = res.data;
-            this.listm = [];
-            if (data.length <  this.pageSize) {
-              this.allLoaded = true;
-            }
-            if (data.length < this.pageSize && this.myAssistList.leng != 0) {
-              this.canNotLoadMore = true;
-            }
-            if(this.loadTopFlag || this.pageSize==1){
-              this.myAssistList = [];
-            }
-            if (data.length != 0) {
-              for (var i = 0; i < data.length; i++) {
-                if (data[i].conceretNeed && data[i].conceretNeed.title) {
-                  if (data[i].conceretNeed.pic) {
-                    data[i].conceretNeed.pic = data[i].conceretNeed.pic.split(
-                      ";"
-                    )[0];
+              this.loadingShow = false;
+              if(res.data){
+                  let data = res.data;
+                  this.listm = [];
+                  if (data.length <  this.pageSize) {
+                    this.allLoaded = true;
                   }
-                  var status = data[i].need.enable + "";
-                  switch (status) {
-                    case "1":
-                      data[i].need.status = this.$t("status.open");
-                      break;
-                    case "2":
-                      data[i].need.status = this.$t("status.execute");
-                      break;
-                    case "0":
-                      data[i].need.status = this.$t("status.closed");
-                      break;
-                    case "6":
-                      data[i].need.status = this.$t("status.complete");
-                      break;
-                    case "3":
-                      data[i].need.status = "编辑中";
-                      break;
-                    case "4":
-                      data[i].need.status = "洽谈中";
-                      break;
-                    case "5":
-                      data[i].need.status = "执行中";
-                      break;
+                  if (data.length < this.pageSize && this.myAssistList.leng != 0) {
+                    this.canNotLoadMore = true;
                   }
-                  let curData = data[i];
-                  curData.need.time = this.moment(
-                    curData.need.createTime
-                  ).format("YYYY/MM/DD HH:mm");
-                  if (!_this.mySolove) {
-                    (function(curData) {
-                      _this.getPushItem(curData, function(result) {
-                        _this.myAssistList.push(result);
-                        let len = _this.myAssistList.length;
-                        let minIndex, temp;
-                        for (var i = 0; i < len; i++) {
-                          minIndex = i;
-                          for (var j = i + 1; j < len; j++) {
-                            if (
-                              _this.myAssistList[j].need.createTime >
-                              _this.myAssistList[minIndex].need.createTime
-                            ) {
-                              minIndex = j;
-                            }
-                          }
-                          temp = _this.myAssistList[i];
-                          _this.myAssistList[i] = _this.myAssistList[minIndex];
-                          _this.myAssistList[minIndex] = temp;
+                  if(this.loadTopFlag || this.pageSize==1){
+                    this.myAssistList = [];
+                  }
+                  if (data.length != 0) {
+                    for (var i = 0; i < data.length; i++) {
+                      if (data[i].conceretNeed && data[i].conceretNeed.title) {
+                        if (data[i].conceretNeed.pic) {
+                          data[i].conceretNeed.pic = data[i].conceretNeed.pic.split(
+                            ";"
+                          )[0];
                         }
-                      });
-                    })(curData);
-                  } else {
-                    _this.myAssistList.push(curData);
-                    let len = _this.myAssistList.length;
-                    let minIndex, temp;
-                    for (var i = 0; i < len; i++) {
-                      minIndex = i;
-                      for (var j = i + 1; j < len; j++) {
-                        if (
-                          _this.myAssistList[j].need.createTime >
-                          _this.myAssistList[minIndex].need.createTime
-                        ) {
-                          minIndex = j;
+                        var status = data[i].need.enable + "";
+                        switch (status) {
+                          case "1":
+                            data[i].need.status = this.$t("status.open");
+                            break;
+                          case "2":
+                            data[i].need.status = this.$t("status.execute");
+                            break;
+                          case "0":
+                            data[i].need.status = this.$t("status.closed");
+                            break;
+                          case "6":
+                            data[i].need.status = this.$t("status.complete");
+                            break;
+                          case "3":
+                            data[i].need.status = "编辑中";
+                            break;
+                          case "4":
+                            data[i].need.status = "洽谈中";
+                            break;
+                          case "5":
+                            data[i].need.status = "执行中";
+                            break;
+                        }
+                        let curData = data[i];
+                        curData.need.time = this.moment(
+                          curData.need.createTime
+                        ).format("YYYY/MM/DD HH:mm");
+                        if (!_this.mySolove) {
+                          (function(curData) {
+                            _this.getPushItem(curData, function(result) {
+                              _this.myAssistList.push(result);
+                              let len = _this.myAssistList.length;
+                              let minIndex, temp;
+                              for (var i = 0; i < len; i++) {
+                                minIndex = i;
+                                for (var j = i + 1; j < len; j++) {
+                                  if (
+                                    _this.myAssistList[j].need.createTime >
+                                    _this.myAssistList[minIndex].need.createTime
+                                  ) {
+                                    minIndex = j;
+                                  }
+                                }
+                                temp = _this.myAssistList[i];
+                                _this.myAssistList[i] = _this.myAssistList[minIndex];
+                                _this.myAssistList[minIndex] = temp;
+                              }
+                            });
+                          })(curData);
+                        } else {
+                          _this.myAssistList.push(curData);
+                          let len = _this.myAssistList.length;
+                          let minIndex, temp;
+                          for (var i = 0; i < len; i++) {
+                            minIndex = i;
+                            for (var j = i + 1; j < len; j++) {
+                              if (
+                                _this.myAssistList[j].need.createTime >
+                                _this.myAssistList[minIndex].need.createTime
+                              ) {
+                                minIndex = j;
+                              }
+                            }
+                            temp = _this.myAssistList[i];
+                            _this.myAssistList[i] = _this.myAssistList[minIndex];
+                            _this.myAssistList[minIndex] = temp;
+                          }
+
                         }
                       }
-                      temp = _this.myAssistList[i];
-                      _this.myAssistList[i] = _this.myAssistList[minIndex];
-                      _this.myAssistList[minIndex] = temp;
                     }
-
+                    this.loadingShow = false;
+                  } else {
+                    if (_this.myAssistList.leng == 0) {
+                      setTimeout(() => {
+                        this.nodataFlag = true;
+                        this.loadingShow = false;
+                      }, 500);
+                      this.noDataTips = this.$t('noDataDisplay');
+                    }
                   }
-                }
-              }
-              this.loadingShow = false;
-            } else {
-              if (_this.myAssistList.leng == 0) {
-                setTimeout(() => {
+              }else{
                   this.nodataFlag = true;
-                  this.loadingShow = false;
-                }, 500);
-                this.noDataTips = this.$t('noDataDisplay');
               }
-            }
+
           } else {
             setTimeout(() => {
               this.nodataFlag = true;

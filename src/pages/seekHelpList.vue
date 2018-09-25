@@ -785,8 +785,8 @@ export default {
         })
         .then(res => {
           if (res.success) {
+               this.loadingShow = false;
             if (!res.data) {
-              this.loadingShow = false;
               this.myAssistList = [];
               return;
             }

@@ -481,6 +481,9 @@ export default {
         }
       }, 200);
     }
+    $('.chat-input').on('focus',function () {
+        document.body.scrollTop = document.body.scrollHeight;
+    })
   },
   deactivated() {
     clearInterval(this.timer);
@@ -517,7 +520,7 @@ export default {
 
 .convo {
   margin-top: 90px !important;
-  margin-bottom: 10px;
+  padding-bottom: 50px;
 }
 .gl_no_item {
   margin-top: 0 !important;

@@ -321,8 +321,10 @@ export default {
         success: function(data) {
           if (data) {
               let mess=JSON.parse(data);
-              for (var i = 0; i < mess.length; i++) {
-                  _this.friendsIdList.push(mess[i].id);
+              if(mess.length>0){
+                  for (var i = 0; i < mess.length; i++) {
+                      _this.friendsIdList.push(mess[i].id);
+                  }
               }
             }
             _this.getContact();
@@ -522,7 +524,6 @@ export default {
               }
               this.list.unshift(temList)
           }else{
-              console.log(message,8888);
               let newContact={
                   id:message.from,
                   receive_new:true,
@@ -555,7 +556,10 @@ export default {
         startDate: 0,
         size: 100,
         success: function(data) {
-          var list = _this.processList(data.list);
+            this.loadingShow=false;
+            if(data&&data.list){
+                var list = _this.processList(data.list);
+            }
         },
         error: function(err) {
             this.loadingShow=false;
