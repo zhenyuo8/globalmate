@@ -482,7 +482,12 @@ export default {
       }, 200);
     }
     $('.chat-input').on('focus',function () {
-        document.body.scrollTop = document.body.scrollHeight;
+        setTimeout(() => {
+          let top = $("#convo").height();
+          $("#content").animate({
+              scrollTop: top
+            },100);
+        });
     })
   },
   deactivated() {
