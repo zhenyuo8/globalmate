@@ -258,7 +258,9 @@ export default {
              // _this.updateFriendsList(res.data)
              this.loadingShow = false;
            }
-        }).catch(e => {});
+        }).catch(e => {
+            this.loadingShow = false;
+        });
     },
     toChatPage(item) {
       let chatItemId = "";
@@ -353,6 +355,7 @@ export default {
         startVersion: 0,
         endVersion: 100,
         success: function(data) {
+            this.loadingShow = false;
           if (data.result && data.result.length != 0) {
             var result = data.result;
             var len = result.length - 1;
@@ -573,11 +576,13 @@ export default {
                 token:this.userInfo.token
             }
         }).then(res => {
+            this.loadingShow = false;
           if (res.success) {
             this.currentUserId = res.data.id;
             this.getFriendsInIM();
           }
         }).catch(e => {
+            this.loadingShow = false;
           console.log(e);
         });
     },
