@@ -55,12 +55,13 @@
     width: 1.6rem;
     height: 1.6rem;
     border-radius: 50%;
-    overflow: hidden;
     border: 1px solid #eee;
+    position: relative;
     img {
       display: inline-block;
       width: 100%;
       height: 100%;
+      border-radius: 50%;
     }
   }
   .name_user {
@@ -164,6 +165,7 @@
       <div class="detail_top" @click='goDetail($event,listData)'>
         <div class="image_user">
           <img :src="listData.othersImage" alt="">
+          <i class="gl_identify" v-if="listData.userTag" :class="'gl_'+listData.userTag">V</i>
         </div>
         <div class="name_user">
           <span class="name">{{listData.userName}}</span>
@@ -354,8 +356,9 @@ export default {
                 }
               }
             }
-            this.getOthersInfo(data.need.userId, function(result) {
+            this.getOthersInfo(data.need.userId, function(result,result1) {
               list["othersImage"] = result || "../assets/images/icon.png";
+              list["userTag"] = result1 || "";
               _this.listData = list;
             });
             this.getPushItem(data.need.id);
@@ -432,7 +435,7 @@ export default {
           {}
         )
         .then(res => {
-          callback && callback(res.data.pic);
+          callback && callback(res.data.pic,res.data.userTag);
           this.detail.country = res.data.country;
           if(!this.listData.userName){
               this.listData.userName=res.data.nikename;

@@ -3,13 +3,14 @@
     <div class="um-content p5" id="content">
       <div class="im_top_fix" v-show="id">
         <div class="chart_main_content">
-          <div class="chart_main_content_image" @click='showDetail(detail)'>
+          <div class="chart_main_content_image" @click="showDetail('detail')">
             <div class="">
               <img :src="othersInfo.pic" v-if="othersInfo.pic" alt="">
               <img src="../assets/images/icon.png" v-if="!othersInfo.pic" alt="">
+              <i class="gl_identify_im" v-if="othersInfo.userTag" :class="'gl_'+othersInfo.userTag">V</i>
             </div>
           </div>
-          <div class="chart_main_content_decription" @click='showDetail(detail)'>
+          <div class="chart_main_content_decription" @click='showDetail()'>
             <span class="detail_nikename">{{othersInfo.nikename}}</span>
             <span class="detail_name">{{detail.tag}} : {{detail.title}}</span>
             <span class="detail_brand">{{detail.where}}</span>
@@ -86,15 +87,18 @@ export default {
         this.$router.go(-1)
         return
       }
-      this.$router.push({
-        path: "detail",
-        query: {
-          token: this.userInfo.token,
-          title: detail.title,
-          id: this.id,
-          otherUserId: ""
-        }
-      });
+      if(detail){
+          this.showPersonal()
+      }else{
+          this.$router.push({
+            path: "detail",
+            query: {
+              token: this.userInfo.token,
+              id: this.id,
+              otherUserId: ""
+            }
+          });
+      }
     },
     showPersonal() {
       this.$router.push({
@@ -549,6 +553,20 @@ export default {
 .chart_main_content_image > div {
   width: 1.6rem;
   height: 1.6rem;
+  position: relative;
+  .gl_identify_im{
+      position: absolute;
+      right: -0.1rem;
+      top: -6px;
+      font-size: 18px;
+      font-weight: bolder;
+      font-family: monospace;
+      width: .4rem;
+      height: 0.4rem;
+      display: inline-block;
+      border-radius: 50%;
+      text-align: center;
+  }
 }
 .chart_main_content_image > div > img {
   width: 100%;

@@ -139,7 +139,7 @@ ul > li:last-child {
                 </div>
               </li>
             </ul>
-            <span v-if="friends.length==0" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
+            <span v-if="nofriends" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
           </mt-tab-container-item>
           <mt-tab-container-item id="2">
             <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
@@ -193,7 +193,8 @@ export default {
       addFriedsRequestList: [],
       loadingShow: false,
       currentUserId: "",
-      selected:'1'
+      selected:'1',
+      nofriends:false
     };
   },
   methods: {
@@ -423,6 +424,7 @@ export default {
 
                   this.friends.push(temp);
                 }
+
                 this.loadingShow = false;
               }
             } else {
@@ -561,12 +563,15 @@ export default {
         success: function(data) {
             this.loadingShow=false;
             if(data&&data.list){
-                var list = _this.processList(data.list);
+                _this.processList(data.list);
+                if(data.list.length==0){
+                    this.nofriends=true;
+                }
+
             }
         },
         error: function(err) {
             this.loadingShow=false;
-          console.log(err);
         }
       });
     },

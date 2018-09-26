@@ -10,6 +10,7 @@
                   <div class="userImage">
                       <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
                       <img :src="item.pic" v-if="item.pic" alt="">
+                      <i class="gl_identify_rank" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
                   </div>
                   <div class="userInfo_name">
                       <span class="name">{{item.nikename}}</span>
@@ -148,10 +149,23 @@ export default {
                              height: .72rem;
                              overflow: hidden;
                              border-radius: 4px;
+                             position: relative;
                              img{
                                  width: 100%;
                                  height: 100%;
                                  display: inline-block;
+                             }
+                             .gl_identify_rank{
+                                 position: absolute;
+                                 right: 0rem;
+                                 top: 0;
+                                 font-size: 12px;
+                                 font-weight: bolder;
+                                 font-family: monospace;
+                                 width: .25rem;
+                                 height: 0.25rem;
+                                 display: inline-block;
+                                 border-radius: 50%;
                              }
                          }
                          &:after{

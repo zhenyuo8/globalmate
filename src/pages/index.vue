@@ -38,7 +38,10 @@
       </div>
       <ul>
         <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
-          <a href="javascript:;"><img :src="item.pic" alt=""></a>
+          <a href="javascript:;">
+              <img :src="item.pic" alt="">
+              <i class="gl_identify" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
+          </a>
           <span>{{item.name}}</span>
           <img src="../assets/images/goden.png" alt="" v-if="index==0">
           <img src="../assets/images/silver.png" alt="" v-if="index==1">

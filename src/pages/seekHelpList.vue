@@ -14,6 +14,7 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="">
+                         <i class="gl_identify" v-if="item.need.userTag" :class="'gl_'+item.need.userTag">V</i>
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>
@@ -47,6 +48,7 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="">
+                         <i class="gl_identify" v-if="item.need.userTag" :class="'gl_'+item.need.userTag">V</i>
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>
@@ -857,6 +859,7 @@ export default {
                     for (var n = 0; n < this.userList.length; n++) {
                       if (curData.need.userId == this.userList[n].id) {
                         curData.need.pic = this.userList[n].pic;
+                        curData.need.userTag = this.userList[n].userTag;
                         if(this.loadCompleted){
                             _this.myAssistListDone.push(curData);
                             _this.myAssistListDone.sort((a,b) => {
@@ -1171,8 +1174,9 @@ form.rightIn_form {
     }
     .list_repeat_title {
       text-align: left;
-      margin-top: 10px;
-      margin-bottom: 6px;
+      padding: 8px 0;
+    //   margin-top: 10px;
+    //   margin-bottom: 6px;
       font-size: 15px;
       color: #333;
       font-weight: 500;
@@ -1203,13 +1207,12 @@ form.rightIn_form {
       .image_user {
         width: 1.2rem;
         height: 1.2rem;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 1px solid #eee;
+        position: relative;
         img {
           display: inline-block;
           width: 100%;
           height: 100%;
+          border-radius: 50%;
         }
       }
       .name_user {

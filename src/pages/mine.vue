@@ -44,6 +44,7 @@ html,body {
   border-radius: 50%;
   float: left;
   border: 1px solid rgba(151, 151, 151, 1);
+  position: relative;
 }
 
 .mine_image img {
@@ -105,6 +106,7 @@ html,body {
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
           <img :src="userInfo1.pic" alt="">
+          <i class="gl_identify" v-if="userInfo1.userTag" :class="'gl_'+userInfo1.userTag">V</i>
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">
@@ -183,7 +185,8 @@ export default {
         username: "",
         country: "",
         call: "",
-        pic: ""
+        pic: "",
+        userTag:""
       }
     };
   },
@@ -296,6 +299,7 @@ export default {
           this.userInfo1.country = data.country;
           this.userInfo1.call = data.enable;
           this.userInfo1.pic = data.pic || "../assets/images/icon.png";
+          this.userInfo1.userTag = data.userTag || "";
           this.updateUserInfo({
             curUser: data,
           });

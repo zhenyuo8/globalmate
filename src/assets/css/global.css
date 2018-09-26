@@ -147,3 +147,30 @@ input[disabled]{
 .gl_title_color{
     color: #888;
 }
+
+.gl_identify{
+    position: absolute;
+    right: 0.08rem;
+    top: 0;
+    font-size: 18px;
+    font-weight: bolder;
+    font-family: monospace;
+    width: .4rem;
+    height: 0.4rem;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.gl_vGold{
+    color: #ffd900;
+    background: #e3f9f6;
+}
+.gl_vCopper{
+    color: #ee9b6b;
+    background: #e3f9f6;
+}
+.gl_vSilver{
+    color: #e6e8eb;
+    background: #e3f9f6;
+}

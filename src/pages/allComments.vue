@@ -4,6 +4,7 @@
             <div class="comment_repeat" v-for="(item,index) in commentList" >
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
+                    <i class="gl_identify_mine" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
@@ -78,6 +79,7 @@
                     for(var n=0;n<this.userList.length;n++){
                         if(curData.evaluation.uEvaluatorId==this.userList[n].id){
                             curData.pic=this.userList[n].pic;
+                            curData.userTag=this.userList[n].userTag;
                             _this.commentList.push(curData)
                         }
                     }
@@ -137,6 +139,19 @@
         display: flex;
         flex-direction: row;
         position: relative;
+        .gl_identify_mine{
+            position: absolute;
+            left: 0.6rem;
+            top: -6px;
+            font-size: 16px;
+            font-weight: bolder;
+            font-family: monospace;
+            width: .35rem;
+            height: 0.35rem;
+            display: inline-block;
+            border-radius: 50%;
+            text-align: center;
+        }
     }
     .comment_repeat_top span{
         line-height: 0.8rem;
