@@ -40,7 +40,7 @@
         <img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech' />
 
         <div class="show-input">
-          <input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter="createUserTalk()" />
+          <input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter="createUserTalk()" @focus="scrollTop()"/>
           <button class="btn chat-send" @click='createUserTalk()'>
             {{$t('button.send')}}
           </button>
@@ -465,6 +465,11 @@ export default {
         .catch(e => {
           console.log(e);
         });
+    },
+    scrollTop(){
+        setTimeout(()=>{
+            document.body.scrollTop = document.body.scrollHeight;
+        },100)
     }
   },
   activated() {
