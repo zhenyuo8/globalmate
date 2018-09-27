@@ -468,8 +468,8 @@ export default {
     },
     scrollTop(){
         setTimeout(()=>{
-            document.body.scrollTop = document.body.scrollHeight;
-        },100)
+            document.body.scrollBottom = document.body.scrollHeight;
+        },300)
     }
   },
   activated() {
