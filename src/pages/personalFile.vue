@@ -113,9 +113,10 @@
 <script>
 import indexList from "../components/indexList.vue";
 import Vue from "vue";
-import { DatetimePicker, Toast } from "mint-ui";
+import { DatetimePicker, Toast, MessageBox } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
 Vue.component(Toast.name, Toast);
+Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
 export default {
   mixins: [userMix],
@@ -774,10 +775,37 @@ export default {
             }
             !flag && callback && callback();
           } else {
-            Toast({
+            MessageBox.confirm('',{
+              title: '',
               message: this.$t('totastTips.confirmIdentify'),
-              duration: 1000
+              confirmButtonText: this.$t('button.confirm'),
+              cancelButtonText: this.$t('button.cancel'),
+              showCancelButton: true,
+              closeOnClickModal: false
+            }).then(action => {
+              this.$router.replace({
+                path: "identify",
+                query: {
+                  token: this.userInfo.token,
+                  id: "identify"
+                }
+              });
+            }).catch(cancel=>{
+              this.$router.go(-1)
             });
+            // Toast({
+            //   message: this.$t('totastTips.confirmIdentify'),
+            //   duration: 500
+            // });
+            // setTimeout(() => {
+            //   this.$router.replace({
+            //     path: "identify",
+            //     query: {
+            //       token: this.userInfo.token,
+            //       id: "identify"
+            //     }
+            //   });
+            // }, 500)
           }
         });
     },

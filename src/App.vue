@@ -315,6 +315,7 @@ export default {
             });
             this.loadUserList(token)
             this.loadIsCertified();
+            this.getUserByToken(token);
           }
         })
         .catch();
