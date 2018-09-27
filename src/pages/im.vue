@@ -469,7 +469,7 @@ export default {
     scrollTop(){
         setTimeout(()=>{
             // document.body.scrollBottom = document.querySelector('#main').offsetHeight;
-            document.body.scrollBottom = document.body.scrollHeight+50;
+            document.body.scrollTop = document.body.scrollHeight;
         },2000)
     }
   },
