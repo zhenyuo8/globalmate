@@ -39,12 +39,15 @@
   background: #fff;
   margin-bottom: 10px;
 }
-.identify_type h3 {
-  font-size: 16px;
+.identify_type p {
+  font-size: 12px;
   width: 90%;
   margin: auto;
   padding: 15px 0;
   border-bottom: 1px solid #eee;
+  color: red;
+  line-height: 16px;
+  text-align: left;
 }
 .identify_type_select {
   padding: 15px 0;
@@ -136,7 +139,8 @@ p {
 
   <div class="identify" id="identify">
     <div class="identify_type">
-      <h3>{{$t('personaPage.selectidentify')}}</h3>
+      <!-- <h3>{{$t('personaPage.selectidentify')}}</h3> -->
+      <p class="gl_waring">{{$t('totastTips.warningIdentify')}}</p>
       <div class="identify_type_select">
         <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
         <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>

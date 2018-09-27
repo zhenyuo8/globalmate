@@ -211,6 +211,7 @@ export default {
               this.myAssistListDone=[];
               this.loadData()
           }else{
+              this.myAssistList=[];
               this.loadData()
           }
       },
