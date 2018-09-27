@@ -468,7 +468,7 @@ export default {
     },
     scrollTop(){
         var agent=  navigator.userAgent.toLowerCase();
-            this.hideAll()
+            // this.hideAll()
             setTimeout(function(){
                 if (agent.indexOf('safari') != -1 && agent.indexOf('mqqbrowser') == -1
                         && agent.indexOf('coast') == -1 && agent.indexOf('android') == -1
@@ -482,7 +482,7 @@ export default {
                     } else {//其他浏览器
                         window.scrollTo(0, 1000000);
                     }
-            },200)
+            },400)
 
         // setTimeout(()=>{
         //     // document.body.scrollBottom = document.body.scrollHeight;
