@@ -521,23 +521,32 @@ export default {
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
-       if(this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-           this.notReadAgreement=false;
-       }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
-          if(this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-              this.notReadAgreement=false;
-          }
           clearInterval(this.timer);
         }
       }, 200);
     }
+    if(this.userInfo&&this.userInfo.curUser){
+        if(!this.userInfo.curUser.uExt3){
+            this.notReadAgreement=false;
+        }
+    }else{
+        this.timer1 = setInterval(() => {
+            if(this.userInfo&&this.userInfo.curUser){
+                 clearInterval(this.timer1);
+                 if(!this.userInfo.curUser.uExt3){
+                     this.notReadAgreement=false;
+                 }
+            }
+        }, 200);
+    }
   },
   deactivated() {
     clearInterval(this.timer);
+    clearInterval(this.timer1);
   },
 };
 </script>

@@ -277,10 +277,25 @@ export default {
             this.updateUserInfo({
               token: res.data
             });
-            this.loadUserList(res.data)
+            this.loadUserList(res.data);
+            this.getUserByToken(res.data);
           }
         })
         .catch();
+    },
+    getUserByToken(token) {
+      this.axios.get(
+          this.ip + "/globalmate/rest/user/getUserByToken" + "?token=" + token,
+          {}).then(res => {
+          if (res.success) {
+            this.updateUserInfo({
+              curUser: res.data,
+              userId: res.data.id
+            });
+          }
+        }).catch(e => {
+          console.log(e);
+        });
     },
     loadUserMsg(code) {
       let url =
