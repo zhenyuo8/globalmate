@@ -468,9 +468,8 @@ export default {
     },
     scrollTop(){
         setTimeout(()=>{
-            alert(document.body.scrollHeight)
-            document.body.scrollBottom = document.querySelector('#main').offsetHeight;
-            // document.body.scrollBottom = document.body.scrollHeight;
+            // document.body.scrollBottom = document.querySelector('#main').offsetHeight;
+            document.body.scrollBottom = document.body.scrollHeight+50;
         },300)
     }
   },
