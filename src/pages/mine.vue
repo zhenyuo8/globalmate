@@ -177,7 +177,14 @@ export default {
           text: "",
           arrow: true,
           mineType: "feedback"
-        }
+       },
+       {
+         title: this.$t("personaPage.aboutUs"),
+         text: "",
+         arrow: true,
+         mineType: "aboutUs"
+       }
+
       ],
 
       title: "",

@@ -81,8 +81,8 @@
 			<div class="protocol_warp" v-show="!isENAgreement">
 				<h2>GloHelp 用户使用协议</h2>
 				<h6>一、总则</h6>
-				<p>1.1、GloHelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议</p>
-				<p>1.2、 本平台包括其官网、APP、微信企业服务号等其官方公布的任一应用产品</p>
+				<p>1.1、GloHelp网络服务平台（以下简称“本平台”）依据中华人民共和国法律的相关规定制定本协议。本协议具有合同效力。用户注册时，请认真阅读本协议，并选择接受或不接受本协议。</p>
+				<p>1.2、 本平台包括其官网、APP、微信企业服务号等其官方公布的任一应用产品。</p>
 				<p>1.3、 用户注册本平台（包含第三方平台登录）即代表同意本协议的全部条款，本协议即在用户与本平台之间产生法律效力，对双方均具有法律约束力。</p>
 				<p>1.4、 用户注册成功后（包含第三方平台登录），将会拥有独立账号，用户应当对其账号的意思表示承担相应的法律责任。</p>
 				<p>1.5、本平台有权变更本协议，生效的协议内容以本平台公布的最新版本为准。本协议条款变更后，本平台将第一时间对用户进行提示，用户可选择接受或不接受修订后的协议。</p>
@@ -96,7 +96,7 @@
 				<p>2.6、 用户可自主选择是否接收本平台单方给用户推送的信息，包括但不限于求助信息、帮助信息、活动信息、交易信息、榜单信息等。</p>
 				<h6>三、本平台的权利和义务</h6>
 				<p>3.1、 本平台有义务持续提升技术水平，努力确保用户网上交流和互助活动的正常进行，尽力避免服务中断或将中断时间限制在最短时间内。</p>
-				<p>3.2、 本平台对版面进行改版、服务系统升级、增加（或调整）服务功能等须中断服务的操作时，有权暂时中断服务。本平台将视具体情况在实施以上行为时予以公告</p>
+				<p>3.2、 本平台对版面进行改版、服务系统升级、增加（或调整）服务功能等须中断服务的操作时，有权暂时中断服务。本平台将视具体情况在实施以上行为时予以公告。</p>
 				<p>3.3、 本平台有权对用户的注册和更新资料进行审查，对存在任何疑问或异议的资料，本平台有权发出通知问询用户，并要求其做出解释、更正。</p>
 				<p>3.4、 对提供虚假资料进行注册或更新的用户，以及利用本平台从事违反社会公德、公共利益或违法犯罪活动的用户，本平台保留采取限制权限、封禁账号等处理措施的权利，并有权追究用户的法律责任。</p>
 				<p>3.5、根据国家法律法规、本平台的相关规定和本平台所掌握的事实依据，如本平台认定用户存在违法违规或恶意损害其他用户利益等不当行为，本平台有权对该用户在平台内进行公示。</p>
@@ -107,10 +107,10 @@
 				<p>a) 帮助者和求助者应通过自己的审慎判断来确定帮助标的、帮助者和求助者信息的真实性、合法性以及准确性；帮助者和求助者中一方不当行为对另一方造成的损失，本平台不承担任何直接或间接、连带责任。</p>
 				<p>b) 帮助者和求助者应秉持诚信、友善的精神自行协商解决由帮助或求助所引起的纠纷，本平台可参与调解，提供证据；协商或调解不成的，帮助者和求助者可诉诸法律途径加以解决，本平台将全力配合司法机关相关工作。</p>
 				<p>c)帮助者和求助者应自行负担因帮助或求助行为产生的费用。</p>
-				<p>4.3、帮助者的权利与义务</p>
+				<p>4.3、帮助者的权利与义务：</p>
 				<p>4.3.1、帮助者接受求助者邀约后，帮助者有义务就求助者的问题、帮助所涉及事项进行提前沟通解答，促成帮助事项顺利推进。</p>
 				<p>4.3.2、帮助者和求助者确认帮助事项、达成帮助共识后，若符合合同的成立与生效要件，任何一方不得单方违约。合同履行过程中，双方均有权依照相关法律规定追究过错方法律责任、维护己方合法权益。</p>
-				<p>4.4、求助者的权利与义务</p>
+				<p>4.4、求助者的权利与义务：</p>
 				<p>4.4.1、求助者发布的需求信息应当真实、准确、合法，并有义务就拟帮助者的问题、帮助所涉及事项进行提前沟通解答，促成求助事项顺利推进。</p>
 				<p>4.4.2、求助者发布需求后，即代表授权本平台向帮助者披露必要信息并同意接受本平台提供的撮合服务。</p>
 				<p>4.4.3 为更好地满足求助者的需求，提高供需双方信息匹配效率，本平台会在需求有效期内为求助者发布的需求进行推送，帮助者可自主选择是否接受该推送。</p>
@@ -134,7 +134,7 @@
 				<p>9.2.1、 经用户同意，向第三方披露。</p>
 				<p>9.2.2、根据法律的有关规定，应行政、司法等国家机关的要求，向他方披露。</p>
 				<p>9.2.3、 为提供本平台用户所要求的帮助或求助信息，而必须和第三方分享用户的个人或法人信息。</p>
-				<p>9.2.4、 其它本平台根据法律规定必需的披露</p>
+				<p>9.2.4、 其它本平台根据法律规定必需的披露。</p>
 				<h6>十、纠纷解决方式</h6>
 				<p>10.1、 本协议及其规则的有效性、履行和与本协议及其规则效力有关的所有事宜，将受中华人民共和国法律管辖，任何争议解决仅适用中华人民共和国法律。</p>
 
@@ -169,10 +169,10 @@
 				<p>a) Helpers and help seekers should use their own discretion to judge the authenticity, legitimacy, and accuracy of the helping object and related information; for the loss caused by one party to the other between the helper and the help seeker, the platform does not assume any direct, indirect, or joint liability.</p>
 				<p>b) Helpers and help seekers should resolve the disputes caused by helping issues based on honesty and friendliness. The platform can participate in mediation and provide evidence. If consultation or mediation fails, helpers and help seekers can resort to the law. The platform will fully cooperate with the relevant work of the judicial organs.</p>
 				<p>c) Helpers and help seekers should bear the cost of helping or seeking help related issues.</p>
-				<p>4.3. The rights and obligations of the helper</p>
+				<p>4.3. The rights and obligations of the helper:</p>
 				<p>4.3.1. After the helper accepts the invitation from the help seeker, the helper is obliged to communicate in advance about the questions asked by the helper and helping related issues, and to facilitate the helping process.</p>
 				<p>4.3.2. After the helper and the help seeker reach the helping consensus, if the helping contract is established and effective, neither party is allowed to unilaterally default. During the performance of the contract, both parties have the right to investigate the legal responsibility of the default party.</p>
-				<p>4.4. The rights and obligations of the help seeker</p>
+				<p>4.4. The rights and obligations of the help seeker:</p>
 				<p>4.4.1. The demand information issued by the help seeker should be truthful, accurate and legitimate. The help seeker is obliged to communicate in advance about the questions asked by the helper and the helping related issues, and to facilitate the helping process.</p>
 				<p>4.4.2 The help seeker issuing the demand information, is equal to authorize the platform to disclose the necessary information to the helper and agree to accept the matchmaking service provided by the platform.</p>
 				<p>4.4.3 In order to better meet the needs of the help-seekers and improve the information matching efficiency between the supply and demand, the platform will push the demands issued by the help seekers during their validity period. The helper can choose whether to accept the push.</p>

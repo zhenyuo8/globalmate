@@ -110,7 +110,8 @@ export default{
         passport:'Passport',
         studentcard:'Student ID',
         selectidentify:'Please select identification tpye',
-        lessType:'Please select at least one identification method'
+        lessType:'Please select at least one identification method',
+        aboutUs:'About Us'
     },
     messagePage:{
         friends:'Friends',
@@ -184,7 +185,7 @@ export default{
     totastTips:{
         'selectCountry':'Please select your country/region',
         'submissionF':'Submission failed!',
-        'confirmIdentify':'Please confirm your identity',
+        'confirmIdentify':'For the rights and interests of all users, only real name identified users could use GloHelp.',
         'comingSoon':'Coming soon …',
         'loginTips':'Please login …',
         'indentifySelect':'Please choose at least one type you like',

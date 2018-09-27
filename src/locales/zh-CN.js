@@ -110,6 +110,7 @@ export default{
         studentcard:'学生证',
         selectidentify:'请选择认证方式',
         lessType:'请至少选择一项认证方式!',
+        aboutUs:'关于我们'
 
     },
     messagePage:{
@@ -184,7 +185,7 @@ export default{
     totastTips:{
         'selectCountry':'请先选择国家！',
         'submissionF':'发布失败',
-        'confirmIdentify':'请您先完成身份认证',
+        'confirmIdentify':'为了全体用户的权益，只有实名认证的用户才能使用本平台哦~~~',
         'comingSoon':'对不起，该功能暂未上线，敬请关注...',
         'loginTips':'请先登入...',
         'indentifySelect':'请至少选择一种认证方式！谢谢...',
