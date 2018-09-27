@@ -40,7 +40,7 @@
         <img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech' />
 
         <div class="show-input">
-          <input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter="createUserTalk()" @focus="scrollTop()"/>
+          <input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter="createUserTalk()" @focus="scrollTop()" @blur="inputBlur()"/>
           <button class="btn chat-send" @click='createUserTalk()'>
             {{$t('button.send')}}
           </button>
@@ -467,9 +467,37 @@ export default {
         });
     },
     scrollTop(){
-        setTimeout(()=>{
-            document.body.scrollBottom = document.body.scrollHeight;
-        },2000)
+        var agent=  navigator.userAgent.toLowerCase();
+            this.hideAll()
+            setTimeout(function(){
+                if (agent.indexOf('safari') != -1 && agent.indexOf('mqqbrowser') == -1
+                        && agent.indexOf('coast') == -1 && agent.indexOf('android') == -1
+                        && agent.indexOf('linux') == -1 && agent.indexOf('firefox') == -1) {
+                        //safra浏览器
+                        window.scrollTo(0, 1000000);
+                        //先滚动到最底部，再用scrollY得到当前的值，必须延迟 否则拿到的就是1000000
+                        setTimeout(function(){
+                            window.scrollTo(0, window.scrollY-45);//45像素 所有浏览器都是这么高
+                        },200);
+                    } else {//其他浏览器
+                        window.scrollTo(0, 1000000);
+                    }
+            },200)
+
+        // setTimeout(()=>{
+        //     // document.body.scrollBottom = document.body.scrollHeight;
+        // },2000)
+    },
+    inputBlur(){
+        var agent=  navigator.userAgent.toLowerCase();
+            setTimeout(function() {
+                if (!(agent.indexOf('safari') != -1 && agent.indexOf('mqqbrowser') == -1
+                    && agent.indexOf('coast') == -1 && agent.indexOf('android') == -1
+                    && agent.indexOf('linux') == -1 && agent.indexOf('firefox') == -1)){
+                    //非safari浏览器
+                    window.scrollTo(0, 0);
+                }
+            }, 0);
     }
   },
   activated() {
