@@ -478,11 +478,11 @@ export default {
                         //先滚动到最底部，再用scrollY得到当前的值，必须延迟 否则拿到的就是1000000
                         setTimeout(function(){
                             window.scrollTo(0, window.scrollY-45);//45像素 所有浏览器都是这么高
-                        },400);
+                        },200);
                     } else {//其他浏览器
                         window.scrollTo(0, 1000000);
                     }
-            },400)
+            },200)
 
         // setTimeout(()=>{
         //     // document.body.scrollBottom = document.body.scrollHeight;
