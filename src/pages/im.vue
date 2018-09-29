@@ -411,24 +411,41 @@ export default {
           if (data.result && data.result.length != 0) {
             var result = data.result;
             var len = result.length - 1;
-            for (var i = len; i >= 0; i--) {
-              if (
-                result[i].from &&
-                result[i].from == _this.$route.query.toChartId
-              ) {
-                result[i].pic = _this.othersInfo.pic;
+            result.forEach(item => {
+              if (item.from === _this.$route.query.toChartId) {
+                item.pic = _this.othersInfo.pic;
                 try {
-                  _this.chatItemId = JSON.parse(result[i].data.content).item;
+                  _this.chatItemId = JSON.parse(item.data.content).item;
                   if (!_this.id&&i==0) {
                     _this.id = _this.chatItemId;
                   }
                 } catch (e) {}
-                _this.createOnMessage(result[i]);
+                if(_this.chatItemId==_this.id){
+                  _this.createOnMessage(item);
+                }
               } else {
-                result[i].pic = _this.currentUserImgae;
-                _this.createUserTalk(result[i]);
+                item.pic = _this.currentUserImgae;
+                _this.createUserTalk(item);
               }
-            }
+            })
+            // for (var i = len; i >= 0; i--) {
+            //   if (
+            //     result[i].from &&
+            //     result[i].from == _this.$route.query.toChartId
+            //   ) {
+            //     result[i].pic = _this.othersInfo.pic;
+            //     try {
+            //       _this.chatItemId = JSON.parse(result[i].data.content).item;
+            //       if (!_this.id&&i==0) {
+            //         _this.id = _this.chatItemId;
+            //       }
+            //     } catch (e) {}
+            //     _this.createOnMessage(result[i]);
+            //   } else {
+            //     result[i].pic = _this.currentUserImgae;
+            //     _this.createUserTalk(result[i]);
+            //   }
+            // }
             $(document).ready(function() {
               let top = $("#convo").height();
               $("#content").animate(
