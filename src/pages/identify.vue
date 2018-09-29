@@ -1,12 +1,8 @@
 <style scoped lang="less">
 #identify {
   font-size: 14px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
   background-color: #fff;
+  padding-bottom: 36px;
 }
 .identify_body {
   width: 90%;
@@ -28,7 +24,7 @@
   border-radius: 4px;
 }
 .identify_warp {
-  margin-bottom: 36px;
+  // margin-bottom: 36px;
 }
 
 .icon-drivers-license-o {
@@ -149,6 +145,37 @@ p {
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
     <div class="identify_warp">
+        <template>
+          <div v-show='identifyType.includes("STUDENTID")'>
+            <div class="identify_body STUDENTID">
+              <div class="warp">
+                <div class="identify_face_page">
+                  <div class="" id='id_student' @click='uploadImg("studentFront")'>
+                    <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
+                    <template>
+                      <span class="icon-camera2"></span>
+                      <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <div class="warp">
+                <div class="identify_opposite_page">
+                  <div class="" id='id_student_opposite' @click='uploadImg("studentBack")'>
+                    <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
+                    <template>
+                      <span class="icon-camera2"></span>
+                      <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>{{$t('personaPage.studentcard')}}</p>
+          </div>
+          <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
+          </div>
+        </template>
       <template>
         <div class="" v-show='identifyType.includes("IDCARD")'>
           <div class="identify_body IDCARD">
@@ -180,37 +207,7 @@ p {
         <div class="line_separeat" v-show='identifyType.includes("IDCARD")'>
         </div>
       </template>
-      <template>
-        <div v-show='identifyType.includes("STUDENTID")'>
-          <div class="identify_body STUDENTID">
-            <div class="warp">
-              <div class="identify_face_page">
-                <div class="" id='id_student' @click='uploadImg("studentFront")'>
-                  <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
-                  <template>
-                    <span class="icon-camera2"></span>
-                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
-                  </template>
-                </div>
-              </div>
-            </div>
-            <div class="warp">
-              <div class="identify_opposite_page">
-                <div class="" id='id_student_opposite' @click='uploadImg("studentBack")'>
-                  <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
-                  <template>
-                    <span class="icon-camera2"></span>
-                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
-                  </template>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p>{{$t('personaPage.studentcard')}}</p>
-        </div>
-        <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
-        </div>
-      </template>
+
       <template>
         <div class="" v-show='identifyType.includes("PASSPORT")'>
           <div class="identify_body PASSPORT">
