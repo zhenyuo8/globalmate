@@ -464,7 +464,7 @@ export default {
                     }
                     this.loadingShow = false;
                   } else {
-                    if (_this.myAssistList.leng == 0) {
+                    if (_this.myAssistList.length == 0) {
                       setTimeout(() => {
                         this.nodataFlag = true;
                         this.loadingShow = false;
@@ -473,23 +473,33 @@ export default {
                     }
                   }
               }else{
-                  this.nodataFlag = true;
+                  if (_this.myAssistList.length == 0) {
+                    setTimeout(() => {
+                      this.nodataFlag = true;
+                      this.loadingShow = false;
+                    }, 500);
+                    this.noDataTips = this.$t('noDataDisplay');
+                  }
               }
 
           } else {
+            if (_this.myAssistList.length == 0) {
+              setTimeout(() => {
+                this.nodataFlag = true;
+                this.loadingShow = false;
+              }, 500);
+              this.noDataTips = this.$t('noDataDisplay');
+            }
+          }
+        })
+        .catch(e => {
+          if (_this.myAssistList.length == 0) {
             setTimeout(() => {
               this.nodataFlag = true;
               this.loadingShow = false;
             }, 500);
             this.noDataTips = this.$t('noDataDisplay');
           }
-        })
-        .catch(e => {
-          setTimeout(() => {
-            this.nodataFlag = true;
-            this.loadingShow = false;
-          }, 500);
-          this.noDataTips = this.$t('noDataDisplay');
         });
     }
   },
