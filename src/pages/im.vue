@@ -412,6 +412,7 @@ export default {
             var result = data.result;
             var len = result.length - 1;
             result.forEach(item => {
+                _this.chatItemId = JSON.parse(item.data.content).item;
               if (item.from === _this.$route.query.toChartId) {
                 item.pic = _this.othersInfo.pic;
                 try {
@@ -424,8 +425,10 @@ export default {
                   _this.createOnMessage(item);
                 }
               } else {
-                item.pic = _this.currentUserImgae;
-                _this.createUserTalk(item);
+                  if(_this.chatItemId==_this.id){
+                    item.pic = _this.currentUserImgae;
+                    _this.createUserTalk(item);
+                  }
               }
             })
             // for (var i = len; i >= 0; i--) {

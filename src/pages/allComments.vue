@@ -86,7 +86,7 @@
                     this.loadingShow=false;
                 }
                 _this.commentList.sort(function (a,b) {
-                    return b.evaluation.score- a.evaluation.score
+                    return b.evaluation.createTime- a.evaluation.createTime
                 });
             },
 		},

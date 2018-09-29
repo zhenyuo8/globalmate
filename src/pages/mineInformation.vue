@@ -522,7 +522,7 @@ export default {
                 _this.commentList.push(curData);
             }
             _this.commentList.sort(function (a,b) {
-                return b.evaluation.score- a.evaluation.score
+                return b.evaluation.createTime- a.evaluation.createTime
             });
         },
         viewAllComments(){
