@@ -142,8 +142,8 @@ p {
       <!-- <h3>{{$t('personaPage.selectidentify')}}</h3> -->
       <p class="gl_waring">{{$t('totastTips.warningIdentify')}}</p>
       <div class="identify_type_select">
+          <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
         <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
-        <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
         <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')">{{$t('personaPage.passport')}}</span>
       </div>
     </div>
@@ -526,7 +526,7 @@ export default {
                 }
               }
             } else {
-              this.identifyType = ["IDCARD"];
+              this.identifyType = ["STUDENTID"];
             }
           } else {
             Toast({
