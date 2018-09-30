@@ -81,7 +81,7 @@ export default {
       pageNum:1,
       pageSize:10,
       canNotLoadMore:false,
-      bottomPullText:this.$t('loadText.loadMore.'),
+      bottomPullText:this.$t('loadText.loadMore'),
       topPullText:this.$t('loadText.refresh'),
       topLoadingText:this.$t('loadText.loading'),
       topDropText:'',
