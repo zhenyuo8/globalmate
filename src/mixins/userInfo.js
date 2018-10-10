@@ -7,7 +7,7 @@ export default {
     // userInfo: function () {
     //   return this.$store.state.globalmate.userInfo
     // },
-    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList','friendsList', 'userList']),
+    ...mapState('globalmate', ['userInfo', 'todoList', 'msgList','friendsList', 'userList', 'concatRecord']),
     ...mapState(['ip', 'wxAppId', 'wxAppSecret', 'isWXVerified']),
     wxSign() {
       return this.$store.state.globalmate.wx.signature
@@ -63,6 +63,12 @@ export default {
       this.$store.commit({
         type: 'updateWxVertified',
         isWXVerified: status
+      })
+    },
+    updateConcatRecord (record) {
+      this.$store.commit({
+        type: 'globalmate/UPDATE_CONCATRECORD',
+        concatRecord: record
       })
     }
   }

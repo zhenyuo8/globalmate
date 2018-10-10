@@ -30,5 +30,8 @@ export default {
       code: payload.token,
       expiry: Date.now() + 7200 * 1000
     }
+  },
+  [types.UPDATE_CONCATRECORD](state, payload) {
+    state.concatRecord = payload.concatRecord
   }
 };
