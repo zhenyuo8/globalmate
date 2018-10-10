@@ -3,6 +3,7 @@
   font-size: 12px;
   color: #999;
 }
+
 .image_chat {
   width: 1rem;
   height: 1rem;
@@ -58,6 +59,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  max-width: 50%;
 }
 .content_chat .time_chat {
   position: absolute;
@@ -107,6 +109,18 @@ ul > li:last-child {
         }
         .mint-tab-item .mint-tab-item-label{
             font-size: 14px!important;
+            position: relative;
+            .gl_notreadmessage_count{
+                position: absolute;
+                top: -6px;
+                right: 0.8rem;
+                background: red;
+                color: #fff;
+                border-radius: .2rem;
+                min-width: .2rem;
+                padding: 0 .06rem;
+                font-size: 12px;
+            }
         }
         .mint-tab-container{
             margin-top: 10px;
@@ -131,13 +145,13 @@ ul > li:last-child {
   <div class="messageList">
     <div class="message_warp">
         <mt-navbar v-model="selected">
-          <mt-tab-item id="1">{{$t('messagePage.friends')}}</mt-tab-item>
-          <mt-tab-item id="2">{{$t('messagePage.concat')}}</mt-tab-item>
+          <mt-tab-item id="1">{{$t('messagePage.friends')}} <i class="gl_notreadmessage_count" v-show="friendsUnRead>0">{{friendsUnRead}}</i></mt-tab-item>
+          <mt-tab-item id="2">{{$t('messagePage.concat')}} <i class="gl_notreadmessage_count" v-show="concatsUnRead>0">{{concatsUnRead}}</i></mt-tab-item>
         </mt-navbar>
          <mt-tab-container v-model="selected">
            <mt-tab-container-item id="1">
              <ul v-if="friends.length!=0" class="friends_im_ul">
-               <li v-for="(item,index) in friends" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+               <li v-for="(item,index) in friends" @click="goIm(item,'f')" :key='index' :class="item.receive_new?'gl_receive_new':''">
                  <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
                    <img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" v-if='item.users.pic' alt="">
                    <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
@@ -154,7 +168,7 @@ ul > li:last-child {
            </mt-tab-container-item>
            <mt-tab-container-item id="2">
              <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
-               <li v-for="(item,index) in list" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+               <li v-for="(item,index) in list" @click="goIm(item,'c')" :key='index' :class="item.receive_new?'gl_receive_new':''">
                  <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
                    <img :src="item.users.pic" alt="" v-if='item.users.pic'>
                    <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
@@ -167,7 +181,7 @@ ul > li:last-child {
                  </div>
                  <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
                    <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
-                   <span class="refuse">{{$t('button.refuse')}}</span>
+                   <span class="refuse" @click='refuseAddFriend($event,item)'>{{$t('button.refuse')}}</span>
                  </div>
                </li>
              </ul>
@@ -210,6 +224,8 @@ export default {
       currentUserId: "",
       selected:'1',
       nofriends:false,
+      concatsUnRead:0,
+      friendsUnRead:0,
 
     };
   },
@@ -233,32 +249,43 @@ export default {
         confirmButtonText: this.$t("button.confirm"),
         cancelButtonText: this.$t("button.cancel"),
         showCancelButton: true
-      })
-        .then(action => {
+      }).then(action => {
           //同时添加 IM好友关系
           YYIMChat.addRosterItem(item.id);
+          // 消息已读回执
+           YYIMChat.sendReadedReceiptsPacket({
+          	to: item.lastMessage.from,
+          	id: item.lastMessage.id,
+          	type: 'chat',
+          	sessionVersion: item.lastMessage.sessionVersion
+           });
+           item.readedVersion=item.sessionVersion
           setTimeout(() => {
             _this.getFriendsInIM();
           }, 1000);
-          _this.axios
-            .get(
-              _this.ip +
-                "/globalmate/rest/userRelation/addFriend?token=" +
-                _this.$route.query.token +
-                "&targetUserId=" +
-                item.id,
-              {
+          _this.axios.get(_this.ip +"/globalmate/rest/userRelation/addFriend?token=" +_this.$route.query.token +"&targetUserId=" +item.id, {
                 targetUserId: item.id
-              }
-            )
-            .then(res => {
+              }).then(res => {
               if (res.success) {
                 _this.getFriendsInGlohelp();
               }
-            })
-            .catch(e => {});
+            }).catch(e => {});
         })
         .catch(cancel => {});
+    },
+    refuseAddFriend(e,item){
+         e = e ? e : window.event;
+         e.preventDefault();
+         event.stopPropagation();
+         e.cancelBubble = true;
+         // 消息已读回执
+          YYIMChat.sendReadedReceiptsPacket({
+         	to: item.lastMessage.from,
+         	id: item.lastMessage.id,
+         	type: 'chat',
+         	sessionVersion: item.lastMessage.sessionVersion
+          });
+          item.readedVersion=item.sessionVersion
     },
     /**
      * 获取glohelp好友关系
@@ -281,15 +308,33 @@ export default {
         });
     },
 
-    goIm(item) {
+    goIm(item,params) {
         // 消息已读回执
+        let _this=this;
          YYIMChat.sendReadedReceiptsPacket({
         	to: item.lastMessage.from,
         	id: item.lastMessage.id,
         	type: 'chat',
         	sessionVersion: item.lastMessage.sessionVersion
          });
-         item.readedVersion=item.sessionVersion
+         item.readedVersion=item.sessionVersion;
+         if(params=='f'){
+             if(_this.friendsUnRead&&_this.friendsUnRead>1){
+                  _this.friendsUnRead-=1;
+             }else if(_this.friendsUnRead==1){
+                 _this.friendsUnRead=0;
+             }
+         }
+         if(params=='c'){
+             if(_this.concatsUnRead&&_this.concatsUnRead>1){
+                  _this.concatsUnRead--;
+             }else if(_this.concatsUnRead==1){
+                 _this.concatsUnRead=0;
+             }
+         }
+
+
+
          let chatItemId = "";
          item.receive_new=false;
          if (item.lastMessage &&item.lastMessage.data &&item.lastMessage.data.content) {
@@ -409,25 +454,34 @@ export default {
                   }
                 }
                 temp['receive_new']=false;
+
                 temp.lastContactTime = this.moment(temp.lastContactTime).format("YYYY-MM-DD");
                 if (!this.friendsIdList.includes(temp.id)) {
                   this.getHistory(temp.id, function(params) {
                     if (!params) {
                       temp.isAddFriends = true;
                     }
-                    _this.list.push(temp);
+                    if(temp.sessionVersion>temp.readedVersion){
+                        _this.concatsUnRead+=1;
+                        _this.list.unshift(temp);
+                    }else{
+                        _this.list.push(temp);
+                    }
                   });
                 } else {
-
-                  this.friends.push(temp);
+                     if(temp.sessionVersion>temp.readedVersion){
+                         _this.friendsUnRead+=1;
+                         this.friends.unshift(temp);
+                     }else{
+                         this.friends.push(temp);
+                     }
                 }
                 this.loadingShow = false;
               }
             } else {
               this.loadingShow = false;
             }
-          })
-          .catch(e => {
+          }).catch(e => {
             this.loadingShow = false;
           });
       }
@@ -505,6 +559,11 @@ export default {
                   temFriends.lastMessageContent=JSON.parse(message.data.content).chatContent;
                   temFriends.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
                   temList.sessionVersion++;
+                  temList.lastMessage.sessionVersion++;
+                  if((temList.sessionVersion-temList.readedVersion)==1){
+                       _this.friendsUnRead+=1;
+                  }
+
               }
           }
           this.friends.unshift(temList)
@@ -514,14 +573,21 @@ export default {
           })
           if(inContact){
               let temList;
-
               for(let i=0;i<this.list.length;i++){
                   if(this.list[i].id==message.from){
                       temList=this.list[i];
-                      this.list.splice(i,1)
-                      temList.lastMessageContent=JSON.parse(message.data.content).chatContent;
+                      this.list.splice(i,1);
+                      if(JSON.parse(message.data.content).chatType==='add_friends_request'){
+                          temList.lastMessageContent=this.$t('formTitle.befriends');
+                      }else{
+                          temList.lastMessageContent=JSON.parse(message.data.content).chatContent;
+                      }
                       temList.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
                       temList.sessionVersion++;
+                      temList.lastMessage.sessionVersion++;
+                      if((temList.sessionVersion-temList.readedVersion)==1){
+                           this.concatsUnRead+=1;
+                      }
                   }
               }
               this.list.unshift(temList)
@@ -540,6 +606,7 @@ export default {
                 if (!params) {
                   newContact.isAddFriends = true;
                 }
+                _this.concatsUnRead+=1;
                 _this.list.unshift(newContact)
               });
 
@@ -709,6 +776,10 @@ export default {
     },
   },
   activated() {
+      this.friends=[];
+      this.list=[];
+      this.concatsUnRead=0;
+      this.friendsUnRead=0;
       if(this.friends.length!=0) return;
       this.loadingShow = true;
       if (this.userInfo.token) {

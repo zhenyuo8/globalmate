@@ -339,6 +339,26 @@ export default {
     goSwiperItem(url){
         window.open(url);
     },
+    getContact() {
+      let _this = this;
+      YYIMChat.getRecentDigset({
+        startDate: 0,
+        size: 100,
+        success: function(data) {
+            if(data&&data.list){
+                let hasUnReadMessage=data.list.some((item,index)=>{
+                    return item.lastMessage&&item.sessionVersion>item.readedVersion;
+                })
+                if(hasUnReadMessage){
+                    $(".message_tips").show();
+                }
+            }
+        },
+        error: function(err) {
+            this.loadingShow=false;
+        }
+      });
+    },
     readAgreement(){
         let postData={
             id:this.userInfo.userId,
@@ -521,10 +541,12 @@ export default {
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
+       this.getContact()
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
+          this.getContact()
           clearInterval(this.timer);
         }
       }, 200);
