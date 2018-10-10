@@ -7,6 +7,17 @@
   width: 1rem;
   height: 1rem;
   position: relative;
+  .gl_notreadmessage_count{
+      position: absolute;
+      top: -6px;
+      right: -.08rem;
+      background: red;
+      color: #fff;
+      border-radius: .2rem;
+      min-width: .2rem;
+      padding: 0 .06rem;
+      font-size: 12px;
+  }
 }
 .image_chat_after::after {
   content: "";
@@ -123,45 +134,49 @@ ul > li:last-child {
           <mt-tab-item id="1">{{$t('messagePage.friends')}}</mt-tab-item>
           <mt-tab-item id="2">{{$t('messagePage.concat')}}</mt-tab-item>
         </mt-navbar>
+        <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
+            <mt-tab-container v-model="selected">
+              <mt-tab-container-item id="1">
+                <ul v-if="friends.length!=0" class="friends_im_ul">
+                  <li v-for="(item,index) in friends" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+                    <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
+                      <img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" v-if='item.users.pic' alt="">
+                      <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
+                      <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
+                    </div>
+                    <div class="content_chat">
+                      <span class="name_chat">{{item.users.nikename}}</span>
+                      <span class="detail_chat">{{item.lastMessageContent}}</span>
+                      <span class="time_chat">{{item.lastContactTime}}</span>
+                    </div>
+                  </li>
+                </ul>
+                <span v-if="nofriends" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
+              </mt-tab-container-item>
+              <mt-tab-container-item id="2">
+                <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
+                  <li v-for="(item,index) in list" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+                    <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
+                      <img :src="item.users.pic" alt="" v-if='item.users.pic'>
+                      <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
+                      <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
+                    </div>
+                    <div class="content_chat">
+                      <span class="name_chat">{{item.users.nikename}}</span>
+                      <span class="detail_chat">{{item.lastMessageContent}}</span>
+                      <span class="time_chat">{{item.lastContactTime}}</span>
+                    </div>
+                    <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
+                      <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
+                      <span class="refuse">{{$t('button.refuse')}}</span>
+                    </div>
+                  </li>
+                </ul>
+                <span v-if="list.length==0&&!loadingShow" style="padding:10px;">{{$t('formTitle.noContact')}}</span>
+              </mt-tab-container-item>
+            </mt-tab-container>
+        </mt-loadmore>
 
-        <mt-tab-container v-model="selected">
-          <mt-tab-container-item id="1">
-            <ul v-if="friends.length!=0" class="friends_im_ul">
-              <li v-for="(item,index) in friends" @click='toChatPage(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
-                <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-                  <img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" v-if='item.users.pic' alt="">
-                  <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
-                </div>
-                <div class="content_chat">
-                  <span class="name_chat">{{item.users.nikename}}</span>
-                  <span class="detail_chat">{{item.lastMessageContent}}</span>
-                  <span class="time_chat">{{item.lastContactTime}}</span>
-                </div>
-              </li>
-            </ul>
-            <span v-if="nofriends" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
-          </mt-tab-container-item>
-          <mt-tab-container-item id="2">
-            <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
-              <li v-for="(item,index) in list" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
-                <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-                  <img :src="item.users.pic" alt="" v-if='item.users.pic'>
-                  <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
-                </div>
-                <div class="content_chat">
-                  <span class="name_chat">{{item.users.nikename}}</span>
-                  <span class="detail_chat">{{item.lastMessageContent}}</span>
-                  <span class="time_chat">{{item.lastContactTime}}</span>
-                </div>
-                <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
-                  <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
-                  <span class="refuse">{{$t('button.refuse')}}</span>
-                </div>
-              </li>
-            </ul>
-            <span v-if="list.length==0" style="padding:10px;">{{$t('formTitle.noContact')}}</span>
-          </mt-tab-container-item>
-        </mt-tab-container>
     </div>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
@@ -173,7 +188,8 @@ ul > li:last-child {
 <script>
 import Vue from "vue";
 import loading from "../components/loading.vue";
-import { MessageBox, Toast,Navbar, TabItem ,TabContainer, TabContainerItem} from "mint-ui";
+import { MessageBox, Toast,Navbar, TabItem ,TabContainer, TabContainerItem,Loadmore} from "mint-ui";
+Vue.component(Loadmore.name, Loadmore);
 Vue.component(Navbar.name, Navbar);
 Vue.component(TabItem.name, TabItem);
 Vue.component(TabContainer.name, TabContainer);
@@ -194,10 +210,30 @@ export default {
       loadingShow: false,
       currentUserId: "",
       selected:'1',
-      nofriends:false
+      nofriends:false,
+      canNotLoadMore:false,
+      bottomPullText:this.$t('loadText.loadMore'),
+      topPullText:this.$t('loadText.refresh'),
+      topLoadingText:this.$t('loadText.loading'),
+      topDropText:'',
+      bottomDropText:'',
+      allLoaded:false,
     };
   },
   methods: {
+      //下拉加载
+      loadTop() {
+        this.pageNum = 1;
+        this.loadTopFlag = true;
+        this.loadingShow=true;
+        this.friends=[];
+        this.list=[];
+        this.$refs.loadmore.onTopLoaded();
+        this.getFriendsInIM();
+      },
+      loadBottom() {
+
+      },
     /**
      * 同意对方加好友请求glohelp添加好友
      * @param  {[event]} e    [阻止冒泡事件]
@@ -263,56 +299,36 @@ export default {
             this.loadingShow = false;
         });
     },
-    toChatPage(item) {
-      let chatItemId = "";
-      item.receive_new=false;
-      if (
-        item.lastMessage &&
-        item.lastMessage.data &&
-        item.lastMessage.data.content
-      ) {
-        try {
-          chatItemId = JSON.parse(item.lastMessage.data.content).item;
-        } catch (e) {
-          chatItemId = "";
-        }
-      }
-      this.$router.push({
-        path: "im",
-        query: {
-          token: this.$route.query.token,
-          title: item.users.nikename,
-          senderDId: item.to,
-          toChartId: item.users.id,
-          chatItemId: chatItemId
-        }
-      });
-    },
-    goIm(item) {
-      let chatItemId = "";
-      item.receive_new=false;
-      if (
-        item.lastMessage &&
-        item.lastMessage.data &&
-        item.lastMessage.data.content
-      ) {
-        try {
-          chatItemId = JSON.parse(item.lastMessage.data.content).item;
-        } catch (e) {
-          chatItemId = "";
-        }
-      }
 
-      this.$router.push({
-        path: "im",
-        query: {
-          token: this.$route.query.token,
-          title: item.users.nikename,
-          senderDId: item.to,
-          toChartId: item.users.id,
-          chatItemId: chatItemId
-        }
-      });
+    goIm(item) {
+        // 消息已读回执
+         YYIMChat.sendReadedReceiptsPacket({
+        	to: item.lastMessage.from,
+        	id: item.lastMessage.id,
+        	type: 'chat',
+        	sessionVersion: item.lastMessage.sessionVersion
+         });
+         item.readedVersion=item.sessionVersion
+         let chatItemId = "";
+         item.receive_new=false;
+         if (item.lastMessage &&item.lastMessage.data &&item.lastMessage.data.content) {
+             try {
+               chatItemId = JSON.parse(item.lastMessage.data.content).item;
+             } catch (e) {
+               chatItemId = "";
+             }
+         }
+
+         this.$router.push({
+             path: "im",
+             query: {
+               token: this.$route.query.token,
+               title: item.users.nikename,
+               senderDId: item.to,
+               toChartId: item.users.id,
+               chatItemId: chatItemId
+             }
+         });
     },
     /**
      * 获取IM好友
@@ -374,7 +390,6 @@ export default {
         },
         error: function(err) {
             this.loadingShow=false;
-          console.log(err);
         }
       });
     },
@@ -385,6 +400,7 @@ export default {
       mess.sort(function (a,b) {
            return b.lastContactTime- a.lastContactTime
        });
+
       for (var i = 0; i < mess.length; i++) {
         let temp = mess[i];
         this.axios.get(this.ip +"/globalmate/rest/user/list/" + mess[i].id,{
@@ -424,7 +440,6 @@ export default {
 
                   this.friends.push(temp);
                 }
-
                 this.loadingShow = false;
               }
             } else {
@@ -561,13 +576,11 @@ export default {
         startDate: 0,
         size: 100,
         success: function(data) {
-            this.loadingShow=false;
             if(data&&data.list){
                 _this.processList(data.list);
                 if(data.list.length==0){
-                    this.nofriends=true;
+                    _this.nofriends=true;
                 }
-
             }
         },
         error: function(err) {
@@ -581,7 +594,6 @@ export default {
                 token:this.userInfo.token
             }
         }).then(res => {
-            this.loadingShow = false;
           if (res.success) {
             this.currentUserId = res.data.id;
             this.getFriendsInIM();
@@ -688,36 +700,30 @@ export default {
     },
     loginIM() {
       let username = this.userInfo.userId;
-      if (this.userInfo["curUser"]) {
-        username = this.userInfo["curUser"].id;
-      }
       if (!username) return;
       let obj = JSON.stringify({
         username: username,
         clientId: "44a18837b5acf71f0017772df15e1542",
         clientSecret: "959E5086D0544F36C915F91B624EA8DE"
       });
-      this.axios
-        .post(
-          "https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token",
-          obj,
-          {
+      this.axios.post("https://im.yyuap.com/sysadmin/rest/zxy_test/globalmate_test/token",obj,{
             headers: {
               "Content-Type": "application/json"
             }
-          }
-        )
-        .then(result => {
-          let clientIdentify = "pc" + String(new Date().getTime());
-          //登陆YYIMSDK
-          YYIMChat.login({
-            username: username,
-            token: result.token,
-            expiration: result.expiration,
-            appType: 4,
-            identify: clientIdentify
-          });
-        });
+          }).then(result => {
+              let clientIdentify = "pc" + String(new Date().getTime());
+              //登陆YYIMSDK
+              YYIMChat.login({
+                username: username,
+                token: result.token,
+                expiration: result.expiration,
+                appType: 4,
+                identify: clientIdentify
+              });
+      }).catch(e=>{
+          this.loadingShow=false;
+          console.log(e);
+      });
     },
   },
   activated() {
@@ -727,11 +733,26 @@ export default {
          this.getUserByToken();
          this.initIM()
       } else {
+          let i=1;
         this.timer = setInterval(() => {
           if (this.userInfo.token) {
+              i=1;
             this.getUserByToken();
             this.initIM()
             clearInterval(this.timer);
+          }
+          i++;
+          if(i==20){
+              clearInterval(this.timer);
+              Toast({
+                message: this.$t('totastTips.networkerror'),
+                duration: 2000
+              });
+              i=1;
+              setTimeout(()=>{
+                  window.history.back(-1);
+              },2500);
+              this.loadingShow=false;
           }
         }, 200);
       }

@@ -211,7 +211,8 @@ export default{
         'personalFileTips':'Please complete your personal information and identity in "My GloHelp".',
         'moreThan':'结束时间必须大于开始时间',
         'lessThan':'开始时间必须小于结束时间',
-        'warningIdentify':'In order to protect the rights and interests of all users, and to offer you a safe and reliable platform, please be sure to fill in your real information. Your information will only be used for identity authentication. We promise to ensure your information security.'
+        'warningIdentify':'In order to protect the rights and interests of all users, and to offer you a safe and reliable platform, please be sure to fill in your real information. Your information will only be used for identity authentication. We promise to ensure your information security.',
+        'networkerror':'Network exception, please try again later'
     },
     moneyType:{
         'chinaType':'RMB',

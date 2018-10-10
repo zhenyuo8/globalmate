@@ -150,16 +150,19 @@ input[disabled]{
 
 .gl_identify{
     position: absolute;
-    right: 0.08rem;
+    right: 0rem;
     top: 0;
-    font-size: 18px;
+    border-radius: 50%;
+    overflow: hidden;
+    font-size: 16px;
+    /*font-size: 18px;
     font-weight: bolder;
     font-family: monospace;
     width: .4rem;
     height: 0.4rem;
     display: inline-block;
     border-radius: 50%;
-    text-align: center;
+    text-align: center;*/
 }
 
 .gl_vGold{

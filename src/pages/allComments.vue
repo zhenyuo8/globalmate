@@ -4,7 +4,7 @@
             <div class="comment_repeat" v-for="(item,index) in commentList" >
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
-                    <i class="gl_identify_mine" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
+                    <i class="gl_identify_mine icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
@@ -144,13 +144,8 @@
             left: 0.6rem;
             top: -6px;
             font-size: 16px;
-            font-weight: bolder;
-            font-family: monospace;
-            width: .35rem;
-            height: 0.35rem;
-            display: inline-block;
             border-radius: 50%;
-            text-align: center;
+            overflow: hidden;
         }
     }
     .comment_repeat_top span{

@@ -70,7 +70,7 @@
   color: #00adff !important;
 }
 #identify .submitbtn {
-  position: fixed;
+  // position: fixed;
   bottom: 0;
   right: 0;
   left: 0;

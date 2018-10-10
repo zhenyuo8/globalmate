@@ -16,7 +16,7 @@
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag">V</i>
+                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -27,7 +27,7 @@
               <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag">V</i>
+                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>

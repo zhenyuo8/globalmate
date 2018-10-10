@@ -137,6 +137,7 @@
     div {
       float: left;
       width: 20%;
+      position: relative;
       img {
         width: 1rem;
         height: 1rem;
@@ -165,7 +166,7 @@
       <div class="detail_top" @click='goDetail($event,listData)'>
         <div class="image_user">
           <img :src="listData.othersImage" alt="">
-          <i class="gl_identify" v-if="listData.userTag" :class="'gl_'+listData.userTag">V</i>
+          <i class="gl_identify icon-globalmate5" v-if="listData.userTag" :class="'gl_'+listData.userTag"></i>
         </div>
         <div class="name_user">
           <span class="name">{{listData.userName}}</span>
@@ -198,6 +199,7 @@
               <div class="" v-for="(item,index) in pushList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
+                  <i class="gl_identify icon-globalmate5" v-if="item.userInfo.userTag" :class="'gl_'+item.userInfo.userTag"></i>
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>
@@ -208,6 +210,7 @@
               <div class="" v-for="(item,index) in assistList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
+                  <i class="gl_identify icon-globalmate5" v-if="item.userInfo.userTag" :class="'gl_'+item.userInfo.userTag"></i>
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>
@@ -396,8 +399,10 @@ export default {
                               _this.assistList.push(result)
                           }
                         _this.pushList.push(result);
+                        console.log(_this.pushList,99999);
                       });
                   }
+
               }
             }
           }

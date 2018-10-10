@@ -106,7 +106,7 @@ html,body {
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
           <img :src="userInfo1.pic" alt="">
-          <i class="gl_identify" v-if="userInfo1.userTag" :class="'gl_'+userInfo1.userTag">V</i>
+          <i class="gl_identify icon-globalmate5" v-if="userInfo1.userTag" :class="'gl_'+userInfo1.userTag"></i>
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">

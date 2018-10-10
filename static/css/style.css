@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('./fonts/icomoon.eot?zgk0bv');
-  src:  url('./fonts/icomoon.eot?zgk0bv#iefix') format('embedded-opentype'),
-    url('./fonts/icomoon.ttf?zgk0bv') format('truetype'),
-    url('./fonts/icomoon.woff?zgk0bv') format('woff'),
-    url('./fonts/icomoon.svg?zgk0bv#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?wkcmx1');
+  src:  url('fonts/icomoon.eot?wkcmx1#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?wkcmx1') format('truetype'),
+    url('fonts/icomoon.woff?wkcmx1') format('woff'),
+    url('fonts/icomoon.svg?wkcmx1#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,117 +24,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-user-add-outline:before {
-  content: "\e96c";
-}
-.icon-user-add:before {
-  content: "\e96d";
-}
-.icon-more-horizontal:before {
-  content: "\e958";
-}
-.icon-group_add:before {
-  content: "\e96b";
-}
-.icon-flight_takeoff:before {
-  content: "\e959";
-}
-.icon-local_hospital:before {
-  content: "\e950";
-}
-.icon-map-pin2:before {
-  content: "\e951";
-}
-.icon-arrow_right_samll:before {
-  content: "\e901";
-}
-.icon-chat:before {
-  content: "\e969";
-}
-.icon-notice:before {
-  content: "\e965";
-}
-.icon-heart3:before {
-  content: "\e960";
-}
-.icon-pacman:before {
-  content: "\e95a";
-}
-.icon-game:before {
-  content: "\e95a";
-}
-.icon-book:before {
-  content: "\e952";
-}
-.icon-book2:before {
-  content: "\e953";
-}
-.icon-pen:before {
-  content: "\e954";
-}
-.icon-tools:before {
-  content: "\e955";
-}
-.icon-map-location:before {
-  content: "\e956";
-}
-.icon-exclamation:before {
-  content: "\e966";
-}
-.icon-heart:before {
-  content: "\e95e";
-}
-.icon-cool:before {
-  content: "\e9eb";
-}
-.icon-office:before {
-  content: "\e95b";
-}
-.icon-coin-yen:before {
-  content: "\e95c";
-}
-.icon-notification:before {
-  content: "\ea08";
-}
-.icon-checkbox:before {
-  content: "\ea52";
-}
-.icon-camera:before {
-  content: "\e96e";
-}
-.icon-chat-bubble-dots:before {
-  content: "\e967";
-}
-.icon-exclamation-solid:before {
-  content: "\e963";
-}
-.icon-exclamation-outline:before {
-  content: "\e964";
-}
-.icon-camera2:before {
-  content: "\e96f";
-}
-.icon-user-plus:before {
-  content: "\e96a";
-}
-.icon-wechat:before {
-  content: "\e968";
-}
-.icon-drivers-license-o:before {
-  content: "\e962";
-}
-.icon-id-card-o:before {
-  content: "\e962";
-}
-.icon-image_default:before {
-  content: "\e961";
-}
-.icon-heart2:before {
-  content: "\e95f";
-}
-.icon-user:before {
-  content: "\e957";
-}
 .icon-global-im:before {
   content: "\e95d";
   color: #5c5d5d;
@@ -382,4 +271,133 @@
 }
 .icon-Document_zhengwenmuban:before {
   content: "\e94f";
+}
+.icon-chat:before {
+  content: "\e969";
+}
+.icon-notice:before {
+  content: "\e965";
+}
+.icon-heart3:before {
+  content: "\e960";
+}
+.icon-pacman:before {
+  content: "\e95a";
+}
+.icon-game:before {
+  content: "\e95a";
+}
+.icon-book:before {
+  content: "\e952";
+}
+.icon-book2:before {
+  content: "\e953";
+}
+.icon-pen:before {
+  content: "\e954";
+}
+.icon-tools:before {
+  content: "\e955";
+}
+.icon-map-location:before {
+  content: "\e956";
+}
+.icon-user-add-outline:before {
+  content: "\e96c";
+}
+.icon-user-add:before {
+  content: "\e96d";
+}
+.icon-more-horizontal:before {
+  content: "\e958";
+}
+.icon-group_add:before {
+  content: "\e96b";
+}
+.icon-flight_takeoff:before {
+  content: "\e959";
+}
+.icon-local_hospital:before {
+  content: "\e950";
+}
+.icon-map-pin2:before {
+  content: "\e951";
+}
+.icon-arrow_right_samll:before {
+  content: "\e901";
+}
+.icon-camera:before {
+  content: "\e96e";
+}
+.icon-chat-bubble-dots:before {
+  content: "\e967";
+}
+.icon-exclamation-solid:before {
+  content: "\e963";
+}
+.icon-exclamation-outline:before {
+  content: "\e964";
+}
+.icon-exclamation:before {
+  content: "\e966";
+}
+.icon-heart:before {
+  content: "\e95e";
+}
+.icon-cool:before {
+  content: "\e9eb";
+}
+.icon-office:before {
+  content: "\e95b";
+}
+.icon-coin-yen:before {
+  content: "\e95c";
+}
+.icon-notification:before {
+  content: "\ea08";
+}
+.icon-checkbox:before {
+  content: "\ea52";
+}
+.icon-globalmate2:before {
+  content: "\ea88";
+}
+.icon-globalmate3:before {
+  content: "\ea89";
+}
+.icon-globalmate1:before {
+  content: "\ea8a";
+}
+.icon-globalmate4:before {
+  content: "\ea8d";
+}
+.icon-vimeo:before {
+  content: "\eaa0";
+}
+.icon-globalmate5:before {
+  content: "\eaa1";
+}
+.icon-camera2:before {
+  content: "\e96f";
+}
+.icon-user-plus:before {
+  content: "\e96a";
+}
+.icon-wechat:before {
+  content: "\e968";
+}
+.icon-drivers-license-o:before {
+  content: "\e962";
+}
+.icon-id-card-o:before {
+  content: "\e962";
+}
+.icon-image_default:before {
+  content: "\e961";
+}
+.icon-heart2:before {
+  content: "\e95f";
+}
+.icon-user:before {
+  content: "\e957";
 }

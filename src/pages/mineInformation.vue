@@ -245,14 +245,10 @@
         left: 0.6rem;
         top: -6px;
         font-size: 16px;
-        font-weight: bolder;
-        font-family: monospace;
-        width: .35rem;
-        height: 0.35rem;
-        display: inline-block;
+        overflow: hidden;
         border-radius: 50%;
-        text-align: center;
     }
+
 }
 .comment_repeat_top span{
     line-height: 0.8rem;
@@ -296,7 +292,7 @@
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
                 <img :src='information.pic' alt="">
-                <i class="gl_identify" v-if="information.userTag" :class="'gl_'+information.userTag">V</i>
+                <i class="gl_identify icon-globalmate5" v-if="information.userTag" :class="'gl_'+information.userTag"></i>
             </div>
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
@@ -350,7 +346,7 @@
             <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2' :key='index' @click='showNeddDetail(item)'>
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="">
-                    <i class="gl_identify_mine" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
+                    <i class="gl_identify_mine icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
