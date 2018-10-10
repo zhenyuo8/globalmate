@@ -134,48 +134,47 @@ ul > li:last-child {
           <mt-tab-item id="1">{{$t('messagePage.friends')}}</mt-tab-item>
           <mt-tab-item id="2">{{$t('messagePage.concat')}}</mt-tab-item>
         </mt-navbar>
-        <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" ref="loadmore" :bottomPullText="bottomPullText" :topDropText='topDropText' :topLoadingText='topLoadingText' :topPullText='topPullText' :bottomDropText='bottomDropText'>
-            <mt-tab-container v-model="selected">
-              <mt-tab-container-item id="1">
-                <ul v-if="friends.length!=0" class="friends_im_ul">
-                  <li v-for="(item,index) in friends" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
-                    <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-                      <img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" v-if='item.users.pic' alt="">
-                      <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
-                      <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
-                    </div>
-                    <div class="content_chat">
-                      <span class="name_chat">{{item.users.nikename}}</span>
-                      <span class="detail_chat">{{item.lastMessageContent}}</span>
-                      <span class="time_chat">{{item.lastContactTime}}</span>
-                    </div>
-                  </li>
-                </ul>
-                <span v-if="nofriends" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
-              </mt-tab-container-item>
-              <mt-tab-container-item id="2">
-                <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
-                  <li v-for="(item,index) in list" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
-                    <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
-                      <img :src="item.users.pic" alt="" v-if='item.users.pic'>
-                      <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
-                      <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
-                    </div>
-                    <div class="content_chat">
-                      <span class="name_chat">{{item.users.nikename}}</span>
-                      <span class="detail_chat">{{item.lastMessageContent}}</span>
-                      <span class="time_chat">{{item.lastContactTime}}</span>
-                    </div>
-                    <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
-                      <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
-                      <span class="refuse">{{$t('button.refuse')}}</span>
-                    </div>
-                  </li>
-                </ul>
-                <span v-if="list.length==0&&!loadingShow" style="padding:10px;">{{$t('formTitle.noContact')}}</span>
-              </mt-tab-container-item>
-            </mt-tab-container>
-        </mt-loadmore>
+         <mt-tab-container v-model="selected">
+           <mt-tab-container-item id="1">
+             <ul v-if="friends.length!=0" class="friends_im_ul">
+               <li v-for="(item,index) in friends" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+                 <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
+                   <img :src="item.users.pic+'?x-oss-process=image/resize,m_fixed,h_65,w_65'" v-if='item.users.pic' alt="">
+                   <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
+                   <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
+                 </div>
+                 <div class="content_chat">
+                   <span class="name_chat">{{item.users.nikename}}</span>
+                   <span class="detail_chat">{{item.lastMessageContent}}</span>
+                   <span class="time_chat">{{item.lastContactTime}}</span>
+                 </div>
+               </li>
+             </ul>
+             <span v-if="friends.length==0" style="padding:10px;">{{$t('formTitle.noFriends')}}</span>
+           </mt-tab-container-item>
+           <mt-tab-container-item id="2">
+             <ul class="gl_contact contact_im_ul" v-if="list.lengt!=0">
+               <li v-for="(item,index) in list" @click='goIm(item)' :key='index' :class="item.receive_new?'gl_receive_new':''">
+                 <div class="image_chat" :class="item.newMessage?'image_chat_after':''">
+                   <img :src="item.users.pic" alt="" v-if='item.users.pic'>
+                   <img src='../assets/images/icon.png' v-if='!item.users.pic' alt="">
+                   <i class="gl_notreadmessage_count" v-if="item.sessionVersion>item.readedVersion">{{item.sessionVersion-item.readedVersion}}</i>
+                 </div>
+                 <div class="content_chat">
+                   <span class="name_chat">{{item.users.nikename}}</span>
+                   <span class="detail_chat">{{item.lastMessageContent}}</span>
+                   <span class="time_chat">{{item.lastContactTime}}</span>
+                 </div>
+                 <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
+                   <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
+                   <span class="refuse">{{$t('button.refuse')}}</span>
+                 </div>
+               </li>
+             </ul>
+             <span v-if="list.length==0&&!loadingShow" style="padding:10px;">{{$t('formTitle.noContact')}}</span>
+           </mt-tab-container-item>
+         </mt-tab-container>
+
 
     </div>
     <div class="defindloadig" v-if="loadingShow">
@@ -211,29 +210,11 @@ export default {
       currentUserId: "",
       selected:'1',
       nofriends:false,
-      canNotLoadMore:false,
-      bottomPullText:this.$t('loadText.loadMore'),
-      topPullText:this.$t('loadText.refresh'),
-      topLoadingText:this.$t('loadText.loading'),
-      topDropText:'',
-      bottomDropText:'',
-      allLoaded:false,
+
     };
   },
   methods: {
-      //下拉加载
-      loadTop() {
-        this.pageNum = 1;
-        this.loadTopFlag = true;
-        this.loadingShow=true;
-        this.friends=[];
-        this.list=[];
-        this.$refs.loadmore.onTopLoaded();
-        this.getFriendsInIM();
-      },
-      loadBottom() {
 
-      },
     /**
      * 同意对方加好友请求glohelp添加好友
      * @param  {[event]} e    [阻止冒泡事件]
@@ -521,9 +502,9 @@ export default {
               if(this.friends[i].id==message.from){
                   temFriends=this.friends[i];
                   this.friends.splice(i,1);
-                  temFriends.receive_new=true;
                   temFriends.lastMessageContent=JSON.parse(message.data.content).chatContent;
                   temFriends.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
+                  temList.sessionVersion++;
               }
           }
           this.friends.unshift(temList)
@@ -533,13 +514,14 @@ export default {
           })
           if(inContact){
               let temList;
+
               for(let i=0;i<this.list.length;i++){
                   if(this.list[i].id==message.from){
                       temList=this.list[i];
                       this.list.splice(i,1)
-                      temList.receive_new=true;
                       temList.lastMessageContent=JSON.parse(message.data.content).chatContent;
                       temList.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
+                      temList.sessionVersion++;
                   }
               }
               this.list.unshift(temList)

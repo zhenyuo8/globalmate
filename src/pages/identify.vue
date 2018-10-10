@@ -240,7 +240,7 @@ p {
         </div>
       </template>
     </div>
-    <button type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
+    <button v-show="identifyType.length!==0" type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
@@ -459,6 +459,7 @@ export default {
               window.history.go(-1);
             }, 2000);
           } else {
+              this.loadingShow = false;
             Toast({
               message: res.msg,
               duration: 2000
@@ -480,7 +481,7 @@ export default {
           if (res.success) {
             let list = res.data;
             let showList = [];
-            if (list.length != 0) {
+            if (list instanceof Array && list.length != 0) {
               this.identifyType = [];
               this.hasAreadyUpload = true;
               for (let i = 0; i < list.length; i++) {
@@ -525,7 +526,10 @@ export default {
             } else {
               this.identifyType = ["STUDENTID"];
             }
+            this.loadingShow = false;
           } else {
+              this.loadingShow = false;
+              this.identifyType = ["STUDENTID"];
             Toast({
               message: res.msg,
               duration: 2000
@@ -533,7 +537,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+            this.loadingShow = false;
         })
         .finally(() => {
           this.loadingShow = false;
@@ -590,11 +594,19 @@ export default {
   activated() {
     this.identifyType = [];
     if (this.userInfo.token) {
-      this.loadData();
+        try{
+            this.loadData();
+        }catch(e){
+            this.identifyType = ["STUDENTID"];
+        }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
-          this.loadData();
+          try{
+              this.loadData();
+          }catch(e){
+              this.identifyType = ["STUDENTID"];
+          }
           clearInterval(this.timer);
         }
       }, 200);
