@@ -16,7 +16,7 @@
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag">V</i>
+                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -27,7 +27,7 @@
               <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag">V</i>
+                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -81,7 +81,7 @@ export default {
       pageNum:1,
       pageSize:10,
       canNotLoadMore:false,
-      bottomPullText:this.$t('loadText.loadMore.'),
+      bottomPullText:this.$t('loadText.loadMore'),
       topPullText:this.$t('loadText.refresh'),
       topLoadingText:this.$t('loadText.loading'),
       topDropText:'',
@@ -464,7 +464,7 @@ export default {
                     }
                     this.loadingShow = false;
                   } else {
-                    if (_this.myAssistList.leng == 0) {
+                    if (_this.myAssistList.length == 0) {
                       setTimeout(() => {
                         this.nodataFlag = true;
                         this.loadingShow = false;
@@ -473,23 +473,33 @@ export default {
                     }
                   }
               }else{
-                  this.nodataFlag = true;
+                  if (_this.myAssistList.length == 0) {
+                    setTimeout(() => {
+                      this.nodataFlag = true;
+                      this.loadingShow = false;
+                    }, 500);
+                    this.noDataTips = this.$t('noDataDisplay');
+                  }
               }
 
           } else {
+            if (_this.myAssistList.length == 0) {
+              setTimeout(() => {
+                this.nodataFlag = true;
+                this.loadingShow = false;
+              }, 500);
+              this.noDataTips = this.$t('noDataDisplay');
+            }
+          }
+        })
+        .catch(e => {
+          if (_this.myAssistList.length == 0) {
             setTimeout(() => {
               this.nodataFlag = true;
               this.loadingShow = false;
             }, 500);
             this.noDataTips = this.$t('noDataDisplay');
           }
-        })
-        .catch(e => {
-          setTimeout(() => {
-            this.nodataFlag = true;
-            this.loadingShow = false;
-          }, 500);
-          this.noDataTips = this.$t('noDataDisplay');
         });
     }
   },

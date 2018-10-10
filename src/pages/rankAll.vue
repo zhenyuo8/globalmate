@@ -10,7 +10,7 @@
                   <div class="userImage">
                       <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
                       <img :src="item.pic" v-if="item.pic" alt="">
-                      <i class="gl_identify_rank" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
+                      <i class="gl_identify_rank icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
                   </div>
                   <div class="userInfo_name">
                       <span class="name">{{item.nikename}}</span>
@@ -160,13 +160,13 @@ export default {
                                  right: 0rem;
                                  top: 0;
                                  font-size: 12px;
-                                 font-weight: bolder;
-                                 font-family: monospace;
-                                 width: .25rem;
-                                 height: 0.25rem;
-                                 display: inline-block;
                                  border-radius: 50%;
+                                 overflow: hidden;
                              }
+                             .icon-globalmate5:before{
+                                 font-size: 12px;
+                             }
+
                          }
                          &:after{
                              content: '';

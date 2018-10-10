@@ -14,7 +14,7 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="">
-                         <i class="gl_identify" v-if="item.need.userTag" :class="'gl_'+item.need.userTag">V</i>
+                         <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i>
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>
@@ -48,7 +48,7 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="">
-                         <i class="gl_identify" v-if="item.need.userTag" :class="'gl_'+item.need.userTag">V</i>
+                         <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i>
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>

@@ -1,12 +1,8 @@
 <style scoped lang="less">
 #identify {
   font-size: 14px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
   background-color: #fff;
+  padding-bottom: 36px;
 }
 .identify_body {
   width: 90%;
@@ -28,7 +24,7 @@
   border-radius: 4px;
 }
 .identify_warp {
-  margin-bottom: 36px;
+  // margin-bottom: 36px;
 }
 
 .icon-drivers-license-o {
@@ -74,7 +70,7 @@
   color: #00adff !important;
 }
 #identify .submitbtn {
-  position: fixed;
+  // position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
@@ -149,6 +145,37 @@ p {
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
     <div class="identify_warp">
+        <template>
+          <div v-show='identifyType.includes("STUDENTID")'>
+            <div class="identify_body STUDENTID">
+              <div class="warp">
+                <div class="identify_face_page">
+                  <div class="" id='id_student' @click='uploadImg("studentFront")'>
+                    <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
+                    <template>
+                      <span class="icon-camera2"></span>
+                      <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <div class="warp">
+                <div class="identify_opposite_page">
+                  <div class="" id='id_student_opposite' @click='uploadImg("studentBack")'>
+                    <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
+                    <template>
+                      <span class="icon-camera2"></span>
+                      <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>{{$t('personaPage.studentcard')}}</p>
+          </div>
+          <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
+          </div>
+        </template>
       <template>
         <div class="" v-show='identifyType.includes("IDCARD")'>
           <div class="identify_body IDCARD">
@@ -180,37 +207,7 @@ p {
         <div class="line_separeat" v-show='identifyType.includes("IDCARD")'>
         </div>
       </template>
-      <template>
-        <div v-show='identifyType.includes("STUDENTID")'>
-          <div class="identify_body STUDENTID">
-            <div class="warp">
-              <div class="identify_face_page">
-                <div class="" id='id_student' @click='uploadImg("studentFront")'>
-                  <img v-if='studentFrontId || studentFront' :src="studentFrontId || studentFront" alt="">
-                  <template>
-                    <span class="icon-camera2"></span>
-                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
-                  </template>
-                </div>
-              </div>
-            </div>
-            <div class="warp">
-              <div class="identify_opposite_page">
-                <div class="" id='id_student_opposite' @click='uploadImg("studentBack")'>
-                  <img v-if='studentBack || studentBackId' :src="studentBackId || studentBack" alt="">
-                  <template>
-                    <span class="icon-camera2"></span>
-                    <span class="icon-tips">{{$t('formTitle.takePhotoUpload')}}</span>
-                  </template>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p>{{$t('personaPage.studentcard')}}</p>
-        </div>
-        <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
-        </div>
-      </template>
+
       <template>
         <div class="" v-show='identifyType.includes("PASSPORT")'>
           <div class="identify_body PASSPORT">
@@ -243,7 +240,7 @@ p {
         </div>
       </template>
     </div>
-    <button type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
+    <button v-show="identifyType.length!==0" type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
@@ -462,6 +459,7 @@ export default {
               window.history.go(-1);
             }, 2000);
           } else {
+              this.loadingShow = false;
             Toast({
               message: res.msg,
               duration: 2000
@@ -483,7 +481,7 @@ export default {
           if (res.success) {
             let list = res.data;
             let showList = [];
-            if (list.length != 0) {
+            if (list instanceof Array && list.length != 0) {
               this.identifyType = [];
               this.hasAreadyUpload = true;
               for (let i = 0; i < list.length; i++) {
@@ -528,7 +526,10 @@ export default {
             } else {
               this.identifyType = ["STUDENTID"];
             }
+            this.loadingShow = false;
           } else {
+              this.loadingShow = false;
+              this.identifyType = ["STUDENTID"];
             Toast({
               message: res.msg,
               duration: 2000
@@ -536,7 +537,7 @@ export default {
           }
         })
         .catch(e => {
-          console.log(e);
+            this.loadingShow = false;
         })
         .finally(() => {
           this.loadingShow = false;
@@ -593,11 +594,19 @@ export default {
   activated() {
     this.identifyType = [];
     if (this.userInfo.token) {
-      this.loadData();
+        try{
+            this.loadData();
+        }catch(e){
+            this.identifyType = ["STUDENTID"];
+        }
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {
-          this.loadData();
+          try{
+              this.loadData();
+          }catch(e){
+              this.identifyType = ["STUDENTID"];
+          }
           clearInterval(this.timer);
         }
       }, 200);

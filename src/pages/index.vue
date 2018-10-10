@@ -40,12 +40,12 @@
         <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
           <a href="javascript:;">
               <img :src="item.pic" alt="">
-              <i class="gl_identify" v-if="item.userTag" :class="'gl_'+item.userTag">V</i>
+              <i class="gl_identify icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
           </a>
-          <span>{{item.name}}</span>
-          <img src="../assets/images/goden.png" alt="" v-if="index==0">
+          <span>{{index+1}}.{{item.name}}</span>
+          <!-- <img src="../assets/images/goden.png" alt="" v-if="index==0">
           <img src="../assets/images/silver.png" alt="" v-if="index==1">
-          <img src="../assets/images/third.png" alt="" v-if="index==2">
+          <img src="../assets/images/third.png" alt="" v-if="index==2"> -->
         </li>
       </ul>
     </div>
@@ -339,6 +339,26 @@ export default {
     goSwiperItem(url){
         window.open(url);
     },
+    getContact() {
+      let _this = this;
+      YYIMChat.getRecentDigset({
+        startDate: 0,
+        size: 100,
+        success: function(data) {
+            if(data&&data.list){
+                let hasUnReadMessage=data.list.some((item,index)=>{
+                    return item.lastMessage&&item.sessionVersion>item.readedVersion;
+                })
+                if(hasUnReadMessage){
+                    $(".message_tips").show();
+                }
+            }
+        },
+        error: function(err) {
+            this.loadingShow=false;
+        }
+      });
+    },
     readAgreement(){
         let postData={
             id:this.userInfo.userId,
@@ -521,10 +541,12 @@ export default {
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
+       this.getContact()
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
+          this.getContact()
           clearInterval(this.timer);
         }
       }, 200);
