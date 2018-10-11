@@ -13,8 +13,8 @@
                    <div class="list_repeat" v-for="(item,index) in myAssistList" @click='showDetail(item)' :key='index'>
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
-                         <img :src="item.need.pic" alt="">
-                         <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i>
+                         <img :src="item.need.pic" alt="" class="gl_user_img">
+                         <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>
@@ -48,7 +48,8 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="">
-                         <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i>
+                         <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+                         <!-- <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i> -->
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>
@@ -153,6 +154,7 @@ Vue.component(Navbar.name, Navbar);
 Vue.component(TabItem.name, TabItem);
 Vue.component(TabContainer.name, TabContainer);
 Vue.component(TabContainerItem.name, TabContainerItem);
+
 import userMix from "../mixins/userInfo";
 export default {
   name: "seekHelpList",
@@ -197,7 +199,10 @@ export default {
       topDropText:'',
       bottomDropText:'',
       selected:'1',
-      loadCompleted:false
+      loadCompleted:false,
+      vGold:require('../assets/images/vGold.png'),
+      vSilver:require('../assets/images/vSilver.png'),
+      vCopper:require('../assets/images/vCopper.png')
     };
   },
   methods: {
@@ -1176,8 +1181,6 @@ form.rightIn_form {
     .list_repeat_title {
       text-align: left;
       padding: 8px 0;
-    //   margin-top: 10px;
-    //   margin-bottom: 6px;
       font-size: 15px;
       color: #333;
       font-weight: 500;
@@ -1209,7 +1212,7 @@ form.rightIn_form {
         width: 1.2rem;
         height: 1.2rem;
         position: relative;
-        img {
+        .gl_user_img {
           display: inline-block;
           width: 100%;
           height: 100%;

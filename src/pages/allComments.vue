@@ -3,8 +3,9 @@
         <div class="mineInformation_comment_warp">
             <div class="comment_repeat" v-for="(item,index) in commentList" >
                 <p class="comment_repeat_top">
-                    <img :src="item.pic" alt="">
-                    <i class="gl_identify_mine icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
+                    <img :src="item.pic" alt="" class="gl_user_img">
+                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
@@ -26,6 +27,7 @@
 <script>
     import loading from '../components/loading.vue'
     import userMix from "../mixins/userInfo";
+
 	export default {
         'name': 'allComments',
         mixins: [userMix],
@@ -35,7 +37,10 @@
 		data(){
 			return{
                 commentList:[],
-                loadingShow:true
+                loadingShow:true,
+                vGold:require('../assets/images/vGold.png'),
+                vSilver:require('../assets/images/vSilver.png'),
+                vCopper:require('../assets/images/vCopper.png')
 			}
 		},
 		props:{
@@ -130,23 +135,23 @@
         margin-bottom: 0;
         text-align: left;
     }
-    .mineInformation_comment_warp>div>.comment_repeat_top img{
+    .mineInformation_comment_warp>div>.comment_repeat_top .gl_user_img{
         width: .8rem;
         height: 0.8rem;
         border-radius:4px;
+    }
+    .mineInformation_comment_warp>div>.comment_repeat_top .gl_cetifiy_medal{
+        position: absolute;
+        left: 0.5rem;
+        bottom: -5px;
+        font-size: 16px;
+        overflow: hidden;
+        border-radius: 50%;
     }
     .comment_repeat_top{
         display: flex;
         flex-direction: row;
         position: relative;
-        .gl_identify_mine{
-            position: absolute;
-            left: 0.6rem;
-            top: -6px;
-            font-size: 16px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
     }
     .comment_repeat_top span{
         line-height: 0.8rem;

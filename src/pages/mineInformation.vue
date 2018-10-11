@@ -13,7 +13,7 @@
   background: #fff;
 }
 .mineInformation_user_image {
-    width: 100%;
+    width: 7.5rem;
     height: 186px;
 }
 
@@ -44,7 +44,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.mineInformation_image img {
+.mineInformation_image .gl_user_img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -231,24 +231,23 @@
     margin-bottom: 0;
     text-align: left;
 }
-.mineInformation_comment_warp>div>.comment_repeat_top img{
+.mineInformation_comment_warp>div>.comment_repeat_top .gl_user_img{
     width: .8rem;
     height: 0.8rem;
     border-radius:4px;
+}
+.mineInformation_comment_warp>div>.comment_repeat_top .gl_cetifiy_medal{
+    position: absolute;
+    left: 0.5rem;
+    bottom: -5px;
+    font-size: 16px;
+    overflow: hidden;
+    border-radius: 50%;
 }
 .comment_repeat_top{
     display: flex;
     flex-direction: row;
     position: relative;
-    .gl_identify_mine{
-        position: absolute;
-        left: 0.6rem;
-        top: -6px;
-        font-size: 16px;
-        overflow: hidden;
-        border-radius: 50%;
-    }
-
 }
 .comment_repeat_top span{
     line-height: 0.8rem;
@@ -286,13 +285,14 @@
 
 <div class="mineInformation">
     <div class="mineInformation_user_image">
-        <img src="../assets/images/stanfu.jpeg" alt="">
+        <img src="../assets/images/5.jpg" alt="">
     </div>
     <div class="mineInformation_info">
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
-                <img :src='information.pic' alt="">
-                <i class="gl_identify icon-globalmate5" v-if="information.userTag" :class="'gl_'+information.userTag"></i>
+                <img :src='information.pic' alt="" class="gl_user_img">
+                 <img :src="information.userTag=='vGold'?vGold:information.userTag=='vSilver'?vSilver:information.userTag=='vCopper'?vCopper:''" v-if="information.userTag" alt="" class="gl_cetifiy_medal">
+
             </div>
             <div class="mineInformation_information">
                 <div class="mineInformation_top">
@@ -345,8 +345,8 @@
             </div>
             <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2' :key='index' @click='showNeddDetail(item)'>
                 <p class="comment_repeat_top">
-                    <img :src="item.pic" alt="">
-                    <i class="gl_identify_mine icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
+                    <img :src="item.pic" alt="" class="gl_user_img">
+                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
                 </p>
@@ -373,6 +373,7 @@
 import loading from '../components/loading.vue'
 import { MessageBox,Toast} from 'mint-ui';
 import userMix from "../mixins/userInfo";
+
 export default {
     'name': 'mine',
     mixins: [userMix],
@@ -390,7 +391,10 @@ export default {
             loadingShow:true,
             otherUserId:'',
             commentList:[],
-            total:0
+            total:0,
+            vGold:require('../assets/images/vGold.png'),
+            vSilver:require('../assets/images/vSilver.png'),
+            vCopper:require('../assets/images/vCopper.png')
 
         }
     },

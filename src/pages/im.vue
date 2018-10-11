@@ -5,9 +5,9 @@
         <div class="chart_main_content">
           <div class="chart_main_content_image" @click="showDetail('detail')">
             <div class="">
-              <img :src="othersInfo.pic" v-if="othersInfo.pic" alt="">
-              <img src="../assets/images/icon.png" v-if="!othersInfo.pic" alt="">
-              <i class="gl_identify_im" v-if="othersInfo.userTag" :class="'gl_'+othersInfo.userTag">V</i>
+              <img :src="othersInfo.pic" v-if="othersInfo.pic" alt="" class="gl_user_img">
+              <img src="../assets/images/icon.png" v-if="!othersInfo.pic" alt="" class="gl_user_img">
+              <img :src="othersInfo.userTag=='vGold'?vGold:othersInfo.userTag=='vSilver'?vSilver:othersInfo.userTag=='vCopper'?vCopper:''" v-if="othersInfo.userTag" alt="" class="gl_cetifiy_medal">
             </div>
           </div>
           <div class="chart_main_content_decription" @click='showDetail()'>
@@ -54,6 +54,7 @@
 import Vue from "vue";
 import { MessageBox, Toast } from "mint-ui";
 import userMix from "../mixins/userInfo";
+
 export default {
   mixins: [userMix],
   data() {
@@ -71,7 +72,10 @@ export default {
       others: false,
       hasSelectAready: false,
       historyList: [],
-      othersInfo: {}
+      othersInfo: {},
+      vGold:require('../assets/images/vGold.png'),
+      vSilver:require('../assets/images/vSilver.png'),
+      vCopper:require('../assets/images/vCopper.png')
     };
   },
   methods: {
@@ -621,8 +625,18 @@ export default {
       border-radius: 50%;
       text-align: center;
   }
+  .gl_cetifiy_medal{
+      position: absolute;
+      bottom: -8px;
+      right: -.16rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      box-shadow: -1px 1px 2px #fff;
+      border-radius: 50%;
+  }
+
 }
-.chart_main_content_image > div > img {
+.chart_main_content_image > div > .gl_user_img {
   width: 100%;
   height: 100%;
 }

@@ -148,32 +148,12 @@ input[disabled]{
     color: #888;
 }
 
-.gl_identify{
+.gl_cetifiy_medal{
     position: absolute;
-    right: 0rem;
-    top: 0;
-    border-radius: 50%;
-    overflow: hidden;
-    font-size: 16px;
-    /*font-size: 18px;
-    font-weight: bolder;
-    font-family: monospace;
-    width: .4rem;
+    bottom: 0;
+    right: 0;
+    width: 0.4rem;
     height: 0.4rem;
-    display: inline-block;
+    box-shadow: -1px 1px 2px #fff;
     border-radius: 50%;
-    text-align: center;*/
-}
-
-.gl_vGold{
-    color: #ffd900;
-    background: #e3f9f6;
-}
-.gl_vCopper{
-    color: #ee9b6b;
-    background: #e3f9f6;
-}
-.gl_vSilver{
-    color: #e6e8eb;
-    background: #e3f9f6;
 }

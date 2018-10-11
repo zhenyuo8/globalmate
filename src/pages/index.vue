@@ -40,12 +40,9 @@
         <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
           <a href="javascript:;">
               <img :src="item.pic" alt="">
-              <i class="gl_identify icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
+              <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
           </a>
           <span>{{index+1}}.{{item.name}}</span>
-          <!-- <img src="../assets/images/goden.png" alt="" v-if="index==0">
-          <img src="../assets/images/silver.png" alt="" v-if="index==1">
-          <img src="../assets/images/third.png" alt="" v-if="index==2"> -->
         </li>
       </ul>
     </div>
@@ -75,6 +72,7 @@ import userMix from "../mixins/userInfo";
 let url1=require('../assets/images/gl_index_1.jpeg')
 let url2=require('../assets/images/gl_index_2.jpeg')
 let url3=require('../assets/images/gl_index_3.jpeg')
+
 export default {
   name: "index",
   mixins: [userMix],
@@ -91,7 +89,10 @@ export default {
       loadingShow: false,
       rankUserList:[],
       notReadAgreement:true,
-      isENAgreement:this.language=='en'?true:false
+      isENAgreement:this.language=='en'?true:false,
+      vGold:require('../assets/images/vGold.png'),
+      vSilver:require('../assets/images/vSilver.png'),
+      vCopper:require('../assets/images/vCopper.png')
     };
   },
   computed: {
@@ -972,11 +973,20 @@ ul {
     color: #333;
     font-size: 13px;
 }
-.rank ul li a img {
+.rank ul li a img:first-child {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   display: inline-block;
+}
+.rank ul li a .gl_cetifiy_medal{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    box-shadow: -1px 1px 2px #fff;
+    border-radius: 50%;
 }
 .rank_title {
   padding: 7px 0.22rem;

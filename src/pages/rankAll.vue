@@ -10,7 +10,7 @@
                   <div class="userImage">
                       <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
                       <img :src="item.pic" v-if="item.pic" alt="">
-                      <i class="gl_identify_rank icon-globalmate5" v-if="item.userTag" :class="'gl_'+item.userTag"></i>
+                       <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
                   </div>
                   <div class="userInfo_name">
                       <span class="name">{{item.nikename}}</span>
@@ -33,6 +33,7 @@
 import Vue from 'vue'
 import userMix from "../mixins/userInfo";
 import loading from "../components/loading.vue";
+
 export default {
   mixins: [userMix],
   components: {
@@ -42,6 +43,9 @@ export default {
     return {
         userLists:[],
         loadingShow:true,
+        vGold:require('../assets/images/vGold.png'),
+        vSilver:require('../assets/images/vSilver.png'),
+        vCopper:require('../assets/images/vCopper.png')
     };
   },
   methods: {
@@ -147,26 +151,23 @@ export default {
                              width: .72rem;
                              float: left;
                              height: .72rem;
-                             overflow: hidden;
                              border-radius: 4px;
                              position: relative;
                              img{
                                  width: 100%;
                                  height: 100%;
+                                 border-radius: 4px;
                                  display: inline-block;
                              }
-                             .gl_identify_rank{
+                             .gl_cetifiy_medal{
                                  position: absolute;
-                                 right: 0rem;
-                                 top: 0;
-                                 font-size: 12px;
+                                 bottom: -4px;
+                                 right: -.08rem;
+                                 width: 0.35rem;
+                                 height: 0.35rem;
+                                 box-shadow: -1px 1px 2px #fff;
                                  border-radius: 50%;
-                                 overflow: hidden;
                              }
-                             .icon-globalmate5:before{
-                                 font-size: 12px;
-                             }
-
                          }
                          &:after{
                              content: '';

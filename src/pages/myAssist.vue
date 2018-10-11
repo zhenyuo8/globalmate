@@ -14,9 +14,10 @@
             <p>{{$t('formTitle.pushTitle')}}</p>
             <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
-                <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
-                <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
+                <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
+                <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:items.userInfo.userTag=='vCopper'?vCopper:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -25,9 +26,9 @@
             <p>{{$t('formTitle.helpMan')}}</p>
             <div class="list_repeat_pushed_item" v-show="item.need.enable!=0">
               <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
-                <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="">
-                <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="">
-                <i class="gl_identify icon-globalmate5" v-if="items.userInfo.userTag" :class="'gl_'+items.userInfo.userTag"></i>
+                <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
+                <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:items.userInfo.userTag=='vCopper'?vCopper:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -63,6 +64,7 @@ Vue.component(Loadmore.name, Loadmore);
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
+
 export default {
   name: "myAssist",
   mixins: [userMix],
@@ -85,7 +87,10 @@ export default {
       topPullText:this.$t('loadText.refresh'),
       topLoadingText:this.$t('loadText.loading'),
       topDropText:'',
-      bottomDropText:''
+      bottomDropText:'',
+      vGold:require('../assets/images/vGold.png'),
+      vSilver:require('../assets/images/vSilver.png'),
+      vCopper:require('../assets/images/vCopper.png')
     };
   },
   methods: {
@@ -180,7 +185,6 @@ export default {
                   uNeedName: item.assistList[0].uNeedName
                 }
               });
-            //   this.loadData();
             })
             .catch(e => {
               console.log(e);
@@ -215,7 +219,6 @@ export default {
                 uNeedName: item.assistList[0].uNeedName
               }
             });
-            // this.loadData();
           })
           .catch(e => {
             console.log(e);
@@ -234,17 +237,6 @@ export default {
             seeOther: true
           }
         });
-
-    //   this.$router.push({
-    //     path: "im",
-    //     query: {
-    //       token: this.userInfo.token,
-    //       title: items.userInfo.nikename,
-    //       id: item.need.id,
-    //       toChartUser: items.userInfo.id,
-    //       toChartId: items.userInfo.id
-    //     }
-    //   });
     },
     evaluate(e, item) {
       e = e ? e : window.event;
@@ -594,12 +586,16 @@ export default {
             float: left;
             width: 20%;
             position: relative;
-            img {
+            .gl_user_img {
               width: 1rem;
               height: 1rem;
               border-radius: 50%;
               display: block;
               margin: auto;
+            }
+            .gl_cetifiy_medal{
+                top: 0.6rem;
+                right: 0.04rem
             }
             span {
               margin: 6px auto 10px;

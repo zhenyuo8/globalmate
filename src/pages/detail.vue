@@ -57,7 +57,7 @@
     border-radius: 50%;
     border: 1px solid #eee;
     position: relative;
-    img {
+    .gl_user_img {
       display: inline-block;
       width: 100%;
       height: 100%;
@@ -138,7 +138,7 @@
       float: left;
       width: 20%;
       position: relative;
-      img {
+      .gl_user_img {
         width: 1rem;
         height: 1rem;
         border-radius: 50%;
@@ -165,8 +165,8 @@
     <div class="detail_content">
       <div class="detail_top" @click='goDetail($event,listData)'>
         <div class="image_user">
-          <img :src="listData.othersImage" alt="">
-          <i class="gl_identify icon-globalmate5" v-if="listData.userTag" :class="'gl_'+listData.userTag"></i>
+          <img :src="listData.othersImage" alt="" class="gl_user_img">
+          <img :src="listData.userTag=='vGold'?vGold:listData.userTag=='vSilver'?vSilver:listData.userTag=='vCopper'?vCopper:''" v-if="listData.userTag" alt="" class="gl_cetifiy_medal">
         </div>
         <div class="name_user">
           <span class="name">{{listData.userName}}</span>
@@ -197,9 +197,9 @@
           <p>{{$t('formTitle.pushTitle')}}</p>
           <div class="list_repeat_pushed_item">
               <div class="" v-for="(item,index) in pushList" :key='index' @click="goChat(listData,item)">
-                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
-                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
-                  <i class="gl_identify icon-globalmate5" v-if="item.userInfo.userTag" :class="'gl_'+item.userInfo.userTag"></i>
+                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="" class="gl_user_img">
+                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="" class="gl_user_img">
+<img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:item.userInfo.userTag=='vCopper'?vCopper:''" v-if="item.userInfo.userTag" alt="" class="gl_cetifiy_medal">
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>
@@ -208,9 +208,9 @@
           <p>{{$t('formTitle.helpMan')}}</p>
           <div class="list_repeat_pushed_item">
               <div class="" v-for="(item,index) in assistList" :key='index' @click="goChat(listData,item)">
-                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="">
-                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="">
-                  <i class="gl_identify icon-globalmate5" v-if="item.userInfo.userTag" :class="'gl_'+item.userInfo.userTag"></i>
+                  <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="" class="gl_user_img">
+                  <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="" class="gl_user_img">
+                 <img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:item.userInfo.userTag=='vCopper'?vCopper:''" v-if="item.userInfo.userTag" alt="" class="gl_cetifiy_medal">
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>
@@ -231,6 +231,7 @@ import Vue from 'vue'
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
 import userMix from "../mixins/userInfo";
+
 export default {
   name: "detail",
   components: {},
@@ -251,7 +252,10 @@ export default {
       listData: {},
       pushList: [],
       assistList: [],
-      showTipsText: ""
+      showTipsText: "",
+      vGold:require('../assets/images/vGold.png'),
+      vSilver:require('../assets/images/vSilver.png'),
+      vCopper:require('../assets/images/vCopper.png')
     };
   },
   activated() {

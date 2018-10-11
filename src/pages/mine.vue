@@ -47,7 +47,7 @@ html,body {
   position: relative;
 }
 
-.mine_image img {
+.mine_image .gl_user_img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
@@ -105,8 +105,8 @@ html,body {
     <div class="mine_body">
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
-          <img :src="userInfo1.pic" alt="">
-          <i class="gl_identify icon-globalmate5" v-if="userInfo1.userTag" :class="'gl_'+userInfo1.userTag"></i>
+          <img :src="userInfo1.pic" alt="" class="gl_user_img">
+          <img :src="userInfo1.userTag=='vGold'?vGold:userInfo1.userTag=='vSilver'?vSilver:userInfo1.userTag=='vCopper'?vCopper:''" v-if="userInfo1.userTag" alt="" class="gl_cetifiy_medal">
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">
@@ -135,6 +135,7 @@ import List from "../components/list.vue";
 import userMix from "../mixins/userInfo";
 import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
 import Vue from "vue";
+
 Vue.component(Toast.name, Toast);
 export default {
   name: "mine",
@@ -186,7 +187,6 @@ export default {
        }
 
       ],
-
       title: "",
       userInfo1: {
         username: "",
@@ -194,7 +194,10 @@ export default {
         call: "",
         pic: "",
         userTag:""
-      }
+    },
+    vGold:require('../assets/images/vGold.png'),
+    vSilver:require('../assets/images/vSilver.png'),
+    vCopper:require('../assets/images/vCopper.png')
     };
   },
   components: {
