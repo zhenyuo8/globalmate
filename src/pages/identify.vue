@@ -296,9 +296,12 @@ export default {
         this.identifyType.splice(this.identifyType.indexOf(type), 1);
         this.verifyIsShowSubmit();
       } else {
-
-        this.identifyType.push(type);
-        this.verifyIsShowSubmit();
+         if((type=='IDCARD'&&!this['idCardFront']&&!this['idCardBack'])||(type=='STUDENTID'&&!this['studentFront']&&!this['studentBack'])||(type=='PASSPORT'&&!this['passPortFront']&&!this['passPortBack'])){
+             this.identifyType.push(type);
+             this.verifyIsShowSubmit();
+         }else{
+             this.identifyType.push(type);
+         }
       }
     },
     verifyIsShowSubmit(){

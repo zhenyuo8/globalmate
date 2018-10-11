@@ -349,18 +349,22 @@ export default {
       YYIMChat.getRosterItems({
         success: function(data) {
           if (data) {
-              let mess=JSON.parse(data);
-              if(mess.length>0){
-                  for (var i = 0; i < mess.length; i++) {
-                      _this.friendsIdList.push(mess[i].id);
+              try{
+                  let mess=JSON.parse(data);
+                  if(mess.length>0){
+                      for (var i = 0; i < mess.length; i++) {
+                          _this.friendsIdList.push(mess[i].id);
+                      }
                   }
+              }catch(e){
+                  console.log(e);
               }
             }
             _this.getContact();
         },
         error: function(err) {
             this.loadingShow=false;
-          console.log(err);
+            console.log(err);
         },
         complete: function() {}
       });
@@ -551,7 +555,6 @@ export default {
                   if((temList.sessionVersion-temList.readedVersion)==1){
                        _this.friendsUnRead+=1;
                   }
-
               }
           }
           this.friends.unshift(temList)
@@ -613,7 +616,7 @@ export default {
         startDate: 0,
         size: 100,
         success: function(data) {
-            if(data&&data.list){
+            if(data&&data.list&&data.list instanceof Array){
                 _this.processList(data.list);
                 if(data.list.length==0){
                     _this.nofriends=true;
