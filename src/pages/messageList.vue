@@ -783,15 +783,17 @@ export default {
       this.list=[];
       this.concatsUnRead=0;
       this.friendsUnRead=0;
-      if(this.friends.length!=0) return;
-      this.loadingShow = true;
-      if (this.userInfo.token) {
+      if(this.friends&&this.friends.length!=0) return;
+
+      if (this.userInfo&&this.userInfo.token) {
+          this.loadingShow = true;
          this.getUserByToken();
          this.initIM()
       } else {
           let i=1;
         this.timer = setInterval(() => {
-          if (this.userInfo.token) {
+          if (this.userInfo&&this.userInfo.token) {
+              this.loadingShow = true;
               i=1;
             this.getUserByToken();
             this.initIM()
