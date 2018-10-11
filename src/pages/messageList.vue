@@ -461,20 +461,24 @@ export default {
                     if (!params) {
                       temp.isAddFriends = true;
                     }
-                    if(temp.sessionVersion>temp.readedVersion){
-                        _this.concatsUnRead+=1;
-                        _this.list.unshift(temp);
-                    }else{
-                        _this.list.push(temp);
+                    if(temp.sessionVersion>0){
+                        if(temp.sessionVersion>temp.readedVersion){
+                            _this.concatsUnRead+=1;
+                            _this.list.unshift(temp);
+                        }else{
+                            _this.list.push(temp);
+                        }
                     }
                   });
                 } else {
-                     if(temp.sessionVersion>temp.readedVersion){
-                         _this.friendsUnRead+=1;
-                         this.friends.unshift(temp);
-                     }else{
-                         this.friends.push(temp);
-                     }
+                    if(temp.sessionVersion>0){
+                        if(temp.sessionVersion>temp.readedVersion){
+                            _this.friendsUnRead+=1;
+                            this.friends.unshift(temp);
+                        }else{
+                            this.friends.push(temp);
+                        }
+                    }
                 }
                 this.loadingShow = false;
               }
