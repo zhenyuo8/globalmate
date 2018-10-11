@@ -108,6 +108,9 @@ export default{
         idcard:'身份证',
         passport:'护照',
         studentcard:'学生证',
+        idcardNote:'通过身份证/护照认证，您将成为金牌用户。',
+        passportNote:'通过身份证/护照认证，您将成为金牌用户。',
+        studentcardNote:'通过学生证认证，您将成为银牌用户。',
         selectidentify:'请选择认证方式',
         lessType:'请至少选择一项认证方式!',
         aboutUs:'关于我们'

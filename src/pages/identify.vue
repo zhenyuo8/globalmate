@@ -115,6 +115,15 @@
 p {
   padding: 10px 0;
 }
+.gl_note{
+    font-size: 12px;
+    width: 86%;
+    margin: auto;
+    line-height: 14px;
+    text-align: left;
+    font-family: serif;
+    color: #333;
+}
 .gl_totast_p {
   color: red;
   text-align: left;
@@ -163,7 +172,7 @@ p {
                 </div>
               </div>
             </div>
-            <p>{{$t('personaPage.studentcard')}}</p>
+            <p class="gl_note">{{$t('personaPage.studentcardNote')}}</p>
           </div>
           <div class="line_separeat" v-show='identifyType.includes("STUDENTID")'>
           </div>
@@ -194,7 +203,7 @@ p {
               </div>
             </div>
           </div>
-          <p>{{$t('personaPage.idcard')}}</p>
+          <p class="gl_note">{{$t('personaPage.idcardNote')}}</p>
         </div>
         <div class="line_separeat" v-show='identifyType.includes("IDCARD")'>
         </div>
@@ -226,7 +235,7 @@ p {
               </div>
             </div>
           </div>
-          <p>{{$t('personaPage.passport')}}</p>
+          <p class="gl_note">{{$t('personaPage.passportNote')}}</p>
         </div>
         <div class="line_separeat" v-show='identifyType.includes("PASSPORT")'>
         </div>

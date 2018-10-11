@@ -109,6 +109,9 @@ export default{
         idcard:'ID Card',
         passport:'Passport',
         studentcard:'Student ID',
+        idcardNote:'You will get a golden metal on your profile picture after authentication by passport/ID card.',
+        passportNote:'You will get a golden metal on your profile picture after authentication by passport/ID card.',
+        studentcardNote:'You will get a silver metal on your profile picture after authenticaion by student ID',
         selectidentify:'Please select identification tpye',
         lessType:'Please select at least one identification method',
         aboutUs:'About Us'

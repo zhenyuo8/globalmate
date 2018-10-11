@@ -83,20 +83,18 @@ ul > li:last-child {
 }
 .request_action {
   position: absolute;
-  right: 0.2rem;
+  right: 0.3rem;
   top: 50%;
 }
 .request_action span {
   font-size: 14px;
   color: #fff;
-  padding: 0.16rem;
-  border-radius: 2px;
+  padding: 0.16rem 0.25rem;
+  border-radius: 4px;
+  display: inline-table;
   margin-left: 0.2rem;
   &.accept {
-    background: #2343de;
-  }
-  &.refuse {
-    background: red;
+    background: linear-gradient( 103.8deg, #3cb65f, green);
   }
 }
 
@@ -181,7 +179,6 @@ ul > li:last-child {
                  </div>
                  <div class="request_action" v-show="item.isAddFriends&&item.lastMessage.from!=currentUserId">
                    <span class="accept" @click='agreeAddFriend($event,item)'>{{$t('button.agree')}}</span>
-                   <span class="refuse" @click='refuseAddFriend($event,item)'>{{$t('button.refuse')}}</span>
                  </div>
                </li>
              </ul>
@@ -273,20 +270,7 @@ export default {
         })
         .catch(cancel => {});
     },
-    refuseAddFriend(e,item){
-         e = e ? e : window.event;
-         e.preventDefault();
-         event.stopPropagation();
-         e.cancelBubble = true;
-         // 消息已读回执
-          YYIMChat.sendReadedReceiptsPacket({
-         	to: item.lastMessage.from,
-         	id: item.lastMessage.id,
-         	type: 'chat',
-         	sessionVersion: item.lastMessage.sessionVersion
-          });
-          item.readedVersion=item.sessionVersion
-    },
+
     /**
      * 获取glohelp好友关系
      * @return {[type]} [description]
