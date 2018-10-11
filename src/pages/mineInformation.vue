@@ -285,7 +285,7 @@
 
 <div class="mineInformation">
     <div class="mineInformation_user_image">
-        <img src="../assets/images/5.jpg" alt="">
+        <img src="../assets/images/bg.jpeg" alt="">
     </div>
     <div class="mineInformation_info">
         <div class="mineInformation_detail">

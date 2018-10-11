@@ -981,7 +981,7 @@ ul {
 }
 .rank ul li a .gl_cetifiy_medal{
     position: absolute;
-    bottom: 0;
+    bottom: 14px!important;
     right: 0;
     width: 0.5rem;
     height: 0.5rem;

@@ -47,7 +47,7 @@
                    <div class="list_repeat" v-for="(item,index) in myAssistListDone" @click='showDetail(item)' :key='index'>
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
-                         <img :src="item.need.pic" alt="">
+                         <img :src="item.need.pic" alt="" class="gl_user_img">
                          <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
                          <!-- <i class="gl_identify icon-globalmate5" v-if="item.need.userTag" :class="'gl_'+item.need.userTag"></i> -->
                        </div>
