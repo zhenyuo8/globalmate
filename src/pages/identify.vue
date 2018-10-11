@@ -23,9 +23,6 @@
   border: 1px solid #00adff;
   border-radius: 4px;
 }
-.identify_warp {
-  // margin-bottom: 36px;
-}
 
 .icon-drivers-license-o {
   font-size: 86px;
@@ -70,10 +67,6 @@
   color: #00adff !important;
 }
 #identify .submitbtn {
-  // position: fixed;
-  bottom: 0;
-  right: 0;
-  left: 0;
   height: 36px;
   font-size: 16px;
   text-align: center;
@@ -135,7 +128,6 @@ p {
 
   <div class="identify" id="identify">
     <div class="identify_type">
-      <!-- <h3>{{$t('personaPage.selectidentify')}}</h3> -->
       <p class="gl_waring">{{$t('totastTips.warningIdentify')}}</p>
       <div class="identify_type_select">
           <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
@@ -240,7 +232,7 @@ p {
         </div>
       </template>
     </div>
-    <button v-show="identifyType.length!==0" type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
+    <button v-show="identifyType.length!==0&& submitControl" type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
@@ -260,6 +252,7 @@ export default {
     return {
       title: "",
       identifyType: ["IDCARD"],
+      submitControl:false,
       showIDCARD: true,
       showSTUDENTID: false,
       showPASSPORT: false,
@@ -292,9 +285,24 @@ export default {
     selectType(e, type) {
       if (this.identifyType.includes(type)) {
         this.identifyType.splice(this.identifyType.indexOf(type), 1);
+        this.verifyIsShowSubmit();
       } else {
+
         this.identifyType.push(type);
+        this.verifyIsShowSubmit();
       }
+    },
+    verifyIsShowSubmit(){
+        if(this.identifyType.length>0){
+            for(var i=0;i<this.identifyType.length;i++){
+                let type=this.identifyType[i];
+                if((type=='IDCARD'&&!this['idCardFront']&&!this['idCardBack'])||(type=='STUDENTID'&&!this['studentFront']&&!this['studentBack'])||(type=='PASSPORT'&&!this['passPortFront']&&!this['passPortBack'])){
+                    this.submitControl=true;
+                }else{
+                    this.submitControl=false;
+                }
+            }
+        }
     },
     previewImage(file, callback) {
       if (!file || !/image\//.test(file.type)) return;
@@ -524,11 +532,13 @@ export default {
                 }
               }
             } else {
+                this.submitControl=true;
               this.identifyType = ["STUDENTID"];
             }
             this.loadingShow = false;
           } else {
               this.loadingShow = false;
+              this.submitControl=true;
               this.identifyType = ["STUDENTID"];
             Toast({
               message: res.msg,
