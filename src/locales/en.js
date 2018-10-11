@@ -253,5 +253,12 @@ export default{
         'Fr':'Fr',
         'Sa':'Sa',
         'Su':'Su',
+    },
+    timeago:{
+        'hourago':' hour ago',
+        'hoursago':' hours ago',
+        'dayago':' day ago',
+        'daysago':' days ago',
+        'now':'Now'
     }
 }

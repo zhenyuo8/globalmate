@@ -24,6 +24,7 @@ const eventbus = new Vue()
 Vue.prototype.$eventbus = eventbus
 Vue.use(VueI18n)
 Vue.prototype.axios = axios
+moment().locale('zh-CN')
 Vue.prototype.moment = moment
 Vue.prototype.qs = qs
 Vue.prototype.$utils = utils

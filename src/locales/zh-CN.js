@@ -253,5 +253,12 @@ export default{
            'Fr':'五',
            'Sa':'六',
            'Su':'日',
+       },
+       timeago:{
+           'hourago':'小时前',
+           'hoursago':'小时前',
+           'dayago':'天前',
+           'daysago':'天前',
+           'now':'刚刚'
        }
 }

@@ -443,7 +443,19 @@ export default {
                 }
                 temp['receive_new']=false;
 
-                temp.lastContactTime = this.moment(temp.lastContactTime).format("YYYY-MM-DD");
+                let secondsCalculate=this.moment().valueOf()-this.moment(temp.lastContactTime).valueOf();
+                if(secondsCalculate<24*60*60*1000){
+                    let hour=this.moment(temp.lastContactTime).startOf("HOUR").fromNow().split(' ')[0];
+                    hour=hour=='an'?'1'+this.$t('timeago.hourago'):hour+this.$t('timeago.hoursago');
+                     temp.lastContactTime = hour;
+                }else if(secondsCalculate<7*24*60*60*1000){
+                    let day=this.moment(temp.lastContactTime).startOf("DAY").fromNow().split(' ')[0];
+                     temp.lastContactTime = day+this.$t('timeago.daysago');
+                }else{
+                    temp.lastContactTime = this.moment(temp.lastContactTime).format("YYYY-MM-DD");
+                }
+
+
                 if (!this.friendsIdList.includes(temp.id)) {
                   this.getHistory(temp.id, function(params) {
                     if (!params) {
@@ -549,7 +561,7 @@ export default {
                   temFriends=this.friends[i];
                   this.friends.splice(i,1);
                   temFriends.lastMessageContent=JSON.parse(message.data.content).chatContent;
-                  temFriends.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
+                  temFriends.lastContactTime=this.$t('timeago.now')
                   temList.sessionVersion++;
                   temList.lastMessage.sessionVersion++;
                   if((temList.sessionVersion-temList.readedVersion)==1){
@@ -573,7 +585,7 @@ export default {
                       }else{
                           temList.lastMessageContent=JSON.parse(message.data.content).chatContent;
                       }
-                      temList.lastContactTime=this.moment(message.dateline).format('YYYY-MM-DD');
+                      temList.lastContactTime=this.$t('timeago.now');
                       temList.sessionVersion++;
                       temList.lastMessage.sessionVersion++;
                       if((temList.sessionVersion-temList.readedVersion)==1){
@@ -592,7 +604,7 @@ export default {
                   return item.id==message.from;
               });
               newContact['lastMessageContent']=JSON.parse(message.data.content).chatContent;
-              newContact['lastContactTime']=this.moment(message.dateline).format('YYYY-MM-DD');
+              newContact['lastContactTime']=this.$t('timeago.now');
               this.getHistory(message.id, function(params) {
                 if (!params) {
                   newContact.isAddFriends = true;
