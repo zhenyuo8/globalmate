@@ -447,6 +447,9 @@ export default {
                 if(secondsCalculate<24*60*60*1000){
                     let hour=this.moment(temp.lastContactTime).startOf("HOUR").fromNow().split(' ')[0];
                     hour=hour=='an'?'1'+this.$t('timeago.hourago'):hour+this.$t('timeago.hoursago');
+                    if(hour=='a'){
+                        hour='1';
+                    }
                      temp.lastContactTime = hour;
                 }else if(secondsCalculate<7*24*60*60*1000){
                     let day=this.moment(temp.lastContactTime).startOf("DAY").fromNow().split(' ')[0];
