@@ -655,7 +655,7 @@ export default {
           console.log(e);
         });
     },
-    initIM() {
+    initIM(callback) {
       let _this = this;
       YYIMChat.initSDK({
         app: "globalmate_test", //appId应用id
@@ -747,10 +747,10 @@ export default {
           //透传业务消息
         }
       });
-      this.loginIM();
+      this.loginIM(callback);
       YYIMChat.onMessage();
     },
-    loginIM() {
+    loginIM(callback) {
       let username = this.userInfo.userId;
       if (!username) return;
       let obj = JSON.stringify({
@@ -772,6 +772,10 @@ export default {
                 appType: 4,
                 identify: clientIdentify
               });
+              setTimeout(()=>{
+                  callback&&callback();
+              },50)
+
       }).catch(e=>{
           this.loadingShow=false;
           console.log(e);
@@ -787,16 +791,16 @@ export default {
 
       if (this.userInfo&&this.userInfo.token) {
           this.loadingShow = true;
-         this.getUserByToken();
-         this.initIM()
+        //  this.getUserByToken();
+         this.initIM(this.getUserByToken)
       } else {
           let i=1;
         this.timer = setInterval(() => {
           if (this.userInfo&&this.userInfo.token) {
               this.loadingShow = true;
               i=1;
-            this.getUserByToken();
-            this.initIM()
+            // this.getUserByToken();
+            this.initIM(this.getUserByToken)
             clearInterval(this.timer);
           }
           i++;
