@@ -221,6 +221,7 @@ export default {
     },
     clickCallBack(item) {
       let type = item.mineType;
+      console.log(item);
       switch (type) {
         case "publish":
           this.$router.push({
@@ -285,6 +286,15 @@ export default {
             }
           });
           break;
+         case "aboutUs":
+           this.$router.push({
+             path: "aboutUs",
+             query: {
+               token: this.token,
+               id: "aboutUs"
+             }
+           });
+           break;
         default:
       }
     },

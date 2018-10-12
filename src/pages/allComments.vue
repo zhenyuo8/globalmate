@@ -168,7 +168,11 @@
         color: #ff0023;
     }
     .comment_repeat_top .score .gl_score_item{
-        margin: 0 .02rem;
+        margin: 0 .02rem!important;
+        color: red!important;
+    }
+    .comment_repeat_top .score .icon-heart2::before{
+        font-size: 13px!important;
     }
     .comment_repeat_middle{
         margin-top: 10px;

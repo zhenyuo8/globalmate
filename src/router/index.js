@@ -30,6 +30,14 @@ export default new Router({
       }
     },
     {
+      path: '/aboutUs',
+      name: 'aboutUs',
+      component: () => import('@/pages/aboutUs.vue'),
+      meta: {
+        index: 7
+      }
+    },
+    {
       path: '/mineInformation',
       name: 'mineInformation',
       component: () => import('@/pages/mineInformation.vue'),

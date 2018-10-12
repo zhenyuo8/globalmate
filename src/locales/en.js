@@ -260,5 +260,11 @@ export default{
         'dayago':' day ago',
         'daysago':' days ago',
         'now':'Now'
+    },
+    aboutUs:{
+        first:'GloHelp是一个致力于打造基于真实社会网络的互信互助平台，通过精准推送高效地帮您解决身边的问题，让每一个遇到困难的人都有人帮，让世界变得更美好!',
+        second:'Mission : To make everyone obtain the help when troubles happened.',
+        third:'Vision : To become the biggest platform of sharing and helping.',
+        fourth:'Value : Keep concern of our world universally, execute plan surefootedly.'
     }
 }
