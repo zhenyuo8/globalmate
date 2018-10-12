@@ -134,7 +134,7 @@ export default new Router({
       name: 'messageList',
       component: () => import('@/pages/messageList.vue'),
       meta: {
-        index: 4
+        index: 7
       }
     },
     {
