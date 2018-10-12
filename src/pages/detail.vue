@@ -145,6 +145,10 @@
         display: block;
         margin: auto;
       }
+      .gl_cetifiy_medal{
+          bottom: 40%;
+          right: 0.1rem;
+      }
       span {
         margin: 6px auto 10px;
         width: 100%;

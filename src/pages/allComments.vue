@@ -7,12 +7,15 @@
                     <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
 
                     <span>{{item.evaluation.uEvluatorName}}</span>
-                    <span class="score">{{$t('formTitle.scoreAction')}}:{{item.evaluation.score}}</span>
+                    <span class="score" >
+                        <i v-for=" i in item.evaluation.score" class="gl_score_item icon-heart2" :index='i' ></i>
+                    </span>
                 </p>
                 <p class="comment_repeat_middle">
-                    {{item.evaluation.createTime}} {{$t('formTitle.head')}}:{{item.needAggEntity.conceretNeed.title}} {{$t('formTitle.reward')}}:{{item.needAggEntity.conceretNeed.rewardAmount}}
+                    {{item.evaluation.createTime}} {{$t('formTitle.head')}}:{{item.needAggEntity.conceretNeed.title}} {{$t('formTitle.reward')}}:{{item.needAggEntity.conceretNeed.reward}}
                 </p>
                 <p class="comment_repeat_bottom">
+
                     {{item.evaluation.content}}
                 </p>
             </div>
@@ -85,6 +88,7 @@
                         if(curData.evaluation.uEvaluatorId==this.userList[n].id){
                             curData.pic=this.userList[n].pic;
                             curData.userTag=this.userList[n].userTag;
+                            curData.evaluation.score=curData.evaluation.score-0;
                             _this.commentList.push(curData)
                         }
                     }
@@ -162,6 +166,9 @@
         position: absolute;
         right: 0;
         color: #ff0023;
+    }
+    .comment_repeat_top .score .gl_score_item{
+        margin: 0 .02rem;
     }
     .comment_repeat_middle{
         margin-top: 10px;
