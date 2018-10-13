@@ -157,3 +157,7 @@ input[disabled]{
     box-shadow: -1px 1px 2px #fff;
     border-radius: 50%;
 }
+.gl_score_item{
+    margin: 0 .02rem!important;
+    color: red!important;
+}

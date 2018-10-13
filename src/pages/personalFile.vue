@@ -107,11 +107,15 @@
     <indexList :class="show?'list_show':'list_hide'" :selectItem='selectItem' :countrySityCallBack='countrySityCallBack' :listType='listType'></indexList>
     <mt-datetime-picker ref="picker" type="date" :startDate="startDate" :endDate="endDate" :cancelText="$t('button.cancel')" :confirmText="$t('button.confirm')" @confirm="handleConfirm" v-model="pickerValue">
     </mt-datetime-picker>
+    <div class="defindloading" v-if='loadingShow'>
+      <loading></loading>
+    </div>
   </div>
 </template>
 
 <script>
 import indexList from "../components/indexList.vue";
+import loading from "../components/loading.vue";
 import Vue from "vue";
 import { DatetimePicker, Toast, MessageBox } from "mint-ui";
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -121,6 +125,7 @@ import userMix from "../mixins/userInfo";
 export default {
   mixins: [userMix],
   components: {
+      loading,
     DatetimePicker,
     indexList
   },
@@ -161,7 +166,8 @@ export default {
         country: '',
         city: '',
         hobby: ''
-      }
+    },
+    loadingShow:true,
     };
   },
   methods: {
@@ -288,8 +294,8 @@ export default {
           $($(".list_ul li")[this.hasSelect_list[i]]).removeClass("select");
         }
       }
-      this.selectHelpTypeValue = "";
-      this.type_list = [];
+    //   this.selectHelpTypeValue = "";
+    //   this.type_list = [];
     },
     confirm() {
       this.selectHelpTypeValue = this.type_list.join("、");
@@ -696,6 +702,7 @@ export default {
       return obj;
     },
     submit() {
+
       let {nickName, name, phone, country, city, hobby} = this.userMsg;
       if (!nickName || !name || !phone || !country || !city || !hobby) {
         Toast({
@@ -729,6 +736,7 @@ export default {
       postData.school = JSON.stringify(this.educationValue);
       postData.helpAvailable = this.selectHelpTypeValue;
       postData.pic = this.headerImgae || "";
+      this.loadingShow=true;
       this.axios
         .put(
           this.ip +
@@ -745,7 +753,11 @@ export default {
                 this.loadIsCertified(this.toIdentify.bind(this)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
                 return;
             }else{
-                window.history.back(-1);
+                setTimeout(()=>{
+                    this.loadingShow=false;
+                    window.history.back(-1);
+                },1000)
+
             }
           }
         })
@@ -793,19 +805,6 @@ export default {
             }).catch(cancel=>{
               this.$router.go(-1)
             });
-            // Toast({
-            //   message: this.$t('totastTips.confirmIdentify'),
-            //   duration: 500
-            // });
-            // setTimeout(() => {
-            //   this.$router.replace({
-            //     path: "identify",
-            //     query: {
-            //       token: this.userInfo.token,
-            //       id: "identify"
-            //     }
-            //   });
-            // }, 500)
           }
         });
     },
@@ -826,8 +825,8 @@ export default {
          }).then(res => {
              if (res.success) {
                let data = res.data;
+               this.loadIsCertified(this.toIdentify.bind(this))
                if(params){
-                //    window.history.back(-1);
                    this.updateUserInfo({
                      curUser: data,
                    });
@@ -849,8 +848,10 @@ export default {
                    }
                }
              }
+             this.loadingShow=false;
            })
            .catch(e => {
+                this.loadingShow=false;
              console.log(e);
            });
     }
@@ -860,7 +861,16 @@ export default {
     this.selectFlag = false;
     this.educationFlag = false;
     this.showEducationValue = false;
-    this.loadCurrentUser();
+    if(this.userInfo&&this.userInfo.token){
+        this.loadCurrentUser();
+    }else{
+        let timer=setInterval(()=>{
+            if(this.userInfo&&this.userInfo.token){
+                this.loadCurrentUser();
+            }
+        },20)
+    }
+
 
   },
   deactivated() {

@@ -69,9 +69,9 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-let url1=require('../assets/images/gl_index_1.jpeg')
-let url2=require('../assets/images/gl_index_2.jpeg')
-let url3=require('../assets/images/gl_index_3.jpeg')
+let url1=require('../assets/images/index_1.jpeg')
+let url2=require('../assets/images/index_2.jpeg')
+let url3=require('../assets/images/index_2.jpeg')
 
 export default {
   name: "index",
@@ -657,12 +657,12 @@ export default {
             },
             {
                 url:url2,
-                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+                href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
             },
-            {
-                url:url3,
-                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-            },
+            // {
+            //     url:url3,
+            //     href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
+            // },
         ]
     }else{
          this.slides=[
@@ -672,12 +672,12 @@ export default {
              },
              {
                  url:url2,
-                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+                 href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
              },
-             {
-                 url:url3,
-                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-             },
+            //  {
+            //      url:url3,
+            //      href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
+            //  },
          ]
         this.isENAgreement=false;
     }
