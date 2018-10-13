@@ -162,8 +162,43 @@
     background: #fff;
     padding: 0 10px;
     left: 6%;
-
 }
+.mineInformation_school_more{
+    height: 32px;
+    line-height: 32px;
+    font-size: 12px;
+    position: absolute;
+    top: -16px;
+    color: #54698d;
+    background: #fff;
+    padding: 0 .08rem;
+    right: 2%;
+}
+.mineInformation_school_content{
+    overflow: hidden;
+    ul{
+        overflow: hidden;
+        li{
+           float: left;
+           width: 25%;
+           margin: auto;
+           img{
+              width: 80%;
+              height: 80%;
+              display: inline-block;
+              border-radius: 50%;
+           }
+           span{
+               width: 80%;
+               margin: auto;
+               display: inline-block;
+               color: #333;
+               font-size: 12px;
+           }
+        }
+    }
+}
+
 .mineInformation_school_content_repeat span{
     line-height: 32px;
     color: #333;
@@ -235,6 +270,9 @@
     width: .8rem;
     height: 0.8rem;
     border-radius:4px;
+}
+.gl_score_item{
+    margin: 0 0.02rem;
 }
 .mineInformation_comment_warp>div>.comment_repeat_top .gl_cetifiy_medal{
     position: absolute;
@@ -316,6 +354,22 @@
         </div>
         <div class="mineInformation_line">
 
+        </div>
+        <div class="mineInformation_school">
+            <div class="mineInformation_school_title">
+                我的好友
+            </div>
+            <div class="mineInformation_school_more icon-arrow_right_samll" @click="previewAllFriends()">
+                更多
+            </div>
+            <div class="mineInformation_school_content">
+                <ul>
+                    <li v-for="(item,index) in friendsListGL" :key='index' @click="goDetail(item)">
+                        <img :src="item.pic" alt="">
+                        <span>{{item.nikename}}</span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="mineInformation_school">
             <div class="mineInformation_school_title">
@@ -403,7 +457,8 @@ export default {
             total:0,
             vGold:require('../assets/images/vGold.png'),
             vSilver:require('../assets/images/vSilver.png'),
-            vCopper:require('../assets/images/vCopper.png')
+            vCopper:require('../assets/images/vCopper.png'),
+            friendsListGL:[]
 
         }
     },
@@ -578,12 +633,52 @@ export default {
                 console.log(e);
             })
         },
+        loadMyfriends(){
+            let _this=this;
+            let userId=this.userInfo.userId;
+            if(this.$route.query.otherUserId){
+                userId=this.$route.query.id;
+            }
+              this.axios.get(this.ip +"/globalmate/rest/userRelation/getFriends",{
+                  params:{
+                      userId: this.userInfo.userId,
+                      token:this.userInfo.token
+                  }
+               }).then(res => {
+               if (res.success) {
+                 this.friendsListGL=res.data;
+                 this.loadingShow = false;
+               }
+            }).catch(e => {
+                this.loadingShow = false;
+            });
+        },
+        previewAllFriends(){
+
+        },
+        goDetail(item) {
+          this.$router.push({
+            path: "mineInformation",
+            meta: {
+              index: 100
+          },
+            query: {
+              token: this.userInfo.token,
+              title: item.nikename,
+              otherUserId: item.id,
+              id: '',
+              currentuser: this.userInfo.userId,
+              seeOther: true
+            }
+          });
+        },
 
     },
     activated(){
         this.isOthers=true;
         this.helpAvailable=[];
         this.commentList=[];
+        this.friendsListGL=[];
          this.total=0;
         this.otherUserId=this.$route.query.otherUserId;
 
@@ -592,6 +687,7 @@ export default {
             if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){
                 this.isOthers=false;
             }
+            this.loadMyfriends();
              this.getEvalute();
         } else {
           this.timer = setInterval(() => {
@@ -600,6 +696,7 @@ export default {
               if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){
                   this.isOthers=false;
               }
+              this.loadMyfriends();
                this.getEvalute();
               clearInterval(this.timer);
             }
