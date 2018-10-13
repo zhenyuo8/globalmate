@@ -180,7 +180,7 @@
 }
 
 .chat-thread li.right-item{
-	margin: 20px 1.4rem 0 .6rem;
+	margin: 4px 1.4rem 4px .6rem;
 }
 .chat-thread li {
 	position: relative;
@@ -251,7 +251,7 @@
 }
 
 .chat-thread li.left-item {
-	margin: 20px .6rem 2px 1.4rem;
+	margin: 4px .6rem 2px 1.4rem;
 	float: left;
 	color: #343434;
 	background-color: #fff;

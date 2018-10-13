@@ -794,7 +794,6 @@ export default {
 
       if (this.userInfo&&this.userInfo.token) {
           this.loadingShow = true;
-        //  this.getUserByToken();
          this.initIM(this.getUserByToken)
       } else {
           let i=1;
@@ -802,7 +801,6 @@ export default {
           if (this.userInfo&&this.userInfo.token) {
               this.loadingShow = true;
               i=1;
-            // this.getUserByToken();
             this.initIM(this.getUserByToken)
             clearInterval(this.timer);
           }

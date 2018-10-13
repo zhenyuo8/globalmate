@@ -29,6 +29,7 @@
           <li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)' :key='index'>
             <img :src="item.pic" alt="">
             <div class="chat-item-text">
+                <i>{{item.time}}</i>
               {{item.chatContent}}
             </div>
           </li>
@@ -195,6 +196,26 @@ export default {
             console.log(err);
           }
         });
+        obj["time"] = new Date().valueOf();
+         var timedetail=_this.moment(obj["time"]).calendar().split('at')[1];
+         var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
+         var showTime=moonOrAfter+$.trim(timedetail).split(' ')[0];
+        if(this.isNeedShowTimeSend){
+            console.log(obj["time"]);
+            if((obj["time"]-this.isNeedShowTimeSend)>60*1000){
+                var $li1=$('<li class="gl_im_time"><i>'+showTime+'</i></li>')
+                $('#chat-thread').append($li1);
+                this.isNeedShowTimeSend=obj["time"];
+            }
+
+        }else{
+            this.isNeedShowTimeSend=obj["time"];
+            var $li1=$('<li class="gl_im_time"><i>'+showTime+'</i></li>')
+            $('#chat-thread').append($li1);
+        }
+
+
+
         $li = $(
           '<li class="right-item"> <img src="' +
             this.currentUserImgae +
@@ -218,6 +239,11 @@ export default {
         }
         obj["pic"] = this.currentUserImgae;
         obj["type"] = false;
+        if(arg.time){
+             obj["time"] = arg.time;
+             var $li1=$('<li class="gl_im_time"><i>'+arg.time+'</i></li>')
+             $('#chat-thread').append($li1);
+        }
         $li = $(
           '<li class="right-item"> <img src="' +
             this.currentUserImgae +
@@ -225,8 +251,8 @@ export default {
             obj["chatContent"] +
             "</div> </li>"
         );
-        // $('#chat-thread').append($li);
-        this.historyList.push(obj);
+        $('#chat-thread').append($li);
+        // this.historyList.push(obj);
       }
 
       if ($li) {
@@ -285,7 +311,13 @@ export default {
       }
       obj["pic"] = arg.pic;
       obj["type"] = true;
-      this.historyList.push(obj);
+      if(arg.time){
+           obj["time"] = arg.time;
+           var $li1=$('<li class="gl_im_time"><i>'+arg.time+'</i></li>')
+           $('#chat-thread').append($li1);
+      }
+       $('#chat-thread').append($li);
+    //   this.historyList.push(obj);
       if ($li) {
         $li.on("click", function(e) {
           if (e.target.tagName == "IMG") {
@@ -415,29 +447,35 @@ export default {
           if (data.result && data.result.length != 0) {
             var result = data.result;
             var len = result.length - 1;
-            // result.forEach(item => {
-            //     _this.chatItemId = JSON.parse(item.data.content).item;
-            //   if (item.from === _this.$route.query.toChartId) {
-            //     item.pic = _this.othersInfo.pic;
-            //     try {
-            //       _this.chatItemId = JSON.parse(item.data.content).item;
-            //       if (!_this.id&&i==0) {
-            //         _this.id = _this.chatItemId;
-            //       }
-            //     } catch (e) {}
-            //     _this.createOnMessage(item);
-            //     if(_this.chatItemId==_this.id){
-            //
-            //     }
-            //   } else {
-            //       item.pic = _this.currentUserImgae;
-            //       _this.createUserTalk(item);
-            //       if(_this.chatItemId==_this.id){
-            //
-            //       }
-            //   }
-            // })
             for (var i = len; i >= 0; i--) {
+                let secondsCalculate=_this.moment().valueOf()-_this.moment(result[i].dateline).valueOf();
+                let a=new Date(_this.moment().format('YYYY-MM-DD').valueOf()).getTime();
+                let b=_this.moment(result[i].dateline).valueOf()
+
+                if(!_this.isNeedShowTime){
+                     _this.isNeedShowTime=_this.moment(result[i].dateline).valueOf();
+                     if(secondsCalculate>2*60*1000&&secondsCalculate<24*60*60*1000&&b>a){
+                         var timedetail=_this.moment(result[i].dateline).calendar().split('at')[1];
+                         var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
+                         result[i].time=moonOrAfter+$.trim(timedetail).split(' ')[0];
+                     }
+                     if(b<a){
+                         result[i].time=_this.moment(result[i].dateline).format("YYYY-MM-DD")
+                     }
+                }else{
+                    if((_this.moment(result[i].dateline).valueOf()-_this.isNeedShowTime)>60*1000){
+                        if(secondsCalculate>2*60*1000&&secondsCalculate<24*60*60*1000){
+                            var timedetail=_this.moment(result[i].dateline).calendar().split('at')[1];
+                            var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
+                            result[i].time=moonOrAfter+$.trim(timedetail).split(' ')[0];
+                        }
+                        if(b<a){
+                            result[i].time=_this.moment(result[i].dateline).format("YYYY-MM-DD")
+                        }
+                        _this.isNeedShowTime=_this.moment(result[i].dateline).valueOf();
+                    }
+                }
+
               if (result[i].from &&result[i].from == _this.$route.query.toChartId) {
                 result[i].pic = _this.othersInfo.pic;
                 try {
@@ -579,10 +617,6 @@ export default {
   width: 100%;
   right: 0;
   left: 0;
-  .chart_main_content {
-    // height: 1.4rem;
-    // overflow: hidden;
-  }
 }
 
 .convo {
@@ -646,7 +680,6 @@ export default {
   overflow: hidden;
 }
 .chart_main_content_decription span {
-  // float: left;
   padding: 4px 0;
   margin-right: 0.2rem;
   text-align: left;
@@ -701,5 +734,25 @@ export default {
 }
 .mint-toast {
   padding: 10px 0.2rem !important;
+}
+.gl_im_time{
+    float: right;
+    font-size: 12px!important;
+    margin: 0!important;
+    width: 100%!important;
+    text-align: center!important;
+    background-color:transparent!important;
+}
+.gl_im_time i{
+    display: inline-block;
+    padding: 3px .1rem;
+    color: #fff;
+    background: #d3d3d3;
+    border-radius: 4px;
+}
+.gl_im_time:after{
+    position: absolute;
+    top: 10px!important;
+    border: none!important;
 }
 </style>
