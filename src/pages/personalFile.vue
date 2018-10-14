@@ -299,6 +299,7 @@ export default {
     },
     confirm() {
       this.selectHelpTypeValue = this.type_list.join("、");
+      this.userMsg.selectHelpTypeValue=this.selectHelpTypeValue;
       this.selectFlag = false;
     },
     fillEducation() {
