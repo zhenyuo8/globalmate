@@ -703,8 +703,8 @@ export default {
     },
     submit() {
 
-      let {nickName, name, phone, country, city, hobby} = this.userMsg;
-      if (!nickName || !name || !phone || !country || !city || !hobby) {
+      let {nickName, name, phone, country, city, hobby,selectHelpTypeValue} = this.userMsg;
+      if (!nickName || !name || !phone || !country || !city || !hobby||!selectHelpTypeValue) {
         Toast({
           message: this.$t('totastTips.allRequiredTips'),
           duration: 1000
@@ -842,6 +842,7 @@ export default {
                    this.userMsg.city = data.city || ""
                    this.userMsg.hobby = data.hobby;
                    this.selectHelpTypeValue = data.helpAvailable || "";
+                   this.userMsg.selectHelpTypeValue = data.helpAvailable || "";
                    this.headerImgae = data.pic || '';
                    if(data.country){
                        this.country=data.country;
