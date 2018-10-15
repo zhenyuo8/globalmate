@@ -24,7 +24,8 @@ export default{
         'ignore':'忽略',
         'agreeAccept':'已读&接受',
         'delete':'删除',
-        'preview':'预览'
+        'preview':'预览',
+        'selectHelp':'选择 Ta'
     },
     cityName:{
         'beijing':'北京',
@@ -216,7 +217,12 @@ export default{
         'moreThan':'结束时间必须大于开始时间',
         'lessThan':'开始时间必须小于结束时间',
         'warningIdentify':'为了保障全体用户的权益，为您提供一个安全可靠的平台，请您务必填写真实信息。您的信息只会用于身份认证，本平台承诺保障您的信息安全。',
-        'networkerror':'网络异常，请稍后再试'
+        'networkerror':'网络异常，请稍后再试',
+        'notCompletePerosnal':'您的个人资料还未完善，请完善之后再使用!',
+        'notReadAgreement':'您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
+        'comfirmAddFriendE':'确定选择 <',
+        'comfirmAddFriendA':'> 来帮忙？'
+
     },
     moneyType:{
         'chinaType':'人民币',

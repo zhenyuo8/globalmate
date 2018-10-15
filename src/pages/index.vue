@@ -69,9 +69,9 @@ Vue.component(MessageBox.name, MessageBox);
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 import userMix from "../mixins/userInfo";
-let url1=require('../assets/images/gl_index_1.jpeg')
-let url2=require('../assets/images/gl_index_2.jpeg')
-let url3=require('../assets/images/gl_index_3.jpeg')
+let url1=require('../assets/images/index_1.jpeg')
+let url2=require('../assets/images/index_2.jpeg')
+let url3=require('../assets/images/index_2.jpeg')
 
 export default {
   name: "index",
@@ -141,7 +141,7 @@ export default {
             if (!flag) {
                 MessageBox.confirm('',{
                     title: '',
-                    message: '您还未完成身份认证，是否进行身份认证？',
+                    message: _this.$t('totastTips.confirmIdentify'),
                     confirmButtonText:_this.$t('button.confirm'),
                     cancelButtonText:_this.$t('button.cancel'),
                     showCancelButton: true
@@ -383,7 +383,7 @@ export default {
         let _this=this;
         MessageBox.confirm('',{
             title: '',
-            message: '您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
+            message: this.$t('totastTips.notReadAgreement'),
             confirmButtonText:_this.$t('button.confirm'),
             cancelButtonText:_this.$t('button.cancel'),
             showCancelButton: true
@@ -409,7 +409,7 @@ export default {
         let _this=this;
         MessageBox.confirm('',{
             title: '',
-            message: '您的个人资料还未完善，请完善之后再使用,谢谢！',
+            message: this.$t('totastTips.notCompletePerosnal'),
             confirmButtonText:_this.$t('button.confirm'),
             cancelButtonText:_this.$t('button.cancel'),
             showCancelButton: true
@@ -657,12 +657,12 @@ export default {
             },
             {
                 url:url2,
-                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+                href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
             },
-            {
-                url:url3,
-                href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-            },
+            // {
+            //     url:url3,
+            //     href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
+            // },
         ]
     }else{
          this.slides=[
@@ -672,24 +672,24 @@ export default {
              },
              {
                  url:url2,
-                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
+                 href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
              },
-             {
-                 url:url3,
-                 href:'https://r.xiumi.us/stage/v5/2uz68/105558479?from=groupmessage#/'
-             },
+            //  {
+            //      url:url3,
+            //      href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
+            //  },
          ]
         this.isENAgreement=false;
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
-    //    this.getContact()
+       this.getCurrentUser()
        this.initIM(this.getContact)
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
-        //   this.getContact()
+          this.getCurrentUser()
           this.initIM(this.getContact)
           clearInterval(this.timer);
         }

@@ -138,6 +138,7 @@ export default {
     // 点击发布按钮逻辑
     publish() {
       let postData = this.getListData();
+      console.log(postData,999);
       this.submitUrl = "/globalmate/rest/need/addCommon";
       if (postData&&!this.isSubmiting) {
           this.isSubmiting=true;
@@ -707,6 +708,7 @@ export default {
           if (res.success) {
             let data = res.data;
             this.listRepeatProcess();
+            this.type=data.conceretNeed.type;
             if(isNaN(data.conceretNeed.reward)){
                 this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
                 this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||this.$t('moneyType.chinaType');
@@ -735,8 +737,9 @@ export default {
                   item.endtime = _this.moment(data.conceretNeed.endTime).format("YYYY-MM-DD");
                   item.isPlacehold = false;
               }
+
               if (data.conceretNeed.description) {
-                _this.$el.querySelector(".main_decription_area textarea").value =data.conceretNeed.description;
+                  _this.description=data.conceretNeed.description
               }
             });
           }
