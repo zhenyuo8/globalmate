@@ -782,14 +782,29 @@ export default {
               certifyMsg: res.data,
               identified: flag // 判断是否通过认证了
             });
-            if (!flag) {
-              Toast({
-                message: this.$t('totastTips.confirmIdentify'),
-                duration: 1000
-              });
-              return;
+            if(!flag){
+                MessageBox.confirm('',{
+                  title: '',
+                  message: this.$t('totastTips.confirmIdentify'),
+                  confirmButtonText: this.$t('button.confirm'),
+                  cancelButtonText: this.$t('button.cancel'),
+                  showCancelButton: true,
+                  closeOnClickModal: false
+                }).then(action => {
+                  this.$router.replace({
+                    path: "identify",
+                    query: {
+                      token: this.userInfo.token,
+                      id: "identify"
+                    }
+                  });
+                }).catch(cancel=>{
+                  this.$router.go(-1);
+                });
+            }else {
+                this.$router.go(-1);
             }
-            !flag && callback && callback();
+
           } else {
             MessageBox.confirm('',{
               title: '',
@@ -813,7 +828,7 @@ export default {
         });
     },
     toIdentify(){
-        this.$router.push({
+        this.$router.replace({
           path: "identify",
           query: {
             token: this.userInfo.token,
