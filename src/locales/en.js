@@ -24,7 +24,8 @@ export default{
         'ignore':'Ignore',
         'agreeAccept':'Read & Accept',
         'delete':'Delete',
-        'preview':'Preview'
+        'preview':'Preview',
+        'selectHelp':'select HM/HER'
     },
     cityName:{
         'beijing':'Beijing',
@@ -215,7 +216,11 @@ export default{
         'moreThan':'结束时间必须大于开始时间',
         'lessThan':'开始时间必须小于结束时间',
         'warningIdentify':'In order to protect the rights and interests of all users, and to offer you a safe and reliable platform, please be sure to fill in your real information. Your information will only be used for identity authentication. We promise to ensure your information security.',
-        'networkerror':'Network exception, please try again later'
+        'networkerror':'Network exception, please try again later',
+        'notCompletePerosnal':'You personel information have not complete yet.please fill up your information first!',
+        'notReadAgreement':'You have read and agree the agreement yet.go to read agreement？',
+        'comfirmAddFriendE':'Confirm  to  choose <',
+        'comfirmAddFriendA':'> to  help?'
     },
     moneyType:{
         'chinaType':'RMB',

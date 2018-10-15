@@ -383,7 +383,7 @@ export default {
         let _this=this;
         MessageBox.confirm('',{
             title: '',
-            message: '您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
+            message: this.$t('totastTips.notReadAgreement'),
             confirmButtonText:_this.$t('button.confirm'),
             cancelButtonText:_this.$t('button.cancel'),
             showCancelButton: true
@@ -409,7 +409,7 @@ export default {
         let _this=this;
         MessageBox.confirm('',{
             title: '',
-            message: '您的个人资料还未完善，请完善之后再使用,谢谢！',
+            message: this.$t('totastTips.notCompletePerosnal'),
             confirmButtonText:_this.$t('button.confirm'),
             cancelButtonText:_this.$t('button.cancel'),
             showCancelButton: true

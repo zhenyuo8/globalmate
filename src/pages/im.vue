@@ -16,7 +16,7 @@
             <span class="detail_brand">{{detail.where}}</span>
           </div>
           <div class="chart_main_content_action" v-show="detail.enable==1">
-            <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="!others">选择Ta</span>
+            <span class='' :class="hasSelectAready?'do_help_grey':'do_help'" @click="selectWhoHelp()" v-show="!others">{{$t('button.selectHelp')}}</span>
           </div>
           <div class="detail_status" :class="'status_'+detail.enable">
             {{detail.status}}
@@ -141,7 +141,7 @@ export default {
       }
       MessageBox.confirm("", {
         title: "",
-        message: "确定选择 <" + _this.othersInfo.nikename + "> 来帮忙？",
+        message: this.$t('totastTips.comfirmAddFriendE') + _this.othersInfo.nikename + this.$t('totastTips.comfirmAddFriendA'),
         confirmButtonText: this.$t("button.confirm"),
         cancelButtonText: this.$t("button.cancel"),
         showCancelButton: true
