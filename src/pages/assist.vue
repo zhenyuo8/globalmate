@@ -138,6 +138,7 @@ export default {
     // 点击发布按钮逻辑
     publish() {
       let postData = this.getListData();
+      console.log(postData,999);
       this.submitUrl = "/globalmate/rest/need/addCommon";
       if (postData&&!this.isSubmiting) {
           this.isSubmiting=true;
@@ -707,6 +708,7 @@ export default {
           if (res.success) {
             let data = res.data;
             this.listRepeatProcess();
+            this.type=data.conceretNeed.type;
             if(isNaN(data.conceretNeed.reward)){
                 this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
                 this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||this.$t('moneyType.chinaType');
