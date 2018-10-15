@@ -755,7 +755,7 @@ export default {
               this.loadCurrentUser(true);
               var isIdentify = this.userInfo["identified"];
               if (!isIdentify) {
-                this.loadIsCertified(this.toIdentify.bind(this)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
+                this.loadIsCertified('afterSubmit'); // 再次确认一下有没有认证，有可能存在刚好通过的情况
                 // return;
             }else{
                 setTimeout(()=>{
@@ -802,7 +802,9 @@ export default {
                   this.$router.go(-1);
                 });
             }else {
-                this.$router.go(-1);
+                if(callback&&callback=='afterSubmit'){
+                    this.$router.go(-1);
+                }
             }
 
           } else {
