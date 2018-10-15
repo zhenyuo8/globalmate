@@ -33,7 +33,6 @@
         <div class="" id="uploader_header" @click='uploadImage'>
           <img v-if="!headerImgae" class="icon-user image_span" src='../assets/images/icon.png' />
           <img v-if="headerImgae" class='image_span' :src="headerImgae" alt="">
-          <!-- <span class="icon-user image_span"></span> -->
           <button type="button" name="button">{{$t('formTitle.portrait')}}</button>
         </div>
       </div>
@@ -46,7 +45,6 @@
             <span class="fr icon-arrow_right_samll">{{item.schooldate}}</span>
           </li>
         </ul>
-        <!-- <span style="font-size:20px;">+</span> -->
         <span style="color:#26a2ff"> + {{$t('formTitle.education')}}</span>
       </div>
     </div>
@@ -69,9 +67,9 @@
     </div>
     <div :class="selectFlag?'select_in':'select_out'">
       <ul class="list_ul">
-        <li v-for="(item,index) in list" @click='selectItemType(item,index)' :key='index'>
-          <span class="list_item">{{item}}</span>
-          <span class="icon-checkbox"></span>
+        <li v-for="(item,index) in list" @click='selectItemType(item,index)' :key='index' :class="item.isSelect?'select':''">
+          <span class="list_item">{{item.name}}</span>
+          <span class="icon-checkbox" ></span>
         </li>
       </ul>
       <div class="buttom_action">
@@ -131,21 +129,50 @@ export default {
   },
   data() {
     return {
-      list: [
-        this.$t("formName.study"),
-        this.$t("formName.textbook"),
-        this.$t("formName.formality"),
-        this.$t("formName.exchange"),
-        this.$t("formName.medical"),
-        this.$t("formName.carry"),
-        this.$t("formName.rent"),
-        this.$t("formName.accompany"),
-        this.$t("formName.daigou"),
-        this.$t("formName.other")
+
+      list:[
+          {
+              'name':this.$t("formName.study"),
+              isSelect:false
+          },
+          {
+              'name':this.$t("formName.textbook"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.formality"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.exchange"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.medical"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.carry"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.rent"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.accompany"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.daigou"),
+              'isSelect':false
+          },
+          {
+              'name':this.$t("formName.other"),
+              'isSelect':false
+          },
       ],
       selectFlag: false,
-      type_list: [],
-      hasSelect_list: [],
       selectHelpTypeValue: "",
       headerImgae: "",
       educationFlag: false,
@@ -267,38 +294,23 @@ export default {
     selectItemType(item, index) {
       if ($($(".list_ul li")[index]).hasClass("select")) {
         $($(".list_ul li")[index]).removeClass("select");
+        item.isSelect=false;
       } else {
+           item.isSelect=true;
         $($(".list_ul li")[index]).addClass("select");
-      }
-      let someType = this.type_list.some(function(itm, inx) {
-        return itm === item;
-      });
-      if (someType) {
-        for (var i = 0; i < this.type_list.length; i++) {
-          if (this.type_list[i] === item) {
-            this.type_list.splice(i, 1);
-          }
-          if (this.hasSelect_list[i] === index) {
-            this.hasSelect_list.splice(i, 1);
-          }
-        }
-      } else {
-        this.type_list.push(item);
-        this.hasSelect_list.push(index);
       }
     },
     cancel() {
       this.selectFlag = false;
-      if (this.type_list.length > 0) {
-        for (var i = 0; i < this.hasSelect_list.length; i++) {
-          $($(".list_ul li")[this.hasSelect_list[i]]).removeClass("select");
-        }
-      }
-    //   this.selectHelpTypeValue = "";
-    //   this.type_list = [];
     },
     confirm() {
-      this.selectHelpTypeValue = this.type_list.join("、");
+        let value=[];
+        this.list.forEach((item,index)=>{
+            if(item.isSelect){
+                value.push(item.name);
+            }
+        })
+      this.selectHelpTypeValue = value.join("、");
       this.userMsg.selectHelpTypeValue=this.selectHelpTypeValue;
       this.selectFlag = false;
     },
@@ -703,7 +715,6 @@ export default {
       return obj;
     },
     submit() {
-
       let {nickName, name, phone, country, city, hobby,selectHelpTypeValue} = this.userMsg;
       if (!nickName || !name || !phone || !country || !city || !hobby||!selectHelpTypeValue) {
         Toast({
@@ -738,27 +749,19 @@ export default {
       postData.helpAvailable = this.selectHelpTypeValue;
       postData.pic = this.headerImgae || "";
       this.loadingShow=true;
-      this.axios
-        .put(
-          this.ip +
-            "/globalmate/rest/user/update/" +
-            "?token=" +
-            this.$route.query.token,
-          postData
-        )
-        .then(res => {
+      this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.$route.query.token,
+          postData ).then(res => {
           if (res.success) {
               this.loadCurrentUser(true);
               var isIdentify = this.userInfo["identified"];
               if (!isIdentify) {
                 this.loadIsCertified(this.toIdentify.bind(this)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
-                return;
+                // return;
             }else{
                 setTimeout(()=>{
                     this.loadingShow=false;
                     window.history.back(-1);
                 },1000)
-
             }
           }
         })
@@ -844,6 +847,20 @@ export default {
                    this.userMsg.hobby = data.hobby;
                    this.selectHelpTypeValue = data.helpAvailable || "";
                    this.userMsg.selectHelpTypeValue = data.helpAvailable || "";
+                   if(data.helpAvailable){
+                       let tempList=this.list;
+                       this.list=[];
+                       let helpAvailable=data.helpAvailable.split('、');
+                       for(var i=0;i<helpAvailable.length;i++){
+                           let curH=helpAvailable[i]
+                           if(tempList.forEach((item,index)=>{
+                               if(item.name==curH){
+                                   item.isSelect=true;
+                               }
+                           }));
+                       }
+                       this.list=tempList
+                   }
                    this.headerImgae = data.pic || '';
                    if(data.country){
                        this.country=data.country;

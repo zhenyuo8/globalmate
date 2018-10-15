@@ -141,7 +141,7 @@ export default {
             if (!flag) {
                 MessageBox.confirm('',{
                     title: '',
-                    message: '您还未完成身份认证，是否进行身份认证？',
+                    message: _this.$t('totastTips.confirmIdentify'),
                     confirmButtonText:_this.$t('button.confirm'),
                     cancelButtonText:_this.$t('button.cancel'),
                     showCancelButton: true

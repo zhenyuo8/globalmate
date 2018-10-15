@@ -735,8 +735,9 @@ export default {
                   item.endtime = _this.moment(data.conceretNeed.endTime).format("YYYY-MM-DD");
                   item.isPlacehold = false;
               }
+
               if (data.conceretNeed.description) {
-                _this.$el.querySelector(".main_decription_area textarea").value =data.conceretNeed.description;
+                  _this.description=data.conceretNeed.description
               }
             });
           }
