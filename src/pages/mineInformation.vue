@@ -528,8 +528,10 @@ export default {
                          curData.userTag=this.userList[n].userTag;
                      }
                  }
-                  curData.evaluation.score=curData.evaluation.score-0;
-                _this.commentList.push(curData);
+                 curData.evaluation.score=curData.evaluation.score-0;
+                 if(curData.needAggEntity&&curData.needAggEntity.conceretNeed){
+                      _this.commentList.push(curData);
+                 }
             }
             _this.commentList.sort(function (a,b) {
                 return b.evaluation.createTime- a.evaluation.createTime
