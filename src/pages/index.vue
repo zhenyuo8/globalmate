@@ -683,13 +683,13 @@ export default {
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
-    //    this.getContact()
+       this.getCurrentUser()
        this.initIM(this.getContact)
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
-        //   this.getContact()
+          this.getCurrentUser()
           this.initIM(this.getContact)
           clearInterval(this.timer);
         }
