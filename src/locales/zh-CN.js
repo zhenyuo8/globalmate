@@ -210,7 +210,7 @@ export default{
         'completedOrExecution':'当前任务已完成或者正在执行中',
         'confirmSendFriend':'确定发送加好友请求?',
         'areadyFriend':'已经是你的朋友了',
-        'uploadedTwo':'请确定每种认证类型都已上传两张图片!',
+        'uploadedTwo':'请确定所选类型图片已上传!',
         'receiveNewMessages':'收到新消息,请到消息列表查看！',
         'ignoreAgreement':'忽略此用户协议，您将无法使用本平台所提供的任何服务!',
         'personalFileTips':'请先点击编辑完善个人资料，然后到身份认证页面完成认证',

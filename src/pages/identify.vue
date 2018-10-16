@@ -293,23 +293,27 @@ export default {
   methods: {
     selectType(e, type) {
       if (this.identifyType.includes(type)) {
-        this.identifyType.splice(this.identifyType.indexOf(type), 1);
-        this.verifyIsShowSubmit();
+          this.identifyType.splice(this.identifyType.indexOf(type), 1);
+          this.verifyIsShowSubmit();
       } else {
          if((type=='IDCARD'&&!this['idCardFront']&&!this['idCardBack'])||(type=='STUDENTID'&&!this['studentFront']&&!this['studentBack'])||(type=='PASSPORT'&&!this['passPortFront']&&!this['passPortBack'])){
              this.identifyType.push(type);
-             this.verifyIsShowSubmit();
+             this.verifyIsShowSubmit(type);
          }else{
              this.identifyType.push(type);
+             if(this[type+'_edit']){
+                 this.verifyIsShowSubmit(type);
+             }
          }
       }
     },
-    verifyIsShowSubmit(){
+    verifyIsShowSubmit(types){
         if(this.identifyType.length>0){
             for(var i=0;i<this.identifyType.length;i++){
                 let type=this.identifyType[i];
                 if((type=='IDCARD'&&!this['idCardFront']&&!this['idCardBack'])||(type=='STUDENTID'&&!this['studentFront']&&!this['studentBack'])||(type=='PASSPORT'&&!this['passPortFront']&&!this['passPortBack'])){
                     this.submitControl=true;
+                    return
                 }else{
                     this.submitControl=false;
                 }
@@ -390,6 +394,7 @@ export default {
               "Content-Type": "multipart/form-data"
             }
           }).then(res => {
+              this[key+'_change']=true;
             this[key] = url;
           });
       });
@@ -437,7 +442,7 @@ export default {
         };
         this[type] && (obj["id"] = this[type]);
         arr.push(obj)
-      } else if (this[key1] || this[key2]) {
+    } else if (!this[key1] || !this[key2]) {
         Toast({
           message: this.$t('totastTips.uploadedTwo'),
           duration: 2000
@@ -523,6 +528,7 @@ export default {
                     switch (type) {
                       case "IDCARD":
                         this.showImage("idCardFront", "idCardBack", pic);
+                        this[type+'_edit']=true;
                         break;
                       case "STUDENTID":
                         this.showImage(
@@ -530,6 +536,7 @@ export default {
                           "studentBack",
                           pic
                         );
+                        this[type+'_edit']=true;
                         break;
                       case "PASSPORT":
                         this.showImage(
@@ -537,6 +544,7 @@ export default {
                           "passPortBack",
                           pic
                         );
+                        this[type+'_edit']=true;
                         break;
                       default:
                     }
