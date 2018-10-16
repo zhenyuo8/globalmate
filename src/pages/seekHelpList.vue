@@ -227,6 +227,7 @@ export default {
       this.loadData()
     },
     showDetail(item) {
+        let _this=this;
         if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
             this.hasReadAgreementYet()
             return
@@ -236,16 +237,33 @@ export default {
             this.toCompletePersonal();
             return;
         }
-      this.$router.push({
-        path: "detail",
-        query: {
-          token: this.userInfo.token,
-          title: item.conceretNeed.title,
-          id: item.need.id,
-          otherUserId: item.need.userId,
-          userId: this.userInfo.userId
+        var isIdentify = this.userInfo["identified"];
+        if(!isIdentify){
+            this.loadIsCertified(function () {
+                _this.$router.push({
+                  path: "detail",
+                  query: {
+                    token: _this.userInfo.token,
+                    title: item.conceretNeed.title,
+                    id: item.need.id,
+                    otherUserId: item.need.userId,
+                    userId: _this.userInfo.userId
+                  }
+                   });
+            })
+        }else{
+            this.$router.push({
+              path: "detail",
+              query: {
+                token: this.userInfo.token,
+                title: item.conceretNeed.title,
+                id: item.need.id,
+                otherUserId: item.need.userId,
+                userId: this.userInfo.userId
+              }
+            });
         }
-      });
+
     },
     goDetail(e, item) {
         if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
@@ -257,17 +275,35 @@ export default {
             this.toCompletePersonal();
             return;
         }
-      this.$router.push({
-        path: "mineInformation",
-        query: {
-          token: this.userInfo.token,
-          title: item.need.userName,
-          otherUserId: item.need.userId,
-          id: item.need.id,
-          currentuser: this.userInfo.userId,
-          seeOther: true
-        }
-      });
+        var isIdentify = this.userInfo["identified"];
+        if (!isIdentify) {
+          this.loadIsCertified(function () {
+              _this.$router.push({
+                path: "mineInformation",
+                query: {
+                  token: _this.userInfo.token,
+                  title: item.need.userName,
+                  otherUserId: item.need.userId,
+                  id: item.need.id,
+                  currentuser: _this.userInfo.userId,
+                  seeOther: true
+                }
+              });
+          }); // 再次确认一下有没有认证，有可能存在刚好通过的情况
+          return;
+      }else{
+          this.$router.push({
+            path: "mineInformation",
+            query: {
+              token: this.userInfo.token,
+              title: item.need.userName,
+              otherUserId: item.need.userId,
+              id: item.need.id,
+              currentuser: this.userInfo.userId,
+              seeOther: true
+            }
+          });
+      }
     },
     goHelp(e, item) {
       e.preventDefault;
@@ -282,27 +318,55 @@ export default {
             this.toCompletePersonal();
             return;
         }
-      if (item.need.enable != 1) {
-        Toast({
-          message: this.$t('totastTips.completedOrExecution'),
-          duration: 2000
-        });
-        return;
-      }
-      this.getUserInfo(item.need.userId, function(data) {
-        _this.$router.push({
-          path: "im",
-          query: {
-            token: _this.userInfo.token,
-            title: data.nikename,
-            id: item.need.id,
-            toChartUser: data.nikename,
-            toChartId: item.need.userId,
-            whoNeedHelf: item.need.userId,
-            userId: _this.userInfo.userId
-          }
-        });
-      });
+        var isIdentify = this.userInfo["identified"];
+        if(!isIdentify){
+            this.loadIsCertified(function () {
+                if (item.need.enable != 1) {
+                  Toast({
+                    message: _this.$t('totastTips.completedOrExecution'),
+                    duration: 2000
+                  });
+                  return;
+                }
+                _this.getUserInfo(item.need.userId, function(data) {
+                  _this.$router.push({
+                    path: "im",
+                    query: {
+                      token: _this.userInfo.token,
+                      title: data.nikename,
+                      id: item.need.id,
+                      toChartUser: data.nikename,
+                      toChartId: item.need.userId,
+                      whoNeedHelf: item.need.userId,
+                      userId: _this.userInfo.userId
+                    }
+                  });
+                });
+            })
+        }else{
+            if (item.need.enable != 1) {
+              Toast({
+                message: this.$t('totastTips.completedOrExecution'),
+                duration: 2000
+              });
+              return;
+            }
+            this.getUserInfo(item.need.userId, function(data) {
+              _this.$router.push({
+                path: "im",
+                query: {
+                  token: _this.userInfo.token,
+                  title: data.nikename,
+                  id: item.need.id,
+                  toChartUser: data.nikename,
+                  toChartId: item.need.userId,
+                  whoNeedHelf: item.need.userId,
+                  userId: _this.userInfo.userId
+                }
+              });
+            });
+        }
+
     },
     getUserInfo(userId, callback) {
       let url = "";
@@ -365,7 +429,48 @@ export default {
 
          });
      },
+     loadIsCertified(callback) {
+         let _this=this;
+       this.axios
+         .get(this.ip + "/globalmate/rest/certify/list", {
+           params: {
+             onlyCurrentUser: true,
+             token: this.userInfo.token
+           }
+         })
+         .then(res => {
+           if (res.data && res.data.length) {
+             let flag = res.data.some(item => item.isEffective == 1);
+             this.updateUserInfo({
+               certifyMsg: res.data,
+               identified: flag // 判断是否通过认证了
+             });
+             if (!flag) {
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: _this.$t('totastTips.confirmIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                 }).catch(cancel=>{
 
+                 });
+
+               return;
+             }
+             flag && callback && callback();
+           } else {
+               this.$router.push({
+                 path: "identify",
+                 query: {
+                   token: this.userInfo.token,
+                   id: "identify"
+                 }
+               });
+           }
+         });
+     },
     searchCallBack(data) {
       this.msg = !this.msg;
       this.list = [
@@ -392,11 +497,6 @@ export default {
       this.noDataTips = "";
       this.rightIn = !this.rightIn;
       this.searchContent = {};
-      // this.searchContent["type"] = this.$el.querySelector("#typesearch").value;
-      // this.searchContent["where"] =
-      //   this.$el.querySelector("#countrysearch").value +
-      //   "_" +
-      //   this.$el.querySelector("#citysearch").value;
       if (this.searchCountry || this.searchCity) {
         this.searchContent["where"] =
         this.searchCountry + "_" + this.searchCity;
@@ -452,12 +552,9 @@ export default {
       if (value) {
         if (items == "country") {
           this.country = value;
-          // this.$el.querySelector("#countrysearch").value = value;
           this.searchCountry = value;
           this.searchCity = '';
-          // this.$el.querySelector("#citysearch").value = "";
         } else {
-          // this.$el.querySelector("#citysearch").value = value;
           this.searchCity = value;
         }
       }
@@ -872,9 +969,7 @@ export default {
             }
             let data = res.data ? res.data : [];
             this.listm = [];
-            // if (data.length >= this.pageSize) {
-            //   this.allLoaded = false;
-            // }
+
             if (data.length < this.pageSize) {
               this.allLoaded = true;
             } else {
@@ -957,8 +1052,6 @@ export default {
                         }else{
 
                         }
-
-
                       }
                     }
                   }
