@@ -227,6 +227,15 @@ export default {
       this.loadData()
     },
     showDetail(item) {
+        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+            this.hasReadAgreementYet()
+            return
+        }
+        let hasCompletePersonal=this.completePersonal();
+        if(!hasCompletePersonal) {
+            this.toCompletePersonal();
+            return;
+        }
       this.$router.push({
         path: "detail",
         query: {
@@ -239,6 +248,15 @@ export default {
       });
     },
     goDetail(e, item) {
+        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+            this.hasReadAgreementYet()
+            return
+        }
+        let hasCompletePersonal=this.completePersonal();
+        if(!hasCompletePersonal) {
+            this.toCompletePersonal();
+            return;
+        }
       this.$router.push({
         path: "mineInformation",
         query: {
@@ -255,6 +273,15 @@ export default {
       e.preventDefault;
       e.cancelBubble = true;
       let _this = this;
+        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+            this.hasReadAgreementYet()
+            return
+        }
+        let hasCompletePersonal=this.completePersonal();
+        if(!hasCompletePersonal) {
+            this.toCompletePersonal();
+            return;
+        }
       if (item.need.enable != 1) {
         Toast({
           message: this.$t('totastTips.completedOrExecution'),
@@ -293,6 +320,51 @@ export default {
         })
         .catch(e => {});
     },
+     hasReadAgreementYet(){
+         let _this=this;
+         MessageBox.confirm('',{
+             title: '',
+             message: this.$t('totastTips.notReadAgreement'),
+             confirmButtonText:_this.$t('button.confirm'),
+             cancelButtonText:_this.$t('button.cancel'),
+             showCancelButton: true
+         }).then(action => {
+             _this.$router.go(-1);
+         }).catch(cancel=>{
+
+         });
+     },
+     completePersonal(){
+         let curUser=this.userInfo.curUser
+         let flag=true;
+         for(var key in curUser){
+             if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
+                 if(!curUser[key]){
+                     flag=false;
+                 }
+             }
+         }
+         return flag;
+     },
+     toCompletePersonal(){
+         let _this=this;
+         MessageBox.confirm('',{
+             title: '',
+             message: this.$t('totastTips.notCompletePerosnal'),
+             confirmButtonText:_this.$t('button.confirm'),
+             cancelButtonText:_this.$t('button.cancel'),
+             showCancelButton: true
+         }).then(action => {
+             _this.$router.push({
+                 path: 'personalFile',
+                 query: {
+                     'token': _this.userInfo.token,
+                 }
+             });
+         }).catch(cancel=>{
+
+         });
+     },
 
     searchCallBack(data) {
       this.msg = !this.msg;
