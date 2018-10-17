@@ -443,11 +443,13 @@ export default {
         this[type] && (obj["id"] = this[type]);
         arr.push(obj)
     } else if (!this[key1] || !this[key2]) {
-        Toast({
-          message: this.$t('totastTips.uploadedTwo'),
-          duration: 2000
-        })
-        return false
+        if(this.identifyType.includes(type)){
+            Toast({
+              message: this.$t('totastTips.uploadedTwo'),
+              duration: 2000
+            })
+            return false
+        }
       }
     },
     submitData() {
