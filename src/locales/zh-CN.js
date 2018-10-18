@@ -25,7 +25,9 @@ export default{
         'agreeAccept':'已读&接受',
         'delete':'删除',
         'preview':'预览',
-        'selectHelp':'选择 Ta'
+        'selectHelp':'选择 Ta',
+        'lastestList':'最新求助信息',
+        'moreList':'更多',
     },
     cityName:{
         'beijing':'北京',
@@ -210,7 +212,7 @@ export default{
         'completedOrExecution':'当前任务已完成或者正在执行中',
         'confirmSendFriend':'确定发送加好友请求?',
         'areadyFriend':'已经是你的朋友了',
-        'uploadedTwo':'请确定每种认证类型都已上传两张图片!',
+        'uploadedTwo':'请确定所选类型图片已上传!',
         'receiveNewMessages':'收到新消息,请到消息列表查看！',
         'ignoreAgreement':'忽略此用户协议，您将无法使用本平台所提供的任何服务!',
         'personalFileTips':'请先点击编辑完善个人资料，然后到身份认证页面完成认证',
@@ -221,7 +223,10 @@ export default{
         'notCompletePerosnal':'您的个人资料还未完善，请完善之后再使用!',
         'notReadAgreement':'您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
         'comfirmAddFriendE':'确定选择 <',
-        'comfirmAddFriendA':'> 来帮忙？'
+        'comfirmAddFriendA':'> 来帮忙？',
+        'readAgreementFirst':'请仔细阅读GloHelp用户协议。',
+        'readAgreementYetExt':'我已阅读并同意 ',
+        'readAgreementYetExtra':'用户协议。'
 
     },
     moneyType:{

@@ -1,3 +1,73 @@
+<style media="screen" lang="less">
+    .gl_index_list{
+        ul{
+            padding: 10px .32rem;
+            li{
+                padding: 10px 0;
+                position: relative;
+                &:after{
+                    content: '';
+                    clear: both;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    border-bottom: 1px solid #eee;
+                }
+                .list_repeat_user{
+                    display: flex;
+                }
+                .image_user {
+                  width: 1.2rem;
+                  height: 1.2rem;
+                  position: relative;
+                  .gl_user_img {
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+                .name_user {
+                  display: flex;
+                  flex: 2;
+                  flex-direction: column;
+                  text-align: left;
+                  margin-left: 0.24rem;
+                  span {
+                    &.name {
+                      font-size: 14px;
+                      color: #333;
+                    }
+                    &.type {
+                      font-size: 13px;
+                      color: #888;
+                      margin-top: 0.1rem;
+                    }
+                  }
+                }
+                .status_user {
+                  span {
+                    font-size: 14px;
+                    display: block;
+                    text-align: right;
+                    margin-bottom: 10px;
+                    &.created_time {
+                      font-size: 12px;
+                      color: blue;
+                    }
+                  }
+                }
+                .status_close {
+                  span {
+                    color: red !important;
+                  }
+                }
+            }
+        }
+    }
+</style>
+
 <template>
     <div class="index" id='index'>
         <div class="header">
@@ -27,6 +97,41 @@
       </ul>
     </div>
 
+    <div class=" gl_index_list service_star">
+        <div class="rank_title service_star_title">
+          <div class="left">
+            {{$t('button.lastestList')}}
+          </div>
+          <div class="right icon-arrow_right_samll" @click='offer'>
+            {{$t('button.moreList')}}
+          </div>
+        </div>
+        <ul>
+            <li v-for="(item,index) in myAssistList" :key="index" v-if="index<3" @click='showDetail(item)'>
+                <div class="list_repeat_user">
+                  <div class="image_user">
+                    <img :src="item.need.pic" alt="" class="gl_user_img">
+                    <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+
+                  </div>
+                  <div class="name_user">
+                    <span class="name">{{item.need.userName}}</span>
+                    <span class="type">{{item.conceretNeed.tag}}</span>
+                    <span class="type">{{$t('formTitle.reward')}}
+                      <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                      <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                    </span>
+                  </div>
+                  <div class="status_user">
+                    <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                    <span class="created_time">{{item.need.time}}</span>
+                  </div>
+                </div>
+            </li>
+            <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
+        </ul>
+    </div>
+
     <div class="rank service_star">
       <div class="rank_title service_star_title">
         <div class="left">
@@ -44,6 +149,7 @@
           </a>
           <span>{{index+1}}.{{item.name}}</span>
         </li>
+        <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
       </ul>
     </div>
     <div class="buttom_action">
@@ -55,13 +161,11 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback' :isENAgreement='isENAgreement'></protocol>
   </div>
 </template>
 
 <script>
 import loading from "../components/loading.vue";
-import protocol from "../components/protocol.vue";
 import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
 import Vue from "vue";
 Vue.component(Toast.name, Toast);
@@ -77,7 +181,7 @@ export default {
   name: "index",
   mixins: [userMix],
   components: {
-    loading,protocol
+    loading
   },
   data() {
     return {
@@ -88,11 +192,10 @@ export default {
       messageList: [],
       loadingShow: false,
       rankUserList:[],
-      notReadAgreement:true,
-      isENAgreement:this.language=='en'?true:false,
       vGold:require('../assets/images/vGold.png'),
       vSilver:require('../assets/images/vSilver.png'),
-      vCopper:require('../assets/images/vCopper.png')
+      vCopper:require('../assets/images/vCopper.png'),
+      myAssistList:[]
     };
   },
   computed: {
@@ -124,14 +227,12 @@ export default {
     },
     loadIsCertified(callback) {
         let _this=this;
-      this.axios
-        .get(this.ip + "/globalmate/rest/certify/list", {
+      this.axios.get(this.ip + "/globalmate/rest/certify/list", {
           params: {
             onlyCurrentUser: true,
             token: this.userInfo.token
           }
-        })
-        .then(res => {
+        }).then(res => {
           if (res.data && res.data.length) {
             let flag = res.data.some(item => item.isEffective == 1);
             this.updateUserInfo({
@@ -150,17 +251,20 @@ export default {
                 }).catch(cancel=>{
 
                 });
-              Toast({
-                message: this.$t('totastTips.confirmIdentify'),
-                duration: 1000
-              });
-              return;
+            }else{
+                flag && callback && callback();
             }
-            flag && callback && callback();
           } else {
-            Toast({
-              message: this.$t('totastTips.confirmIdentify'),
-              duration: 1000
+            MessageBox.confirm('',{
+                title: '',
+                message: _this.$t('totastTips.confirmIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                _this.toIdentify();
+            }).catch(cancel=>{
+
             });
           }
         });
@@ -177,6 +281,19 @@ export default {
           seeOther: true
         }
       });
+    },
+    showDetail(item) {
+        let _this=this;
+        this.$router.push({
+          path: "detail",
+          query: {
+            token: this.userInfo.token,
+            title: item.conceretNeed.title,
+            id: item.need.id,
+            otherUserId: item.need.userId,
+            userId: this.userInfo.userId
+          }
+        });
     },
     publishHandler(item) {
       if (item.key == "carry") {
@@ -198,6 +315,7 @@ export default {
        }
     },
     publish(item) {
+      let _this=this;
       if (!this.token) {
         Toast({
           message: this.$t('totastTips.loginTips'),
@@ -205,22 +323,29 @@ export default {
         });
         return;
       }
+      if(!_this.completePersonal()){
+          MessageBox.confirm('',{
+              title: '',
+              message: _this.$t('totastTips.warningIdentify'),
+              confirmButtonText:_this.$t('button.confirm'),
+              cancelButtonText:_this.$t('button.cancel'),
+              showCancelButton: true
+          }).then(action => {
+              this.$router.push({
+                  path: 'personalFile',
+                  query: {
+                      'token': _this.userInfo.token,
+                  }
+              });
+          }).catch(cancel=>{
 
-      if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-          this.hasReadAgreementYet()
-          return
+          });
+      }else if(_this.userInfo&&!_this.userInfo["identified"]){
+          _this.loadIsCertified(_this.publishHandler.bind(this, item))
+
+      }else{
+          _this.publishHandler(item);
       }
-      let hasCompletePersonal=this.completePersonal();
-      if(!hasCompletePersonal) {
-          this.toCompletePersonal();
-          return;
-      }
-      var isIdentify = this.userInfo["identified"];
-      if (!isIdentify) {
-        this.loadIsCertified(this.publishHandler.bind(this, item)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
-        return;
-      }
-      this.publishHandler(item);
     },
     goPersonalCenter() {
       if (!this.token) {
@@ -248,15 +373,6 @@ export default {
           duration: 2000
         });
       } else {
-          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-              this.hasReadAgreementYet()
-              return
-          }
-          let hasCompletePersonal=this.completePersonal();
-          if(!hasCompletePersonal) {
-              this.toCompletePersonal();
-              return;
-          }
         this.$router.push({
           path: "seekHelpList",
           query: {
@@ -274,16 +390,6 @@ export default {
           duration: 2000
         });
       } else {
-          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-              this.hasReadAgreementYet()
-              return
-          }
-
-          let hasCompletePersonal=this.completePersonal();
-          if(!hasCompletePersonal) {
-              this.toCompletePersonal();
-              return;
-          }
         this.$router.push({
           path: "myAssist",
           query: {
@@ -294,6 +400,10 @@ export default {
         });
       }
     },
+    /**
+     * 消息列表页面路由
+     * @return {[type]} [description]
+     */
     toMessage() {
       $(".message_tips").hide();
       this.$router.push({
@@ -320,6 +430,10 @@ export default {
         });
       }
     },
+    /**
+     * 榜单排名页面路由
+     * @return {[type]} [description]
+     */
     getRank(){
         let list=this.userList;
         list=list.sort(function (a,b) {
@@ -331,12 +445,12 @@ export default {
             this.rankUserList=list
         }
     },
-    agreementCallback(params){
-        this.notReadAgreement=params
-        if(params=='accept'){
-            this.readAgreement()
-        }
-    },
+
+    /**
+     * [goSwiperItem description]
+     * @param  {[type]} url [description]
+     * @return {[type]}     [description]
+     */
     goSwiperItem(url){
         window.open(url);
     },
@@ -360,39 +474,7 @@ export default {
         }
       });
     },
-    readAgreement(){
-        let postData={
-            id:this.userInfo.userId,
-            uExt3:'hasReadAgreement'
-        }
-        this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.userInfo.token,postData).then(res=> {
-            if (res.success) {
-                this.notReadAgreement=true;
-                if(!this.completePersonal()){
-                    this.$router.push({
-                        path: 'personalFile',
-                        query: {
-                            'token': this.userInfo.token,
-                        }
-                    });
-                }
-            }
-          }).catch(e => {});
-    },
-    hasReadAgreementYet(){
-        let _this=this;
-        MessageBox.confirm('',{
-            title: '',
-            message: this.$t('totastTips.notReadAgreement'),
-            confirmButtonText:_this.$t('button.confirm'),
-            cancelButtonText:_this.$t('button.cancel'),
-            showCancelButton: true
-        }).then(action => {
-            _this.notReadAgreement=false;
-        }).catch(cancel=>{
 
-        });
-    },
     completePersonal(){
         let curUser=this.userInfo.curUser
         let flag=true;
@@ -405,25 +487,7 @@ export default {
         }
         return flag;
     },
-    toCompletePersonal(){
-        let _this=this;
-        MessageBox.confirm('',{
-            title: '',
-            message: this.$t('totastTips.notCompletePerosnal'),
-            confirmButtonText:_this.$t('button.confirm'),
-            cancelButtonText:_this.$t('button.cancel'),
-            showCancelButton: true
-        }).then(action => {
-            _this.$router.push({
-                path: 'personalFile',
-                query: {
-                    'token': _this.userInfo.token,
-                }
-            });
-        }).catch(cancel=>{
 
-        });
-    },
     toIdentify(){
         this.$router.push({
           path: "identify",
@@ -574,8 +638,105 @@ export default {
         });
       }
     },
+    loadDataIndex(){
+        let _this=this;
+        this.myAssistList=[];
+        let url = "/globalmate/rest/need/query";
+        this.axios.get(this.ip + url, {
+            params: {
+                token: this.userInfo.token,
+                type: '',
+                where: '',
+                pageNum: 1,
+                pageSize: 10,
+                searchText: '',
+                enable:'1,2'
+            }
+         }).then(res => {
+            if (res.success) {
+                 this.loadingShow = false;
+              if (!res.data) {
+                this.myAssistList = [];
+                return;
+              }
+              let data = res.data ? res.data : [];
+
+              if (data.length!==0) {
+                for (var i = 0; i < data.length; i++) {
+                  if (data[i].conceretNeed && data[i].conceretNeed.title) {
+                    if (
+                      data[i].conceretNeed.pic &&
+                      data[i].conceretNeed.pic.indexOf("aliyuncs") > -1
+                    ) {
+                      data[i].conceretNeed.pic = data[i].conceretNeed.pic.split(
+                        ";"
+                      );
+                    } else {
+                      data[i].conceretNeed.pic = "";
+                    }
+                    var status = data[i].need.enable + "";
+                    switch (status) {
+                      case "1":
+                        data[i].need.status = this.$t("status.open");
+                        break;
+                      case "2":
+                        data[i].need.status = this.$t("status.execute");
+                        break;
+                      case "0":
+                        data[i].need.status = this.$t("status.closed");
+                        break;
+                      case "6":
+                        data[i].need.status = this.$t("status.complete");
+                        break;
+                      case "3":
+                        data[i].need.status = "编辑中";
+                        break;
+                      case "4":
+                        data[i].need.status = "洽谈中";
+                        break;
+                      case "5":
+                        data[i].need.status = "执行中";
+                        break;
+                      default:
+                    }
+
+                    if (data[i] && data[i].need) {
+                      let curData = data[i];
+                      if (curData.need.userId == this.userInfo.userId) {
+                        curData["self"] = true;
+                      }
+                      curData.need.time = this.moment(
+                        curData.need.createTime
+                      ).format("YYYY/MM/DD HH:mm");
+                      for (var n = 0; n < this.userList.length; n++) {
+                        if (curData.need.userId == this.userList[n].id) {
+                          curData.need.pic = this.userList[n].pic;
+                          curData.need.userTag = this.userList[n].userTag;
+                          _this.myAssistList.push(curData);
+                          _this.myAssistList.sort((a,b) => {
+                            return b.need.createTime - a.need.createTime
+                          })
+                        }
+                      }
+                    }
+                  }
+                }
+                this.loadingShow = false;
+              }
+            }
+          }).catch(e => {
+            if (this.myAssistList&&this.myAssistList.length == 0) {
+              setTimeout(() => {
+                this.nodataFlag = true;
+                this.loadingShow = false;
+              }, 500);
+              this.noDataTips = this.$t('noDataDisplay');
+            }
+          });
+    }
   },
   activated() {
+
     this.mainmenu = [
       {
         title: this.$t("formName.study"),
@@ -649,7 +810,6 @@ export default {
       }
     ];
     if(this.language&&this.language.indexOf('en')>-1){
-        this.isENAgreement=true;
         this.slides=[
             {
                 url:url1,
@@ -659,10 +819,6 @@ export default {
                 url:url2,
                 href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
             },
-            // {
-            //     url:url3,
-            //     href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
-            // },
         ]
     }else{
          this.slides=[
@@ -674,45 +830,27 @@ export default {
                  url:url2,
                  href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
              },
-            //  {
-            //      url:url3,
-            //      href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
-            //  },
          ]
-        this.isENAgreement=false;
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
        this.getCurrentUser()
        this.initIM(this.getContact)
+       this.loadDataIndex()
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
           this.getCurrentUser()
           this.initIM(this.getContact)
+          this.loadDataIndex()
           clearInterval(this.timer);
         }
       }, 200);
     }
-    if(this.userInfo&&this.userInfo.curUser){
-        if(!this.userInfo.curUser.uExt3){
-            this.notReadAgreement=false;
-        }
-    }else{
-        this.timer1 = setInterval(() => {
-            if(this.userInfo&&this.userInfo.curUser){
-                 clearInterval(this.timer1);
-                 if(!this.userInfo.curUser.uExt3){
-                     this.notReadAgreement=false;
-                 }
-            }
-        }, 200);
-    }
   },
   deactivated() {
     clearInterval(this.timer);
-    clearInterval(this.timer1);
   },
 };
 </script>
@@ -1088,15 +1226,16 @@ ul {
   ); /* 标准的语法 */
 }
 
-.rank {
+.rank ,.gl_index_list{
   margin-top: 7px;
   background: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   color: #999;
 }
 .rank ul {
-    min-height: 80px;
-    padding: 6px 0.6rem;
+    /*min-height: 80px;*/
+    padding: 10px 0.6rem;
+    width: 100%;
 }
 .rank ul li {
   display: inline-block;

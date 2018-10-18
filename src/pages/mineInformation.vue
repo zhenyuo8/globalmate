@@ -483,67 +483,147 @@ export default {
             });
         },
         chartWith(){
-            this.$router.push({
-                path: 'im',
-                query: {
-                    'token': this.$route.query.token,
-                    'title': this.information.nikename,
-                    'id': this.$route.query.id,
-                    'toChartUser':this.information.nikename,
-                    'toChartId':this.otherUserId,
-                }
-            });
+            let _this=this;
+            if(!this.completePersonal()){
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: this.$t('totastTips.warningIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                     this.$router.push({
+                         path: 'personalFile',
+                         query: {
+                             'token': this.userInfo.token,
+                         }
+                     });
+                 }).catch(cancel=>{
+
+                 });
+
+             }else if(this.userInfo&&!this.userInfo["identified"]){
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: this.$t('totastTips.warningIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                     this.$router.push({
+                       path: "identify",
+                       query: {
+                         token: this.userInfo.token,
+                         id: "identify"
+                       }
+                     });
+                 }).catch(cancel=>{
+
+                 });
+             }else{
+                 this.$router.push({
+                     path: 'im',
+                     query: {
+                         'token': this.$route.query.token,
+                         'title': this.information.nikename,
+                         'id': this.$route.query.id,
+                         'toChartUser':this.information.nikename,
+                         'toChartId':this.otherUserId,
+                     }
+                 });
+             }
+
         },
         addIMFriend(){
             let _this=this;
-            let content={
-                'item':'',
-                'chatContent':"<i style='color:red'>"+this.$t('formTitle.befriends')+"!</i>",
-                'chatType':'add_friends_request',
-                'request_person':this.userInfo.userId
-            }
-            YYIMChat.getRosterItems({
-            	success: function(data){
-                    if(data){
-                        let userlist=JSON.parse(data);
-                        var isFriend=userlist.some((item,index)=>{
-                            return item.id==_this.information.id
-                        });
-                        if(isFriend){
-                            Toast({
-              					message: _this.information.nikename+this.$t('totastTips.areadyFriend'),
-              					duration: 2000
-            				});
-                        }else{
-                            MessageBox.confirm('',{
-                                title: '',
-                                message: _this.$t('totastTips.confirmSendFriend'),
-                                confirmButtonText:_this.$t('button.confirm'),
-                                cancelButtonText:_this.$t('button.cancel'),
-                                showCancelButton: true
-                            }).then(action => {
-                                YYIMChat.sendTextMessage({
-                                    to: _this.information.id+'',
-                                    type: 'chat',
-                                    content: JSON.stringify(content),
-                                    body: {},
-                                    success:function(data){
-                                    },
-                                    error:function(err){
-                                        console.log(err);
-                                    }
-                                })
-                            }).catch(cancel=>{
+            if(!this.completePersonal()){
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: this.$t('totastTips.warningIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                     this.$router.push({
+                         path: 'personalFile',
+                         query: {
+                             'token': this.userInfo.token,
+                         }
+                     });
+                 }).catch(cancel=>{
 
-                            });
-                        }
-                    }
-            	},
-            	error: function(err){
-            		console.log(err);
-            	},
-            	complete: function(){}
-            });
+                 });
+
+             }else if(this.userInfo&&!this.userInfo["identified"]){
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: this.$t('totastTips.warningIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                     this.$router.push({
+                       path: "identify",
+                       query: {
+                         token: this.userInfo.token,
+                         id: "identify"
+                       }
+                     });
+                 }).catch(cancel=>{
+
+                 });
+
+             }else{
+                 let content={
+                     'item':'',
+                     'chatContent':"<i style='color:red'>"+this.$t('formTitle.befriends')+"!</i>",
+                     'chatType':'add_friends_request',
+                     'request_person':this.userInfo.userId
+                 }
+                 YYIMChat.getRosterItems({
+                 	success: function(data){
+                         if(data){
+                             let userlist=JSON.parse(data);
+                             var isFriend=userlist.some((item,index)=>{
+                                 return item.id==_this.information.id
+                             });
+                             if(isFriend){
+                                 Toast({
+                   					message: _this.information.nikename+this.$t('totastTips.areadyFriend'),
+                   					duration: 2000
+                 				});
+                             }else{
+                                 MessageBox.confirm('',{
+                                     title: '',
+                                     message: _this.$t('totastTips.confirmSendFriend'),
+                                     confirmButtonText:_this.$t('button.confirm'),
+                                     cancelButtonText:_this.$t('button.cancel'),
+                                     showCancelButton: true
+                                 }).then(action => {
+                                     YYIMChat.sendTextMessage({
+                                         to: _this.information.id+'',
+                                         type: 'chat',
+                                         content: JSON.stringify(content),
+                                         body: {},
+                                         success:function(data){
+                                         },
+                                         error:function(err){
+                                             console.log(err);
+                                         }
+                                     })
+                                 }).catch(cancel=>{
+
+                                 });
+                             }
+                         }
+                 	},
+                 	error: function(err){
+                 		console.log(err);
+                 	},
+                 	complete: function(){}
+                 });
+             }
+
         },
         getEvalute(){
             let url='/globalmate/rest/evaluate/list'
@@ -600,6 +680,18 @@ export default {
                     'isOthers':this.isOthers
                 }
             });
+        },
+        completePersonal(){
+            let curUser=this.userInfo.curUser
+            let flag=true;
+            for(var key in curUser){
+                if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
+                    if(!curUser[key]){
+                        flag=false;
+                    }
+                }
+            }
+            return flag;
         },
         loadInfo(){
             let url='/globalmate/rest/user/getUserByToken'

@@ -407,7 +407,6 @@ export default {
                               _this.assistList.push(result)
                           }
                         _this.pushList.push(result);
-                        console.log(_this.pushList,99999);
                       });
                   }
 
@@ -418,25 +417,67 @@ export default {
         .catch();
     },
     goChart() {
-      if (this.listData.enable != 1) {
-        Toast({
-          message: this.$t('totastTips.completedOrExecution'),
-          duration: 2000
-        });
-        return;
-      }
+       let _this=this;
+       if(!this.completePersonal()){
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                    path: 'personalFile',
+                    query: {
+                        'token': this.userInfo.token,
+                    }
+                });
+            }).catch(cancel=>{
 
-      this.$router.push({
-        path: "im",
-        query: {
-          token: this.userInfo.token,
-          title: this.othersInfo.nikename,
-          id: this.$route.query.id,
-          toChartUser: this.othersInfo.nikename,
-          toChartId: this.othersInfo.id,
-          fromDetail: 'true'
+            });
+
+        }else if(this.userInfo&&!this.userInfo["identified"]){
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                  path: "identify",
+                  query: {
+                    token: this.userInfo.token,
+                    id: "identify"
+                  }
+                });
+            }).catch(cancel=>{
+
+            });
+
+        }else{
+            if (this.listData.enable != 1) {
+              Toast({
+                message: this.$t('totastTips.completedOrExecution'),
+                duration: 2000
+              });
+              return;
+            }
+
+            this.$router.push({
+              path: "im",
+              query: {
+                token: this.userInfo.token,
+                title: this.othersInfo.nikename,
+                id: this.$route.query.id,
+                toChartUser: this.othersInfo.nikename,
+                toChartId: this.othersInfo.id,
+                fromDetail: 'true'
+              }
+            });
         }
-      });
+
+
     },
     getOthersInfo(userId, callback) {
       this.axios
@@ -460,17 +501,56 @@ export default {
         });
     },
     goChat(item, items) {
-      this.$router.push({
-        path: "im",
-        query: {
-          token: this.userInfo.token,
-          title: items.userInfo.nikename,
-          id: item.id,
-          toChartUser: items.userInfo.id,
-          toChartId: items.userInfo.id,
-          fromDetail: 'true'
+        if(!this.completePersonal()){
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                    path: 'personalFile',
+                    query: {
+                        'token': this.userInfo.token,
+                    }
+                });
+            }).catch(cancel=>{
+
+            });
+
+        }else if(this.userInfo&&!this.userInfo["identified"]){
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                  path: "identify",
+                  query: {
+                    token: this.userInfo.token,
+                    id: "identify"
+                  }
+                });
+            }).catch(cancel=>{
+
+            });
+
+        }else{
+            this.$router.push({
+              path: "im",
+              query: {
+                token: this.userInfo.token,
+                title: items.userInfo.nikename,
+                id: item.id,
+                toChartUser: items.userInfo.id,
+                toChartId: items.userInfo.id,
+                fromDetail: 'true'
+              }
+            });
         }
-      });
   },
     goDetail(e, item) {
       e.preventDefault;
@@ -487,6 +567,18 @@ export default {
       });
     },
 
+    completePersonal(){
+        let curUser=this.userInfo.curUser
+        let flag=true;
+        for(var key in curUser){
+            if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
+                if(!curUser[key]){
+                    flag=false;
+                }
+            }
+        }
+        return flag;
+    },
   },
   created() {}
 };

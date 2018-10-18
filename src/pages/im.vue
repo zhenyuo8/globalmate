@@ -620,7 +620,7 @@ export default {
 }
 
 .convo {
-  margin-top: 90px !important;
+  margin-top: 100px !important;
   padding-bottom: 50px;
 }
 .gl_no_item {

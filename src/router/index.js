@@ -152,6 +152,6 @@ export default new Router({
       meta: {
         index: 20
       }
-    },
+    }
   ]
 })

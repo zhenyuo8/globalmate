@@ -1,11 +1,11 @@
 <style scoped lang="less">
 	#protocol{
-		position: fixed;
-		top: 64px;
-		left: 4%;
-		right: 4%;
-		 bottom: 80px;
 		font-size: 16px;
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
 		&.gl_english{
 			font-family: Arial;
 		}
@@ -47,13 +47,10 @@
 		.bottom_action{
 			display: flex;
 			background: #fff;
-			margin-top: 10px;
-			position: absolute;
-			bottom: 0;
 			width: 100%;
 			button{
 				flex: 1;
-				padding: 8px 0;
+				padding: 10px 0;
 				&.ignore{
 					color:#888;
 					position: relative;
@@ -174,8 +171,8 @@
 				<p>4.3.2. After the helper and the help seeker reach the helping consensus, if the helping contract is established and effective, neither party is allowed to unilaterally default. During the performance of the contract, both parties have the right to investigate the legal responsibility of the default party.</p>
 				<p>4.4. The rights and obligations of the help seeker:</p>
 				<p>4.4.1. The demand information issued by the help seeker should be truthful, accurate and legitimate. The help seeker is obliged to communicate in advance about the questions asked by the helper and the helping related issues, and to facilitate the helping process.</p>
-				<p>4.4.2 The help seeker issuing the demand information, is equal to authorize the platform to disclose the necessary information to the helper and agree to accept the matchmaking service provided by the platform.</p>
-				<p>4.4.3 In order to better meet the needs of the help-seekers and improve the information matching efficiency between the supply and demand, the platform will push the demands issued by the help seekers during their validity period. The helper can choose whether to accept the push.</p>
+				<p>4.4.2. The help seeker issuing the demand information, is equal to authorize the platform to disclose the necessary information to the helper and agree to accept the matchmaking service provided by the platform.</p>
+				<p>4.4.3. In order to better meet the needs of the help-seekers and improve the information matching efficiency between the supply and demand, the platform will push the demands issued by the help seekers during their validity period. The helper can choose whether to accept the push.</p>
 
 				<h6>5. Intellectual Property Rights</h6>
 				<p>5.1. Intellectual property rights of all information published by the user on the platform including but not limited to texts, pictures and videos, except for the right of authorship, publication and modification, are exclusively and freely authorized to the platform to use and so are the rights to maintain the above intellectual property rights. This Agreement has constituted a written agreement stipulated in Article 25 of the Copyright Law of the People's Republic of China, the validity of which covers the content of any work protected by the copyright law issued by the user on the platform, regardless of whether the content is formed before the signing of this agreement. The user may contact us to expressly revoke some or all of the above authorizations.</p>
@@ -207,11 +204,10 @@
 				<p>10.1 The validity, performance and all matters relating to the validity of this agreement and its rules are subject to the laws of the People's Republic of China. Any dispute resolution shall be governed only by the laws of the People's Republic of China.</p>
 
 			</div>
-		</div>
-
-		<div class="bottom_action">
-			<button type="button" name="button" class="ignore" @click='ignore'>{{$t('button.ignore')}}</button>
-			<button type="button" name="button" class="accept" @click='accept'>{{$t('button.agreeAccept')}}</button>
+			<div class="bottom_action">
+				<button type="button" name="button" class="ignore" @click='ignore'>{{$t('button.ignore')}}</button>
+				<button type="button" name="button" class="accept" @click='accept'>{{$t('button.agreeAccept')}}</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -223,20 +219,11 @@ Vue.component(MessageBox.name, MessageBox);
 export default {
   data() {
     return {
-		isEN:false,
-		notReadAgreement:true
+		isENAgreement:this.language=='en'?true:false,
 	}
   },
   props: {
-	  userIdAgreement:{
-		  type:String,
-		  default:''
-	  },
-	  isENAgreement:{
-		  type:Boolean,
-		  default:false
-	  },
-	  agreementCallback:{
+	  actionCallBack:{
 		  type:Function,
 		  default:function () {
 
@@ -245,20 +232,11 @@ export default {
   },
   methods: {
 	  accept(){
-		  this.agreementCallback('accept')
+		  this.actionCallBack('accept')
 	  },
 	  ignore(){
-		  let _this=this;
-		  MessageBox.confirm("", {
-	        title: "",
-	        message: '<div style="color:red;font-size:16px;">'+this.$t('totastTips.ignoreAgreement')+'</div>',
-	        confirmButtonText: this.$t("button.confirm"),
-	        cancelButtonText: this.$t("button.cancel"),
-	        showCancelButton: true
-	      }).then(action => {
-	          _this.agreementCallback(true);
-	        }).catch(cancel => {});
-	  }
+		  this.actionCallBack('ignore')
+	  },
   },
   activated(){
 

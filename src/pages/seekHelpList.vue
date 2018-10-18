@@ -227,55 +227,93 @@ export default {
       this.loadData()
     },
     showDetail(item) {
-      this.$router.push({
-        path: "detail",
-        query: {
-          token: this.userInfo.token,
-          title: item.conceretNeed.title,
-          id: item.need.id,
-          otherUserId: item.need.userId,
-          userId: this.userInfo.userId
-        }
-      });
+        let _this=this;
+        this.$router.push({
+          path: "detail",
+          query: {
+            token: this.userInfo.token,
+            title: item.conceretNeed.title,
+            id: item.need.id,
+            otherUserId: item.need.userId,
+            userId: this.userInfo.userId
+          }
+        });
     },
     goDetail(e, item) {
-      this.$router.push({
-        path: "mineInformation",
-        query: {
-          token: this.userInfo.token,
-          title: item.need.userName,
-          otherUserId: item.need.userId,
-          id: item.need.id,
-          currentuser: this.userInfo.userId,
-          seeOther: true
-        }
-      });
+        this.$router.push({
+          path: "mineInformation",
+          query: {
+            token: this.userInfo.token,
+            title: item.need.userName,
+            otherUserId: item.need.userId,
+            id: item.need.id,
+            currentuser: this.userInfo.userId,
+            seeOther: true
+          }
+        });
     },
     goHelp(e, item) {
       e.preventDefault;
       e.cancelBubble = true;
       let _this = this;
-      if (item.need.enable != 1) {
-        Toast({
-          message: this.$t('totastTips.completedOrExecution'),
-          duration: 2000
-        });
-        return;
-      }
-      this.getUserInfo(item.need.userId, function(data) {
-        _this.$router.push({
-          path: "im",
-          query: {
-            token: _this.userInfo.token,
-            title: data.nikename,
-            id: item.need.id,
-            toChartUser: data.nikename,
-            toChartId: item.need.userId,
-            whoNeedHelf: item.need.userId,
-            userId: _this.userInfo.userId
-          }
-        });
-      });
+        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+            this.hasReadAgreementYet()
+            return
+        }
+        let hasCompletePersonal=this.completePersonal();
+        if(!hasCompletePersonal) {
+            this.toCompletePersonal();
+            return;
+        }
+        var isIdentify = this.userInfo["identified"];
+        if(!isIdentify){
+            this.loadIsCertified(function () {
+                if (item.need.enable != 1) {
+                  Toast({
+                    message: _this.$t('totastTips.completedOrExecution'),
+                    duration: 2000
+                  });
+                  return;
+                }
+                _this.getUserInfo(item.need.userId, function(data) {
+                  _this.$router.push({
+                    path: "im",
+                    query: {
+                      token: _this.userInfo.token,
+                      title: data.nikename,
+                      id: item.need.id,
+                      toChartUser: data.nikename,
+                      toChartId: item.need.userId,
+                      whoNeedHelf: item.need.userId,
+                      userId: _this.userInfo.userId
+                    }
+                  });
+                });
+            })
+        }else{
+            if (item.need.enable != 1) {
+              Toast({
+                message: this.$t('totastTips.completedOrExecution'),
+                duration: 2000
+              });
+              return;
+            }
+            this.getUserInfo(item.need.userId, function(data) {
+              _this.$router.push({
+                path: "im",
+                query: {
+                  token: _this.userInfo.token,
+                  title: data.nikename,
+                  id: item.need.id,
+                  toChartUser: data.nikename,
+                  toChartId: item.need.userId,
+                  whoNeedHelf: item.need.userId,
+                  userId: _this.userInfo.userId
+                }
+              });
+            });
+        }
+
     },
     getUserInfo(userId, callback) {
       let url = "";
@@ -293,7 +331,93 @@ export default {
         })
         .catch(e => {});
     },
+     hasReadAgreementYet(){
+         let _this=this;
+         MessageBox.confirm('',{
+             title: '',
+             message: this.$t('totastTips.notReadAgreement'),
+             confirmButtonText:_this.$t('button.confirm'),
+             cancelButtonText:_this.$t('button.cancel'),
+             showCancelButton: true
+         }).then(action => {
+             _this.$router.go(-1);
+         }).catch(cancel=>{
 
+         });
+     },
+     completePersonal(){
+         let curUser=this.userInfo.curUser
+         let flag=true;
+         for(var key in curUser){
+             if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
+                 if(!curUser[key]){
+                     flag=false;
+                 }
+             }
+         }
+         return flag;
+     },
+     toCompletePersonal(){
+         let _this=this;
+         MessageBox.confirm('',{
+             title: '',
+             message: this.$t('totastTips.notCompletePerosnal'),
+             confirmButtonText:_this.$t('button.confirm'),
+             cancelButtonText:_this.$t('button.cancel'),
+             showCancelButton: true
+         }).then(action => {
+             _this.$router.push({
+                 path: 'personalFile',
+                 query: {
+                     'token': _this.userInfo.token,
+                 }
+             });
+         }).catch(cancel=>{
+
+         });
+     },
+     loadIsCertified(callback) {
+         let _this=this;
+       this.axios
+         .get(this.ip + "/globalmate/rest/certify/list", {
+           params: {
+             onlyCurrentUser: true,
+             token: this.userInfo.token
+           }
+         })
+         .then(res => {
+           if (res.data && res.data.length) {
+             let flag = res.data.some(item => item.isEffective == 1);
+             this.updateUserInfo({
+               certifyMsg: res.data,
+               identified: flag // 判断是否通过认证了
+             });
+             if (!flag) {
+                 MessageBox.confirm('',{
+                     title: '',
+                     message: _this.$t('totastTips.confirmIdentify'),
+                     confirmButtonText:_this.$t('button.confirm'),
+                     cancelButtonText:_this.$t('button.cancel'),
+                     showCancelButton: true
+                 }).then(action => {
+                 }).catch(cancel=>{
+
+                 });
+
+               return;
+             }
+             flag && callback && callback();
+           } else {
+               this.$router.push({
+                 path: "identify",
+                 query: {
+                   token: this.userInfo.token,
+                   id: "identify"
+                 }
+               });
+           }
+         });
+     },
     searchCallBack(data) {
       this.msg = !this.msg;
       this.list = [
@@ -320,11 +444,6 @@ export default {
       this.noDataTips = "";
       this.rightIn = !this.rightIn;
       this.searchContent = {};
-      // this.searchContent["type"] = this.$el.querySelector("#typesearch").value;
-      // this.searchContent["where"] =
-      //   this.$el.querySelector("#countrysearch").value +
-      //   "_" +
-      //   this.$el.querySelector("#citysearch").value;
       if (this.searchCountry || this.searchCity) {
         this.searchContent["where"] =
         this.searchCountry + "_" + this.searchCity;
@@ -380,12 +499,9 @@ export default {
       if (value) {
         if (items == "country") {
           this.country = value;
-          // this.$el.querySelector("#countrysearch").value = value;
           this.searchCountry = value;
           this.searchCity = '';
-          // this.$el.querySelector("#citysearch").value = "";
         } else {
-          // this.$el.querySelector("#citysearch").value = value;
           this.searchCity = value;
         }
       }
@@ -783,8 +899,10 @@ export default {
       if(this.loadCompleted){
           postData['enable']='0,6';
       }else{
+          postData['enable']='1,2';
           if(postData['enable']){
-              delete postData['enable'];
+
+            //   delete postData['enable'];
           }
       }
       this.axios
@@ -800,9 +918,7 @@ export default {
             }
             let data = res.data ? res.data : [];
             this.listm = [];
-            // if (data.length >= this.pageSize) {
-            //   this.allLoaded = false;
-            // }
+
             if (data.length < this.pageSize) {
               this.allLoaded = true;
             } else {
@@ -885,8 +1001,6 @@ export default {
                         }else{
 
                         }
-
-
                       }
                     }
                   }

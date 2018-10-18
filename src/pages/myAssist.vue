@@ -414,43 +414,16 @@ export default {
                           (function(curData) {
                             _this.getPushItem(curData, function(result) {
                               _this.myAssistList.push(result);
-                              let len = _this.myAssistList.length;
-                              let minIndex, temp;
-                              for (var i = 0; i < len; i++) {
-                                minIndex = i;
-                                for (var j = i + 1; j < len; j++) {
-                                  if (
-                                    _this.myAssistList[j].need.createTime >
-                                    _this.myAssistList[minIndex].need.createTime
-                                  ) {
-                                    minIndex = j;
-                                  }
-                                }
-                                temp = _this.myAssistList[i];
-                                _this.myAssistList[i] = _this.myAssistList[minIndex];
-                                _this.myAssistList[minIndex] = temp;
-                              }
+                              _this.myAssistList.sort((a,b) => {
+                                return b.need.createTime - a.need.createTime
+                              })
                             });
                           })(curData);
                         } else {
                           _this.myAssistList.push(curData);
-                          let len = _this.myAssistList.length;
-                          let minIndex, temp;
-                          for (var i = 0; i < len; i++) {
-                            minIndex = i;
-                            for (var j = i + 1; j < len; j++) {
-                              if (
-                                _this.myAssistList[j].need.createTime >
-                                _this.myAssistList[minIndex].need.createTime
-                              ) {
-                                minIndex = j;
-                              }
-                            }
-                            temp = _this.myAssistList[i];
-                            _this.myAssistList[i] = _this.myAssistList[minIndex];
-                            _this.myAssistList[minIndex] = temp;
-                          }
-
+                          _this.myAssistList.sort((a,b) => {
+                            return b.need.createTime - a.need.createTime
+                          })
                         }
                       }
                     }
@@ -503,7 +476,11 @@ export default {
     this.myAssistList=[];
     this.pageSize=10;
     this.canNotLoadMore=false;
-    this.mySolove=this.$route.query.id=='solove'?true:false;
+    if(this.$route.query&&this.$route.query.id&&this.$route.query=='solove'){
+        this.mySolove=true;
+    }else{
+        this.mySolove=false;
+    }
     if (this.userInfo && this.userInfo.token) {
       this.loadData();
     } else {

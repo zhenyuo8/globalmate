@@ -363,7 +363,7 @@ export default {
             _this.getContact();
         },
         error: function(err) {
-            this.loadingShow=false;
+            _this.loadingShow=false;
             console.log(err);
         },
         complete: function() {}
@@ -386,7 +386,7 @@ export default {
         startVersion: 0,
         endVersion: 100,
         success: function(data) {
-            this.loadingShow = false;
+            _this.loadingShow = false;
           if (data.result && data.result.length != 0) {
             var result = data.result;
             var len = result.length - 1;
@@ -403,7 +403,7 @@ export default {
           return;
         },
         error: function(err) {
-            this.loadingShow=false;
+            _this.loadingShow=false;
         }
       });
     },
@@ -477,19 +477,19 @@ export default {
                     if(temp.sessionVersion>0){
                         if(temp.sessionVersion>temp.readedVersion){
                             _this.friendsUnRead+=1;
-                            this.friends.unshift(temp);
+                            _this.friends.unshift(temp);
                         }else{
-                            this.friends.push(temp);
+                            _this.friends.push(temp);
                         }
                     }
                 }
-                this.loadingShow = false;
+                _this.loadingShow = false;
               }
             } else {
-              this.loadingShow = false;
+              _this.loadingShow = false;
             }
           }).catch(e => {
-            this.loadingShow = false;
+            _this.loadingShow = false;
           });
       }
     },
@@ -632,14 +632,17 @@ export default {
         size: 100,
         success: function(data) {
             if(data&&data.list&&data.list instanceof Array){
-                _this.processList(data.list);
+
                 if(data.list.length==0){
                     _this.nofriends=true;
+                }else{
+                    _this.processList(data.list);
                 }
             }
+            _this.loadingShow=false;
         },
         error: function(err) {
-            this.loadingShow=false;
+            _this.loadingShow=false;
         }
       });
     },

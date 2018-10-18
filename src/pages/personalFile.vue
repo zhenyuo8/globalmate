@@ -846,7 +846,7 @@ export default {
          }).then(res => {
              if (res.success) {
                let data = res.data;
-               this.loadIsCertified(this.toIdentify.bind(this))
+            //    this.loadIsCertified(this.toIdentify.bind(this))
                if(params){
                    this.updateUserInfo({
                      curUser: data,

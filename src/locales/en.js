@@ -25,7 +25,9 @@ export default{
         'agreeAccept':'Read & Accept',
         'delete':'Delete',
         'preview':'Preview',
-        'selectHelp':'select HM/HER'
+        'selectHelp':'select HM/HER',
+        'lastestList':'New',
+        'moreList':'More ',
     },
     cityName:{
         'beijing':'Beijing',
@@ -209,7 +211,7 @@ export default{
         'completedOrExecution':'The current mission is completed or under executing.',
         'confirmSendFriend':'Confirm sending add friend request?',
         'areadyFriend':' is your friend already.',
-        'uploadedTwo':'Please confirm that each type of authentication has uploaded two pictures.',
+        'uploadedTwo':'Please confirm that the image of the selected type has been uploaded.',
         'receiveNewMessages':'Receive new messages,read it in Message List!',
         'ignoreAgreement':'If you skip this agreement, you could not access to any service we provide！',
         'personalFileTips':'Please complete your personal information and identity in "My GloHelp".',
@@ -220,7 +222,10 @@ export default{
         'notCompletePerosnal':'You personel information have not complete yet.please fill up your information first!',
         'notReadAgreement':'You have read and agree the agreement yet.go to read agreement？',
         'comfirmAddFriendE':'Confirm  to  choose <',
-        'comfirmAddFriendA':'> to  help?'
+        'comfirmAddFriendA':'> to  help?',
+        'readAgreementFirst':'Please read GloHelp agreement first.',
+        'readAgreementYetExt':'I read and agree ',
+        'readAgreementYetExtra':'Agreement.'
     },
     moneyType:{
         'chinaType':'RMB',
