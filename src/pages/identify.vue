@@ -131,6 +131,25 @@ p {
   padding: 10px 0.4rem;
   background: aliceblue;
 }
+.read_agreement{
+    line-height: 32px;
+    font-size: 16px;
+    text-align: left;
+    margin-left: .4rem;
+    a{
+        text-decoration: underline;
+    }
+    span{
+        color: #666;
+        margin-right: .1rem;
+        &.icon-checkbox:before{
+            margin-right: .12rem;
+        }
+        &.checked{
+            color: rgb(41, 182, 246);
+        }
+    }
+}
 </style>
 
 <template>
@@ -140,8 +159,8 @@ p {
       <p class="gl_waring">{{$t('totastTips.warningIdentify')}}</p>
       <div class="identify_type_select">
           <span class="icon-checkbox" :class="identifyType.includes('STUDENTID')?'select_class':''" @click="selectType($event,'STUDENTID')">{{$t('personaPage.studentcard')}}</span>
-        <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
-        <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')">{{$t('personaPage.passport')}}</span>
+        <!-- <span class="icon-checkbox" :class="identifyType.includes('IDCARD')?'select_class':''" @click="selectType($event,'IDCARD')">{{$t('personaPage.idcard')}}</span>
+        <span class="icon-checkbox" :class="identifyType.includes('PASSPORT')?'select_class':''" @click="selectType($event,'PASSPORT')">{{$t('personaPage.passport')}}</span> -->
       </div>
     </div>
     <p class="gl_totast_p" v-show="identifyType.length==0">{{$t('personaPage.lessType')}}</p>
@@ -240,11 +259,13 @@ p {
         <div class="line_separeat" v-show='identifyType.includes("PASSPORT")'>
         </div>
       </template>
+      <p class="read_agreement"><span class="icon-checkbox" @click="checkboxOnclick" :class="isAgreement?'checked':''">{{$t('totastTips.readAgreementYetExt')}}</span><a href="javascript:;" @click="readAll">GloHelp {{$t('totastTips.readAgreementYetExtra')}}</a></p>
     </div>
     <button v-show="identifyType.length!==0&& submitControl" type="button" name="button" class='submitbtn' @click='submitData'>{{$t('button.submit')}}</button>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
+    <protocol v-show="read_agreement_route" :actionCallBack="actionCallBack"></protocol>
   </div>
 </template>
 
@@ -253,6 +274,7 @@ import { Toast } from "mint-ui";
 import Vue from 'vue'
 Vue.component(Toast.name, Toast)
 import loading from "../components/loading.vue";
+import protocol from "../components/protocol.vue";
 import userMix from "../mixins/userInfo";
 export default {
   name: "identify",
@@ -266,7 +288,7 @@ export default {
       showSTUDENTID: false,
       showPASSPORT: false,
       hasAreadyUpload: false,
-      loadingShow: true,
+      loadingShow: false,
       idCardFront: "",
       idCardFrontId: "",
       idCardBack: "",
@@ -279,11 +301,13 @@ export default {
       passPortFrontId: "",
       passPortBack: "",
       passPortBackId: "",
+      isAgreement:false,
+      read_agreement_route:false
       // isWXVerified: false,
     };
   },
   components: {
-    loading
+    loading,protocol
   },
   computed: {
     isIOS() {
@@ -291,6 +315,23 @@ export default {
     }
   },
   methods: {
+      checkboxOnclick(e){
+		  if(this.isAgreement){
+			  $('.icon-checkbox').removeClass('checked');
+		  }else{
+			  $('.icon-checkbox').addClass('checked');
+		  }
+		  this.isAgreement=!this.isAgreement;
+	  },
+      actionCallBack(keywords){
+          if(keywords=='accept'){
+              $('.icon-checkbox').addClass('checked');
+          }
+          this.read_agreement_route=!this.read_agreement_route;
+      },
+      readAll(){
+          this.read_agreement_route=true;
+      },
     selectType(e, type) {
       if (this.identifyType.includes(type)) {
           this.identifyType.splice(this.identifyType.indexOf(type), 1);
@@ -454,12 +495,20 @@ export default {
     },
     submitData() {
       let data = [];
+      if(!this.isAgreement){
+          Toast({
+            message: this.$t('totastTips.readAgreementFirst'),
+            duration: 2000
+          });
+          return
+      }
       let res = this.handleData(data, "idCardFront", "idCardBack", "IDCARD");
       if (res === false) return
       res = this.handleData(data, "studentFront", "studentBack", "STUDENTID");
       if (res === false) return
       res = this.handleData(data, "passPortFront", "passPortBack", "PASSPORT");
       if (res === false) return
+
       if (data.length === 0) {
         Toast({
           message: this.$t('totastTips.indentifySelect'),
@@ -482,6 +531,10 @@ export default {
               message: this.$t('totastTips.reviewIdentify'),
               duration: 2000
             });
+            if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
+                this.readAgreement()
+                return
+            }
             setTimeout(() => {
               window.history.go(-1);
             }, 2000);
@@ -498,7 +551,21 @@ export default {
           console.log(e);
         });
     },
+    readAgreement(){
+        let postData={
+            id:this.userInfo.userId,
+            uExt3:'hasReadAgreement'
+        }
+        this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.userInfo.token,postData).then(res=> {
+            if (res.success) {
+
+            }
+          }).catch(e => {});
+    },
     loadData() {
+        if(this.userInfo&&this.userInfo.curUser&&this.userInfo.curUser.uExt3){
+            this.isAgreement=true;
+        }
       this.axios.get( this.ip + "/globalmate/rest/certify/list", {
         params: {
           token: this.userInfo.token,

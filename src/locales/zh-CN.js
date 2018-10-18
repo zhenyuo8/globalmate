@@ -221,7 +221,10 @@ export default{
         'notCompletePerosnal':'您的个人资料还未完善，请完善之后再使用!',
         'notReadAgreement':'您还未阅读GloHelp公众号的用户协议,是否阅读该协议？',
         'comfirmAddFriendE':'确定选择 <',
-        'comfirmAddFriendA':'> 来帮忙？'
+        'comfirmAddFriendA':'> 来帮忙？',
+        'readAgreementFirst':'请仔细阅读GloHelp用户协议。',
+        'readAgreementYetExt':'我已阅读并同意 ',
+        'readAgreementYetExtra':'用户协议。'
 
     },
     moneyType:{

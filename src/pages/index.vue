@@ -55,13 +55,11 @@
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
     </div>
-    <protocol :userIdAgreement='userIdAgreement' v-if="!notReadAgreement&&token" :agreementCallback='agreementCallback' :isENAgreement='isENAgreement'></protocol>
   </div>
 </template>
 
 <script>
 import loading from "../components/loading.vue";
-import protocol from "../components/protocol.vue";
 import { MessageBox, Toast, Swipe, SwipeItem } from "mint-ui";
 import Vue from "vue";
 Vue.component(Toast.name, Toast);
@@ -77,7 +75,7 @@ export default {
   name: "index",
   mixins: [userMix],
   components: {
-    loading,protocol
+    loading
   },
   data() {
     return {
@@ -88,8 +86,6 @@ export default {
       messageList: [],
       loadingShow: false,
       rankUserList:[],
-      notReadAgreement:true,
-      isENAgreement:this.language=='en'?true:false,
       vGold:require('../assets/images/vGold.png'),
       vSilver:require('../assets/images/vSilver.png'),
       vCopper:require('../assets/images/vCopper.png')
@@ -124,14 +120,12 @@ export default {
     },
     loadIsCertified(callback) {
         let _this=this;
-      this.axios
-        .get(this.ip + "/globalmate/rest/certify/list", {
+      this.axios.get(this.ip + "/globalmate/rest/certify/list", {
           params: {
             onlyCurrentUser: true,
             token: this.userInfo.token
           }
-        })
-        .then(res => {
+        }).then(res => {
           if (res.data && res.data.length) {
             let flag = res.data.some(item => item.isEffective == 1);
             this.updateUserInfo({
@@ -150,17 +144,20 @@ export default {
                 }).catch(cancel=>{
 
                 });
-              Toast({
-                message: this.$t('totastTips.confirmIdentify'),
-                duration: 1000
-              });
-              return;
+            }else{
+                flag && callback && callback();
             }
-            flag && callback && callback();
           } else {
-            Toast({
-              message: this.$t('totastTips.confirmIdentify'),
-              duration: 1000
+            MessageBox.confirm('',{
+                title: '',
+                message: _this.$t('totastTips.confirmIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                _this.toIdentify();
+            }).catch(cancel=>{
+
             });
           }
         });
@@ -198,6 +195,7 @@ export default {
        }
     },
     publish(item) {
+      let _this=this;
       if (!this.token) {
         Toast({
           message: this.$t('totastTips.loginTips'),
@@ -205,22 +203,29 @@ export default {
         });
         return;
       }
+      if(!_this.completePersonal()){
+          MessageBox.confirm('',{
+              title: '',
+              message: _this.$t('totastTips.warningIdentify'),
+              confirmButtonText:_this.$t('button.confirm'),
+              cancelButtonText:_this.$t('button.cancel'),
+              showCancelButton: true
+          }).then(action => {
+              this.$router.push({
+                  path: 'personalFile',
+                  query: {
+                      'token': _this.userInfo.token,
+                  }
+              });
+          }).catch(cancel=>{
 
-      if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-          this.hasReadAgreementYet()
-          return
+          });
+      }else if(_this.userInfo&&!_this.userInfo["identified"]){
+          _this.loadIsCertified(_this.publishHandler.bind(this, item))
+
+      }else{
+          _this.publishHandler(item);
       }
-      let hasCompletePersonal=this.completePersonal();
-      if(!hasCompletePersonal) {
-          this.toCompletePersonal();
-          return;
-      }
-      var isIdentify = this.userInfo["identified"];
-      if (!isIdentify) {
-        this.loadIsCertified(this.publishHandler.bind(this, item)); // 再次确认一下有没有认证，有可能存在刚好通过的情况
-        return;
-      }
-      this.publishHandler(item);
     },
     goPersonalCenter() {
       if (!this.token) {
@@ -248,15 +253,6 @@ export default {
           duration: 2000
         });
       } else {
-          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-              this.hasReadAgreementYet()
-              return
-          }
-          let hasCompletePersonal=this.completePersonal();
-          if(!hasCompletePersonal) {
-              this.toCompletePersonal();
-              return;
-          }
         this.$router.push({
           path: "seekHelpList",
           query: {
@@ -274,16 +270,6 @@ export default {
           duration: 2000
         });
       } else {
-          if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-              this.hasReadAgreementYet()
-              return
-          }
-
-          let hasCompletePersonal=this.completePersonal();
-          if(!hasCompletePersonal) {
-              this.toCompletePersonal();
-              return;
-          }
         this.$router.push({
           path: "myAssist",
           query: {
@@ -294,6 +280,10 @@ export default {
         });
       }
     },
+    /**
+     * 消息列表页面路由
+     * @return {[type]} [description]
+     */
     toMessage() {
       $(".message_tips").hide();
       this.$router.push({
@@ -320,6 +310,10 @@ export default {
         });
       }
     },
+    /**
+     * 榜单排名页面路由
+     * @return {[type]} [description]
+     */
     getRank(){
         let list=this.userList;
         list=list.sort(function (a,b) {
@@ -331,12 +325,12 @@ export default {
             this.rankUserList=list
         }
     },
-    agreementCallback(params){
-        this.notReadAgreement=params
-        if(params=='accept'){
-            this.readAgreement()
-        }
-    },
+
+    /**
+     * [goSwiperItem description]
+     * @param  {[type]} url [description]
+     * @return {[type]}     [description]
+     */
     goSwiperItem(url){
         window.open(url);
     },
@@ -360,39 +354,7 @@ export default {
         }
       });
     },
-    readAgreement(){
-        let postData={
-            id:this.userInfo.userId,
-            uExt3:'hasReadAgreement'
-        }
-        this.axios.put(this.ip +"/globalmate/rest/user/update/" +"?token=" +this.userInfo.token,postData).then(res=> {
-            if (res.success) {
-                this.notReadAgreement=true;
-                if(!this.completePersonal()){
-                    this.$router.push({
-                        path: 'personalFile',
-                        query: {
-                            'token': this.userInfo.token,
-                        }
-                    });
-                }
-            }
-          }).catch(e => {});
-    },
-    hasReadAgreementYet(){
-        let _this=this;
-        MessageBox.confirm('',{
-            title: '',
-            message: this.$t('totastTips.notReadAgreement'),
-            confirmButtonText:_this.$t('button.confirm'),
-            cancelButtonText:_this.$t('button.cancel'),
-            showCancelButton: true
-        }).then(action => {
-            _this.notReadAgreement=false;
-        }).catch(cancel=>{
 
-        });
-    },
     completePersonal(){
         let curUser=this.userInfo.curUser
         let flag=true;
@@ -405,25 +367,7 @@ export default {
         }
         return flag;
     },
-    toCompletePersonal(){
-        let _this=this;
-        MessageBox.confirm('',{
-            title: '',
-            message: this.$t('totastTips.notCompletePerosnal'),
-            confirmButtonText:_this.$t('button.confirm'),
-            cancelButtonText:_this.$t('button.cancel'),
-            showCancelButton: true
-        }).then(action => {
-            _this.$router.push({
-                path: 'personalFile',
-                query: {
-                    'token': _this.userInfo.token,
-                }
-            });
-        }).catch(cancel=>{
 
-        });
-    },
     toIdentify(){
         this.$router.push({
           path: "identify",
@@ -576,6 +520,7 @@ export default {
     },
   },
   activated() {
+
     this.mainmenu = [
       {
         title: this.$t("formName.study"),
@@ -649,7 +594,6 @@ export default {
       }
     ];
     if(this.language&&this.language.indexOf('en')>-1){
-        this.isENAgreement=true;
         this.slides=[
             {
                 url:url1,
@@ -659,10 +603,6 @@ export default {
                 url:url2,
                 href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
             },
-            // {
-            //     url:url3,
-            //     href:'https://c.xiumi.us/stage/v5/3sKti/105677692#/'
-            // },
         ]
     }else{
          this.slides=[
@@ -674,12 +614,7 @@ export default {
                  url:url2,
                  href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
              },
-            //  {
-            //      url:url3,
-            //      href:'https://a.xiumi.us/stage/v5/3sKti/105817735#/'
-            //  },
          ]
-        this.isENAgreement=false;
     }
     if (this.userInfo.token&& this.userList && this.userList.length) {
        this.getRank();
@@ -695,24 +630,9 @@ export default {
         }
       }, 200);
     }
-    if(this.userInfo&&this.userInfo.curUser){
-        if(!this.userInfo.curUser.uExt3){
-            this.notReadAgreement=false;
-        }
-    }else{
-        this.timer1 = setInterval(() => {
-            if(this.userInfo&&this.userInfo.curUser){
-                 clearInterval(this.timer1);
-                 if(!this.userInfo.curUser.uExt3){
-                     this.notReadAgreement=false;
-                 }
-            }
-        }, 200);
-    }
   },
   deactivated() {
     clearInterval(this.timer);
-    clearInterval(this.timer1);
   },
 };
 </script>

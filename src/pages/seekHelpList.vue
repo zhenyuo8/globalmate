@@ -228,82 +228,29 @@ export default {
     },
     showDetail(item) {
         let _this=this;
-        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-            this.hasReadAgreementYet()
-            return
-        }
-        let hasCompletePersonal=this.completePersonal();
-        if(!hasCompletePersonal) {
-            this.toCompletePersonal();
-            return;
-        }
-        var isIdentify = this.userInfo["identified"];
-        if(!isIdentify){
-            this.loadIsCertified(function () {
-                _this.$router.push({
-                  path: "detail",
-                  query: {
-                    token: _this.userInfo.token,
-                    title: item.conceretNeed.title,
-                    id: item.need.id,
-                    otherUserId: item.need.userId,
-                    userId: _this.userInfo.userId
-                  }
-                   });
-            })
-        }else{
-            this.$router.push({
-              path: "detail",
-              query: {
-                token: this.userInfo.token,
-                title: item.conceretNeed.title,
-                id: item.need.id,
-                otherUserId: item.need.userId,
-                userId: this.userInfo.userId
-              }
-            });
-        }
-
+        this.$router.push({
+          path: "detail",
+          query: {
+            token: this.userInfo.token,
+            title: item.conceretNeed.title,
+            id: item.need.id,
+            otherUserId: item.need.userId,
+            userId: this.userInfo.userId
+          }
+        });
     },
     goDetail(e, item) {
-        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-            this.hasReadAgreementYet()
-            return
-        }
-        let hasCompletePersonal=this.completePersonal();
-        if(!hasCompletePersonal) {
-            this.toCompletePersonal();
-            return;
-        }
-        var isIdentify = this.userInfo["identified"];
-        if (!isIdentify) {
-          this.loadIsCertified(function () {
-              _this.$router.push({
-                path: "mineInformation",
-                query: {
-                  token: _this.userInfo.token,
-                  title: item.need.userName,
-                  otherUserId: item.need.userId,
-                  id: item.need.id,
-                  currentuser: _this.userInfo.userId,
-                  seeOther: true
-                }
-              });
-          }); // 再次确认一下有没有认证，有可能存在刚好通过的情况
-          return;
-      }else{
-          this.$router.push({
-            path: "mineInformation",
-            query: {
-              token: this.userInfo.token,
-              title: item.need.userName,
-              otherUserId: item.need.userId,
-              id: item.need.id,
-              currentuser: this.userInfo.userId,
-              seeOther: true
-            }
-          });
-      }
+        this.$router.push({
+          path: "mineInformation",
+          query: {
+            token: this.userInfo.token,
+            title: item.need.userName,
+            otherUserId: item.need.userId,
+            id: item.need.id,
+            currentuser: this.userInfo.userId,
+            seeOther: true
+          }
+        });
     },
     goHelp(e, item) {
       e.preventDefault;

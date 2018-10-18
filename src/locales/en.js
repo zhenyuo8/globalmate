@@ -220,7 +220,10 @@ export default{
         'notCompletePerosnal':'You personel information have not complete yet.please fill up your information first!',
         'notReadAgreement':'You have read and agree the agreement yet.go to read agreement？',
         'comfirmAddFriendE':'Confirm  to  choose <',
-        'comfirmAddFriendA':'> to  help?'
+        'comfirmAddFriendA':'> to  help?',
+        'readAgreementFirst':'Please read GloHelp agreement first.',
+        'readAgreementYetExt':'I read and agree ',
+        'readAgreementYetExtra':'Agreement.'
     },
     moneyType:{
         'chinaType':'RMB',
