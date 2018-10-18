@@ -25,7 +25,9 @@ export default{
         'agreeAccept':'Read & Accept',
         'delete':'Delete',
         'preview':'Preview',
-        'selectHelp':'select HM/HER'
+        'selectHelp':'select HM/HER',
+        'lastestList':'New',
+        'moreList':'More ',
     },
     cityName:{
         'beijing':'Beijing',

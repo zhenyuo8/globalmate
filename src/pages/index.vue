@@ -1,3 +1,73 @@
+<style media="screen" lang="less">
+    .gl_index_list{
+        ul{
+            padding: 10px .32rem;
+            li{
+                padding: 10px 0;
+                position: relative;
+                &:after{
+                    content: '';
+                    clear: both;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    border-bottom: 1px solid #eee;
+                }
+                .list_repeat_user{
+                    display: flex;
+                }
+                .image_user {
+                  width: 1.2rem;
+                  height: 1.2rem;
+                  position: relative;
+                  .gl_user_img {
+                    display: inline-block;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+                .name_user {
+                  display: flex;
+                  flex: 2;
+                  flex-direction: column;
+                  text-align: left;
+                  margin-left: 0.24rem;
+                  span {
+                    &.name {
+                      font-size: 14px;
+                      color: #333;
+                    }
+                    &.type {
+                      font-size: 13px;
+                      color: #888;
+                      margin-top: 0.1rem;
+                    }
+                  }
+                }
+                .status_user {
+                  span {
+                    font-size: 14px;
+                    display: block;
+                    text-align: right;
+                    margin-bottom: 10px;
+                    &.created_time {
+                      font-size: 12px;
+                      color: blue;
+                    }
+                  }
+                }
+                .status_close {
+                  span {
+                    color: red !important;
+                  }
+                }
+            }
+        }
+    }
+</style>
+
 <template>
     <div class="index" id='index'>
         <div class="header">
@@ -27,6 +97,41 @@
       </ul>
     </div>
 
+    <div class=" gl_index_list service_star">
+        <div class="rank_title service_star_title">
+          <div class="left">
+            {{$t('button.lastestList')}}
+          </div>
+          <div class="right icon-arrow_right_samll" @click='offer'>
+            {{$t('button.moreList')}}
+          </div>
+        </div>
+        <ul>
+            <li v-for="(item,index) in myAssistList" :key="index" v-if="index<3" @click='showDetail(item)'>
+                <div class="list_repeat_user">
+                  <div class="image_user">
+                    <img :src="item.need.pic" alt="" class="gl_user_img">
+                    <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+
+                  </div>
+                  <div class="name_user">
+                    <span class="name">{{item.need.userName}}</span>
+                    <span class="type">{{item.conceretNeed.tag}}</span>
+                    <span class="type">{{$t('formTitle.reward')}}
+                      <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                      <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                    </span>
+                  </div>
+                  <div class="status_user">
+                    <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                    <span class="created_time">{{item.need.time}}</span>
+                  </div>
+                </div>
+            </li>
+            <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
+        </ul>
+    </div>
+
     <div class="rank service_star">
       <div class="rank_title service_star_title">
         <div class="left">
@@ -44,6 +149,7 @@
           </a>
           <span>{{index+1}}.{{item.name}}</span>
         </li>
+        <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
       </ul>
     </div>
     <div class="buttom_action">
@@ -88,7 +194,8 @@ export default {
       rankUserList:[],
       vGold:require('../assets/images/vGold.png'),
       vSilver:require('../assets/images/vSilver.png'),
-      vCopper:require('../assets/images/vCopper.png')
+      vCopper:require('../assets/images/vCopper.png'),
+      myAssistList:[]
     };
   },
   computed: {
@@ -174,6 +281,19 @@ export default {
           seeOther: true
         }
       });
+    },
+    showDetail(item) {
+        let _this=this;
+        this.$router.push({
+          path: "detail",
+          query: {
+            token: this.userInfo.token,
+            title: item.conceretNeed.title,
+            id: item.need.id,
+            otherUserId: item.need.userId,
+            userId: this.userInfo.userId
+          }
+        });
     },
     publishHandler(item) {
       if (item.key == "carry") {
@@ -518,6 +638,102 @@ export default {
         });
       }
     },
+    loadDataIndex(){
+        let _this=this;
+        this.myAssistList=[];
+        let url = "/globalmate/rest/need/query";
+        this.axios.get(this.ip + url, {
+            params: {
+                token: this.userInfo.token,
+                type: '',
+                where: '',
+                pageNum: 1,
+                pageSize: 10,
+                searchText: '',
+                enable:'1,2'
+            }
+         }).then(res => {
+            if (res.success) {
+                 this.loadingShow = false;
+              if (!res.data) {
+                this.myAssistList = [];
+                return;
+              }
+              let data = res.data ? res.data : [];
+
+              if (data.length!==0) {
+                for (var i = 0; i < data.length; i++) {
+                  if (data[i].conceretNeed && data[i].conceretNeed.title) {
+                    if (
+                      data[i].conceretNeed.pic &&
+                      data[i].conceretNeed.pic.indexOf("aliyuncs") > -1
+                    ) {
+                      data[i].conceretNeed.pic = data[i].conceretNeed.pic.split(
+                        ";"
+                      );
+                    } else {
+                      data[i].conceretNeed.pic = "";
+                    }
+                    var status = data[i].need.enable + "";
+                    switch (status) {
+                      case "1":
+                        data[i].need.status = this.$t("status.open");
+                        break;
+                      case "2":
+                        data[i].need.status = this.$t("status.execute");
+                        break;
+                      case "0":
+                        data[i].need.status = this.$t("status.closed");
+                        break;
+                      case "6":
+                        data[i].need.status = this.$t("status.complete");
+                        break;
+                      case "3":
+                        data[i].need.status = "编辑中";
+                        break;
+                      case "4":
+                        data[i].need.status = "洽谈中";
+                        break;
+                      case "5":
+                        data[i].need.status = "执行中";
+                        break;
+                      default:
+                    }
+
+                    if (data[i] && data[i].need) {
+                      let curData = data[i];
+                      if (curData.need.userId == this.userInfo.userId) {
+                        curData["self"] = true;
+                      }
+                      curData.need.time = this.moment(
+                        curData.need.createTime
+                      ).format("YYYY/MM/DD HH:mm");
+                      for (var n = 0; n < this.userList.length; n++) {
+                        if (curData.need.userId == this.userList[n].id) {
+                          curData.need.pic = this.userList[n].pic;
+                          curData.need.userTag = this.userList[n].userTag;
+                          _this.myAssistList.push(curData);
+                          _this.myAssistList.sort((a,b) => {
+                            return b.need.createTime - a.need.createTime
+                          })
+                        }
+                      }
+                    }
+                  }
+                }
+                this.loadingShow = false;
+              }
+            }
+          }).catch(e => {
+            if (this.myAssistList&&this.myAssistList.length == 0) {
+              setTimeout(() => {
+                this.nodataFlag = true;
+                this.loadingShow = false;
+              }, 500);
+              this.noDataTips = this.$t('noDataDisplay');
+            }
+          });
+    }
   },
   activated() {
 
@@ -620,12 +836,14 @@ export default {
        this.getRank();
        this.getCurrentUser()
        this.initIM(this.getContact)
+       this.loadDataIndex()
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token&& this.userList && this.userList.length) {
           this.getRank();
           this.getCurrentUser()
           this.initIM(this.getContact)
+          this.loadDataIndex()
           clearInterval(this.timer);
         }
       }, 200);
@@ -1008,15 +1226,16 @@ ul {
   ); /* 标准的语法 */
 }
 
-.rank {
+.rank ,.gl_index_list{
   margin-top: 7px;
   background: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   color: #999;
 }
 .rank ul {
-    min-height: 80px;
-    padding: 6px 0.6rem;
+    /*min-height: 80px;*/
+    padding: 10px 0.6rem;
+    width: 100%;
 }
 .rank ul li {
   display: inline-block;

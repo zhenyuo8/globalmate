@@ -899,8 +899,10 @@ export default {
       if(this.loadCompleted){
           postData['enable']='0,6';
       }else{
+          postData['enable']='1,2';
           if(postData['enable']){
-              delete postData['enable'];
+
+            //   delete postData['enable'];
           }
       }
       this.axios

@@ -25,7 +25,9 @@ export default{
         'agreeAccept':'已读&接受',
         'delete':'删除',
         'preview':'预览',
-        'selectHelp':'选择 Ta'
+        'selectHelp':'选择 Ta',
+        'lastestList':'最新求助信息',
+        'moreList':'更多',
     },
     cityName:{
         'beijing':'北京',

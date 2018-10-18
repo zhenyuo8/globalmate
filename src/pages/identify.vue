@@ -326,6 +326,7 @@ export default {
       actionCallBack(keywords){
           if(keywords=='accept'){
               $('.icon-checkbox').addClass('checked');
+              this.isAgreement=true;
           }
           this.read_agreement_route=!this.read_agreement_route;
       },
