@@ -1237,6 +1237,9 @@ ul {
     width: 96%;
     display: flex;
 }
+.rank ul p {
+    width: 100%;
+}
 .rank ul li {
   display: inline-block;
   width: 1.4rem;
