@@ -1233,16 +1233,16 @@ ul {
   color: #999;
 }
 .rank ul {
-    /*min-height: 80px;*/
-    padding: 10px 0.6rem;
-    width: 100%;
+    padding: 10px 2%;
+    width: 96%;
+    display: flex;
 }
 .rank ul li {
   display: inline-block;
   width: 1.4rem;
-  margin-right: 0.94rem;
   overflow: hidden;
   position: relative;
+  margin: auto;
 }
 .rank ul li>img{
     width: .48rem!important;
@@ -1254,6 +1254,7 @@ ul {
 .rank ul li span{
     color: #333;
     font-size: 13px;
+    margin-top: 4px;
 }
 .rank ul li a img:first-child {
   width: 100%;
@@ -1263,7 +1264,8 @@ ul {
 }
 .rank ul li a .gl_cetifiy_medal{
     position: absolute;
-    bottom: 14px!important;
+    /*bottom: 14px!important;*/
+    top: 1rem;
     right: 0;
     width: 0.5rem;
     height: 0.5rem;

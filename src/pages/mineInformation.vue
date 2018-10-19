@@ -153,7 +153,9 @@
      position: relative;
      margin-bottom: 10px;
 }
-
+.mineInformation_school .icon-arrow_right_samll:before{
+    float: right;
+}
 .mineInformation_school_title{
     height: 32px;
     line-height: 32px;
@@ -183,8 +185,8 @@
            width: 25%;
            margin: auto;
            img{
-              width: 80%;
-              height: 80%;
+              width: 1.2rem;
+              height: 1.2rem;
               display: inline-block;
               border-radius: 50%;
            }
@@ -404,7 +406,8 @@
             </div>
             <div class="comment_repeat" v-for="(item,index) in commentList" v-if='index<=2' :key='index' @click='showNeddDetail(item)'>
                 <p class="comment_repeat_top">
-                    <img :src="item.pic" alt="" class="gl_user_img">
+                    <img :src="item.pic" alt="" class="gl_user_img" v-if='item.pic'>
+                    <img src="../assets/images/icon.png" alt=""  class="gl_user_img" v-if='!item.pic'>
                     <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score" >
@@ -639,8 +642,9 @@ export default {
             }).then((res)=>{
                 if(res.success){
                     let data=res.data;
-                    this.getEvalutePic(data)
-
+                    if(data){
+                         this.getEvalutePic(data)
+                    }
                 }else {
                     this.loadingShow=false;
                 }
@@ -658,8 +662,9 @@ export default {
                 var curData=data[i];
                 curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                  for(var n=0;n<this.userList.length;n++){
+                     console.log(this.userList);
                      if(curData.evaluation.uEvaluatorId==this.userList[n].id){
-                         curData.pic=this.userList[n].pic;
+                         curData.pic=this.userList[n].pic||'../assets/images/icon.png';
                          curData.userTag=this.userList[n].userTag;
                      }
                  }
@@ -740,7 +745,11 @@ export default {
                   }
                }).then(res => {
                if (res.success) {
-                 this.friendsListGL=res.data;
+                   if(res.data){
+                        this.friendsListGL=res.data;
+                   }else{
+                       this.friendsListGL=this.userList.slice(0,4)
+                   }
                  this.loadingShow = false;
                }
             }).catch(e => {
@@ -751,20 +760,33 @@ export default {
 
         },
         goDetail(item) {
-          this.$router.push({
-            path: "mineInformation",
-            meta: {
-              index: 100
-          },
-            query: {
-              token: this.userInfo.token,
-              title: item.nikename,
-              otherUserId: item.id,
-              id: '',
-              currentuser: this.userInfo.userId,
-              seeOther: true
-            }
-          });
+            this.loadingShow=true;
+            this.$router.replace({
+              path: "mineInformation",
+              query: {
+                token: this.userInfo.token,
+                title: item.nikename,
+                otherUserId: item.id,
+                id: '',
+                currentuser: this.userInfo.userId,
+                seeOther: true
+              }
+            });
+
+            setTimeout(()=>{
+                this.isOthers=true;
+                this.helpAvailable=[];
+                this.commentList=[];
+                this.friendsListGL=[];
+                this.total=0;
+                this.otherUserId=this.$route.query.otherUserId;
+                this.loadInfo();
+                if(!this.otherUserId||(this.otherUserId==this.userInfo.userId)){
+                    this.isOthers=false;
+                }
+                this.loadMyfriends();
+                 this.getEvalute();
+            },500)
         },
 
     },
@@ -773,7 +795,7 @@ export default {
         this.helpAvailable=[];
         this.commentList=[];
         this.friendsListGL=[];
-         this.total=0;
+        this.total=0;
         this.otherUserId=this.$route.query.otherUserId;
 
         if (this.userInfo.token) {
