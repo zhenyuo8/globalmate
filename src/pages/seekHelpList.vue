@@ -325,7 +325,7 @@ export default {
       this.axios
         .get(this.ip + url + "/?token=" + this.userInfo.token, {})
         .then(res => {
-          if (res && res.success) {
+          if (res && res.success&&res.data) {
             callback(res.data);
           }
         })
@@ -827,7 +827,6 @@ export default {
         url = "/globalmate/rest/assist/listSOS";
 
       }
-
       postData={
         token: this.userInfo.token,
         type: this.searchContent.type,
@@ -840,10 +839,6 @@ export default {
           postData['enable']='0,6';
       }else{
           postData['enable']='1,2';
-          if(postData['enable']){
-
-            //   delete postData['enable'];
-          }
       }
       this.axios
         .get(this.ip + url, {
@@ -853,9 +848,12 @@ export default {
           if (res.success) {
                this.loadingShow = false;
             if (!res.data) {
+                this.allLoaded = true;
+                this.canNotLoadMore = true;
               this.myAssistList = [];
               return;
             }
+
             let data = res.data ? res.data : [];
             this.listm = [];
 
@@ -897,15 +895,6 @@ export default {
                       break;
                     case "6":
                       data[i].need.status = this.$t("status.complete");
-                      break;
-                    case "3":
-                      data[i].need.status = "编辑中";
-                      break;
-                    case "4":
-                      data[i].need.status = "洽谈中";
-                      break;
-                    case "5":
-                      data[i].need.status = "执行中";
                       break;
                     default:
                   }

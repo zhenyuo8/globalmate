@@ -107,6 +107,8 @@ export default{
         posted:'Posted',
         received:'Received',
         friends:'Friends',
+        friendsmy:'My Friends',
+        friendsother:'HM/HER Friends',
         offers:'Offered',
         feedback:'FeedBack',
         idcard:'ID Card',

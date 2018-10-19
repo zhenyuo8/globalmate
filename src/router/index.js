@@ -152,6 +152,14 @@ export default new Router({
       meta: {
         index: 20
       }
+    },
+    {
+      path: '/friendsList',
+      name: 'friendsList',
+      component: () => import('@/pages/friendsList.vue'),
+      meta: {
+        index: 20
+      }
     }
   ]
 })

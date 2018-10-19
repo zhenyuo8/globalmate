@@ -359,10 +359,10 @@
         </div>
         <div class="mineInformation_school">
             <div class="mineInformation_school_title">
-                我的好友
+                {{friendsTitle}}
             </div>
             <div class="mineInformation_school_more icon-arrow_right_samll" @click="previewAllFriends()">
-                更多
+                {{$t('button.moreList')}}
             </div>
             <div class="mineInformation_school_content">
                 <ul>
@@ -371,6 +371,7 @@
                         <span>{{item.nikename}}</span>
                     </li>
                 </ul>
+                <p v-if="friendsListGL.length==0">{{$t('formTitle.noFriends')}}</p>
             </div>
         </div>
         <div class="mineInformation_school">
@@ -461,7 +462,8 @@ export default {
             vGold:require('../assets/images/vGold.png'),
             vSilver:require('../assets/images/vSilver.png'),
             vCopper:require('../assets/images/vCopper.png'),
-            friendsListGL:[]
+            friendsListGL:[],
+            friendsTitle:''
 
         }
     },
@@ -662,7 +664,6 @@ export default {
                 var curData=data[i];
                 curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                  for(var n=0;n<this.userList.length;n++){
-                     console.log(this.userList);
                      if(curData.evaluation.uEvaluatorId==this.userList[n].id){
                          curData.pic=this.userList[n].pic||'../assets/images/icon.png';
                          curData.userTag=this.userList[n].userTag;
@@ -700,8 +701,10 @@ export default {
         },
         loadInfo(){
             let url='/globalmate/rest/user/getUserByToken'
+            this.friendsTitle=this.$t('personaPage.friendsmy')
             if(this.$route.query.otherUserId){
-                url='/globalmate/rest/user/list/'+this.$route.query.otherUserId
+                url='/globalmate/rest/user/list/'+this.$route.query.otherUserId;
+                this.friendsTitle=this.$t('personaPage.friendsother')
             }
             this.axios.get(this.ip+url+'?token='+this.$route.query.token,{
 
@@ -747,8 +750,6 @@ export default {
                if (res.success) {
                    if(res.data){
                         this.friendsListGL=res.data;
-                   }else{
-                       this.friendsListGL=this.userList.slice(0,4)
                    }
                  this.loadingShow = false;
                }
@@ -757,7 +758,14 @@ export default {
             });
         },
         previewAllFriends(){
-
+            this.$router.push({
+              path: "friendsList",
+              query: {
+                token: this.userInfo.token,
+                type:'friends',
+                isOthers:this.isOthers?this.otherUserId:''
+              }
+            });
         },
         goDetail(item) {
             this.loadingShow=true;

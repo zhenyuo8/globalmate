@@ -106,6 +106,8 @@ export default{
         posted:'我发布的',
         received:'我收到的',
         friends:'我的朋友',
+        friendsmy:'我的好友',
+        friendsother:'Ta的好友',
         offers:'我帮助的',
         feedback:'意见反馈',
         idcard:'身份证',

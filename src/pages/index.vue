@@ -425,7 +425,7 @@ export default {
           path: "rankAll",
           query: {
             token: this.token,
-            type: key
+            type: 'service'
           }
         });
       }
