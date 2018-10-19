@@ -256,40 +256,41 @@ export default {
       e.preventDefault;
       e.cancelBubble = true;
       let _this = this;
-        if(this.userInfo&&this.userInfo.curUser&&!this.userInfo.curUser.uExt3){
-            this.hasReadAgreementYet()
-            return
-        }
-        let hasCompletePersonal=this.completePersonal();
-        if(!hasCompletePersonal) {
-            this.toCompletePersonal();
-            return;
-        }
-        var isIdentify = this.userInfo["identified"];
-        if(!isIdentify){
-            this.loadIsCertified(function () {
-                if (item.need.enable != 1) {
-                  Toast({
-                    message: _this.$t('totastTips.completedOrExecution'),
-                    duration: 2000
-                  });
-                  return;
-                }
-                _this.getUserInfo(item.need.userId, function(data) {
-                  _this.$router.push({
-                    path: "im",
+        if(!this.completePersonal()) {
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                    path: 'personalFile',
                     query: {
-                      token: _this.userInfo.token,
-                      title: data.nikename,
-                      id: item.need.id,
-                      toChartUser: data.nikename,
-                      toChartId: item.need.userId,
-                      whoNeedHelf: item.need.userId,
-                      userId: _this.userInfo.userId
+                        'token': this.userInfo.token,
                     }
-                  });
                 });
-            })
+            }).catch(cancel=>{
+
+            });
+        }else if(this.userInfo&&!this.userInfo["identified"]){
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                this.$router.push({
+                  path: "identify",
+                  query: {
+                    token: this.userInfo.token,
+                    id: "identify"
+                  }
+                });
+            }).catch(cancel=>{
+
+            });
         }else{
             if (item.need.enable != 1) {
               Toast({
@@ -313,7 +314,6 @@ export default {
               });
             });
         }
-
     },
     getUserInfo(userId, callback) {
       let url = "";
@@ -357,67 +357,7 @@ export default {
          }
          return flag;
      },
-     toCompletePersonal(){
-         let _this=this;
-         MessageBox.confirm('',{
-             title: '',
-             message: this.$t('totastTips.notCompletePerosnal'),
-             confirmButtonText:_this.$t('button.confirm'),
-             cancelButtonText:_this.$t('button.cancel'),
-             showCancelButton: true
-         }).then(action => {
-             _this.$router.push({
-                 path: 'personalFile',
-                 query: {
-                     'token': _this.userInfo.token,
-                 }
-             });
-         }).catch(cancel=>{
 
-         });
-     },
-     loadIsCertified(callback) {
-         let _this=this;
-       this.axios
-         .get(this.ip + "/globalmate/rest/certify/list", {
-           params: {
-             onlyCurrentUser: true,
-             token: this.userInfo.token
-           }
-         })
-         .then(res => {
-           if (res.data && res.data.length) {
-             let flag = res.data.some(item => item.isEffective == 1);
-             this.updateUserInfo({
-               certifyMsg: res.data,
-               identified: flag // 判断是否通过认证了
-             });
-             if (!flag) {
-                 MessageBox.confirm('',{
-                     title: '',
-                     message: _this.$t('totastTips.confirmIdentify'),
-                     confirmButtonText:_this.$t('button.confirm'),
-                     cancelButtonText:_this.$t('button.cancel'),
-                     showCancelButton: true
-                 }).then(action => {
-                 }).catch(cancel=>{
-
-                 });
-
-               return;
-             }
-             flag && callback && callback();
-           } else {
-               this.$router.push({
-                 path: "identify",
-                 query: {
-                   token: this.userInfo.token,
-                   id: "identify"
-                 }
-               });
-           }
-         });
-     },
     searchCallBack(data) {
       this.msg = !this.msg;
       this.list = [
