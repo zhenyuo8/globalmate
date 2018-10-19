@@ -2,6 +2,9 @@
  * minit-ui 组件css默认样式更改
  *
  */
+*{
+     -webkit-tap-highlight-color: transparent;
+}
 .mint-toast-text{
     line-height: 18px!important;
 }
