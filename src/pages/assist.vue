@@ -138,7 +138,6 @@ export default {
     // 点击发布按钮逻辑
     publish() {
       let postData = this.getListData();
-      console.log(postData,999);
       this.submitUrl = "/globalmate/rest/need/addCommon";
       if (postData&&!this.isSubmiting) {
           this.isSubmiting=true;

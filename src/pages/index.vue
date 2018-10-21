@@ -797,7 +797,7 @@ export default {
       },
       {
         title: this.$t("formName.daigou"),
-        key: "buy",
+        key: "second_hand",
         type: "assist",
         form: "aassist",
         icon: "icon-icon-announce"
