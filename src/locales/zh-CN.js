@@ -44,7 +44,7 @@ export default{
         'carry':'帮带',
         'rent':'租赁',
         'accompany':'陪伴',
-        'daigou':'代购',
+        'daigou':'二手市场',
         'other':'其他',
     },
     formTitle:{

@@ -44,7 +44,7 @@ export default{
         'carry':'Carrying',
         'rent':'Renting',
         'accompany':'Accompany',
-        'daigou':'Daigou',
+        'daigou':'Second Hand',
         'other':'Others',
     },
     formTitle:{

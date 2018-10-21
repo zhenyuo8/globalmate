@@ -85,6 +85,40 @@
                 </mt-swipe-item>
             </mt-swipe>
         </div>
+        <div class=" gl_index_list service_star">
+            <div class="rank_title service_star_title">
+              <div class="left">
+                {{$t('button.lastestList')}}
+              </div>
+              <div class="right icon-arrow_right_samll" @click='offer'>
+                {{$t('button.moreList')}}
+              </div>
+            </div>
+            <ul>
+                <li v-for="(item,index) in myAssistList" :key="index" v-if="index<3" @click='showDetail(item)'>
+                    <div class="list_repeat_user">
+                      <div class="image_user">
+                        <img :src="item.need.pic" alt="" class="gl_user_img">
+                        <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+
+                      </div>
+                      <div class="name_user">
+                        <span class="name">{{item.need.userName}}</span>
+                        <span class="type">{{item.conceretNeed.tag}}</span>
+                        <span class="type">{{$t('formTitle.reward')}}
+                          <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
+                          <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
+                        </span>
+                      </div>
+                      <div class="status_user">
+                        <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
+                        <span class="created_time">{{item.need.time}}</span>
+                      </div>
+                    </div>
+                </li>
+                <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
+            </ul>
+        </div>
     <div class="">
       <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
       <ul class="mainmenu">
@@ -97,40 +131,7 @@
       </ul>
     </div>
 
-    <div class=" gl_index_list service_star">
-        <div class="rank_title service_star_title">
-          <div class="left">
-            {{$t('button.lastestList')}}
-          </div>
-          <div class="right icon-arrow_right_samll" @click='offer'>
-            {{$t('button.moreList')}}
-          </div>
-        </div>
-        <ul>
-            <li v-for="(item,index) in myAssistList" :key="index" v-if="index<3" @click='showDetail(item)'>
-                <div class="list_repeat_user">
-                  <div class="image_user">
-                    <img :src="item.need.pic" alt="" class="gl_user_img">
-                    <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
 
-                  </div>
-                  <div class="name_user">
-                    <span class="name">{{item.need.userName}}</span>
-                    <span class="type">{{item.conceretNeed.tag}}</span>
-                    <span class="type">{{$t('formTitle.reward')}}
-                      <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
-                      <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
-                    </span>
-                  </div>
-                  <div class="status_user">
-                    <span :class="'status_'+item.need.enable">{{item.need.status}}</span>
-                    <span class="created_time">{{item.need.time}}</span>
-                  </div>
-                </div>
-            </li>
-            <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
-        </ul>
-    </div>
 
     <div class="rank service_star">
       <div class="rank_title service_star_title">
@@ -1040,12 +1041,13 @@ ul {
 
 .mainmenu li a span {
   display: block;
-  line-height: 30px;
+  margin-top: 10px;
+  /*line-height: 30px;*/
   background-color: #fff;
   color: #999;
   font-size: 12px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
   overflow: hidden;
 }
 
