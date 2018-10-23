@@ -59,7 +59,7 @@
         <label for="">
           <i class="gl_required_class">*</i>
           {{$t('formTitle.helpAvailable')}}:</label>
-        <input type="text" name="" :value="selectHelpTypeValue" id="offerhelpsignup" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled' style='text-align:center'>
+        <input type="text" name="" :value="selectHelpTypeShowValue" id="offerhelpsignup" :placeholder="$t('formTitle.selectPlace')" readonly='readonly' disabled='disabled' style='text-align:center'>
       </p>
     </div>
     <div class="submitbtn" @click='submit'>
@@ -133,47 +133,58 @@ export default {
       list:[
           {
               'name':this.$t("formName.study"),
-              isSelect:false
+              'key': "learn_cooperation",
+              'isSelect':false
           },
           {
               'name':this.$t("formName.textbook"),
+              'key': "teaching_material",
               'isSelect':false
           },
           {
               'name':this.$t("formName.formality"),
+              'key': "formality",
               'isSelect':false
           },
           {
               'name':this.$t("formName.exchange"),
+              'key': "exchange",
               'isSelect':false
           },
           {
               'name':this.$t("formName.medical"),
+              'key': "medical",
               'isSelect':false
           },
           {
               'name':this.$t("formName.carry"),
+              'key': "carry",
               'isSelect':false
           },
           {
               'name':this.$t("formName.rent"),
+              'key': "rent",
               'isSelect':false
           },
           {
               'name':this.$t("formName.accompany"),
+              'key': "accompany",
               'isSelect':false
           },
           {
               'name':this.$t("formName.daigou"),
+              'key': "second_hand",
               'isSelect':false
           },
           {
               'name':this.$t("formName.other"),
+              'key': "other",
               'isSelect':false
           },
       ],
       selectFlag: false,
       selectHelpTypeValue: "",
+      selectHelpTypeShowValue: "",
       headerImgae: "",
       educationFlag: false,
       educationValue: [],
@@ -304,12 +315,14 @@ export default {
       this.selectFlag = false;
     },
     confirm() {
-        let value=[];
+        let value=[] ,showValue=[];
         this.list.forEach((item,index)=>{
             if(item.isSelect){
-                value.push(item.name);
+                value.push(item.key);
+                showValue.push(item.name);
             }
         })
+      this.selectHelpTypeShowValue=showValue.join('、');
       this.selectHelpTypeValue = value.join("、");
       this.userMsg.selectHelpTypeValue=this.selectHelpTypeValue;
       this.selectFlag = false;
@@ -867,15 +880,18 @@ export default {
                    if(data.helpAvailable){
                        let tempList=this.list;
                        this.list=[];
+                       let showValue=[];
                        let helpAvailable=data.helpAvailable.split('、');
                        for(var i=0;i<helpAvailable.length;i++){
                            let curH=helpAvailable[i]
                            if(tempList.forEach((item,index)=>{
-                               if(item.name==curH){
+                               if(item.key==curH){
                                    item.isSelect=true;
+                                    showValue.push(item.name)
                                }
                            }));
                        }
+                       this.selectHelpTypeShowValue=showValue.join('、')
                        this.list=tempList
                    }
                    this.headerImgae = data.pic || '';
