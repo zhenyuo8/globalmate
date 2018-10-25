@@ -594,23 +594,12 @@ export default {
         });
     },
     toIdentify(){
-      let _this=this;
-      MessageBox.confirm('',{
-          title: '',
-          message: this.$t('totastTips.warningIdentify'),
-          confirmButtonText:_this.$t('button.confirm'),
-          cancelButtonText:_this.$t('button.cancel'),
-          showCancelButton: true
-      }).then(action => {
-          this.$router.push({
-            path: "identify",
-            query: {
-              token: this.userInfo.token,
-              id: "identify"
-            }
-          });
-      }).catch(cancel=>{
-
+      this.$router.push({
+        path: "identify",
+        query: {
+          token: this.userInfo.token,
+          id: "identify"
+        }
       });
     },
     toIm(){
