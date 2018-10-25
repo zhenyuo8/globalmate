@@ -437,44 +437,27 @@ export default {
             });
 
         }else if(this.userInfo&&!this.userInfo["identified"]){
-            MessageBox.confirm('',{
-                title: '',
-                message: this.$t('totastTips.warningIdentify'),
-                confirmButtonText:_this.$t('button.confirm'),
-                cancelButtonText:_this.$t('button.cancel'),
-                showCancelButton: true
-            }).then(action => {
-                this.$router.push({
-                  path: "identify",
-                  query: {
-                    token: this.userInfo.token,
-                    id: "identify"
-                  }
-                });
-            }).catch(cancel=>{
-
-            });
+          this.loadIsCertified(this.toIm)
+            // MessageBox.confirm('',{
+            //     title: '',
+            //     message: this.$t('totastTips.warningIdentify'),
+            //     confirmButtonText:_this.$t('button.confirm'),
+            //     cancelButtonText:_this.$t('button.cancel'),
+            //     showCancelButton: true
+            // }).then(action => {
+            //     this.$router.push({
+            //       path: "identify",
+            //       query: {
+            //         token: this.userInfo.token,
+            //         id: "identify"
+            //       }
+            //     });
+            // }).catch(cancel=>{
+            //
+            // });
 
         }else{
-            if (this.listData.enable != 1) {
-              Toast({
-                message: this.$t('totastTips.completedOrExecution'),
-                duration: 2000
-              });
-              return;
-            }
-
-            this.$router.push({
-              path: "im",
-              query: {
-                token: this.userInfo.token,
-                title: this.othersInfo.nikename,
-                id: this.$route.query.id,
-                toChartUser: this.othersInfo.nikename,
-                toChartId: this.othersInfo.id,
-                fromDetail: 'true'
-              }
-            });
+            this.toIm()
         }
 
 
@@ -566,7 +549,91 @@ export default {
         }
       });
     },
+    loadIsCertified(callback) {
+        let _this=this;
+      this.axios.get(this.ip + "/globalmate/rest/certify/list", {
+          params: {
+            onlyCurrentUser: true,
+            token: this.userInfo.token
+          }
+        }).then(res => {
+          if (res.data && res.data.length) {
+            let flag = res.data.some(item => item.isEffective == 1);
+            this.updateUserInfo({
+              certifyMsg: res.data,
+              identified: flag // 判断是否通过认证了
+            });
+            if (!flag) {
+                MessageBox.confirm('',{
+                    title: '',
+                    message: this.$t('totastTips.warningIdentify'),
+                    confirmButtonText:_this.$t('button.confirm'),
+                    cancelButtonText:_this.$t('button.cancel'),
+                    showCancelButton: true
+                }).then(action => {
+                    _this.toIdentify();
+                }).catch(cancel=>{
 
+                });
+            }else{
+                flag && callback && callback();
+            }
+          } else {
+            MessageBox.confirm('',{
+                title: '',
+                message: this.$t('totastTips.warningIdentify'),
+                confirmButtonText:_this.$t('button.confirm'),
+                cancelButtonText:_this.$t('button.cancel'),
+                showCancelButton: true
+            }).then(action => {
+                _this.toIdentify();
+            }).catch(cancel=>{
+
+            });
+          }
+        });
+    },
+    toIdentify(){
+      let _this=this;
+      MessageBox.confirm('',{
+          title: '',
+          message: this.$t('totastTips.warningIdentify'),
+          confirmButtonText:_this.$t('button.confirm'),
+          cancelButtonText:_this.$t('button.cancel'),
+          showCancelButton: true
+      }).then(action => {
+          this.$router.push({
+            path: "identify",
+            query: {
+              token: this.userInfo.token,
+              id: "identify"
+            }
+          });
+      }).catch(cancel=>{
+
+      });
+    },
+    toIm(){
+        if (this.listData.enable != 1) {
+          Toast({
+            message: this.$t('totastTips.completedOrExecution'),
+            duration: 2000
+          });
+          return;
+        }
+
+        this.$router.push({
+          path: "im",
+          query: {
+            token: this.userInfo.token,
+            title: this.othersInfo.nikename,
+            id: this.$route.query.id,
+            toChartUser: this.othersInfo.nikename,
+            toChartId: this.othersInfo.id,
+            fromDetail: 'true'
+          }
+        });
+    },
     completePersonal(){
         let curUser=this.userInfo.curUser
         let flag=true;
