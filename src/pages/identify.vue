@@ -302,7 +302,8 @@ export default {
       passPortBack: "",
       passPortBackId: "",
       isAgreement:false,
-      read_agreement_route:false
+      read_agreement_route:false,
+      waitingSubmit:false,
       // isWXVerified: false,
     };
   },
@@ -518,6 +519,11 @@ export default {
         return
       }
       this.loadingShow = true;
+      if(this.waitingSubmit) return;
+      if(!this.waitingSubmit) {
+        this.waitingSubmit=true
+      }
+
       this.axios
         .post(
           this.ip +
@@ -536,10 +542,12 @@ export default {
                 this.readAgreement()
                 return
             }
+            this.waitingSubmit=false;
             setTimeout(() => {
               window.history.go(-1);
             }, 2000);
           } else {
+            this.waitingSubmit=false;
               this.loadingShow = false;
             Toast({
               message: res.msg,
@@ -549,6 +557,7 @@ export default {
         })
         .catch(e => {
           this.loadingShow = false;
+          this.waitingSubmit=false;
           console.log(e);
         });
     },
@@ -693,6 +702,7 @@ export default {
   },
   activated() {
     this.identifyType = [];
+    this.waitingSubmit=false;
     if (this.userInfo.token) {
         try{
             this.loadData();
