@@ -184,6 +184,7 @@
            float: left;
            width: 25%;
            margin: auto;
+           margin-bottom: 4px;
            img{
               width: 1.2rem;
               height: 1.2rem;
@@ -739,17 +740,19 @@ export default {
             let _this=this;
             let userId=this.userInfo.userId;
             if(this.$route.query.otherUserId){
-                userId=this.$route.query.id;
+                userId=this.$route.query.otherUserId;
             }
               this.axios.get(this.ip +"/globalmate/rest/userRelation/getFriends",{
                   params:{
-                      userId: this.userInfo.userId,
+                      userId: userId,
                       token:this.userInfo.token
                   }
                }).then(res => {
                if (res.success) {
                    if(res.data){
-                        this.friendsListGL=res.data;
+                        this.friendsListGL=res.data.filter((item,index)=>{
+                          return item!=null
+                        })
                    }
                  this.loadingShow = false;
                }
@@ -768,6 +771,7 @@ export default {
             });
         },
         goDetail(item) {
+          console.log(item,11111111);
             this.loadingShow=true;
             this.$router.replace({
               path: "mineInformation",

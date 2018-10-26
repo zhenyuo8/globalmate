@@ -123,11 +123,11 @@ export default {
                 div{
 
                     &.rank{
-                        width: 6%;
+                        /*width: 6%;*/
                         text-align: left;
                         line-height: 0;
                         margin: auto;
-                        padding: 0.2rem 0 0.2rem;
+                        padding: 0.2rem 0.2rem 0.2rem;
                     }
                     &.rank_0{
                         color: red;
