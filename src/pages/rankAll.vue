@@ -112,7 +112,7 @@ export default {
         }
         font-size: 14px;
         .rank_warp{
-            padding:0 0 0 0.4rem;
+            /*padding:0 0 0 0.4rem;*/
             &>span{
                 padding: 6px 0;
                 font-size: 12px;
@@ -124,7 +124,7 @@ export default {
 
                     &.rank{
                         /*width: 6%;*/
-                        text-align: left;
+                        /*text-align: left;*/
                         line-height: 0;
                         margin: auto;
                         padding: 0.2rem 0.2rem 0.2rem;

@@ -2,6 +2,7 @@
     .gl_index_list{
         ul{
             padding: 10px .32rem;
+            background:#fff;
             li{
                 padding: 10px 0;
                 position: relative;
@@ -1229,7 +1230,7 @@ ul {
 }
 
 .rank ,.gl_index_list{
-  margin-top: 7px;
+  /*margin-top: 7px;*/
   background: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   color: #999;
@@ -1238,6 +1239,7 @@ ul {
     padding: 10px 2%;
     width: 96%;
     display: flex;
+    background: #fff;
 }
 .rank ul p {
     width: 100%;
