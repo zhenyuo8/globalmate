@@ -129,7 +129,7 @@ export default{
     status:{
         execute:'Executing',
         closed:'Closed',
-        open:'Openning',
+        open:'Opening',
         complete:'Completed',
     },
     country:{
