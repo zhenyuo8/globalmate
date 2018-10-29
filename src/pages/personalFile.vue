@@ -888,6 +888,9 @@ export default {
                                if(item.key==curH){
                                    item.isSelect=true;
                                     showValue.push(item.name)
+                               }else if(item.name==curH){
+                                 item.isSelect=true;
+                                  showValue.push(item.name)
                                }
                            }));
                        }
