@@ -38,7 +38,8 @@
     </div>
     <div class="um-footer">
       <div class="chat-input-box">
-        <img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech' />
+        <!-- <img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech' /> -->
+        <span class="icon-add change-input-type" @click="sendFileIm"></span>
 
         <div class="show-input">
           <input type="text" class="form-control chat-input" placeholder="" v-model='chartValue' @keyup.enter="createUserTalk()" @focus="scrollTop()" @blur="inputBlur()"/>
@@ -561,6 +562,12 @@ export default {
                     window.scrollTo(0, 0);
                 }
             }, 0);
+    },
+    sendFileIm(){
+      Toast({
+          message: 'IM发送图片功能研发中...',
+          duration: 2000
+        });
     }
   },
   activated() {
@@ -601,8 +608,8 @@ export default {
 <style lang='less'>
 @import "../assets/css/im.css";
 .chat-thread li img, .chat-thread .img-name {
-  width: 0.6rem;
-  height: 0.6rem;
+  // width: 0.6rem;
+  // height: 0.6rem;
 }
 #main {
   background-color: #f4f4f4;

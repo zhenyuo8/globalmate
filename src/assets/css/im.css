@@ -93,11 +93,14 @@
 	align-self: center;
 }
 .change-input-type {
-	height: .7rem;
+	font-size: 28px;
+    color: #888;
+    margin: auto 0.12rem auto 0;
+	/* height: .7rem;
 	width: .7rem;
 	-webkit-border-radius: 50%;
 	border-radius: 50%;
-	margin-right: 10px;
+	margin-right: 10px; */
 }
 .show-input {
 	flex: 1;

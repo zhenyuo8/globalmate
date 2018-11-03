@@ -653,7 +653,7 @@ export default {
                 pageNum: 1,
                 pageSize: 10,
                 searchText: '',
-                enable:'1,2'
+                enable:'1'
             }
          }).then(res => {
             if (res.success) {
@@ -715,7 +715,6 @@ export default {
                         if (curData.need.userId == this.userList[n].id) {
                           curData.need.pic = this.userList[n].pic;
                           curData.need.userTag = this.userList[n].userTag;
-                          console.log(curData,99999)
                           _this.myAssistList.push(curData);
                           _this.myAssistList.sort((a,b) => {
                             return b.need.createTime - a.need.createTime

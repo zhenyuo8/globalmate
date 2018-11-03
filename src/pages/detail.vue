@@ -314,7 +314,7 @@ export default {
                 key == "pic" ||
                 key == "rewardAmount"||key == "reward"
               ) {
-                if (key == "startTime" || key == "endTime") {
+                if ((key == "startTime" || key == "endTime")&&data.conceretNeed[key]) {
                   list[key] = this.moment(data.conceretNeed[key]).format(
                     "YYYY-MM-DD"
                   );
