@@ -121,6 +121,7 @@ export default {
             .rank_repeat{
                 display: flex;
                 padding: 10px 0 10px 0.2rem;
+                position: relative;
                 div{
                     &.rank{
                         /*width: 6%;*/
@@ -147,7 +148,7 @@ export default {
                     &.userInfo{
                         width: 100%;
                         // padding: 0.2rem 0 0.2rem;
-                        position: relative;
+                        
                         margin-left:0.2rem;
                          .userImage{
                              width: .72rem;
@@ -177,9 +178,9 @@ export default {
                              border-bottom: 1px solid #eee;
                              height: 1px;
                              position: absolute;
-                             bottom: -10px;
+                             bottom: 0px;
                              right: 0;
-                             left: 0;
+                             left: 0.48rem;
                          }
                         &>.userInfo_name{
                             float: left;
