@@ -120,7 +120,7 @@ export default {
             }
             .rank_repeat{
                 display: flex;
-                padding: 0.2rem 0 0.2rem 0.2rem;
+                padding: 10px 0 10px 0.2rem;
                 div{
                     &.rank{
                         /*width: 6%;*/
@@ -177,7 +177,7 @@ export default {
                              border-bottom: 1px solid #eee;
                              height: 1px;
                              position: absolute;
-                             bottom: -0.2rem;
+                             bottom: -10px;
                              right: 0;
                              left: 0;
                          }
