@@ -177,7 +177,7 @@ export default {
                              border-bottom: 1px solid #eee;
                              height: 1px;
                              position: absolute;
-                             bottom: -9px;
+                             bottom: -0.2rem;
                              right: 0;
                              left: 0;
                          }
