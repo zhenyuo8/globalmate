@@ -102,6 +102,9 @@
     padding: 10px 0;
     border-top: 1px solid #eee;
     color: #333;
+    &.gl_decription{
+      line-height:24px;
+    }
   }
 }
 .detail_image_new {
@@ -189,7 +192,7 @@
         <p><span class="gl_title_color">{{$t('formTitle.reward')}} :</span>
           <i style="color:red">{{listData.rewardAmount||listData.reward}}</i>
         </p>
-        <p><span class="gl_title_color">{{$t('formTitle.decription')}}</span>{{listData.description}}</p>
+        <p class="gl_decription"><span class="gl_title_color">{{$t('formTitle.decription')}}</span>{{listData.description}}</p>
       </div>
       <div class="detail_image_new" v-if="listData.pic&&listData.pic.length!=0">
         <div class="detail_content_img" v-for="(items,indexs) in listData.pic" :key='indexs'>
@@ -418,7 +421,8 @@ export default {
     },
     goChart() {
        let _this=this;
-       if(!this.completePersonal()){
+       if(false){
+         //!this.completePersonal()
             MessageBox.confirm('',{
                 title: '',
                 message: this.$t('totastTips.warningIdentify'),
@@ -436,7 +440,8 @@ export default {
 
             });
 
-        }else if(this.userInfo&&!this.userInfo["identified"]){
+        }else if(false){
+          //this.userInfo&&!this.userInfo["identified"]
           this.loadIsCertified(this.toIm)
             // MessageBox.confirm('',{
             //     title: '',
@@ -484,7 +489,8 @@ export default {
         });
     },
     goChat(item, items) {
-        if(!this.completePersonal()){
+        if(false){
+          //!this.completePersonal()
             MessageBox.confirm('',{
                 title: '',
                 message: this.$t('totastTips.warningIdentify'),
@@ -502,7 +508,8 @@ export default {
 
             });
 
-        }else if(this.userInfo&&!this.userInfo["identified"]){
+        }else if(false){
+          //this.userInfo&&!this.userInfo["identified"]
             MessageBox.confirm('',{
                 title: '',
                 message: this.$t('totastTips.warningIdentify'),

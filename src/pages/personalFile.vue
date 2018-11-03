@@ -767,7 +767,7 @@ export default {
           if (res.success) {
               this.loadCurrentUser(true);
               var isIdentify = this.userInfo["identified"];
-              if (!isIdentify) {
+              if (false) {
                 this.loadIsCertified('afterSubmit'); // 再次确认一下有没有认证，有可能存在刚好通过的情况
                 // return;
             }else{

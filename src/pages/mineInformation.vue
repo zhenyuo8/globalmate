@@ -490,7 +490,8 @@ export default {
         },
         chartWith(){
             let _this=this;
-            if(!this.completePersonal()){
+            if(false){
+                //!this.completePersonal()
                  MessageBox.confirm('',{
                      title: '',
                      message: this.$t('totastTips.warningIdentify'),
@@ -508,7 +509,8 @@ export default {
 
                  });
 
-             }else if(this.userInfo&&!this.userInfo["identified"]){
+             }else if(false){
+                 //this.userInfo&&!this.userInfo["identified"]
                  MessageBox.confirm('',{
                      title: '',
                      message: this.$t('totastTips.warningIdentify'),
@@ -542,7 +544,8 @@ export default {
         },
         addIMFriend(){
             let _this=this;
-            if(!this.completePersonal()){
+            if(false){
+                //!this.completePersonal()
                  MessageBox.confirm('',{
                      title: '',
                      message: this.$t('totastTips.warningIdentify'),
@@ -560,7 +563,8 @@ export default {
 
                  });
 
-             }else if(this.userInfo&&!this.userInfo["identified"]){
+             }else if(false){
+                 //this.userInfo&&!this.userInfo["identified"]
                  MessageBox.confirm('',{
                      title: '',
                      message: this.$t('totastTips.warningIdentify'),

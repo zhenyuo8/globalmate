@@ -120,14 +120,14 @@ export default {
             }
             .rank_repeat{
                 display: flex;
+                padding: 0.2rem 0 0.2rem 0.2rem;
                 div{
-
                     &.rank{
                         /*width: 6%;*/
                         /*text-align: left;*/
-                        line-height: 0;
+                        // line-height: 0;
                         margin: auto;
-                        padding: 0.2rem 0.2rem 0.2rem;
+                        // padding: 0.2rem 0.2rem 0.2rem;
                     }
                     &.rank_0{
                         color: red;
@@ -145,9 +145,10 @@ export default {
                         font-weight: bold;
                     }
                     &.userInfo{
-                        width: 94%;
-                        padding: 0.2rem 0 0.2rem;
+                        width: 100%;
+                        // padding: 0.2rem 0 0.2rem;
                         position: relative;
+                        margin-left:0.2rem;
                          .userImage{
                              width: .72rem;
                              float: left;
@@ -176,7 +177,7 @@ export default {
                              border-bottom: 1px solid #eee;
                              height: 1px;
                              position: absolute;
-                             bottom: 0;
+                             bottom: -9px;
                              right: 0;
                              left: 0;
                          }

@@ -261,14 +261,14 @@ export default {
           });
           break;
         case "identify":
-            let hasCompletePersonal=this.completePersonal();
-            if(!hasCompletePersonal) {
-                Toast({
-                  message: this.$t('totastTips.personalFileTips'),
-                  duration: 2000
-                });
-                return;
-            }
+            // let hasCompletePersonal=this.completePersonal();
+            // if(!hasCompletePersonal) {
+            //     Toast({
+            //       message: this.$t('totastTips.personalFileTips'),
+            //       duration: 2000
+            //     });
+            //     return;
+            // }
           this.$router.push({
             path: "identify",
             query: {

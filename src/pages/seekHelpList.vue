@@ -256,7 +256,8 @@ export default {
       e.preventDefault;
       e.cancelBubble = true;
       let _this = this;
-        if(!this.completePersonal()) {
+        if(false) {
+          //!this.completePersonal()
             MessageBox.confirm('',{
                 title: '',
                 message: this.$t('totastTips.warningIdentify'),
@@ -273,7 +274,8 @@ export default {
             }).catch(cancel=>{
 
             });
-        }else if(this.userInfo&&!this.userInfo["identified"]){
+        }else if(false){
+          //this.userInfo&&!this.userInfo["identified"]
             MessageBox.confirm('',{
                 title: '',
                 message: this.$t('totastTips.warningIdentify'),

@@ -38,11 +38,11 @@
                   span {
                     &.name {
                       font-size: 14px;
-                      color: #333;
+                      color: #f59d0b;
                     }
                     &.type {
                       font-size: 13px;
-                      color: #888;
+                      color: #333;
                       margin-top: 0.1rem;
                     }
                   }
@@ -105,8 +105,8 @@
                       </div>
                       <div class="name_user">
                         <span class="name">{{item.need.userName}}</span>
-                        <span class="type">{{item.conceretNeed.tag}}</span>
-                        <span class="type">{{$t('formTitle.reward')}}
+                        <span class="type">{{item.conceretNeed.title}}</span>
+                        <span class="type">{{$t('formTitle.reward')}} :
                           <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
                           <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
                         </span>
@@ -325,29 +325,30 @@ export default {
         });
         return;
       }
-      if(!_this.completePersonal()){
-          MessageBox.confirm('',{
-              title: '',
-              message: _this.$t('totastTips.warningIdentify'),
-              confirmButtonText:_this.$t('button.confirm'),
-              cancelButtonText:_this.$t('button.cancel'),
-              showCancelButton: true
-          }).then(action => {
-              this.$router.push({
-                  path: 'personalFile',
-                  query: {
-                      'token': _this.userInfo.token,
-                  }
-              });
-          }).catch(cancel=>{
+      _this.publishHandler(item);
+      // if(!_this.completePersonal()){
+      //     MessageBox.confirm('',{
+      //         title: '',
+      //         message: _this.$t('totastTips.warningIdentify'),
+      //         confirmButtonText:_this.$t('button.confirm'),
+      //         cancelButtonText:_this.$t('button.cancel'),
+      //         showCancelButton: true
+      //     }).then(action => {
+      //         this.$router.push({
+      //             path: 'personalFile',
+      //             query: {
+      //                 'token': _this.userInfo.token,
+      //             }
+      //         });
+      //     }).catch(cancel=>{
 
-          });
-      }else if(_this.userInfo&&!_this.userInfo["identified"]){
-          _this.loadIsCertified(_this.publishHandler.bind(this, item))
+      //     });
+      // }else if(_this.userInfo&&!_this.userInfo["identified"]){
+      //     _this.loadIsCertified(_this.publishHandler.bind(this, item))
 
-      }else{
-          _this.publishHandler(item);
-      }
+      // }else{
+      //     _this.publishHandler(item);
+      // }
     },
     goPersonalCenter() {
       if (!this.token) {
@@ -714,6 +715,7 @@ export default {
                         if (curData.need.userId == this.userList[n].id) {
                           curData.need.pic = this.userList[n].pic;
                           curData.need.userTag = this.userList[n].userTag;
+                          console.log(curData,99999)
                           _this.myAssistList.push(curData);
                           _this.myAssistList.sort((a,b) => {
                             return b.need.createTime - a.need.createTime
