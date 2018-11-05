@@ -67,6 +67,17 @@
             }
         }
     }
+    .buttom_action{
+      span{
+        display: inline-flex;
+        background:linear-gradient( 103.8deg, rgba(97, 216, 60, 1), rgba(60, 182, 95, 1) );
+        color: #fff;
+        border-radius: 50%;
+        &.icon-add::before{
+          font-size: 36px;
+        }
+      }
+    }
 </style>
 
 <template>
@@ -106,6 +117,7 @@
                       <div class="name_user">
                         <span class="name">{{item.need.userName}}</span>
                         <span class="type">{{item.conceretNeed.title}}</span>
+                        <span class="type">{{item.conceretNeed.tag}}</span>
                         <span class="type">{{$t('formTitle.reward')}} :
                           <i style="color:red" v-if="!item.conceretNeed.reward">{{item.conceretNeed.rewardAmount}}</i>
                           <i style="color:red" v-if="item.conceretNeed.reward">{{item.conceretNeed.reward}}</i>
@@ -155,10 +167,11 @@
       </ul>
     </div>
     <div class="buttom_action">
-      <ul>
+      <span class="icon-add" @click="publish()"></span>
+      <!-- <ul>
         <li class="need_help" @click="seekHelp">{{$t('button.myPublished')}}</li>
         <li @click='offer'>{{$t('button.OthersPublished')}}</li>
-      </ul>
+      </ul> -->
     </div>
     <div class="defindloadig" v-if="loadingShow">
       <loading></loading>
@@ -318,14 +331,21 @@ export default {
     },
     publish(item) {
       let _this=this;
-      if (!this.token) {
-        Toast({
-          message: this.$t('totastTips.loginTips'),
-          duration: 2000
-        });
-        return;
-      }
-      _this.publishHandler(item);
+      let item1={
+        title: this.$t("formName.study"),
+        key: "learn_cooperation",
+        type: "assist",
+        form: "assist",
+        icon: "icon-pen"
+      };
+      // if (!this.token) {
+      //   Toast({
+      //     message: this.$t('totastTips.loginTips'),
+      //     duration: 2000
+      //   });
+      //   return;
+      // }
+      _this.publishHandler(item1);
       // if(!_this.completePersonal()){
       //     MessageBox.confirm('',{
       //         title: '',
@@ -881,6 +901,7 @@ export default {
   top: 0;
   overflow-y: scroll;
   padding-bottom: 44px;
+  background: #fff;
 }
 .header {
   font-size: 14px;
@@ -1281,8 +1302,9 @@ ul {
     border-radius: 50%;
 }
 .rank_title {
-  padding: 7px 0.22rem;
+  padding: 4px 0.22rem;
   display: flex;
+  background: #f9f8f4;
 }
 .service_star_title > div {
   /*flex: 1;*/
@@ -1308,7 +1330,8 @@ ul {
   bottom: -1px;
   left: 0;
   right: 0;
-  background: rgba(250, 250, 250, 0.9);
+  background:rgba(253,253,253,0.8);
+  /* display: none; */
   box-shadow: 0px 2px 2px 1px rgba(178, 178, 178, 1);
 }
 #index .buttom_action ul {

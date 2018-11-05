@@ -43,7 +43,12 @@
       :actions="actions"
       v-model="removeShow">
     </mt-actionsheet>
-
+    <div  class="gl_reward_type_warp" :class="selectStyleFlag?'select_in':'select_out'" >
+         <mt-radio align="right" v-model="style_value" :options='styleList' @change='checkStyle'></mt-radio>
+    </div>
+    <div class="gl_mask" v-if="selectStyleFlag" @click='selectStyleType'>
+			
+		</div>
   </div>
 </template>
 
@@ -54,8 +59,9 @@ import dateInterview from "../components/dateInterview.vue";
 import Reward from "../components/reward.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
-import { Toast, Actionsheet } from "mint-ui";
+import { Toast, Actionsheet, Radio} from "mint-ui";
 Vue.component(Toast.name, Toast);
+Vue.component(Radio.name, Radio);
 Vue.component(Actionsheet.name, Actionsheet);
 import userMix from "../mixins/userInfo";
 export default {
@@ -103,6 +109,9 @@ export default {
       }],
       removeIndex: undefined,
       description: '',
+      style_value:'',
+      styleList:[],
+      selectStyleFlag:false,
     };
   },
   watch: {
@@ -131,6 +140,29 @@ export default {
     Reward
   },
   methods: {
+    checkStyle(){
+      this.selectStyleFlag=!this.selectStyleFlag;
+      this.selectName='';
+      this.type=arguments[0];
+      this.styleList.forEach((item,index)=>{
+        if(item.value===arguments[0]){
+          item.select=true;
+          this.selectName=item.label;
+        }else{
+          item.select=false;
+        }
+      })
+      this.listRepeat.forEach((item,index)=>{
+        if (item.key === "style") {
+              item.text = this.selectName;
+              item.isPlacehold = false; 
+              // item.key=arguments[0]; 
+            }
+      });
+    },
+    selectStyleType(){
+      this.selectStyleFlag=!this.selectStyleFlag;
+    },
     removeItem(index) {
       this.removeShow = true
       this.removeIndex = index
@@ -173,10 +205,14 @@ export default {
     },
     clickCallBack(item, e) {
       let _this = this;
+      console.log(item)
       if (!item.type) {
         if (item.key === "date") {
             this.selectCallBack(e, item);
-        } else {
+        } else if(item.key === "style") {
+          console.log(item)
+          this.selectStyleFlag=!this.selectStyleFlag;
+        }else{
           this.getSelectItem(item.key);
         }
       } else {
@@ -577,6 +613,7 @@ export default {
       let listRepeat = this.listRepeat;
       let postData = {},
         hasParaRequired = false;
+        postData["type"] = this.type;
       for (var i = 0; i < listRepeat.length; i++) {
         if (listRepeat[i].isPlacehold && listRepeat[i].isRequire) {
           postData[listRepeat[i].componentKey] = "";
@@ -652,11 +689,11 @@ export default {
       this.listRepeat = [
         {
           title: this.$t("formTitle.type"),
-          text: this.$route.query.title,
-          arrow: false,
+          text: this.$t("formTitle.selectPlace"),
+          arrow: true,
           key: "style",
-          isRequire: false,
-          isPlacehold: false,
+          isRequire: true,
+          isPlacehold: true,
           componentKey: "businessType"
         },
         {
@@ -883,6 +920,57 @@ export default {
     this.selectItem = [];
     this.listRepeat = [];
     this.type = this.$route.query.key;
+    this.styleList = [
+      {
+        label: this.$t("formName.study"),
+        value: "learn_cooperation",
+        select:false,      
+      },
+      {
+        label: this.$t("formName.textbook"),
+        value: "teaching_material",
+        select:false,       
+      },
+      {
+        label: this.$t("formName.formality"),
+        value: "formality",
+        select:false,     
+      },
+      {
+        label: this.$t("formName.exchange"),
+        value: "exchange",
+        select:false,     
+      },
+      {
+        label: this.$t("formName.medical"),
+        value: "medical",
+        select:false,        
+      },
+      {
+        label: this.$t("formName.carry"),
+        value: "carry",        
+      },
+      {
+        label: this.$t("formName.rent"),
+        value: "rent",
+        select:false,       
+      },
+      {
+        label: this.$t("formName.accompany"),
+        value: "accompany",
+        select:false,      
+      },
+      {
+        label: this.$t("formName.daigou"),
+        value: "second_hand",
+        select:false,        
+      },
+      {
+        label: this.$t("formName.other"),
+        value: "other",
+        select:false,       
+      }
+    ];
     $(".repeat_content input").val("");
     this.description = '';
     if (this.$route.query.mode && this.$route.query.mode == "MODIFY") {
@@ -912,7 +1000,7 @@ export default {
 @import "../assets/css/common.css";
 </style>
 
-<style media="screen">
+<style media="screen" lang="less">
 .list_show {
   position: fixed;
   right: 0;
@@ -936,4 +1024,69 @@ export default {
   -moz-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
 }
+.select_out {
+		  position: fixed;
+		  left: 0;
+		  right: 0;
+		  bottom: -100%;
+		  opacity: 0;
+		  -webkit-transition: all 0.3s ease-out;
+		  -moz-transition: all 0.3s ease-out;
+		  transition: all 0.3s ease-out;
+		  background: #eee;
+		}
+		 .select_in {
+		  position: fixed;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  opacity: 1;
+		  z-index: 2;
+		  -webkit-transition: all 0.3s ease-in;
+		  -moz-transition: all 0.3s ease-in;
+		  transition: all 0.3s ease-in;
+
+		}
+		.gl_mask{
+		    position: fixed;
+		    top: 0;
+		    bottom: 0;
+		    left: 0;
+		    right: 0;
+		    z-index: 1;
+		    background: rgba(153, 153, 153, 0.5);
+		}
+		.mint-cell-title{
+	        text-align: left!important;
+	    }
+	    .mint-radio-core{
+	        display: none!important
+	    }
+
+		.mint-switch {
+		  margin-right: 0.08rem;
+		  .mint-switch-core {
+		    height: 0.5rem !important;
+		    width: 0.76rem !important;
+		  }
+		  .mint-switch-core::after {
+		    width: 0.43rem !important;
+		    height: 0.43rem !important;
+		    border-radius: 50% !important;
+		  }
+		  .mint-switch-input:checked + .mint-switch-core::after {
+		    transform: translateX(12px) !important;
+		  }
+		  .mint-switch-core::before {
+		    height: 0.46rem !important;
+		    width: 0.70rem !important;
+		  }
+		  .mint-switch-input:checked + .mint-switch-core {
+		    background: #66fd66 !important;
+		    border-color: #66fd66 !important;
+		  }
+		  .mint-radio-core {
+		    display: none !important;
+		  }
+		}
 </style>

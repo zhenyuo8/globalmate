@@ -118,11 +118,11 @@
 		  <span @click='selectRewardType' class="gl_reward_type">{{itemRepeat.rewardType}}</span>
 	  </div>
 	  <div class="gl_mask" v-if="selectFlag" @click='selectRewardType'>
-
-      </div>
+			
+		</div>
 	  <div :class="selectFlag?'select_in':'select_out'" class="gl_reward_type_warp">
          <mt-radio align="right" v-model="value" :options='list' @change='check'></mt-radio>
-      </div>
+    </div>
   </div>
 </template>
 

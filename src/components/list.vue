@@ -204,7 +204,7 @@ export default {
   methods: {
     clickBack(item) {
         this.curItem=item;
-        if (item.key !== "style"&&item.key!=='date') {
+        if (item.key!=='date') {
             this.clickCallBack(item);
         }
     },
