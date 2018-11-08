@@ -541,7 +541,7 @@ export default {
               }
             });
         }
-  },
+    },
     goDetail(e, item) {
       e.preventDefault;
       e.cancelBubble = true;

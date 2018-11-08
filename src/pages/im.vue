@@ -36,6 +36,7 @@
         </ul>
       </div>
     </div>
+    <div class="um-remind-read" @click="remindRead">{{$t('button.remind')}}</div>
     <div class="um-footer">
       <div class="chat-input-box">
         <!-- <img src="../assets/images/speech.png" alt="" class="change-input-type" data-flag='speech' /> -->
@@ -75,9 +76,9 @@ export default {
       hasSelectAready: false,
       historyList: [],
       othersInfo: {},
-      vGold:require('../assets/images/vGold.png'),
-      vSilver:require('../assets/images/vSilver.png'),
-      vCopper:require('../assets/images/vCopper.png')
+      vGold: require("../assets/images/vGold.png"),
+      vSilver: require("../assets/images/vSilver.png"),
+      vCopper: require("../assets/images/vCopper.png")
     };
   },
   methods: {
@@ -89,21 +90,21 @@ export default {
       }
     },
     showDetail(detail) {
-      if (this.$route.query && this.$route.query.fromDetail === 'true') {
-        this.$router.go(-1)
-        return
+      if (this.$route.query && this.$route.query.fromDetail === "true") {
+        this.$router.go(-1);
+        return;
       }
-      if(detail){
-          this.showPersonal()
-      }else{
-          this.$router.push({
-            path: "detail",
-            query: {
-              token: this.userInfo.token,
-              id: this.id,
-              otherUserId: ""
-            }
-          });
+      if (detail) {
+        this.showPersonal();
+      } else {
+        this.$router.push({
+          path: "detail",
+          query: {
+            token: this.userInfo.token,
+            id: this.id,
+            otherUserId: ""
+          }
+        });
       }
     },
     showPersonal() {
@@ -135,14 +136,17 @@ export default {
       let _this = this;
       if (this.detail.enable != 1) {
         Toast({
-          message: this.$t('totastTips.completedOrExecution'),
+          message: this.$t("totastTips.completedOrExecution"),
           duration: 2000
         });
         return;
       }
       MessageBox.confirm("", {
         title: "",
-        message: this.$t('totastTips.comfirmAddFriendE') + _this.othersInfo.nikename + this.$t('totastTips.comfirmAddFriendA'),
+        message:
+          this.$t("totastTips.comfirmAddFriendE") +
+          _this.othersInfo.nikename +
+          this.$t("totastTips.comfirmAddFriendA"),
         confirmButtonText: this.$t("button.confirm"),
         cancelButtonText: this.$t("button.cancel"),
         showCancelButton: true
@@ -198,24 +202,24 @@ export default {
           }
         });
         obj["time"] = new Date().valueOf();
-         var timedetail=_this.moment(obj["time"]).calendar().split('at')[1];
-         var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
-         var showTime=moonOrAfter+$.trim(timedetail).split(' ')[0];
-        if(this.isNeedShowTimeSend){
-            console.log(obj["time"]);
-            if((obj["time"]-this.isNeedShowTimeSend)>60*1000){
-                var $li1=$('<li class="gl_im_time"><i>'+showTime+'</i></li>')
-                $('#chat-thread').append($li1);
-                this.isNeedShowTimeSend=obj["time"];
-            }
-
-        }else{
-            this.isNeedShowTimeSend=obj["time"];
-            var $li1=$('<li class="gl_im_time"><i>'+showTime+'</i></li>')
-            $('#chat-thread').append($li1);
+        var timedetail = _this
+          .moment(obj["time"])
+          .calendar()
+          .split("at")[1];
+        var moonOrAfter =
+          $.trim(timedetail).split(" ")[1] == "PM" ? "下午 " : "上午 ";
+        var showTime = moonOrAfter + $.trim(timedetail).split(" ")[0];
+        if (this.isNeedShowTimeSend) {
+          if (obj["time"] - this.isNeedShowTimeSend > 60 * 1000) {
+            var $li1 = $('<li class="gl_im_time"><i>' + showTime + "</i></li>");
+            $("#chat-thread").append($li1);
+            this.isNeedShowTimeSend = obj["time"];
+          }
+        } else {
+          this.isNeedShowTimeSend = obj["time"];
+          var $li1 = $('<li class="gl_im_time"><i>' + showTime + "</i></li>");
+          $("#chat-thread").append($li1);
         }
-
-
 
         $li = $(
           '<li class="right-item"> <img src="' +
@@ -240,10 +244,10 @@ export default {
         }
         obj["pic"] = this.currentUserImgae;
         obj["type"] = false;
-        if(arg.time){
-             obj["time"] = arg.time;
-             var $li1=$('<li class="gl_im_time"><i>'+arg.time+'</i></li>')
-             $('#chat-thread').append($li1);
+        if (arg.time) {
+          obj["time"] = arg.time;
+          var $li1 = $('<li class="gl_im_time"><i>' + arg.time + "</i></li>");
+          $("#chat-thread").append($li1);
         }
         $li = $(
           '<li class="right-item"> <img src="' +
@@ -252,7 +256,7 @@ export default {
             obj["chatContent"] +
             "</div> </li>"
         );
-        $('#chat-thread').append($li);
+        $("#chat-thread").append($li);
         // this.historyList.push(obj);
       }
 
@@ -312,13 +316,13 @@ export default {
       }
       obj["pic"] = arg.pic;
       obj["type"] = true;
-      if(arg.time){
-           obj["time"] = arg.time;
-           var $li1=$('<li class="gl_im_time"><i>'+arg.time+'</i></li>')
-           $('#chat-thread').append($li1);
+      if (arg.time) {
+        obj["time"] = arg.time;
+        var $li1 = $('<li class="gl_im_time"><i>' + arg.time + "</i></li>");
+        $("#chat-thread").append($li1);
       }
-       $('#chat-thread').append($li);
-    //   this.historyList.push(obj);
+      $("#chat-thread").append($li);
+      //   this.historyList.push(obj);
       if ($li) {
         $li.on("click", function(e) {
           if (e.target.tagName == "IMG") {
@@ -372,18 +376,18 @@ export default {
             }
             var status = data.need.enable + "";
             switch (status) {
-              case '1':
-                  this.detail["status"]=this.$t('status.open');
-                  break;
-              case '2':
-                  this.detail["status"]=this.$t('status.execute');
-                  break;
-              case '0':
-                  this.detail["status"]=this.$t('status.closed');
-                  break;
-              case '6':
-                  this.detail["status"]=this.$t('status.complete');
-                  break;
+              case "1":
+                this.detail["status"] = this.$t("status.open");
+                break;
+              case "2":
+                this.detail["status"] = this.$t("status.execute");
+                break;
+              case "0":
+                this.detail["status"] = this.$t("status.closed");
+                break;
+              case "6":
+                this.detail["status"] = this.$t("status.complete");
+                break;
               case "3":
                 this.detail["status"] = "编辑中";
                 break;
@@ -449,39 +453,82 @@ export default {
             var result = data.result;
             var len = result.length - 1;
             for (var i = len; i >= 0; i--) {
-                let secondsCalculate=_this.moment().valueOf()-_this.moment(result[i].dateline).valueOf();
-                let a=new Date(_this.moment().format('YYYY-MM-DD').valueOf()).getTime();
-                let b=_this.moment(result[i].dateline).valueOf()
+              let secondsCalculate =
+                _this.moment().valueOf() -
+                _this.moment(result[i].dateline).valueOf();
+              let a = new Date(
+                _this
+                  .moment()
+                  .format("YYYY-MM-DD")
+                  .valueOf()
+              ).getTime();
+              let b = _this.moment(result[i].dateline).valueOf();
 
-                if(!_this.isNeedShowTime){
-                     _this.isNeedShowTime=_this.moment(result[i].dateline).valueOf();
-                     if(secondsCalculate>2*60*1000&&secondsCalculate<24*60*60*1000&&b>a){
-                         var timedetail=_this.moment(result[i].dateline).calendar().split('at')[1];
-                         var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
-                         result[i].time=moonOrAfter+$.trim(timedetail).split(' ')[0];
-                     }
-                     if(b<a){
-                         result[i].time=_this.moment(result[i].dateline).format("YYYY-MM-DD")
-                     }
-                }else{
-                    if((_this.moment(result[i].dateline).valueOf()-_this.isNeedShowTime)>60*1000){
-                        if(secondsCalculate>2*60*1000&&secondsCalculate<24*60*60*1000){
-                            var timedetail=_this.moment(result[i].dateline).calendar().split('at')[1];
-                            var moonOrAfter=$.trim(timedetail).split(' ')[1]=='PM'?"下午 ":'上午 '
-                            result[i].time=moonOrAfter+$.trim(timedetail).split(' ')[0];
-                        }
-                        if(b<a){
-                            result[i].time=_this.moment(result[i].dateline).format("YYYY-MM-DD")
-                        }
-                        _this.isNeedShowTime=_this.moment(result[i].dateline).valueOf();
-                    }
+              if (!_this.isNeedShowTime) {
+                _this.isNeedShowTime = _this
+                  .moment(result[i].dateline)
+                  .valueOf();
+                if (
+                  secondsCalculate > 2 * 60 * 1000 &&
+                  secondsCalculate < 24 * 60 * 60 * 1000 &&
+                  b > a
+                ) {
+                  var timedetail = _this
+                    .moment(result[i].dateline)
+                    .calendar()
+                    .split("at")[1];
+                  var moonOrAfter =
+                    $.trim(timedetail).split(" ")[1] == "PM"
+                      ? "下午 "
+                      : "上午 ";
+                  result[i].time =
+                    moonOrAfter + $.trim(timedetail).split(" ")[0];
                 }
+                if (b < a) {
+                  result[i].time = _this
+                    .moment(result[i].dateline)
+                    .format("YYYY-MM-DD");
+                }
+              } else {
+                if (
+                  _this.moment(result[i].dateline).valueOf() -
+                    _this.isNeedShowTime >
+                  60 * 1000
+                ) {
+                  if (
+                    secondsCalculate > 2 * 60 * 1000 &&
+                    secondsCalculate < 24 * 60 * 60 * 1000
+                  ) {
+                    var timedetail = _this
+                      .moment(result[i].dateline)
+                      .calendar()
+                      .split("at")[1];
+                    var moonOrAfter =
+                      $.trim(timedetail).split(" ")[1] == "PM"
+                        ? "下午 "
+                        : "上午 ";
+                    result[i].time =
+                      moonOrAfter + $.trim(timedetail).split(" ")[0];
+                  }
+                  if (b < a) {
+                    result[i].time = _this
+                      .moment(result[i].dateline)
+                      .format("YYYY-MM-DD");
+                  }
+                  _this.isNeedShowTime = _this
+                    .moment(result[i].dateline)
+                    .valueOf();
+                }
+              }
 
-              if (result[i].from &&result[i].from == _this.$route.query.toChartId) {
+              if (
+                result[i].from &&
+                result[i].from == _this.$route.query.toChartId
+              ) {
                 result[i].pic = _this.othersInfo.pic;
                 try {
                   _this.chatItemId = JSON.parse(result[i].data.content).item;
-                  if (!_this.id&&i==0) {
+                  if (!_this.id && i == 0&&_this.chatItemId!='null') {
                     _this.id = _this.chatItemId;
                   }
                 } catch (e) {}
@@ -490,7 +537,6 @@ export default {
               } else {
                 result[i].pic = _this.currentUserImgae;
                 _this.createUserTalk(result[i]);
-
               }
             }
             $(document).ready(function() {
@@ -530,44 +576,107 @@ export default {
           console.log(e);
         });
     },
-    scrollTop(){
-        var agent=  navigator.userAgent.toLowerCase();
-            // this.hideAll()
-            setTimeout(function(){
-                if (agent.indexOf('safari') != -1 && agent.indexOf('mqqbrowser') == -1
-                        && agent.indexOf('coast') == -1 && agent.indexOf('android') == -1
-                        && agent.indexOf('linux') == -1 && agent.indexOf('firefox') == -1) {
-                        //safra浏览器
-                        window.scrollTo(0, 1000000);
-                        //先滚动到最底部，再用scrollY得到当前的值，必须延迟 否则拿到的就是1000000
-                        setTimeout(function(){
-                            window.scrollTo(0, window.scrollY-45);//45像素 所有浏览器都是这么高
-                        },200);
-                    } else {//其他浏览器
-                        window.scrollTo(0, 1000000);
-                    }
-            },200)
+    scrollTop() {
+      var agent = navigator.userAgent.toLowerCase();
+      // this.hideAll()
+      setTimeout(function() {
+        if (
+          agent.indexOf("safari") != -1 &&
+          agent.indexOf("mqqbrowser") == -1 &&
+          agent.indexOf("coast") == -1 &&
+          agent.indexOf("android") == -1 &&
+          agent.indexOf("linux") == -1 &&
+          agent.indexOf("firefox") == -1
+        ) {
+          //safra浏览器
+          window.scrollTo(0, 1000000);
+          //先滚动到最底部，再用scrollY得到当前的值，必须延迟 否则拿到的就是1000000
+          setTimeout(function() {
+            window.scrollTo(0, window.scrollY - 45); //45像素 所有浏览器都是这么高
+          }, 200);
+        } else {
+          //其他浏览器
+          window.scrollTo(0, 1000000);
+        }
+      }, 200);
 
-        // setTimeout(()=>{
-        //     // document.body.scrollBottom = document.body.scrollHeight;
-        // },2000)
+      // setTimeout(()=>{
+      //     // document.body.scrollBottom = document.body.scrollHeight;
+      // },2000)
     },
-    inputBlur(){
-        var agent=  navigator.userAgent.toLowerCase();
-            setTimeout(function() {
-                if (!(agent.indexOf('safari') != -1 && agent.indexOf('mqqbrowser') == -1
-                    && agent.indexOf('coast') == -1 && agent.indexOf('android') == -1
-                    && agent.indexOf('linux') == -1 && agent.indexOf('firefox') == -1)){
-                    //非safari浏览器
-                    window.scrollTo(0, 0);
-                }
-            }, 0);
+    inputBlur() {
+      var agent = navigator.userAgent.toLowerCase();
+      setTimeout(function() {
+        if (
+          !(
+            agent.indexOf("safari") != -1 &&
+            agent.indexOf("mqqbrowser") == -1 &&
+            agent.indexOf("coast") == -1 &&
+            agent.indexOf("android") == -1 &&
+            agent.indexOf("linux") == -1 &&
+            agent.indexOf("firefox") == -1
+          )
+        ) {
+          //非safari浏览器
+          window.scrollTo(0, 0);
+        }
+      }, 0);
     },
-    sendFileIm(){
+    sendFileIm() {
       Toast({
-          message: 'IM发送图片功能研发中...',
-          duration: 2000
-        });
+        message: "IM发送图片功能研发中...",
+        duration: 2000
+      });
+    },
+    remindRead(){
+      let _this=this;
+      let url=`https://im.yyuap.com/sysadmin/rest/user/zxy_test/globalmate_test/${this.userInfo.userId}/presence?token=${window.token}`
+      this.axios.get(url,{
+        params:{
+          username:JSON.stringify([this.$route.query.toChartId])
+        }
+      }).then(result => {
+          if(result[this.$route.query.toChartId]==0){
+            _this.doRemind();
+          }else{
+            Toast({
+                message: _this.$t('totastTips.onlineWait'),
+                duration: 2000
+              });
+          }
+      });
+    },
+    doRemind(){
+      let _this=this;
+      if(this.id=='null'){
+        this.id='';
+      }
+      let postData={
+        needId:this.id,      
+        toUserId:this.$route.query.toChartId,
+      }
+      this.axios
+          .post(
+            this.ip + '/globalmate/rest/msg/unreadTempMsg?token='+ this.userInfo["token"],
+            postData
+          )
+          .then(res => {
+            if (res.success) {
+              this.loadingShow = false;
+              Toast({
+                message: _this.$t('totastTips.remindSendWait'),
+                duration: 2000
+              });           
+            } else {
+              Toast({
+                message: res.msg,
+                duration: 2000
+              });
+            }
+          })
+          .catch(e => {          
+            console.log(e);
+      });
     }
   },
   activated() {
@@ -588,14 +697,17 @@ export default {
         }
       }, 200);
     }
-    $('.chat-input').on('focus',function () {
-        setTimeout(() => {
-          let top = $("#convo").height();
-          $("#content").animate({
-              scrollTop: top
-            },100);
-        });
-    })
+    $(".chat-input").on("focus", function() {
+      setTimeout(() => {
+        let top = $("#convo").height();
+        $("#content").animate(
+          {
+            scrollTop: top
+          },
+          100
+        );
+      });
+    });
   },
   deactivated() {
     clearInterval(this.timer);
@@ -607,10 +719,7 @@ export default {
 
 <style lang='less'>
 @import "../assets/css/im.css";
-.chat-thread li img, .chat-thread .img-name {
-  // width: 0.6rem;
-  // height: 0.6rem;
-}
+
 #main {
   background-color: #f4f4f4;
 }
@@ -653,29 +762,28 @@ export default {
   width: 1.6rem;
   height: 1.6rem;
   position: relative;
-  .gl_identify_im{
-      position: absolute;
-      right: -0.1rem;
-      top: -6px;
-      font-size: 18px;
-      font-weight: bolder;
-      font-family: monospace;
-      width: .4rem;
-      height: 0.4rem;
-      display: inline-block;
-      border-radius: 50%;
-      text-align: center;
+  .gl_identify_im {
+    position: absolute;
+    right: -0.1rem;
+    top: -6px;
+    font-size: 18px;
+    font-weight: bolder;
+    font-family: monospace;
+    width: 0.4rem;
+    height: 0.4rem;
+    display: inline-block;
+    border-radius: 50%;
+    text-align: center;
   }
-  .gl_cetifiy_medal{
-      position: absolute;
-      bottom: -8px;
-      right: -.16rem;
-      width: 0.5rem;
-      height: 0.5rem;
-      box-shadow: -1px 1px 2px #fff;
-      border-radius: 50%;
+  .gl_cetifiy_medal {
+    position: absolute;
+    bottom: -8px;
+    right: -0.16rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    box-shadow: -1px 1px 2px #fff;
+    border-radius: 50%;
   }
-
 }
 .chart_main_content_image > div > .gl_user_img {
   width: 100%;
@@ -742,24 +850,34 @@ export default {
 .mint-toast {
   padding: 10px 0.2rem !important;
 }
-.gl_im_time{
-    float: right;
-    font-size: 12px!important;
-    margin: 0!important;
-    width: 100%!important;
-    text-align: center!important;
-    background-color:transparent!important;
+.gl_im_time {
+  float: right;
+  font-size: 12px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
+  background-color: transparent !important;
 }
-.gl_im_time i{
-    display: inline-block;
-    padding: 3px .1rem;
-    color: #fff;
-    background: #d3d3d3;
-    border-radius: 4px;
+.gl_im_time i {
+  display: inline-block;
+  padding: 3px 0.1rem;
+  color: #fff;
+  background: #d3d3d3;
+  border-radius: 4px;
 }
-.gl_im_time:after{
-    position: absolute;
-    top: 10px!important;
-    border: none!important;
+.gl_im_time:after {
+  position: absolute;
+  top: 10px !important;
+  border: none !important;
+}
+.um-remind-read{
+  position: fixed;
+  bottom: 60px;
+  right: 0.25rem;
+  font-size: 12px;
+  padding: 0.2rem;
+  color: #fff;
+  background: #1676ec;
+  border-radius: 4px;
 }
 </style>

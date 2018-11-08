@@ -168,7 +168,7 @@ input {
       </div>
     </div>
     <div class="repeat_content repeat_common" v-if="itemRepeat.type&&itemRepeat.type=='input'" >
-        <input type="text" name="" value="" :placeholder="itemRepeat.text" @change="change(itemRepeat,$event)">
+        <input type="text" name="" value="" :placeholder="itemRepeat.text" @change="change(itemRepeat,$event)" maxlength="50" >
     </div>
   </div>
 

@@ -28,6 +28,7 @@ export default{
         'selectHelp':'选择 Ta',
         'lastestList':'最新求助信息',
         'moreList':'更多',
+        'remind':'提醒对方阅读'
     },
     cityName:{
         'beijing':'北京',
@@ -228,8 +229,9 @@ export default{
         'comfirmAddFriendA':'> 来帮忙？',
         'readAgreementFirst':'请仔细阅读GloHelp用户协议。',
         'readAgreementYetExt':'我已阅读并同意 ',
-        'readAgreementYetExtra':'用户协议。'
-
+        'readAgreementYetExtra':'用户协议。',
+        'onlineWait':'对方在线，请耐心等待对方的回复。',
+        'remindSendWait':'提醒消息已发送，请耐心等待对方的回复。'
     },
     moneyType:{
         'chinaType':'人民币',

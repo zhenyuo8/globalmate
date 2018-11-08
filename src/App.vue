@@ -224,6 +224,7 @@ export default {
         )
         .then(result => {
           let clientIdentify = "pc" + String(new Date().getTime());
+          window.token=result.token;
           //登陆YYIMSDK
           YYIMChat.login({
             username: username,

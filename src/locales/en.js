@@ -6,7 +6,7 @@ export default{
         'OthersPublished':'Offering Help',
         'stars':'Stars',
         'more':'More',
-        'publish':'Submit',
+        'publish':'Pub',
         'submit':'Submit',
         'agree':'Agree',
         'refuse':'Refuse',
@@ -28,6 +28,7 @@ export default{
         'selectHelp':'select HM/HER',
         'lastestList':'New',
         'moreList':'More ',
+        'remind':'Remind to read'
     },
     cityName:{
         'beijing':'Beijing',
@@ -93,8 +94,8 @@ export default{
         rankTitle:'Ranking',
         viewAllComments:'All',
         takePhotoUpload:'Take photos or upload pictures',
-        noContact:'No Contacts',
-        noFriends:'No friends',
+        noContact:'No Contact',
+        noFriends:'No Friend',
         agreeAddFriendRequest:'Agree to add friend request',
         befriends:'I want to be good friends with you.',
         hotCountry:'Hot Country',
@@ -123,7 +124,7 @@ export default{
     },
     messagePage:{
         friends:'Friends',
-        concat:'Concats',
+        concat:'Contact',
 
     },
     status:{
@@ -227,7 +228,9 @@ export default{
         'comfirmAddFriendA':'> to  help?',
         'readAgreementFirst':'Please read GloHelp agreement first.',
         'readAgreementYetExt':'I read and agree ',
-        'readAgreementYetExtra':'Agreement.'
+        'readAgreementYetExtra':'Agreement.',
+        'onlineWait':'He/She is online now, please wait for his/her response.',
+        'remindSendWait':'Reminding message was send, please wait for his/her response.'
     },
     moneyType:{
         'chinaType':'RMB',

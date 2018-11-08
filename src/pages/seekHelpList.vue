@@ -80,14 +80,15 @@
                </mt-tab-container-item>
            </mt-tab-container>
         </mt-loadmore>
+        <div v-if="nodataFlag" class="yy_nodata_class" style="">
+          <div class="yy_icon_img">
+            <img src="../assets/images/business_nodata.png" alt="">
+            <span class="yy_nodata_text">{{noDataTips}}</span>
+          </div>
+        </div>
     </div>
 
-    <div v-if="nodataFlag" class="yy_nodata_class" style="">
-      <div class="yy_icon_img">
-        <img src="../assets/images/business_nodata.png" alt="">
-        <span class="yy_nodata_text">{{noDataTips}}</span>
-      </div>
-    </div>
+    
 
     <div class="mask" v-show="rightIn" @click="hideMask">
     </div>
@@ -146,7 +147,15 @@
 import searchInput from "../components/searchInput.vue";
 import loading from "../components/loading.vue";
 import indexList from "../components/indexList.vue";
-import { MessageBox, Toast, Loadmore ,Navbar, TabItem ,TabContainer, TabContainerItem} from "mint-ui";
+import {
+  MessageBox,
+  Toast,
+  Loadmore,
+  Navbar,
+  TabItem,
+  TabContainer,
+  TabContainerItem
+} from "mint-ui";
 Vue.component(Loadmore.name, Loadmore);
 Vue.component(Toast.name, Toast);
 Vue.component(MessageBox.name, MessageBox);
@@ -167,7 +176,7 @@ export default {
   data() {
     return {
       myAssistList: [],
-      myAssistListDone:[],
+      myAssistListDone: [],
       searchVal: "",
       msg: false,
       nodataFlag: false,
@@ -182,140 +191,140 @@ export default {
         type: "",
         where: ""
       },
-      searchCountry: '',
-      searchCity: '',
+      searchCountry: "",
+      searchCity: "",
       isSOS: false,
       loadingShow: true,
       show: false,
       selectItem: [],
       listType: "",
-      allLoaded:false,
-      pageNum:1,
-      pageSize:10,
-      canNotLoadMore:false,
-      bottomPullText:this.$t('loadText.loadMore'),
-      topPullText:this.$t('loadText.refresh'),
-      topLoadingText:this.$t('loadText.loading'),
-      topDropText:'',
-      bottomDropText:'',
-      selected:'1',
-      loadCompleted:false,
-      vGold:require('../assets/images/vGold.png'),
-      vSilver:require('../assets/images/vSilver.png'),
-      vCopper:require('../assets/images/vCopper.png')
+      allLoaded: false,
+      pageNum: 1,
+      pageSize: 10,
+      canNotLoadMore: false,
+      bottomPullText: this.$t("loadText.loadMore"),
+      topPullText: this.$t("loadText.refresh"),
+      topLoadingText: this.$t("loadText.loading"),
+      topDropText: "",
+      bottomDropText: "",
+      selected: "1",
+      loadCompleted: false,
+      vGold: require("../assets/images/vGold.png"),
+      vSilver: require("../assets/images/vSilver.png"),
+      vCopper: require("../assets/images/vCopper.png")
     };
   },
   methods: {
-      TabChange(number){
-          this.pageNum=1;
-          this.canNotLoadMore=false;
-          this.allLoaded=false;
-          this.loadCompleted=false;
-          if(number=='2'){
-              this.loadCompleted=true;
-              this.myAssistListDone=[];
-              this.loadData()
-          }else{
-              this.myAssistList=[];
-              this.loadData()
-          }
-      },
+    TabChange(number) {
+      this.pageNum = 1;
+      this.canNotLoadMore = false;
+      this.allLoaded = false;
+      this.loadCompleted = false;
+      if (number == "2") {
+        this.loadCompleted = true;
+        this.myAssistListDone = [];
+        this.loadData();
+      } else {
+        this.myAssistList = [];
+        this.loadData();
+      }
+    },
     searchForContent(val) {
       this.searchVal = val;
       this.pageNum = 1;
       this.loadTopFlag = true;
-      this.loadData()
+      this.loadData();
     },
     showDetail(item) {
-        let _this=this;
-        this.$router.push({
-          path: "detail",
-          query: {
-            token: this.userInfo.token,
-            title: item.conceretNeed.title,
-            id: item.need.id,
-            otherUserId: item.need.userId,
-            userId: this.userInfo.userId
-          }
-        });
+      let _this = this;
+      this.$router.push({
+        path: "detail",
+        query: {
+          token: this.userInfo.token,
+          title: item.conceretNeed.title,
+          id: item.need.id,
+          otherUserId: item.need.userId,
+          userId: this.userInfo.userId
+        }
+      });
     },
     goDetail(e, item) {
-        this.$router.push({
-          path: "mineInformation",
-          query: {
-            token: this.userInfo.token,
-            title: item.need.userName,
-            otherUserId: item.need.userId,
-            id: item.need.id,
-            currentuser: this.userInfo.userId,
-            seeOther: true
-          }
-        });
+      this.$router.push({
+        path: "mineInformation",
+        query: {
+          token: this.userInfo.token,
+          title: item.need.userName,
+          otherUserId: item.need.userId,
+          id: item.need.id,
+          currentuser: this.userInfo.userId,
+          seeOther: true
+        }
+      });
     },
     goHelp(e, item) {
       e.preventDefault;
       e.cancelBubble = true;
       let _this = this;
-        if(false) {
-          //!this.completePersonal()
-            MessageBox.confirm('',{
-                title: '',
-                message: this.$t('totastTips.warningIdentify'),
-                confirmButtonText:_this.$t('button.confirm'),
-                cancelButtonText:_this.$t('button.cancel'),
-                showCancelButton: true
-            }).then(action => {
-                this.$router.push({
-                    path: 'personalFile',
-                    query: {
-                        'token': this.userInfo.token,
-                    }
-                });
-            }).catch(cancel=>{
-
+      if (false) {
+        //!this.completePersonal()
+        MessageBox.confirm("", {
+          title: "",
+          message: this.$t("totastTips.warningIdentify"),
+          confirmButtonText: _this.$t("button.confirm"),
+          cancelButtonText: _this.$t("button.cancel"),
+          showCancelButton: true
+        })
+          .then(action => {
+            this.$router.push({
+              path: "personalFile",
+              query: {
+                token: this.userInfo.token
+              }
             });
-        }else if(false){
-          //this.userInfo&&!this.userInfo["identified"]
-            MessageBox.confirm('',{
-                title: '',
-                message: this.$t('totastTips.warningIdentify'),
-                confirmButtonText:_this.$t('button.confirm'),
-                cancelButtonText:_this.$t('button.cancel'),
-                showCancelButton: true
-            }).then(action => {
-                this.$router.push({
-                  path: "identify",
-                  query: {
-                    token: this.userInfo.token,
-                    id: "identify"
-                  }
-                });
-            }).catch(cancel=>{
-
+          })
+          .catch(cancel => {});
+      } else if (false) {
+        //this.userInfo&&!this.userInfo["identified"]
+        MessageBox.confirm("", {
+          title: "",
+          message: this.$t("totastTips.warningIdentify"),
+          confirmButtonText: _this.$t("button.confirm"),
+          cancelButtonText: _this.$t("button.cancel"),
+          showCancelButton: true
+        })
+          .then(action => {
+            this.$router.push({
+              path: "identify",
+              query: {
+                token: this.userInfo.token,
+                id: "identify"
+              }
             });
-        }else{
-            if (item.need.enable != 1) {
-              Toast({
-                message: this.$t('totastTips.completedOrExecution'),
-                duration: 2000
-              });
-              return;
-            }
-            this.getUserInfo(item.need.userId, function(data) {
-              _this.$router.push({
-                path: "im",
-                query: {
-                  token: _this.userInfo.token,
-                  title: data.nikename,
-                  id: item.need.id,
-                  toChartUser: data.nikename,
-                  toChartId: item.need.userId,
-                  whoNeedHelf: item.need.userId,
-                  userId: _this.userInfo.userId
-                }
-              });
-            });
+          })
+          .catch(cancel => {});
+      } else {
+        if (item.need.enable != 1) {
+          Toast({
+            message: this.$t("totastTips.completedOrExecution"),
+            duration: 2000
+          });
+          return;
         }
+        this.getUserInfo(item.need.userId, function(data) {
+          _this.$router.push({
+            path: "im",
+            query: {
+              token: _this.userInfo.token,
+              title: data.nikename,
+              id: item.need.id,
+              toChartUser: data.nikename,
+              toChartId: item.need.userId,
+              whoNeedHelf: item.need.userId,
+              userId: _this.userInfo.userId
+            }
+          });
+        });
+      }
     },
     getUserInfo(userId, callback) {
       let url = "";
@@ -327,38 +336,46 @@ export default {
       this.axios
         .get(this.ip + url + "/?token=" + this.userInfo.token, {})
         .then(res => {
-          if (res && res.success&&res.data) {
+          if (res && res.success && res.data) {
             callback(res.data);
           }
         })
         .catch(e => {});
     },
-     hasReadAgreementYet(){
-         let _this=this;
-         MessageBox.confirm('',{
-             title: '',
-             message: this.$t('totastTips.notReadAgreement'),
-             confirmButtonText:_this.$t('button.confirm'),
-             cancelButtonText:_this.$t('button.cancel'),
-             showCancelButton: true
-         }).then(action => {
-             _this.$router.go(-1);
-         }).catch(cancel=>{
-
-         });
-     },
-     completePersonal(){
-         let curUser=this.userInfo.curUser
-         let flag=true;
-         for(var key in curUser){
-             if(key=='country'||key=='city'||key=='phone'||key=='helpAvailable'||key=='school'||key=='name'||key=='nikename'){
-                 if(!curUser[key]){
-                     flag=false;
-                 }
-             }
-         }
-         return flag;
-     },
+    hasReadAgreementYet() {
+      let _this = this;
+      MessageBox.confirm("", {
+        title: "",
+        message: this.$t("totastTips.notReadAgreement"),
+        confirmButtonText: _this.$t("button.confirm"),
+        cancelButtonText: _this.$t("button.cancel"),
+        showCancelButton: true
+      })
+        .then(action => {
+          _this.$router.go(-1);
+        })
+        .catch(cancel => {});
+    },
+    completePersonal() {
+      let curUser = this.userInfo.curUser;
+      let flag = true;
+      for (var key in curUser) {
+        if (
+          key == "country" ||
+          key == "city" ||
+          key == "phone" ||
+          key == "helpAvailable" ||
+          key == "school" ||
+          key == "name" ||
+          key == "nikename"
+        ) {
+          if (!curUser[key]) {
+            flag = false;
+          }
+        }
+      }
+      return flag;
+    },
 
     searchCallBack(data) {
       this.msg = !this.msg;
@@ -388,9 +405,9 @@ export default {
       this.searchContent = {};
       if (this.searchCountry || this.searchCity) {
         this.searchContent["where"] =
-        this.searchCountry + "_" + this.searchCity;
+          this.searchCountry + "_" + this.searchCity;
       } else {
-        this.searchContent["where"] = ''
+        this.searchContent["where"] = "";
       }
       this.myAssistList = [];
       this.loadData();
@@ -442,7 +459,7 @@ export default {
         if (items == "country") {
           this.country = value;
           this.searchCountry = value;
-          this.searchCity = '';
+          this.searchCity = "";
         } else {
           this.searchCity = value;
         }
@@ -455,10 +472,14 @@ export default {
       let lang = navigator.language || "zh-CN";
       let isEN = /^zh/.test(lang)
         ? false
-        : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
+        : /^en/.test(lang)
+          ? true
+          : /^es/.test(lang)
+            ? true
+            : true;
       if (key == "city" && this.country) {
-           this.listType = key;
-           this.show=true;
+        this.listType = key;
+        this.show = true;
         url = "/globalmate/rest/user/cityWithInitials";
         this.axios
           .get(this.ip + url, {
@@ -470,56 +491,57 @@ export default {
           })
           .then(res => {
             if (res.success) {
-              let list=[],obj={};
-              for(var key in res.data){
-                  obj={};
-                  obj['letter']=key;
-                  obj['list']=res.data[key];
-                  if (this.country == "中国" || this.country == "China") {
-                    if(key==='B'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Beijing"),
-                            cityInitials:'B',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='C'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Chongqing"),
-                            cityInitials:'C',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='S'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Shanghai"),
-                            cityInitials:'S',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='T'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Tianjin"),
-                            cityInitials:'T',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
+              let list = [],
+                obj = {};
+              for (var key in res.data) {
+                obj = {};
+                obj["letter"] = key;
+                obj["list"] = res.data[key];
+                if (this.country == "中国" || this.country == "China") {
+                  if (key === "B") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Beijing"),
+                      cityInitials: "B",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
                   }
-                  list.push(obj);
+                  if (key === "C") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Chongqing"),
+                      cityInitials: "C",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                  if (key === "S") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Shanghai"),
+                      cityInitials: "S",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                  if (key === "T") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Tianjin"),
+                      cityInitials: "T",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                }
+                list.push(obj);
               }
-              let city=this.getHotCity(this.country);
+              let city = this.getHotCity(this.country);
               list.unshift(city);
               this.selectItem = list;
             }
@@ -531,8 +553,8 @@ export default {
             });
           });
       } else if (key == "country") {
-          this.listType = key;
-          this.show=true;
+        this.listType = key;
+        this.show = true;
         url = "/globalmate/rest/user/countryWithInitials";
         this.axios
           .get(this.ip + url, {
@@ -543,16 +565,17 @@ export default {
           })
           .then(res => {
             if (res.success) {
-                let list=[],obj={};
-                for(var key in res.data){
-                    obj={};
-                    obj['letter']=key;
-                    obj['list']=res.data[key];
-                    list.push(obj);
-                }
-                let hotcity=this.getCountryHot();
-                list.unshift(hotcity);
-                this.selectItem = list;
+              let list = [],
+                obj = {};
+              for (var key in res.data) {
+                obj = {};
+                obj["letter"] = key;
+                obj["list"] = res.data[key];
+                list.push(obj);
+              }
+              let hotcity = this.getCountryHot();
+              list.unshift(hotcity);
+              this.selectItem = list;
             }
           })
           .catch(e => {
@@ -563,7 +586,7 @@ export default {
           });
       } else {
         Toast({
-          message: this.$t('totastTips.selectCountry'),
+          message: this.$t("totastTips.selectCountry"),
           duration: 2000
         });
       }
@@ -571,8 +594,8 @@ export default {
 
     getCountryHot() {
       let obj = {};
-      obj["letter"] = this.$t('formTitle.hotCountry');
-      obj['list']=[];
+      obj["letter"] = this.$t("formTitle.hotCountry");
+      obj["list"] = [];
       let list = [
         this.$t("country.china"),
         this.$t("country.korea"),
@@ -589,24 +612,25 @@ export default {
         this.$t("country.malaysia")
       ];
 
-      for(var i=0;i<list.length;i++){
-          let commonObj={
-              city:"",
-              cityInitials:"",
-              countryInitials:"",
-              countryregion:"埃及",
-              id:"",
-              state:""
-          }
-          commonObj.countryregion=list[i];
-          obj['list'].push(commonObj);
+      for (var i = 0; i < list.length; i++) {
+        let commonObj = {
+          city: "",
+          cityInitials: "",
+          countryInitials: "",
+          countryregion: "埃及",
+          id: "",
+          state: ""
+        };
+        commonObj.countryregion = list[i];
+        obj["list"].push(commonObj);
       }
       return obj;
     },
     getHotCity(country) {
-      let obj = {},list=[];
-      obj["letter"] = this.$t('formTitle.hotCity');
-      obj['list']=[];
+      let obj = {},
+        list = [];
+      obj["letter"] = this.$t("formTitle.hotCity");
+      obj["list"] = [];
       switch (country) {
         case "中国":
           list = [
@@ -685,7 +709,7 @@ export default {
           ];
           break;
         case "新加坡":
-            list= [this.$t("city.Singapore")];
+          list = [this.$t("city.Singapore")];
           break;
         case "Singapore":
           list = [this.$t("city.Singapore")];
@@ -718,10 +742,10 @@ export default {
           break;
 
         case "德国":
-          list= [this.$t("city.Frankfurt")];
+          list = [this.$t("city.Frankfurt")];
           break;
         case "Germany":
-          list= [this.$t("city.Frankfurt")];
+          list = [this.$t("city.Frankfurt")];
           break;
         case "加拿大":
           list = [this.$t("city.Vancouver")];
@@ -730,10 +754,10 @@ export default {
           list = [this.$t("city.Vancouver")];
           break;
         case "英国":
-          list= [this.$t("city.Landon")];
+          list = [this.$t("city.Landon")];
           break;
         case "UK":
-          list= [this.$t("city.Landon")];
+          list = [this.$t("city.Landon")];
           break;
         case "澳大利亚":
           list = [this.$t("city.Sydney")];
@@ -751,21 +775,21 @@ export default {
           list = [this.$t("city.KualaLumpur")];
           break;
         case "Malaysia":
-          list= [this.$t("city.KualaLumpur")];
+          list = [this.$t("city.KualaLumpur")];
           break;
         default:
       }
-      for(var i=0;i<list.length;i++){
-          let commonObj={
-              city:"",
-              cityInitials:"",
-              countryInitials:"",
-              countryregion:"",
-              id:"",
-              state:""
-          }
-          commonObj.city=list[i];
-          obj['list'].push(commonObj);
+      for (var i = 0; i < list.length; i++) {
+        let commonObj = {
+          city: "",
+          cityInitials: "",
+          countryInitials: "",
+          countryregion: "",
+          id: "",
+          state: ""
+        };
+        commonObj.city = list[i];
+        obj["list"].push(commonObj);
       }
       return obj;
     },
@@ -784,7 +808,7 @@ export default {
       }
     },
     previewImage(e, item, pics) {
-      if (!item || !pics || !pics.length) return
+      if (!item || !pics || !pics.length) return;
       wx.previewImage({
         current: item, // 当前显示图片的http链接
         urls: pics || [item] // 需要预览的图片http链接列表
@@ -814,10 +838,10 @@ export default {
       this.noDataTips = "";
       this.type = this.$route.query.id;
       if (this.type && this.type.toLocaleLowerCase() == "sos") {
-          $('.list_wrap').css('top',0);
+        $(".list_wrap").css("top", 0);
         this.isSOS = true;
       } else {
-          $('.list_wrap').css('top','46px');
+        $(".list_wrap").css("top", "46px");
         this.isSOS = false;
       }
       let _this = this;
@@ -827,31 +851,49 @@ export default {
       };
       if (this.isSOS) {
         url = "/globalmate/rest/assist/listSOS";
-
       }
-      postData={
-        token: this.userInfo.token,
-        type: this.searchContent.type,
-        where: this.searchContent.where,
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        searchText: this.searchVal,
-      }
-      if(this.loadCompleted){
-          postData['enable']='0,6';
+      if(this.$route.query.currentType){
+        $(".list_wrap").css("top", 0);
+        postData = {
+          token: this.userInfo.token,
+          type: this.searchContent.type,
+          where: this.searchContent.where,
+          pageNum: 1,
+          pageSize: 100000,
+          searchText: this.searchVal
+        };
+        if (this.loadCompleted) {
+          postData["enable"] = "0,2,6";
+        } else {
+          postData["enable"] = "1";
+        }
       }else{
-          postData['enable']='1,2';
+        postData = {
+          token: this.userInfo.token,
+          type: this.searchContent.type,
+          where: this.searchContent.where,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          searchText: this.searchVal
+        };
+        if (this.loadCompleted) {
+          postData["enable"] = "0,6";
+        } else {
+          postData["enable"] = "1,2";
+        }
       }
+      
+      
       this.axios
         .get(this.ip + url, {
           params: postData
         })
         .then(res => {
           if (res.success) {
-               this.loadingShow = false;
+            this.loadingShow = false;
             if (!res.data) {
-                this.allLoaded = true;
-                this.canNotLoadMore = true;
+              this.allLoaded = true;
+              this.canNotLoadMore = true;
               this.myAssistList = [];
               return;
             }
@@ -871,7 +913,31 @@ export default {
               this.myAssistList = [];
               this.myAssistListDone = [];
             }
-            if (data.length!==0) {
+            if(this.$route.query.currentType){
+                let  hasRunningdata=data.some((item,index)=>{
+                      return item.need.type==this.$route.query.currentType;
+                });
+                if(!hasRunningdata){
+                  if (this.loadCompleted){
+                      if(_this.myAssistListDone.length==0){
+                        setTimeout(() => {
+                          this.loadingShow = false;
+                          this.nodataFlag = true;
+                        }, 500);
+                        this.noDataTips = this.$t("noDataDisplay");
+                      }
+                    }else{
+                      if(_this.myAssistList.length==0){
+                        setTimeout(() => {
+                          this.loadingShow = false;
+                          this.nodataFlag = true;
+                        }, 500);
+                        this.noDataTips = this.$t("noDataDisplay");
+                      }
+                    }
+                }
+            }
+            if (data.length !== 0) {
               for (var i = 0; i < data.length; i++) {
                 if (data[i].conceretNeed && data[i].conceretNeed.title) {
                   if (
@@ -913,24 +979,34 @@ export default {
                       if (curData.need.userId == this.userList[n].id) {
                         curData.need.pic = this.userList[n].pic;
                         curData.need.userTag = this.userList[n].userTag;
-                        if(this.loadCompleted){
-                            _this.myAssistListDone.push(curData);
-                            _this.myAssistListDone.sort((a,b) => {
-                              return b.need.createTime - a.need.createTime
-                            })
-                        }else{
-                            if (curData.need.enable != 0 &&curData.need.enable != 6) {
-                               _this.myAssistList.push(curData);
+                        if (this.loadCompleted) {
+                          // _this.myAssistListDone.push(curData);
+                          if(this.$route.query.currentType){                               
+                                if(this.$route.query.currentType==curData.need.type){
+                                  _this.myAssistListDone.push(curData);
+                                }
+                              }else{
+                                _this.myAssistListDone.push(curData);
+                              }
+                          _this.myAssistListDone.sort((a, b) => {
+                            return b.need.createTime - a.need.createTime;
+                          });
+                        } else {
+                         if (
+                              curData.need.enable != 0 &&
+                              curData.need.enable != 6
+                            ) {
+                              if(this.$route.query.currentType){                               
+                                if(this.$route.query.currentType==curData.need.type){
+                                  _this.myAssistList.push(curData);
+                                }
+                              }else{
+                                _this.myAssistList.push(curData);
+                              }                             
                             }
-                            _this.myAssistList.sort((a,b) => {
-                              return b.need.createTime - a.need.createTime
-                            })
-
-                        }
-                        if (curData.need.enable != 0 &&curData.need.enable != 6) {
-
-                        }else{
-
+                          _this.myAssistList.sort((a, b) => {
+                            return b.need.createTime - a.need.createTime;
+                          });
                         }
                       }
                     }
@@ -944,7 +1020,7 @@ export default {
                   this.loadingShow = false;
                   this.nodataFlag = true;
                 }, 500);
-                this.noDataTips = this.$t('noDataDisplay');
+                this.noDataTips = this.$t("noDataDisplay");
               }
             }
           } else {
@@ -953,7 +1029,7 @@ export default {
                 this.nodataFlag = true;
                 this.loadingShow = false;
               }, 500);
-              this.noDataTips = this.$t('noDataDisplay');
+              this.noDataTips = this.$t("noDataDisplay");
             }
           }
         })
@@ -963,7 +1039,7 @@ export default {
               this.nodataFlag = true;
               this.loadingShow = false;
             }, 500);
-            this.noDataTips = this.$t('noDataDisplay');
+            this.noDataTips = this.$t("noDataDisplay");
           }
           console.log(e);
         });
@@ -991,12 +1067,14 @@ export default {
   activated() {
     this.myAssistList = [];
     this.myAssistListDone = [];
+    this.selected='1';
+    this.loadCompleted = false;
     if (this.userInfo.token && this.userList && this.userList.length) {
-        this.loadData();
+      this.loadData();
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token && this.userList && this.userList.length) {
-            this.loadData();
+          this.loadData();
           clearInterval(this.timer);
         }
       }, 200);
@@ -1008,11 +1086,11 @@ export default {
     this.allLoaded = false;
     this.selectItem = [];
     clearInterval(this.timer);
-    this.searchContent.type = ''
-    this.searchContent.where = ''
-    this.searchCountry = ''
-    this.searchCity = ''
-    this.searchVal = ''
+    this.searchContent.type = "";
+    this.searchContent.where = "";
+    this.searchCountry = "";
+    this.searchCity = "";
+    this.searchVal = "";
   },
   created() {}
 };
@@ -1213,6 +1291,9 @@ form.rightIn_form {
 .list_wrap {
   background: #f7f5f3;
   overflow: scroll;
+  .yy_nodata_class{
+    top:46px;
+  }
   .list_repeat {
     background: #fff;
     padding: 0.2rem 0.4rem;
@@ -1363,8 +1444,8 @@ form.rightIn_form {
       min-height: 100%;
     }
   }
-  .mint-navbar .mint-tab-item{
-      padding: 10px 0!important;
+  .mint-navbar .mint-tab-item {
+    padding: 10px 0 !important;
   }
   .search-box {
     position: relative;

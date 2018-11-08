@@ -59,7 +59,7 @@ import dateInterview from "../components/dateInterview.vue";
 import Reward from "../components/reward.vue";
 import Vue from "vue";
 import loading from "../components/loading.vue";
-import { Toast, Actionsheet, Radio} from "mint-ui";
+import { Toast, Actionsheet, Radio } from "mint-ui";
 Vue.component(Toast.name, Toast);
 Vue.component(Radio.name, Radio);
 Vue.component(Actionsheet.name, Actionsheet);
@@ -100,18 +100,21 @@ export default {
       loadingShow: true,
       isEditType: false,
       removeShow: false,
-      actions: [{
-        name: this.$t('button.delete'),
-        method: this.removePic
-      }, {
-        name: this.$t('button.preview'),
-        method: this.previewImg
-      }],
+      actions: [
+        {
+          name: this.$t("button.delete"),
+          method: this.removePic
+        },
+        {
+          name: this.$t("button.preview"),
+          method: this.previewImg
+        }
+      ],
       removeIndex: undefined,
-      description: '',
-      style_value:'',
-      styleList:[],
-      selectStyleFlag:false,
+      description: "",
+      style_value: "",
+      styleList: [],
+      selectStyleFlag: false
     };
   },
   watch: {
@@ -125,9 +128,9 @@ export default {
         this.type = this.$route.query.newvalue;
       }
     },
-    removeShow (val) {
+    removeShow(val) {
       if (!val) {
-        this.removeIndex = undefined
+        this.removeIndex = undefined;
       }
     }
   },
@@ -140,39 +143,38 @@ export default {
     Reward
   },
   methods: {
-    checkStyle(){
-      this.selectStyleFlag=!this.selectStyleFlag;
-      this.selectName='';
-      this.type=arguments[0];
-      this.styleList.forEach((item,index)=>{
-        if(item.value===arguments[0]){
-          item.select=true;
-          this.selectName=item.label;
-        }else{
-          item.select=false;
+    checkStyle() {
+      this.selectStyleFlag = !this.selectStyleFlag;
+      this.selectName = "";
+      this.type = arguments[0];
+      this.styleList.forEach((item, index) => {
+        if (item.value === arguments[0]) {
+          item.select = true;
+          this.selectName = item.label;
+        } else {
+          item.select = false;
         }
-      })
-      this.listRepeat.forEach((item,index)=>{
+      });
+      this.listRepeat.forEach((item, index) => {
         if (item.key === "style") {
-              item.text = this.selectName;
-              item.isPlacehold = false; 
-              // item.key=arguments[0]; 
-            }
+          item.text = this.selectName;
+          item.isPlacehold = false;
+        }
       });
     },
-    selectStyleType(){
-      this.selectStyleFlag=!this.selectStyleFlag;
+    selectStyleType() {
+      this.selectStyleFlag = !this.selectStyleFlag;
     },
     removeItem(index) {
-      this.removeShow = true
-      this.removeIndex = index
+      this.removeShow = true;
+      this.removeIndex = index;
     },
     // 点击发布按钮逻辑
     publish() {
       let postData = this.getListData();
       this.submitUrl = "/globalmate/rest/need/addCommon";
-      if (postData&&!this.isSubmiting) {
-          this.isSubmiting=true;
+      if (postData && !this.isSubmiting) {
+        this.isSubmiting = true;
         this.loadingShow = true;
         this.axios
           .post(
@@ -183,13 +185,13 @@ export default {
             if (res.success) {
               this.loadingShow = false;
               Toast({
-                message: this.$t('totastTips.submitedSuccess'),
+                message: this.$t("totastTips.submitedSuccess"),
                 duration: 2000
               });
-               setTimeout(() => {
-                   window.history.go(-1);
-                   this.isSubmiting=false;
-                }, 1500);
+              setTimeout(() => {
+                window.history.go(-1);
+                this.isSubmiting = false;
+              }, 1500);
             } else {
               Toast({
                 message: res.msg,
@@ -198,21 +200,21 @@ export default {
             }
           })
           .catch(e => {
-              this.isSubmiting=false;
+            this.isSubmiting = false;
             console.log(e);
           });
       }
     },
     clickCallBack(item, e) {
       let _this = this;
-      console.log(item)
+      console.log(item);
       if (!item.type) {
         if (item.key === "date") {
-            this.selectCallBack(e, item);
-        } else if(item.key === "style") {
-          console.log(item)
-          this.selectStyleFlag=!this.selectStyleFlag;
-        }else{
+          this.selectCallBack(e, item);
+        } else if (item.key === "style") {
+          console.log(item);
+          this.selectStyleFlag = !this.selectStyleFlag;
+        } else {
           this.getSelectItem(item.key);
         }
       } else {
@@ -241,16 +243,19 @@ export default {
         default:
           this.listRepeat.forEach(function(item, index) {
             if (item.key === "date") {
-              if (item.key === selectItem.key &&item.componentKey === selectItem.componentKey) {
-                  if(value.length==1){
-                      item.starttime = value[0];
-                      item.endtime = '';
-                      item.isPlacehold = false;
-                  }else{
-                      item.starttime = value[0];
-                      item.endtime = value[1];
-                      item.isPlacehold = false;
-                  }
+              if (
+                item.key === selectItem.key &&
+                item.componentKey === selectItem.componentKey
+              ) {
+                if (value.length == 1) {
+                  item.starttime = value[0];
+                  item.endtime = "";
+                  item.isPlacehold = false;
+                } else {
+                  item.starttime = value[0];
+                  item.endtime = value[1];
+                  item.isPlacehold = false;
+                }
               }
             } else {
               if (item.key === selectItem.key) {
@@ -295,10 +300,14 @@ export default {
       let lang = navigator.language || "zh-CN";
       let isEN = /^zh/.test(lang)
         ? false
-        : /^en/.test(lang) ? true : /^es/.test(lang) ? true : true;
+        : /^en/.test(lang)
+          ? true
+          : /^es/.test(lang)
+            ? true
+            : true;
       if (key == "city" && this.country) {
-           this.listType = key;
-           this.show=true;
+        this.listType = key;
+        this.show = true;
         url = "/globalmate/rest/user/cityWithInitials";
         this.axios
           .get(this.ip + url, {
@@ -310,56 +319,57 @@ export default {
           })
           .then(res => {
             if (res.success) {
-              let list=[],obj={};
-              for(var key in res.data){
-                  obj={};
-                  obj['letter']=key;
-                  obj['list']=res.data[key];
-                  if (this.country == "中国" || this.country == "China") {
-                    if(key==='B'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Beijing"),
-                            cityInitials:'B',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='C'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Chongqing"),
-                            cityInitials:'C',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='S'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Shanghai"),
-                            cityInitials:'S',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
-                    if(key==='T'){
-                        obj['list'].unshift({
-                            city:this.$t("city.Tianjin"),
-                            cityInitials:'T',
-                            countryInitials:'',
-                            countryregion:'',
-                            id:'',
-                            state:''
-                        })
-                    }
+              let list = [],
+                obj = {};
+              for (var key in res.data) {
+                obj = {};
+                obj["letter"] = key;
+                obj["list"] = res.data[key];
+                if (this.country == "中国" || this.country == "China") {
+                  if (key === "B") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Beijing"),
+                      cityInitials: "B",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
                   }
-                  list.push(obj);
+                  if (key === "C") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Chongqing"),
+                      cityInitials: "C",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                  if (key === "S") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Shanghai"),
+                      cityInitials: "S",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                  if (key === "T") {
+                    obj["list"].unshift({
+                      city: this.$t("city.Tianjin"),
+                      cityInitials: "T",
+                      countryInitials: "",
+                      countryregion: "",
+                      id: "",
+                      state: ""
+                    });
+                  }
+                }
+                list.push(obj);
               }
-              let city=this.getHotCity(this.country);
+              let city = this.getHotCity(this.country);
               list.unshift(city);
               this.selectItem = list;
             }
@@ -371,8 +381,8 @@ export default {
             });
           });
       } else if (key == "country") {
-          this.listType = key;
-          this.show=true;
+        this.listType = key;
+        this.show = true;
         url = "/globalmate/rest/user/countryWithInitials";
         this.axios
           .get(this.ip + url, {
@@ -383,16 +393,17 @@ export default {
           })
           .then(res => {
             if (res.success) {
-                let list=[],obj={};
-                for(var key in res.data){
-                    obj={};
-                    obj['letter']=key;
-                    obj['list']=res.data[key];
-                    list.push(obj);
-                }
-                let hotcity=this.getCountryHot();
-                list.unshift(hotcity);
-                this.selectItem = list;
+              let list = [],
+                obj = {};
+              for (var key in res.data) {
+                obj = {};
+                obj["letter"] = key;
+                obj["list"] = res.data[key];
+                list.push(obj);
+              }
+              let hotcity = this.getCountryHot();
+              list.unshift(hotcity);
+              this.selectItem = list;
             }
           })
           .catch(e => {
@@ -403,15 +414,15 @@ export default {
           });
       } else {
         Toast({
-          message: this.$t('totastTips.selectCountry'),
+          message: this.$t("totastTips.selectCountry"),
           duration: 2000
         });
       }
     },
     getCountryHot() {
       let obj = {};
-      obj["letter"] = this.$t('formTitle.hotCountry');
-      obj['list']=[];
+      obj["letter"] = this.$t("formTitle.hotCountry");
+      obj["list"] = [];
       let list = [
         this.$t("country.china"),
         this.$t("country.korea"),
@@ -428,24 +439,25 @@ export default {
         this.$t("country.malaysia")
       ];
 
-      for(var i=0;i<list.length;i++){
-          let commonObj={
-              city:"",
-              cityInitials:"",
-              countryInitials:"",
-              countryregion:"埃及",
-              id:"",
-              state:""
-          }
-          commonObj.countryregion=list[i];
-          obj['list'].push(commonObj);
+      for (var i = 0; i < list.length; i++) {
+        let commonObj = {
+          city: "",
+          cityInitials: "",
+          countryInitials: "",
+          countryregion: "埃及",
+          id: "",
+          state: ""
+        };
+        commonObj.countryregion = list[i];
+        obj["list"].push(commonObj);
       }
       return obj;
     },
     getHotCity(country) {
-      let obj = {},list=[];
-      obj["letter"] = this.$t('formTitle.hotCity');;
-      obj['list']=[];
+      let obj = {},
+        list = [];
+      obj["letter"] = this.$t("formTitle.hotCity");
+      obj["list"] = [];
       switch (country) {
         case "中国":
           list = [
@@ -524,7 +536,7 @@ export default {
           ];
           break;
         case "新加坡":
-            list= [this.$t("city.Singapore")];
+          list = [this.$t("city.Singapore")];
           break;
         case "Singapore":
           list = [this.$t("city.Singapore")];
@@ -557,10 +569,10 @@ export default {
           break;
 
         case "德国":
-          list= [this.$t("city.Frankfurt")];
+          list = [this.$t("city.Frankfurt")];
           break;
         case "Germany":
-          list= [this.$t("city.Frankfurt")];
+          list = [this.$t("city.Frankfurt")];
           break;
         case "加拿大":
           list = [this.$t("city.Vancouver")];
@@ -569,10 +581,10 @@ export default {
           list = [this.$t("city.Vancouver")];
           break;
         case "英国":
-          list= [this.$t("city.Landon")];
+          list = [this.$t("city.Landon")];
           break;
         case "UK":
-          list= [this.$t("city.Landon")];
+          list = [this.$t("city.Landon")];
           break;
         case "澳大利亚":
           list = [this.$t("city.Sydney")];
@@ -590,21 +602,21 @@ export default {
           list = [this.$t("city.KualaLumpur")];
           break;
         case "Malaysia":
-          list= [this.$t("city.KualaLumpur")];
+          list = [this.$t("city.KualaLumpur")];
           break;
         default:
       }
-      for(var i=0;i<list.length;i++){
-          let commonObj={
-              city:"",
-              cityInitials:"",
-              countryInitials:"",
-              countryregion:"",
-              id:"",
-              state:""
-          }
-          commonObj.city=list[i];
-          obj['list'].push(commonObj);
+      for (var i = 0; i < list.length; i++) {
+        let commonObj = {
+          city: "",
+          cityInitials: "",
+          countryInitials: "",
+          countryregion: "",
+          id: "",
+          state: ""
+        };
+        commonObj.city = list[i];
+        obj["list"].push(commonObj);
       }
       return obj;
     },
@@ -613,37 +625,37 @@ export default {
       let listRepeat = this.listRepeat;
       let postData = {},
         hasParaRequired = false;
-        postData["type"] = this.type;
+      postData["type"] = this.type;
       for (var i = 0; i < listRepeat.length; i++) {
         if (listRepeat[i].isPlacehold && listRepeat[i].isRequire) {
           postData[listRepeat[i].componentKey] = "";
           hasParaRequired = true;
           Toast({
-            message: listRepeat[i].title + this.$t('totastTips.requiredTips'),
+            message: listRepeat[i].title + this.$t("totastTips.requiredTips"),
             duration: 2000
           });
           return false;
         } else if (!listRepeat[i].isPlacehold) {
-            if(listRepeat[i].key=='date'){
-                postData['startTime'] = listRepeat[i].starttime;
-                postData['endTime'] = listRepeat[i].endtime;
-            }else{
-                if(listRepeat[i].key=='reward'){
-                    postData[listRepeat[i].componentKey] = listRepeat[i].text+' '+listRepeat[i].rewardType;
-                }else{
-                    postData[listRepeat[i].componentKey] = listRepeat[i].text;
-                }
-
+          if (listRepeat[i].key == "date") {
+            postData["startTime"] = listRepeat[i].starttime;
+            postData["endTime"] = listRepeat[i].endtime;
+          } else {
+            if (listRepeat[i].key == "reward") {
+              postData[listRepeat[i].componentKey] =
+                listRepeat[i].text + " " + listRepeat[i].rewardType;
+            } else {
+              postData[listRepeat[i].componentKey] = listRepeat[i].text;
             }
-
+          }
         }
       }
       if (!this.myReward.isPlacehold) {
-          let moneyType=$('.gl_reward_type').text();
-          if(moneyType=='单位'||moneyType=='Currencies'){
-              moneyType=this.$t('moneyType.chinaType');
-          }
-        postData[this.myReward.componentKey] = this.myReward.text+' '+moneyType;
+        let moneyType = $(".gl_reward_type").text();
+        if (moneyType == "单位" || moneyType == "Currencies") {
+          moneyType = this.$t("moneyType.chinaType");
+        }
+        postData[this.myReward.componentKey] =
+          this.myReward.text + " " + moneyType;
       } else {
         hasParaRequired = true;
       }
@@ -651,14 +663,16 @@ export default {
         postData[this.title.componentKey] = this.title.text;
       } else {
         Toast({
-          message: this.title.title + this.$t('totastTips.requiredTips'),
+          message: this.title.title + this.$t("totastTips.requiredTips"),
           duration: 2000
         });
         return false;
       }
       postData["description"] = this.description;
       if (this.filesHasUpload.length !== 0) {
-        postData["pic"] = this.filesHasUpload.filter(item => item.includes('http')).join(";");
+        postData["pic"] = this.filesHasUpload
+          .filter(item => item.includes("http"))
+          .join(";");
       }
       postData["type"] = this.type;
       return postData;
@@ -674,7 +688,7 @@ export default {
         isRequire: false,
         isPlacehold: true,
         componentKey: "reward",
-        rewardType:this.$t('moneyType.currency')
+        rewardType: this.$t("moneyType.currency")
       };
       this.title = {
         title: this.$t("formTitle.head"),
@@ -701,8 +715,8 @@ export default {
           text: this.$t("formTitle.selectPlace"),
           arrow: true,
           key: "date",
-          starttime:'',
-          endtime:'',
+          starttime: "",
+          endtime: "",
           isRequire: true,
           isPlacehold: true,
           componentKey: "startTime"
@@ -744,19 +758,26 @@ export default {
           if (res.success) {
             let data = res.data;
             this.listRepeatProcess();
-            this.type=data.conceretNeed.type;
-            if(isNaN(data.conceretNeed.reward)){
-                this.myReward.text = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[0];
-                this.myReward.rewardType = data.conceretNeed.reward&&data.conceretNeed.reward.split(' ')[1]||this.$t('moneyType.chinaType');
-            }else{
-                this.myReward.text = data.conceretNeed.reward||this.$t("formTitle.inputPlace");
+            this.type = data.conceretNeed.type;
+            if (isNaN(data.conceretNeed.reward)) {
+              this.myReward.text =
+                data.conceretNeed.reward &&
+                data.conceretNeed.reward.split(" ")[0];
+              this.myReward.rewardType =
+                (data.conceretNeed.reward &&
+                  data.conceretNeed.reward.split(" ")[1]) ||
+                this.$t("moneyType.chinaType");
+            } else {
+              this.myReward.text =
+                data.conceretNeed.reward || this.$t("formTitle.inputPlace");
             }
 
             this.myReward.isPlacehold = false;
             this.title.text = data.conceretNeed.title;
             this.title.isPlacehold = false;
             if (data.conceretNeed.pic) {
-              this.filesHasUpload = data.conceretNeed.pic&&data.conceretNeed.pic.split(';')
+              this.filesHasUpload =
+                data.conceretNeed.pic && data.conceretNeed.pic.split(";");
             }
             this.listRepeat.forEach(function(item, index) {
               if (item.componentKey == "country" && data.conceretNeed.country) {
@@ -768,14 +789,21 @@ export default {
                 item.text = data.conceretNeed.city;
                 item.isPlacehold = false;
               }
-              if (item.componentKey == "startTime" &&data.conceretNeed.startTime) {
-                  item.starttime = _this.moment(data.conceretNeed.startTime).format("YYYY-MM-DD");
-                  item.endtime = _this.moment(data.conceretNeed.endTime).format("YYYY-MM-DD");
-                  item.isPlacehold = false;
+              if (
+                item.componentKey == "startTime" &&
+                data.conceretNeed.startTime
+              ) {
+                item.starttime = _this
+                  .moment(data.conceretNeed.startTime)
+                  .format("YYYY-MM-DD");
+                item.endtime = _this
+                  .moment(data.conceretNeed.endTime)
+                  .format("YYYY-MM-DD");
+                item.isPlacehold = false;
               }
 
               if (data.conceretNeed.description) {
-                  _this.description=data.conceretNeed.description
+                _this.description = data.conceretNeed.description;
               }
             });
           }
@@ -784,19 +812,19 @@ export default {
           console.log(e);
         });
     },
-    removePic () {
-      this.removeShow = false
+    removePic() {
+      this.removeShow = false;
       if (this.removeIndex !== undefined) {
-        this.filesHasUpload.splice(this.removeIndex, 1)
-        this.removeIndex = undefined
+        this.filesHasUpload.splice(this.removeIndex, 1);
+        this.removeIndex = undefined;
       }
     },
-    previewImg () {
+    previewImg() {
       wx.previewImage({
         current: this.filesHasUpload[this.removeIndex], // 当前显示图片的http链接
         urls: this.filesHasUpload // 需要预览的图片http链接列表
       });
-      this.removeIndex = undefined
+      this.removeIndex = undefined;
     },
     uploadAttr() {
       const ua = navigator.userAgent.toLowerCase();
@@ -856,23 +884,28 @@ export default {
         form.append("success_action_status", "200");
         form.append("signature", obj.signature);
         form.append("file", blob, ran + ".jpg");
-        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key + "_" + ran + ".jpg"}`;
-        this.axios.post(obj.host, form, {
+        let url = `${obj.host}${obj.host.endsWith("/") ? "" : "/"}${obj.key +
+          "_" +
+          ran +
+          ".jpg"}`;
+        this.axios
+          .post(obj.host, form, {
             headers: {
               "Content-Type": "multipart/form-data"
             }
-          }).then(res => {
+          })
+          .then(res => {
             // this[key] = url;
             this.filesHasUpload.some((item, index) => {
               if (item === localData) {
-                this.filesHasUpload[index] = url
+                this.filesHasUpload[index] = url;
               }
-            })
+            });
             // this.filesHasUpload[len] = url
           });
       });
     },
-    getImgBase64 (localId) {
+    getImgBase64(localId) {
       wx.getLocalImgData({
         localId, // 图片的localID
         success: res => {
@@ -880,13 +913,15 @@ export default {
           if (localData.indexOf("data:image") != 0) {
             localData = "data:image/jpeg;base64," + localData;
           }
-          localData = localData.replace(/\r|\n/g, "").replace("data:image/jgp", "data:image/jpeg");
+          localData = localData
+            .replace(/\r|\n/g, "")
+            .replace("data:image/jgp", "data:image/jpeg");
           this.filesHasUpload.push(localData);
           this.uploadToAli(localData);
         }
       });
     },
-    chosenImage () {
+    chosenImage() {
       wx.chooseImage({
         count: 9, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
@@ -895,8 +930,8 @@ export default {
           // let len = this.filesHasUpload.length;
           var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
           localIds.forEach(item => {
-            this.getImgBase64(item)
-          })
+            this.getImgBase64(item);
+          });
           return;
           // wx.getLocalImgData({
           //   localId: localIds[0], // 图片的localID
@@ -924,55 +959,55 @@ export default {
       {
         label: this.$t("formName.study"),
         value: "learn_cooperation",
-        select:false,      
+        select: false
       },
       {
         label: this.$t("formName.textbook"),
         value: "teaching_material",
-        select:false,       
+        select: false
       },
       {
         label: this.$t("formName.formality"),
         value: "formality",
-        select:false,     
+        select: false
       },
       {
         label: this.$t("formName.exchange"),
         value: "exchange",
-        select:false,     
+        select: false
       },
       {
         label: this.$t("formName.medical"),
         value: "medical",
-        select:false,        
+        select: false
       },
       {
         label: this.$t("formName.carry"),
-        value: "carry",        
+        value: "carry"
       },
       {
         label: this.$t("formName.rent"),
         value: "rent",
-        select:false,       
+        select: false
       },
       {
         label: this.$t("formName.accompany"),
         value: "accompany",
-        select:false,      
+        select: false
       },
       {
         label: this.$t("formName.daigou"),
         value: "second_hand",
-        select:false,        
+        select: false
       },
       {
         label: this.$t("formName.other"),
         value: "other",
-        select:false,       
+        select: false
       }
     ];
     $(".repeat_content input").val("");
-    this.description = '';
+    this.description = "";
     if (this.$route.query.mode && this.$route.query.mode == "MODIFY") {
       this.isEditType = true;
       this.loadDataEdit(this.$route.query.id);
@@ -1025,68 +1060,70 @@ export default {
   transition: all 0.2s ease-out;
 }
 .select_out {
-		  position: fixed;
-		  left: 0;
-		  right: 0;
-		  bottom: -100%;
-		  opacity: 0;
-		  -webkit-transition: all 0.3s ease-out;
-		  -moz-transition: all 0.3s ease-out;
-		  transition: all 0.3s ease-out;
-		  background: #eee;
-		}
-		 .select_in {
-		  position: fixed;
-		  left: 0;
-		  right: 0;
-		  bottom: 0;
-		  opacity: 1;
-		  z-index: 2;
-		  -webkit-transition: all 0.3s ease-in;
-		  -moz-transition: all 0.3s ease-in;
-		  transition: all 0.3s ease-in;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -100%;
+  opacity: 0;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+  background: #eee;
+}
+.select_in {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 1;
+  z-index: 2;
+  -webkit-transition: all 0.3s ease-in;
+  -moz-transition: all 0.3s ease-in;
+  transition: all 0.3s ease-in;
+}
+.gl_mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: rgba(153, 153, 153, 0.5);
+}
+.mint-cell {
+  min-height: 36px !important;
+}
+.mint-cell-title {
+  text-align: left !important;
+}
+.mint-radio-core {
+  display: none !important;
+}
 
-		}
-		.gl_mask{
-		    position: fixed;
-		    top: 0;
-		    bottom: 0;
-		    left: 0;
-		    right: 0;
-		    z-index: 1;
-		    background: rgba(153, 153, 153, 0.5);
-		}
-		.mint-cell-title{
-	        text-align: left!important;
-	    }
-	    .mint-radio-core{
-	        display: none!important
-	    }
-
-		.mint-switch {
-		  margin-right: 0.08rem;
-		  .mint-switch-core {
-		    height: 0.5rem !important;
-		    width: 0.76rem !important;
-		  }
-		  .mint-switch-core::after {
-		    width: 0.43rem !important;
-		    height: 0.43rem !important;
-		    border-radius: 50% !important;
-		  }
-		  .mint-switch-input:checked + .mint-switch-core::after {
-		    transform: translateX(12px) !important;
-		  }
-		  .mint-switch-core::before {
-		    height: 0.46rem !important;
-		    width: 0.70rem !important;
-		  }
-		  .mint-switch-input:checked + .mint-switch-core {
-		    background: #66fd66 !important;
-		    border-color: #66fd66 !important;
-		  }
-		  .mint-radio-core {
-		    display: none !important;
-		  }
-		}
+.mint-switch {
+  margin-right: 0.08rem;
+  .mint-switch-core {
+    height: 0.5rem !important;
+    width: 0.76rem !important;
+  }
+  .mint-switch-core::after {
+    width: 0.43rem !important;
+    height: 0.43rem !important;
+    border-radius: 50% !important;
+  }
+  .mint-switch-input:checked + .mint-switch-core::after {
+    transform: translateX(12px) !important;
+  }
+  .mint-switch-core::before {
+    height: 0.46rem !important;
+    width: 0.7rem !important;
+  }
+  .mint-switch-input:checked + .mint-switch-core {
+    background: #66fd66 !important;
+    border-color: #66fd66 !important;
+  }
+  .mint-radio-core {
+    display: none !important;
+  }
+}
 </style>

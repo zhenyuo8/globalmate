@@ -10,7 +10,7 @@
             <p class="gl_status" :class="'status_'+item.need.enable">{{item.need.status}}</p>
             <p class="created_time">{{item.need.time}}</p>
           </div>
-          <div class="list_repeat_pushed" v-if="!mySolove">
+          <div class="list_repeat_pushed" v-if="item.pushList&&item.pushList.length!=0&&!mySolove">
             <p>{{$t('formTitle.pushTitle')}}</p>
             <div class="list_repeat_pushed_item" v-show="item.pushList&&item.pushList.length!=0">
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
@@ -35,6 +35,7 @@
           </div>
           <div class="action_list" v-if="item.conceretNeed.status!='Closed'&&!mySolove">
             <span class="re_edit" @click='editForm($event,item)' :class="item.need.enable==1||item.need.enable==3?'can_be_edit':''">{{$t('button.edit')}}</span>
+            <span class="delete" @click='deleteForm($event,item)' :class="item.need.enable!=2?'can_be_edit':''">{{$t('button.delete')}}</span>
             <span class="done" @click='finished($event,item)' :class="item.need.enable!=6&&item.need.enable!=0?'can_be_done':''">{{$t('button.finished')}}</span>
             <span class="comment" @click='evaluate($event,item)' :class="item.need.enable==0?'can_be_evaluate':''">{{$t('button.evaluate')}}</span>
           </div>
@@ -123,6 +124,39 @@ export default {
         }
       });
     },
+    deleteForm(e,item){
+      let postData={
+        needId:item.need.id,      
+      }
+      if (item.need.enable == 2 || item.need.enable == 6) {
+        Toast({
+          message: this.$t('totastTips.completedOrExecution'),
+          duration: 2000
+        });
+        return;
+      }
+      // return
+      this.axios
+          .delete(
+            this.ip + `/globalmate/rest/need/delete/${item.need.id}?token=${this.userInfo.token}`,
+            postData
+          ).then(res => {
+            if (res.success) {
+              this.loadingShow = true;
+              setTimeout(()=>{
+                this.myAssistList=[];
+                this.loadData();   
+              },2000) 
+            } else {
+              Toast({
+                message: res.msg,
+                duration: 2000
+              });
+            }
+          }).catch(e => {          
+            console.log(e);
+       });
+    },
     finished(e, item) {
       e = e ? e : window.event;
       e.preventDefault();
@@ -191,36 +225,18 @@ export default {
             });
         }
       } else {
-        this.axios
-          .get(
-            this.ip + "/globalmate/rest/assist/" + item.need.id + "/complete",
-            {
-              params: {
+        this.axios.get(this.ip + "/globalmate/rest/assist/" + item.need.id + "/complete",{
+          params: {
                 token: this.userInfo.token,
                 needId: item.need.id,
                 action: "coplete",
                 providerId: item.need.userId
               }
-            }
-          )
-          .then(res => {
+            }).then(res => {
             this.myAssistList = [];
             this.loadingShow = true;
-            let assistMan = item.assistList[0].providerId;
-            this.$router.push({
-              path: "evaluate",
-              query: {
-                token: this.userInfo.token,
-                title: this.$t("button.evaluate"),
-                id: "evaluate",
-                evaluateId: assistMan,
-                businessId: item.need.id,
-                uNeedId: item.assistList[0].uNeedId,
-                uNeedName: item.assistList[0].uNeedName
-              }
-            });
-          })
-          .catch(e => {
+            this.loadData();
+          }).catch(e => {
             console.log(e);
           });
       }
@@ -308,15 +324,18 @@ export default {
           if (res.success) {
             if (res.data && res.data.length != 0) {
               var nowData = res.data;
-              for (var i = 0; i < nowData.length; i++) {
-                let curNowData = nowData[i];
+              for(var i=0;i<15;i++){
+                var length=nowData.length+1;
+                var index=parseInt(length * (Math.random()));
+                var t=nowData[index];
+                nowData.splice(index,1);
                 for (var n = 0; n < this.userList.length; n++) {
-                  if (curNowData.providerId == this.userList[n].id) {
-                    curNowData.userInfo = this.userList[n];
-                    if (curNowData.matchAccept) {
-                      data.assistList.push(curNowData);
+                  if (t.providerId == this.userList[n].id) {
+                    t.userInfo = this.userList[n];
+                    if (t.matchAccept) {
+                      data.assistList.push(t);
                     }
-                    data.pushList.push(curNowData);
+                    data.pushList.push(t);
                   }
                 }
               }

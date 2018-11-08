@@ -68,14 +68,19 @@
         }
     }
     .buttom_action{
+      overflow: hidden;
+      line-height: 0;
+      padding: 0.1rem;
       span{
-        display: inline-flex;
+        display: inline-block;
         background:linear-gradient( 103.8deg, rgba(97, 216, 60, 1), rgba(60, 182, 95, 1) );
         color: #fff;
         border-radius: 50%;
-        &.icon-add::before{
-          font-size: 36px;
-        }
+        font-size: 16px;
+        padding: 0.1rem;
+        width: 0.8rem;
+        height: 0.8rem;
+        line-height: 0.8rem;
       }
     }
 </style>
@@ -137,7 +142,7 @@
       <ul class="mainmenu">
         <li v-for="(item,index) in mainmenu" :key='index'>
           <a href="javascript:;">
-            <b :class="item.icon" @click='publish(item)'></b>
+            <b :class="item.icon" @click='goCurrentType(item)'></b>
             <span>{{item.title}}</span>
           </a>
         </li>
@@ -167,7 +172,7 @@
       </ul>
     </div>
     <div class="buttom_action">
-      <span class="icon-add" @click="publish()"></span>
+      <span class="" @click="publish()">{{$t('button.publish')}}</span>
       <!-- <ul>
         <li class="need_help" @click="seekHelp">{{$t('button.myPublished')}}</li>
         <li @click='offer'>{{$t('button.OthersPublished')}}</li>
@@ -328,6 +333,17 @@ export default {
             }
           });
        }
+    },
+    goCurrentType(item){
+      this.$router.push({
+          path: "seekHelpList",
+          query: {
+            token: this.token,
+            id: "offer",
+            userId: this.userId,
+            currentType:item.key
+          }
+        });
     },
     publish(item) {
       let _this=this;
@@ -629,6 +645,7 @@ export default {
             }
           }).then(result => {
               let clientIdentify = "pc" + String(new Date().getTime());
+              window.token=result.token;
               //登陆YYIMSDK
               YYIMChat.login({
                 username: username,
@@ -759,7 +776,6 @@ export default {
     }
   },
   activated() {
-
     this.mainmenu = [
       {
         title: this.$t("formName.study"),
@@ -900,7 +916,7 @@ export default {
   bottom: 0;
   top: 0;
   overflow-y: scroll;
-  padding-bottom: 44px;
+  padding-bottom: 60px;
   background: #fff;
 }
 .header {
@@ -1330,11 +1346,13 @@ ul {
   bottom: -1px;
   left: 0;
   right: 0;
+  /* height: 36px;
+  padding: 6px 0; */
   background:rgba(253,253,253,0.8);
   /* display: none; */
-  box-shadow: 0px 2px 2px 1px rgba(178, 178, 178, 1);
+  box-shadow: 0px 4px 10px 2px rgba(178, 178, 178, 1);
 }
-#index .buttom_action ul {
+/* #index .buttom_action ul {
   height: 24px;
   padding: 10px 0;
 }
@@ -1347,7 +1365,7 @@ ul {
   height: 24px;
   line-height: 24px;
   color: #007aff;
-}
+} */
 .need_help {
   box-sizing: border-box;
   border-right: 2px solid #eee;
