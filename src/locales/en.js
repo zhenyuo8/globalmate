@@ -6,7 +6,7 @@ export default{
         'OthersPublished':'Offering Help',
         'stars':'Stars',
         'more':'More',
-        'publish':'Pub',
+        'publish':'Post',
         'submit':'Submit',
         'agree':'Agree',
         'refuse':'Refuse',

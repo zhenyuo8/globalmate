@@ -138,7 +138,8 @@
             </ul>
         </div>
     <div class="">
-      <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p>
+      <!-- <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p> -->
+      <p class="index_notice"></p>
       <ul class="mainmenu">
         <li v-for="(item,index) in mainmenu" :key='index'>
           <a href="javascript:;">
@@ -1380,8 +1381,8 @@ ul {
 }
 #index .index_notice {
   color: #f59d0b;
-  height: 20px;
-  line-height: 20px;
+  height: 6px;
+  /* line-height: 20px; */
   text-align: left;
   background: #f9f8f4;
   padding-left: .4rem;
