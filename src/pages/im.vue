@@ -1,7 +1,7 @@
 <template>
   <div class="um-win um-page" id="main">
     <div class="um-content p5" id="content">
-      <div class="im_top_fix" v-show="id">
+      <div class="im_top_fix" v-show="id||idList.length>0">
         <div class="chart_main_content">
           <div class="chart_main_content_image" @click="showDetail('detail')">
             <div class="">
@@ -24,7 +24,7 @@
         </div>
 
       </div>
-      <div id="convo" class="convo" :class="id?'':'gl_no_item'">
+      <div id="convo" class="convo" :class="(id||idList.length>0)?'':'gl_no_item'">
         <ul class="chat-thread" id="chat-thread">
           <li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)' :key='index'>
             <img :src="item.pic" alt="">
@@ -78,7 +78,8 @@ export default {
       othersInfo: {},
       vGold: require("../assets/images/vGold.png"),
       vSilver: require("../assets/images/vSilver.png"),
-      vCopper: require("../assets/images/vCopper.png")
+      vCopper: require("../assets/images/vCopper.png"),
+      idList:[],
     };
   },
   methods: {
@@ -341,8 +342,8 @@ export default {
       });
     },
     loadData() {
-      if (!this.id) return;
-      this.axios
+      if(this.id){
+        this.axios
         .get(
           this.ip +
             "/globalmate/rest/need/list/" +
@@ -414,6 +415,76 @@ export default {
         .catch(e => {
           console.log(e);
         });
+      }else if(this.idList.length>0){
+        for(var i=0;i<this.idList.length;i++){
+          var id=this.idList[i];
+          this.axios
+        .get(
+          this.ip +
+            "/globalmate/rest/need/list/" +
+            id +
+            "?token=" +
+            this.userInfo.token +
+            "&onlyCurrentUser=true",
+          {
+            onlyCurrentUser: true
+          }
+        )
+        .then(res => {
+          if (res.success) {
+            let data = res.data;
+            if (!data) return;
+            if(data.need.enable!='1') return;
+            this.id=id;
+            for (var key in data.conceretNeed) {
+              if (key === "pic") {
+                if (
+                  data.conceretNeed[key] &&
+                  data.conceretNeed[key].indexOf("aliyuncs") > -1
+                ) {
+                  this.imageArr = data.conceretNeed[key].split(";");
+                }
+              }
+              if (key === "title") {
+                this.detail[key] = data.conceretNeed[key];
+              }
+              if (key === "tag") {
+                this.detail[key] = data.conceretNeed[key];
+              }
+            }
+            var status = data.need.enable + "";
+            switch (status) {
+              case "1":
+                this.detail["status"] = this.$t("status.open");
+                break;
+              case "2":
+                this.detail["status"] = this.$t("status.execute");
+                break;
+              case "0":
+                this.detail["status"] = this.$t("status.closed");
+                break;
+              case "6":
+                this.detail["status"] = this.$t("status.complete");
+                break;
+              default:
+            }
+            for (var key in data.need) {
+              this.detail[key] = data.need[key];
+            }
+            if (this.userInfo.userId !== res.data.need.userId) {
+              this.others = true;
+            }
+            if (res.data.need.enable != 1) {
+              this.hasSelectAready = true;
+            }
+          } else {
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+        }
+      }
     },
 
     getOthersInfo(toChartId) {
@@ -521,18 +592,17 @@ export default {
                 }
               }
 
+              try {
+                  _this.chatItemId = JSON.parse(result[i].data.content).item;
+                  if (!_this.id && _this.chatItemId&&_this.chatItemId!='null') {
+                    _this.idList.push(_this.chatItemId);
+                  }
+                } catch (e) {}
               if (
                 result[i].from &&
                 result[i].from == _this.$route.query.toChartId
               ) {
                 result[i].pic = _this.othersInfo.pic;
-                try {
-                  _this.chatItemId = JSON.parse(result[i].data.content).item;
-                  if (!_this.id && i == 0&&_this.chatItemId!='null') {
-                    _this.id = _this.chatItemId;
-                  }
-                } catch (e) {}
-
                 _this.createOnMessage(result[i]);
               } else {
                 result[i].pic = _this.currentUserImgae;
@@ -736,7 +806,7 @@ export default {
 }
 
 .convo {
-  margin-top: 100px !important;
+  margin-top: 120px !important;
   padding-bottom: 50px;
 }
 .gl_no_item {

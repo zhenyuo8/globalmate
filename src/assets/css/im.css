@@ -174,6 +174,8 @@
 	overflow-y: scroll;
 	overflow-x: hidden;
 	margin-top: 10px;
+	width: 100%;
+	margin-bottom: 48px;
 }
 .chat-time {
 	display: inline-block;
@@ -276,9 +278,6 @@
 	left: -.12rem;
 }
 
-.chat-thread {
-	width: 100%;
-}
 .chat-tips-box {
 	display: none;
 	width: 100%;

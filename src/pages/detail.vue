@@ -112,7 +112,7 @@
   flex-direction: column;
   padding: 10px 0;
   .detail_content_img {
-      margin: 0 auto 10px;
+      // margin: 0 auto 10px;
     img {
       width: 100%;
       height: 100%;
