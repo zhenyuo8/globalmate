@@ -258,6 +258,7 @@ export default {
       e = e ? e : window.event;
       e.preventDefault();
       event.stopPropagation();
+      console.log(item)
       e.cancelBubble = true;
       if (item.need.enable == 6) {
         Toast({
@@ -324,21 +325,49 @@ export default {
           if (res.success) {
             if (res.data && res.data.length != 0) {
               var nowData = res.data;
-              for(var i=0;i<15;i++){
-                var length=nowData.length+1;
-                var index=parseInt(length * (Math.random()));
-                var t=nowData[index];
-                nowData.splice(index,1);
-                for (var n = 0; n < this.userList.length; n++) {
-                  if (t.providerId == this.userList[n].id) {
-                    t.userInfo = this.userList[n];
-                    if (t.matchAccept) {
-                      data.assistList.push(t);
+              if(nowData.length>15){
+                for(var i=0;i<15;i++){
+                  var length=nowData.length+1;
+                  var index=parseInt(length * (Math.random()));
+                  var t=nowData[index];
+                  nowData.splice(index,1);
+                  for (var n = 0; n < this.userList.length; n++) {
+                    if (t.providerId == this.userList[n].id) {
+                      t.userInfo = this.userList[n];
+                      if (t.matchAccept) {
+                        data.assistList.push(t);
+                      }
+                      data.pushList.push(t);
                     }
-                    data.pushList.push(t);
                   }
                 }
-              }
+                var matchAcceptData=res.data.filter(item=>{
+                  return item.matchAccept
+                })
+                if(matchAcceptData&&matchAcceptData.length>0){
+                    this.userList.forEach(item=>{
+                    if(item.id==matchAcceptData[0].providerId){
+                      console.log(matchAcceptData[0])
+                      matchAcceptData[0].userInfo=item;
+                      data.assistList.push(matchAcceptData[0]);
+                      data.pushList[0]=matchAcceptData[0];
+                    }
+                })
+                }
+              }else{
+                for(var j=0;j<nowData.length;j++){
+                  var y=nowData[j];
+                  for (var m = 0; m < this.userList.length; m++) {
+                    if (y.providerId == this.userList[m].id) {
+                      y.userInfo = this.userList[m];
+                      if (y.matchAccept) {
+                        data.assistList.push(y);
+                      }
+                      data.pushList.push(y);
+                    }
+                  }
+                }
+              }   
             }
             callback && callback(data);
           } else {

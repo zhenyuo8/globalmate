@@ -1,7 +1,7 @@
 <template>
   <div class="um-win um-page" id="main">
     <div class="um-content p5" id="content">
-      <div class="im_top_fix" v-show="id||idList.length>0">
+      <div class="im_top_fix" v-show="id||idListAviavlable">
         <div class="chart_main_content">
           <div class="chart_main_content_image" @click="showDetail('detail')">
             <div class="">
@@ -24,7 +24,7 @@
         </div>
 
       </div>
-      <div id="convo" class="convo" :class="(id||idList.length>0)?'':'gl_no_item'">
+      <div id="convo" class="convo" :class="(id||idListAviavlable)?'':'gl_no_item'">
         <ul class="chat-thread" id="chat-thread">
           <li :class="item.type?'left-item':'right-item'" v-for="(item,index) in historyList" @click='showInfo(item)' :key='index'>
             <img :src="item.pic" alt="">
@@ -80,6 +80,7 @@ export default {
       vSilver: require("../assets/images/vSilver.png"),
       vCopper: require("../assets/images/vCopper.png"),
       idList:[],
+      idListAviavlable:false
     };
   },
   methods: {
@@ -435,6 +436,7 @@ export default {
             let data = res.data;
             if (!data) return;
             if(data.need.enable!='1') return;
+            this.idListAviavlable=true;
             this.id=id;
             for (var key in data.conceretNeed) {
               if (key === "pic") {
@@ -754,6 +756,7 @@ export default {
     this.historyList = [];
     this.id = "";
     this.id = this.$route.query.id;
+    this.isNeedShowTime=false;
     this.toChartId = this.$route.query.toChartId;
     if (this.userInfo.token) {
       this.getUserByToken(this.loadData);
