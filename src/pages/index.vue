@@ -85,12 +85,22 @@
       height: 54px;
       font-size: 12px;
       span{ 
+        img{
+          width: 0.8rem;
+          height: 0.8rem;
+          display: block;
+          margin: auto;
+        }
+        i{
+          display: block;
+          margin-top: 10px;
+        }
         &.published{
           flex: 1;
-          background: url('../assets/images/post-icon.png') no-repeat top;
-          background-size: 35px!important;
-          padding-top: 45px!important;
-          color: #444;
+          // background: url('../assets/images/post-icon.png') no-repeat top;
+          // background-size: 35px!important;
+          // padding-top: 45px!important;
+          // color: #444;
           position: relative;
           &::after{
             clear: both;
@@ -105,10 +115,10 @@
         }
         &.publish{
           flex: 1;
-           background: url('../assets/images/publish-icon.png') no-repeat top;
-           background-size: 35px!important;
-          padding-top: 45px!important;
-          color: #444;
+          //  background: url('../assets/images/publish-icon.png') no-repeat top;
+          //  background-size: 35px!important;
+          // padding-top: 45px!important;
+          // color: #444;
         }
       }
     }
@@ -202,8 +212,14 @@
       </ul>
     </div>
     <div class="buttom_action">
-      <span class="published" @click="seekHelp">{{$t('button.myPublished')}}</span>
-      <span class="publish" @click="publish()">{{$t('button.publish')}}</span>
+      <span class="published" @click="seekHelp">
+        <img src="../assets/images/post-icon.png" alt="">
+        <i>{{$t('button.myPublished')}}</i>
+      </span>
+      <span class="publish" @click="publish()">
+        <img src="../assets/images/publish-icon.png" alt="">
+        <i>{{$t('button.publish')}}</i>
+      </span>
       <!-- <span>{{$t('button.myPublished')}}</span>
       <span class="" @click="publish()">{{$t('button.publish')}}</span> -->
       <!-- <ul>
