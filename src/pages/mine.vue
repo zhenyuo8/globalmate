@@ -106,7 +106,7 @@ html,body {
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
           <img :src="userInfo1.pic" alt="" class="gl_user_img">
-          <img :src="userInfo1.userTag=='vGold'?vGold:userInfo1.userTag=='vSilver'?vSilver:''" v-if="userInfo1.userTag" alt="" class="gl_cetifiy_medal">
+          <img :src="userInfo1.userTag=='vGold'?vGold:userInfo1.userTag=='vSilver'?vSilver:''" v-if="userInfo1.userTag&&userInfo1.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">

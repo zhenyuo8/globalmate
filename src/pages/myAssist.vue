@@ -16,7 +16,7 @@
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
-                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag&&items.userInfo.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
 
                 <span>{{items.userInfo.nikename}}</span>
               </div>
@@ -43,7 +43,7 @@
               <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
-                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag&&items.userInfo.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>

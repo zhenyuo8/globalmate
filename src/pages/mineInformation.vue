@@ -337,7 +337,7 @@
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
                 <img :src='information.pic' alt="" class="gl_user_img">
-                 <img :src="information.userTag=='vGold'?vGold:information.userTag=='vSilver'?vSilver:''" v-if="information.userTag" alt="" class="gl_cetifiy_medal">
+                 <img :src="information.userTag=='vGold'?vGold:information.userTag=='vSilver'?vSilver:''" v-if="information.userTag&&information.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
 
             </div>
             <div class="mineInformation_information">
@@ -410,7 +410,7 @@
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="" class="gl_user_img" v-if='item.pic'>
                     <img src="../assets/images/icon.png" alt=""  class="gl_user_img" v-if='!item.pic'>
-                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag&&item.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score" >
                         <i v-for=" (i,j) in item.evaluation.score" class="gl_score_item icon-heart2" :index='i' :key="j"></i>

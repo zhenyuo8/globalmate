@@ -4,7 +4,7 @@
             <div class="comment_repeat" v-for="(item,index) in commentList" :key="index">
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="" class="gl_user_img">
-                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag&&item.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
 
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score" >
@@ -56,7 +56,6 @@
                     acquired='&acquired=false'
                 }
                 let url='/globalmate/rest/evaluate/list'
-                console.log(this.$route.query)
                 if(this.isOthers){
                     url='/globalmate/rest/evaluate/list/'+this.$route.query.userId;
                 }
@@ -87,7 +86,6 @@
                     curData.evaluation.createTime=this.moment(curData.evaluation.createTime).format('YYYY-MM-DD');
                     for(var n=0;n<this.userList.length;n++){
                         if(curData.evaluation.uEvaluatorId==this.userList[n].id){
-                            console.log(curData,8888888)
                             curData.pic=this.userList[n].pic;
                             curData.userTag=this.userList[n].userTag;
                             curData.evaluation.score=curData.evaluation.score-0;
@@ -98,7 +96,6 @@
                     }
                     this.loadingShow=false;
                 }
-                console.log(_this.commentList)
                 _this.commentList.sort(function (a,b) {
                     return b.evaluation.createTime- a.evaluation.createTime
                 });

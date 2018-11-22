@@ -14,7 +14,7 @@
                      <div class="list_repeat_user">
                        <div class="image_user" @click.stop.prevent='goDetail($event,item)'>
                          <img :src="item.need.pic" alt="" class="gl_user_img">
-                         <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+                         <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:''" v-if="item.need.userTag&&item.need.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                        </div>
                        <div class="name_user">
                          <span class="name">{{item.need.userName}}</span>

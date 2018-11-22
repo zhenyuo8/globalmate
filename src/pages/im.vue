@@ -7,7 +7,7 @@
             <div class="">
               <img :src="othersInfo.pic" v-if="othersInfo.pic" alt="" class="gl_user_img">
               <img src="../assets/images/icon.png" v-if="!othersInfo.pic" alt="" class="gl_user_img">
-              <img :src="othersInfo.userTag=='vGold'?vGold:othersInfo.userTag=='vSilver'?vSilver:othersInfo.userTag=='vCopper'?vCopper:''" v-if="othersInfo.userTag" alt="" class="gl_cetifiy_medal">
+              <img :src="othersInfo.userTag=='vGold'?vGold:othersInfo.userTag=='vSilver'?vSilver:''" v-if="othersInfo.userTag&&othersInfo.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
             </div>
           </div>
           <div class="chart_main_content_decription" @click='showDetail()'>

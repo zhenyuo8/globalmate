@@ -10,7 +10,7 @@
                   <div class="userImage">
                       <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
                       <img :src="item.pic" v-if="item.pic" alt="">
-                       <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+                       <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag&&item.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                   </div>
                   <div class="userInfo_name">
                       <span class="name">{{item.nikename}}</span>
@@ -122,12 +122,13 @@ export default {
                 display: flex;
                 padding: 10px 0 10px 0.2rem;
                 position: relative;
+                align-items: center;
                 div{
                     &.rank{
                         /*width: 6%;*/
                         /*text-align: left;*/
                         // line-height: 0;
-                        margin: auto;
+                        // margin: auto;
                         // padding: 0.2rem 0.2rem 0.2rem;
                     }
                     &.rank_0{
@@ -147,12 +148,12 @@ export default {
                     }
                     &.userInfo{
                         width: 100%;
-                        // padding: 0.2rem 0 0.2rem;
-                        
+                        display: flex;
+                        align-items: center;
                         margin-left:0.2rem;
                          .userImage{
                              width: .72rem;
-                             float: left;
+                            //  float: left;
                              height: .72rem;
                              border-radius: 4px;
                              position: relative;
@@ -183,7 +184,6 @@ export default {
                              left: 0.48rem;
                          }
                         &>.userInfo_name{
-                            float: left;
                             font-size: 12px;
                             margin-left: 4%;
                             span{
@@ -196,9 +196,9 @@ export default {
                             }
                         }
                          &>.nice{
-                             float: right;
-                             line-height: .72rem;
-                             margin-right: 0.4rem;
+                            position: absolute;
+                            right: 0.4rem;
+                        
                          }
                     }
                 }

@@ -173,7 +173,7 @@
       <div class="detail_top" @click='goDetail($event,listData)'>
         <div class="image_user">
           <img :src="listData.othersImage" alt="" class="gl_user_img">
-          <img :src="listData.userTag=='vGold'?vGold:listData.userTag=='vSilver'?vSilver:listData.userTag=='vCopper'?vCopper:''" v-if="listData.userTag" alt="" class="gl_cetifiy_medal">
+          <img :src="listData.userTag=='vGold'?vGold:listData.userTag=='vSilver'?vSilver:''" v-if="listData.userTag&&listData.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
         </div>
         <div class="name_user">
           <span class="name">{{listData.userName}}</span>
@@ -206,7 +206,7 @@
               <div class="" v-for="(item,index) in pushList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="" class="gl_user_img">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="" class="gl_user_img">
-<img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:item.userInfo.userTag=='vCopper'?vCopper:''" v-if="item.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+<img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:''" v-if="item.userInfo.userTag&&item.userInfo.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>
@@ -217,7 +217,7 @@
               <div class="" v-for="(item,index) in assistList" :key='index' @click="goChat(listData,item)">
                   <img src="../assets/images/icon.png" v-if="!item.userInfo.pic" alt="" class="gl_user_img">
                   <img :src="item.userInfo.pic" v-if="item.userInfo.pic" alt="" class="gl_user_img">
-                 <img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:item.userInfo.userTag=='vCopper'?vCopper:''" v-if="item.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+                 <img :src="item.userInfo.userTag=='vGold'?vGold:item.userInfo.userTag=='vSilver'?vSilver:''" v-if="item.userInfo.userTag&&item.userInfo.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
                   <span>{{item.userInfo.nikename}}</span>
               </div>
           </div>

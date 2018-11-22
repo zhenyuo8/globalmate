@@ -155,7 +155,7 @@
                     <div class="list_repeat_user">
                       <div class="image_user">
                         <img :src="item.need.pic" alt="" class="gl_user_img">
-                        <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+                        <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:''" v-if="item.need.userTag&&item.need.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
 
                       </div>
                       <div class="name_user">
@@ -204,7 +204,7 @@
         <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
           <a href="javascript:;">
               <img :src="item.pic" alt="">
-              <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+              <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag&&item.userTag!='vCopper'" alt="" class="gl_cetifiy_medal">
           </a>
           <span>{{index+1}}.{{item.name}}</span>
         </li>
