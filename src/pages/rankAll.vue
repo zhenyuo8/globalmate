@@ -10,7 +10,7 @@
                   <div class="userImage">
                       <img src="../assets/images/icon.png" v-if="!item.pic" alt="">
                       <img :src="item.pic" v-if="item.pic" alt="">
-                       <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+                       <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
                   </div>
                   <div class="userInfo_name">
                       <span class="name">{{item.nikename}}</span>

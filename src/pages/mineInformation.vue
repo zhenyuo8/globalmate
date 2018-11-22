@@ -337,7 +337,7 @@
         <div class="mineInformation_detail">
             <div class="mineInformation_image">
                 <img :src='information.pic' alt="" class="gl_user_img">
-                 <img :src="information.userTag=='vGold'?vGold:information.userTag=='vSilver'?vSilver:information.userTag=='vCopper'?vCopper:''" v-if="information.userTag" alt="" class="gl_cetifiy_medal">
+                 <img :src="information.userTag=='vGold'?vGold:information.userTag=='vSilver'?vSilver:''" v-if="information.userTag" alt="" class="gl_cetifiy_medal">
 
             </div>
             <div class="mineInformation_information">
@@ -380,7 +380,7 @@
                 {{$t('formTitle.mycircle')}}
             </div>
             <div class="mineInformation_school_content">
-                <div class="mineInformation_school_content_repeat" v-for="(item,index) in school">
+                <div class="mineInformation_school_content_repeat" v-for="(item,index) in school" :key="index">
                     <span class="scholl_name">{{item.schoolname}}</span>
                 </div>
                 <p v-if="school.length==0">{{$t('noDataDisplay')}}</p>
@@ -397,7 +397,7 @@
                 <div class="mineInformation_hobby_offer">
                     <span class="title gl_title_color">{{$t('formTitle.helpAvailable')}}</span>
                     <div class="" v-show="helpAvailable.length!=0">
-                        <span v-for="item in helpAvailable">{{item}}</span>
+                        <span v-for="(item,index) in helpAvailable" :key="index">{{item}}</span>
                     </div>
                 </div>
             </div>
@@ -410,10 +410,10 @@
                 <p class="comment_repeat_top">
                     <img :src="item.pic" alt="" class="gl_user_img" v-if='item.pic'>
                     <img src="../assets/images/icon.png" alt=""  class="gl_user_img" v-if='!item.pic'>
-                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+                    <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
                     <span>{{item.evaluation.uEvluatorName}}</span>
                     <span class="score" >
-                        <i v-for=" i in item.evaluation.score" class="gl_score_item icon-heart2" :index='i' ></i>
+                        <i v-for=" (i,j) in item.evaluation.score" class="gl_score_item icon-heart2" :index='i' :key="j"></i>
                     </span>
                 </p>
                 <p class="comment_repeat_middle" >
@@ -688,7 +688,8 @@ export default {
                 path: 'allComments',
                 query: {
                     'token': this.$route.query.token,
-                    'isOthers':this.isOthers
+                    'isOthers':this.isOthers,
+                    'userId':this.isOthers?this.otherUserId:this.userInfo.userId
                 }
             });
         },
@@ -775,7 +776,6 @@ export default {
             });
         },
         goDetail(item) {
-          console.log(item,11111111);
             this.loadingShow=true;
             this.$router.replace({
               path: "mineInformation",

@@ -249,15 +249,14 @@ export default {
       });
     },
     goDetail(e, item) {
+      if(item.need.userId==this.userInfo.userId) return;
       this.$router.push({
-        path: "mineInformation",
+        path: "im",
         query: {
           token: this.userInfo.token,
-          title: item.need.userName,
-          otherUserId: item.need.userId,
+          toChartId: item.need.userId,
           id: item.need.id,
           currentuser: this.userInfo.userId,
-          seeOther: true
         }
       });
     },
@@ -950,6 +949,9 @@ export default {
                   } else {
                     data[i].conceretNeed.pic = "";
                   }
+                  if(data[i].conceretNeed.reward.indexOf('Please input')>-1||data[i].conceretNeed.reward.indexOf('请选择')>-1){
+                      data[i].conceretNeed.reward=""
+                    }
                   var status = data[i].need.enable + "";
                   switch (status) {
                     case "1":

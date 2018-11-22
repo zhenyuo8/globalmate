@@ -193,12 +193,17 @@ export default {
           chatContent: this.chartValue,
           chatType: ""
         };
+        
         YYIMChat.sendTextMessage({
           to: this.$route.query.toChartId + "",
           type: "chat",
           content: JSON.stringify(content),
           body: {},
-          success: function(data) {},
+          success: function(data) {
+            if(!_this.hasSeachInList&&!_this.hasSeachInList){
+              _this.searchInChatList(_this.addInChatList)
+            }
+          },
           error: function(err) {
             console.log(err);
           }
@@ -389,15 +394,6 @@ export default {
                 break;
               case "6":
                 this.detail["status"] = this.$t("status.complete");
-                break;
-              case "3":
-                this.detail["status"] = "编辑中";
-                break;
-              case "4":
-                this.detail["status"] = "洽谈中";
-                break;
-              case "5":
-                this.detail["status"] = "执行中";
                 break;
               default:
             }
@@ -749,7 +745,49 @@ export default {
           .catch(e => {          
             console.log(e);
       });
-    }
+    },
+    // 查询我是否在事件的沟通列表
+    searchInChatList(callback){
+      this.axios
+        .get(this.ip + "/globalmate/rest//im/listChatRecordsByNeedId/"+this.id, {
+          params: {
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            if(res.data&&res.data.length>0){
+              const list=res.data;
+              const isInlist=list.some(item=>{
+                return item.uChatTargetId==this.userInfo.userId
+              });
+              if(!isInlist&&!this.hasSeachInList){
+                callback&&callback();
+              }
+            }else{
+              callback&&callback();
+            } 
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
+    // 将我加入当前事件的沟通列表
+    addInChatList(){
+      this.axios
+        .post(this.ip + "/globalmate/rest/im/addChatRecord?token="+this.userInfo.token, {
+          needId: this.id
+        })
+        .then(res => {
+          if (res.success) {
+            this.hasSeachInList=true;
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    },
   },
   activated() {
     $("#chat-thread").empty();
@@ -757,10 +795,13 @@ export default {
     this.id = "";
     this.id = this.$route.query.id;
     this.isNeedShowTime=false;
+    this.idListAviavlable=false;
+    this.hasSeachInList=false;
     this.toChartId = this.$route.query.toChartId;
     if (this.userInfo.token) {
       this.getUserByToken(this.loadData);
       this.getOthersInfo(this.toChartId);
+      // this.searchInChatList()
     } else {
       this.timer = setInterval(() => {
         if (this.userInfo.token) {

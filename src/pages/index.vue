@@ -67,20 +67,49 @@
             }
         }
     }
+    #index .buttom_action {
+  
+}
     .buttom_action{
       overflow: hidden;
       line-height: 0;
-      padding: 0.1rem;
-      span{
-        display: inline-block;
-        background:linear-gradient( 103.8deg, rgba(97, 216, 60, 1), rgba(60, 182, 95, 1) );
-        color: #fff;
-        border-radius: 50%;
-        font-size: 16px;
-        padding: 0.1rem;
-        width: 0.8rem;
-        height: 0.8rem;
-        line-height: 0.8rem;
+      position: fixed;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      background:rgba(253,253,253,0.9);
+      box-shadow: 0px 4px 10px 2px rgba(178, 178, 178, 1);
+      padding-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      height: 54px;
+      font-size: 12px;
+      span{ 
+        &.published{
+          flex: 1;
+          background: url('../assets/images/post-icon.png') no-repeat top;
+          background-size: 35px!important;
+          padding-top: 45px!important;
+          color: #444;
+          position: relative;
+          &::after{
+            clear: both;
+            content: "";
+            right: 0;
+            top: 10px;
+            bottom: 2px;
+            border-right: 1px solid #ddd;
+            position: absolute;
+
+          }
+        }
+        &.publish{
+          flex: 1;
+           background: url('../assets/images/publish-icon.png') no-repeat top;
+           background-size: 35px!important;
+          padding-top: 45px!important;
+          color: #444;
+        }
       }
     }
 </style>
@@ -116,7 +145,7 @@
                     <div class="list_repeat_user">
                       <div class="image_user">
                         <img :src="item.need.pic" alt="" class="gl_user_img">
-                        <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:item.need.userTag=='vCopper'?vCopper:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
+                        <img :src="item.need.userTag=='vGold'?vGold:item.need.userTag=='vSilver'?vSilver:''" v-if="item.need.userTag" alt="" class="gl_cetifiy_medal">
 
                       </div>
                       <div class="name_user">
@@ -165,7 +194,7 @@
         <li v-for="(item,index) in rankUserList" :key="index" @click='goDetail(item)'>
           <a href="javascript:;">
               <img :src="item.pic" alt="">
-              <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:item.userTag=='vCopper'?vCopper:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
+              <img :src="item.userTag=='vGold'?vGold:item.userTag=='vSilver'?vSilver:''" v-if="item.userTag" alt="" class="gl_cetifiy_medal">
           </a>
           <span>{{index+1}}.{{item.name}}</span>
         </li>
@@ -173,7 +202,10 @@
       </ul>
     </div>
     <div class="buttom_action">
-      <span class="" @click="publish()">{{$t('button.publish')}}</span>
+      <span class="published" @click="seekHelp">{{$t('button.myPublished')}}</span>
+      <span class="publish" @click="publish()">{{$t('button.publish')}}</span>
+      <!-- <span>{{$t('button.myPublished')}}</span>
+      <span class="" @click="publish()">{{$t('button.publish')}}</span> -->
       <!-- <ul>
         <li class="need_help" @click="seekHelp">{{$t('button.myPublished')}}</li>
         <li @click='offer'>{{$t('button.OthersPublished')}}</li>
@@ -715,6 +747,10 @@ export default {
                     } else {
                       data[i].conceretNeed.pic = "";
                     }
+                    if(data[i].conceretNeed.reward.indexOf('Please input')>-1||data[i].conceretNeed.reward.indexOf('请选择')>-1){
+                      data[i].conceretNeed.reward=""
+                    }
+                  
                     var status = data[i].need.enable + "";
                     switch (status) {
                       case "1":
@@ -728,15 +764,6 @@ export default {
                         break;
                       case "6":
                         data[i].need.status = this.$t("status.complete");
-                        break;
-                      case "3":
-                        data[i].need.status = "编辑中";
-                        break;
-                      case "4":
-                        data[i].need.status = "洽谈中";
-                        break;
-                      case "5":
-                        data[i].need.status = "执行中";
                         break;
                       default:
                     }
@@ -1082,12 +1109,9 @@ ul {
 .mainmenu li a span {
   display: block;
   margin-top: 10px;
-  /*line-height: 30px;*/
   background-color: #fff;
   color: #999;
   font-size: 12px;
-  /*white-space: nowrap;*/
-  /*text-overflow: ellipsis;*/
   overflow: hidden;
 }
 
@@ -1269,7 +1293,6 @@ ul {
 }
 
 .rank ,.gl_index_list{
-  /*margin-top: 7px;*/
   background: rgba(255, 255, 255, 0.6);
   font-size: 14px;
   color: #999;
@@ -1310,7 +1333,6 @@ ul {
 }
 .rank ul li a .gl_cetifiy_medal{
     position: absolute;
-    /*bottom: 14px!important;*/
     top: 1rem;
     right: 0;
     width: 0.5rem;
@@ -1341,32 +1363,6 @@ ul {
   width: 1.4rem;
   height: 1.4rem;
 }
-
-#index .buttom_action {
-  position: fixed;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  /* height: 36px;
-  padding: 6px 0; */
-  background:rgba(253,253,253,0.8);
-  /* display: none; */
-  box-shadow: 0px 4px 10px 2px rgba(178, 178, 178, 1);
-}
-/* #index .buttom_action ul {
-  height: 24px;
-  padding: 10px 0;
-}
-#index .buttom_action ul li {
-  display: inline-block;
-  width: 50%;
-  font-size: 16px;
-  font-weight: 500;
-  float: left;
-  height: 24px;
-  line-height: 24px;
-  color: #007aff;
-} */
 .need_help {
   box-sizing: border-box;
   border-right: 2px solid #eee;
@@ -1382,7 +1378,6 @@ ul {
 #index .index_notice {
   color: #f59d0b;
   height: 6px;
-  /* line-height: 20px; */
   text-align: left;
   background: #f9f8f4;
   padding-left: .4rem;

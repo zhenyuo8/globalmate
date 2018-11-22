@@ -106,7 +106,7 @@ html,body {
       <div class="mine_detail">
         <div class="mine_image" @click='toMineInformation'>
           <img :src="userInfo1.pic" alt="" class="gl_user_img">
-          <img :src="userInfo1.userTag=='vGold'?vGold:userInfo1.userTag=='vSilver'?vSilver:userInfo1.userTag=='vCopper'?vCopper:''" v-if="userInfo1.userTag" alt="" class="gl_cetifiy_medal">
+          <img :src="userInfo1.userTag=='vGold'?vGold:userInfo1.userTag=='vSilver'?vSilver:''" v-if="userInfo1.userTag" alt="" class="gl_cetifiy_medal">
         </div>
         <div class="mine_information" @click='toMineInformation'>
           <div class="mine_top">
@@ -147,43 +147,50 @@ export default {
           title: this.$t("personaPage.identify"),
           text: "",
           arrow: true,
-          mineType: "identify"
+          mineType: "identify",
+          className:'identify'
         },
         {
           title: this.$t("personaPage.posted"),
           text: "",
           arrow: true,
-          mineType: "publish"
+          mineType: "publish",
+          className:'post'
         },
         {
           title: this.$t("personaPage.received"),
           text: "",
           arrow: true,
-          mineType: "sos"
+          mineType: "sos",
+          className:'receive'
         },
         {
           title: this.$t('personaPage.offers'),
           text: "",
           arrow: true,
-          mineType: "solove"
+          mineType: "solove",
+          className:'service'
         },
         {
           title: this.$t("personaPage.friends"),
           text: "",
           arrow: true,
-          mineType: "friends"
+          mineType: "friends",
+          className:'friends'
         },
         {
           title: this.$t("personaPage.feedback"),
           text: "",
           arrow: true,
-          mineType: "feedback"
+          mineType: "feedback",
+          className:'feedback'
        },
        {
          title: this.$t("personaPage.aboutUs"),
          text: "",
          arrow: true,
-         mineType: "aboutUs"
+         mineType: "aboutUs",
+         className:'aboutus'
        }
 
       ],

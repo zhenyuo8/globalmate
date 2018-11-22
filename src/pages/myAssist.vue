@@ -16,10 +16,25 @@
               <div class="" v-for="(items,indexs) in item.pushList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
-                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:items.userInfo.userTag=='vCopper'?vCopper:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
 
                 <span>{{items.userInfo.nikename}}</span>
               </div>
+            </div>
+          </div>
+          <div class="list_repeat_im" v-if="item.imChatList&&item.imChatList.length!=0&&!mySolove">
+            <p>联系中</p>
+            <div class="list_repeat_im_item">
+              <div v-for="(items,indexs) in item.imChatList" :key='indexs'>
+                <div class="im_item_left" @click="goChat(item,items)">
+                  <span class="im_img"><img :src="items.userInfo.pic" alt=""></span>
+                  <span class="im_name">{{items.userInfo.nikename}}</span>
+                </div>
+                <div class="im_item_right">
+                  <span @click="selectWhoHelp(items,item)" :class="item.need.enable!=1?'im_selected':''">{{$t('button.selectHelp')}}</span>
+                </div>
+              </div>
+              
             </div>
           </div>
           <div class="list_repeat_pushed" v-if="item.assistList&&item.assistList.length!=0&&!mySolove">
@@ -28,7 +43,7 @@
               <div class="" v-for="(items,indexs) in item.assistList" :key='indexs' @click="goChat(item,items)">
                 <img src="../assets/images/icon.png" v-if="!items.userInfo.pic" alt="" class="gl_user_img">
                 <img :src="items.userInfo.pic" v-if="items.userInfo.pic" alt="" class="gl_user_img">
-                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:items.userInfo.userTag=='vCopper'?vCopper:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
+                <img :src="items.userInfo.userTag=='vGold'?vGold:items.userInfo.userTag=='vSilver'?vSilver:''" v-if="items.userInfo.userTag" alt="" class="gl_cetifiy_medal">
                 <span>{{items.userInfo.nikename}}</span>
               </div>
             </div>
@@ -243,14 +258,13 @@ export default {
     },
     goChat(item, items) {
         this.$router.push({
-          path: "mineInformation",
+          path: "im",
           query: {
             token: this.userInfo.token,
             title: items.userInfo.nikename,
-            otherUserId: items.userInfo.id,
+            toChartId: items.userInfo.id,
             id: items.needId,
             currentuser: this.userInfo.userId,
-            seeOther: true
           }
         });
     },
@@ -258,7 +272,6 @@ export default {
       e = e ? e : window.event;
       e.preventDefault();
       event.stopPropagation();
-      console.log(item)
       e.cancelBubble = true;
       if (item.need.enable == 6) {
         Toast({
@@ -347,7 +360,6 @@ export default {
                 if(matchAcceptData&&matchAcceptData.length>0){
                     this.userList.forEach(item=>{
                     if(item.id==matchAcceptData[0].providerId){
-                      console.log(matchAcceptData[0])
                       matchAcceptData[0].userInfo=item;
                       data.assistList.push(matchAcceptData[0]);
                       data.pushList[0]=matchAcceptData[0];
@@ -375,6 +387,88 @@ export default {
         })
         .catch(() => {
           callback && callback(data);
+        });
+    },
+    getImChatList(data,callback){
+      data.imChatList = [];
+      this.axios
+        .get(this.ip + "/globalmate/rest//im/listChatRecordsByNeedId/"+data.need.id, {
+          params: {
+            token: this.userInfo.token
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            if(res.data&&res.data.length>0){
+              const list=res.data;
+              for(var j=0;j<list.length;j++){
+                  var y=list[j];
+                  for (var m = 0; m < this.userList.length; m++) {
+                    if (y.uChatTargetId == this.userList[m].id) {
+                      y.userInfo = this.userList[m];
+                      data.imChatList.push(y);
+                      console.log(data)
+                    }
+                  }
+                }
+              
+            callback&&callback(data);
+            }else{
+              callback&&callback(data);
+            } 
+          }else{
+            callback&&callback(data);
+          }
+        })
+        .catch(e => {
+          callback&&callback(data);
+          console.log(e);
+        });
+    },
+
+    selectWhoHelp(items,item) {
+      console.log(items)
+      let _this = this;
+      if (item.need.enable != 1) {
+        Toast({
+          message: this.$t("totastTips.completedOrExecution"),
+          duration: 2000
+        });
+        return;
+      }
+      MessageBox.confirm("", {
+        title: "",
+        message:
+          this.$t("totastTips.comfirmAddFriendE") +
+          items.uChatTargetName +
+          this.$t("totastTips.comfirmAddFriendA"),
+        confirmButtonText: this.$t("button.confirm"),
+        cancelButtonText: this.$t("button.cancel"),
+        showCancelButton: true
+      })
+        .then(action => {
+          _this.confirmWhoHelp(items.uChatTargetId,items.needId);
+        })
+        .catch(cancel => {});
+    },
+    confirmWhoHelp(assistId,needId) {
+      this.axios
+        .get(this.ip + "/globalmate/rest/assist/" + needId + "/agree", {
+          params: {
+            token: this.userInfo.token,
+            providerId: assistId
+          }
+        })
+        .then(res => {
+          if (res.success) {
+            this.loadingShow=true;
+            this.myAssistList=[];
+            this.loadData();
+          } else {
+          }
+        })
+        .catch(e => {
+          console.log(e);
         });
     },
     //下拉加载
@@ -461,10 +555,13 @@ export default {
                         if (!_this.mySolove) {
                           (function(curData) {
                             _this.getPushItem(curData, function(result) {
-                              _this.myAssistList.push(result);
-                              _this.myAssistList.sort((a,b) => {
-                                return b.need.createTime - a.need.createTime
+                              _this.getImChatList(result,function(result2){
+                                  _this.myAssistList.push(result2);
+                                  _this.myAssistList.sort((a,b) => {
+                                    return b.need.createTime - a.need.createTime
+                                  })
                               })
+                              
                             });
                           })(curData);
                         } else {
@@ -560,12 +657,8 @@ export default {
   background: #eee;
   overflow-y: auto;
   .list_warp {
-    // height: 100%;
     background: #f7f5f3;
     overflow: scroll;
-    .mint-loadmore {
-      // min-height: 100%;
-    }
     .list_repeat {
       background: #fff;
       margin-bottom: 10px;
@@ -630,6 +723,78 @@ export default {
               text-overflow: ellipsis;
               overflow: hidden;
               font-size: 12px;
+            }
+          }
+        }
+      }
+      .list_repeat_im{
+        text-align: left;
+        position: relative;
+        margin-top: 6px;
+        &::before{
+              border-top: 1px solid #eee;
+              content: "";
+              clear: both;
+              position: absolute;
+              left: 0;
+              right: 0;
+          }
+        p{
+          padding:10px 0; 
+        }
+        .list_repeat_im_item{
+          &>div{
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 8px;
+          }
+          &::before{
+            border-top: 1px dashed #eee;
+              content: "";
+              clear: both;
+              position: absolute;
+              left: 0;
+              right: 0;
+          }
+          div{
+            flex: 1;
+            &.im_item_left{
+              display: flex;
+              flex-direction: column;
+              span{
+                width: 1rem;
+                height: 1rem;
+                display: inline-block;
+                overflow: hidden;
+                text-align: center;
+                &.im_name{
+                  margin-top: 6px;
+                  font-size: 12px;
+                  height: 12px;
+                }
+                img{
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 50%;
+                  display: inline-block
+                }
+              }
+            }
+            &.im_item_right{
+              text-align: right!important;
+              span{
+                  padding: 6px 0.15rem;
+                  background: linear-gradient(103.1deg, rgba(97, 216, 60, 1),
+    rgba(60, 182, 95, 1));
+                  border-radius: 12px;
+                  color: #fff;
+                  text-align: center;
+                  margin-right: 0.08rem;
+                  &.im_selected{
+                    background:#aaa;
+                  }
+              }
             }
           }
         }

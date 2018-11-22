@@ -36,7 +36,45 @@
 .repeat .repeat_title {
   text-align: left;
 }
-
+.repeat_title{
+  span{
+    &.receive{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/receive-icon.png') no-repeat left;
+    }
+    &.service{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/service-icon.png') no-repeat left;
+    }
+    &.post{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/post-icon.png') no-repeat left;
+    }
+    &.identify{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/identify-icon.png') no-repeat left;
+    }
+    &.friends{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/friends-icon.png') no-repeat left;
+    }
+    &.feedback{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/feedback-icon.png') no-repeat left;
+    }
+    &.aboutus{
+      padding-left: 35px;
+      background-size: 25px!important;
+      background: url('../assets/images/aboutus-icon.png') no-repeat left;
+    }
+  }
+}
 .repeat .repeat_content {
   text-align: right;
   position: relative;
@@ -150,11 +188,12 @@ input {
   <div class="repeat" @click='clickBack(itemRepeat)'>
     <div class="repeat_title repeat_common" :class="itemRepeat.componentKey=='reward'?'gl_reward_title':''">
       <span style="color:red" v-if="itemRepeat.isRequire">*</span>
-      <span>{{itemRepeat.title}}</span>
+      <span :class="itemRepeat.className?itemRepeat.className:''">{{itemRepeat.title}}</span>
     </div>
     <div class="repeat_content repeat_common" v-if="!itemRepeat.type">
       <div class="repeate_content_text">
         <div class="repeate_content_text_item" v-if="!itemRepeat.mintType" :class="itemRepeat.arrow?'':'repeate_content_text_item_fixed'">
+          
           <span :id='itemRepeat.componentKey' :name='itemRepeat.componentKey'>{{itemRepeat.text}}</span>
         </div>
         <div class="repeate_content_text_item" v-if="itemRepeat.mintType" :class="itemRepeat.arrow?'':'repeate_content_text_item_fixed'">
