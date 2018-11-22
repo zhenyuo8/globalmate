@@ -326,7 +326,6 @@ export default {
                       list[key] = [];
                     }
                   } else {
-                    console.log(data.conceretNeed[key])
                     list[key] = data.conceretNeed[key];
                     if(list[key].indexOf('Please input')>-1&&(key=='rewardAmount'||key=='reward')){
                         list[key]=""

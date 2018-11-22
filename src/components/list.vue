@@ -38,6 +38,15 @@
 }
 .repeat_title{
   span{
+    &.mine_list{
+      display: flex;
+      align-items: center;
+      img{
+        width: 0.56rem;
+        height: 0.56rem;
+        margin-right: 0.1rem;
+      }
+    }
     &.receive{
       padding-left: 35px;
       background-size: 25px!important;
@@ -188,7 +197,13 @@ input {
   <div class="repeat" @click='clickBack(itemRepeat)'>
     <div class="repeat_title repeat_common" :class="itemRepeat.componentKey=='reward'?'gl_reward_title':''">
       <span style="color:red" v-if="itemRepeat.isRequire">*</span>
-      <span :class="itemRepeat.className?itemRepeat.className:''">{{itemRepeat.title}}</span>
+      <span :class="itemRepeat.className?'mine_list':''" v-if="itemRepeat.className">
+        <img :src="itemRepeat.className=='identify'?identify:itemRepeat.className=='post'?post:itemRepeat.className=='friends'?friends:itemRepeat.className=='feedback'?feedback:itemRepeat.className=='aboutus'?aboutus:itemRepeat.className=='service'?service:itemRepeat.className=='receive'?receive:''" alt="" v-if="itemRepeat.className">
+        <i>{{itemRepeat.title}}</i>
+      </span>
+      <span v-if="!itemRepeat.className">
+        {{itemRepeat.title}}
+      </span>
     </div>
     <div class="repeat_content repeat_common" v-if="!itemRepeat.type">
       <div class="repeate_content_text">
@@ -222,7 +237,14 @@ export default {
   mixins: [userMix],
   data() {
     return {
-
+      'identify':require('../assets/images/identify-icon.png'),
+      'post':require('../assets/images/post-icon.png'),
+      'service':require('../assets/images/publish-icon.png'),
+      'receive':require('../assets/images/receive-icon.png'),
+      'feedback':require('../assets/images/feedback-icon.png'),
+      'aboutus':require('../assets/images/aboutus-icon.png'),
+      'friends':require('../assets/images/friends-icon.png'),
+     
 
     };
   },
