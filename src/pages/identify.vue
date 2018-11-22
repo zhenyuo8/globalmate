@@ -438,6 +438,7 @@ export default {
             }
           }).then(res => {
               this[key+'_change']=true;
+              this.submitControl=true;
             this[key] = url;
           });
       });
@@ -472,7 +473,7 @@ export default {
     },
     handleData(arr, key1, key2, type) {
       if (this[key1] && this[key2]) {
-        if (!this[key1].includes('http') || !this[key1].includes('http')) {
+        if (!this[key1].includes('http') || !this[key2].includes('http')) {
           Toast({
             message: this.$t('totastTips.waitUpload'),
             duration: 1000
@@ -504,12 +505,12 @@ export default {
           });
           return
       }
-      let res = this.handleData(data, "idCardFront", "idCardBack", "IDCARD");
-      if (res === false) return
+      // let res = this.handleData(data, "idCardFront", "idCardBack", "IDCARD");
+      // if (res === false) return
       res = this.handleData(data, "studentFront", "studentBack", "STUDENTID");
       if (res === false) return
-      res = this.handleData(data, "passPortFront", "passPortBack", "PASSPORT");
-      if (res === false) return
+      // res = this.handleData(data, "passPortFront", "passPortBack", "PASSPORT");
+      // if (res === false) return
 
       if (data.length === 0) {
         Toast({

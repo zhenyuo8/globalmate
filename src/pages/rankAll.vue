@@ -123,6 +123,8 @@ export default {
                 padding: 10px 0 10px 0.2rem;
                 position: relative;
                 align-items: center;
+                height: 40px;
+                overflow: hidden;
                 div{
                     &.rank{
                         /*width: 6%;*/
