@@ -444,6 +444,7 @@ export default {
       });
     },
     uploadImg(key) {
+      this.submitControl=true;
       wx.chooseImage({
         count: 1, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
@@ -507,7 +508,7 @@ export default {
       }
       // let res = this.handleData(data, "idCardFront", "idCardBack", "IDCARD");
       // if (res === false) return
-      res = this.handleData(data, "studentFront", "studentBack", "STUDENTID");
+      let res = this.handleData(data, "studentFront", "studentBack", "STUDENTID");
       if (res === false) return
       // res = this.handleData(data, "passPortFront", "passPortBack", "PASSPORT");
       // if (res === false) return
