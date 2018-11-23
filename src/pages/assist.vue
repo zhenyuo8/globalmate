@@ -19,7 +19,7 @@
         </div>
         <div class="main_decription_uploader">
           <div class="hide_space">
-            <div class="main_decription_uploader_container_img" v-for="(item,index) in filesHasUpload" :key='index' @click='removeItem(index)'>
+            <div class="main_decription_uploader_container" v-for="(item,index) in filesHasUpload" :key='index' @click='removeItem(index)'>
               <img :src="item" class="prev_imgae" alt="">
             </div>
             <div class="main_decription_uploader_container" @click='chosenImage'>
@@ -1122,6 +1122,14 @@ export default {
   }
   .mint-radio-core {
     display: none !important;
+  }
+}
+.main_decription_uploader_container{
+  overflow: hidden;
+  img{
+    width: 100%;
+    height: 100%;
+    display: inline-block;
   }
 }
 </style>
