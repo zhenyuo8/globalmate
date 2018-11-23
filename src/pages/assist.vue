@@ -207,12 +207,10 @@ export default {
     },
     clickCallBack(item, e) {
       let _this = this;
-      console.log(item);
       if (!item.type) {
         if (item.key === "date") {
           this.selectCallBack(e, item);
         } else if (item.key === "style") {
-          console.log(item);
           this.selectStyleFlag = !this.selectStyleFlag;
         } else {
           this.getSelectItem(item.key);
