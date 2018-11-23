@@ -327,7 +327,7 @@ export default {
                     }
                   } else {
                     list[key] = data.conceretNeed[key];
-                    if(list[key].indexOf('Please input')>-1&&(key=='rewardAmount'||key=='reward')){
+                    if(list[key]&&list[key].indexOf('Please input')>-1&&(key=='rewardAmount'||key=='reward')){
                         list[key]=""
                     }
                   }
