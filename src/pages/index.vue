@@ -3,6 +3,7 @@
         ul{
             padding: 10px .32rem;
             background:#fff;
+            min-height: 257px;
             li{
                 padding: 10px 0;
                 position: relative;

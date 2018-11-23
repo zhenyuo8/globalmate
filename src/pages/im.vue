@@ -793,6 +793,7 @@ export default {
     $("#chat-thread").empty();
     this.historyList = [];
     this.id = "";
+    this.idList=[];
     this.id = this.$route.query.id;
     this.isNeedShowTime=false;
     this.idListAviavlable=false;
