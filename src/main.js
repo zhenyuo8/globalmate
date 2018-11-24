@@ -32,7 +32,7 @@ Vue.config.productionTip = false
 
 const langLoaded = Object.keys(messages)
 let lang = navigator.language || defaultLang;
-lang = /^zh/.test(lang) ? 'zh-CN' : /^en/.test(lang) ? 'en' : /^es/.test(lang) ? 'es' : lang;
+lang = /^zh/.test(lang) ? 'zh-CN' : /^en/.test(lang) ? 'en' : /^es/.test(lang) ? 'en' : lang;
 Vue.prototype.language = lang
 Vue.locale = () => {};
 const i18n = new VueI18n({
