@@ -140,7 +140,7 @@ export default{
         singapore:'Singapore',
         thailand:'Thailand',
         vietnam:'Vietnam',
-        us:'US',
+        us:'United States',
         germany:'Germany',
         canada:'Canada',
         uk:'UK',

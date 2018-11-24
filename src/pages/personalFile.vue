@@ -667,7 +667,7 @@ export default {
             this.$t("city.Hawaii")
           ];
           break;
-        case "US":
+        case "United States":
           list = [
             this.$t("city.NewYork"),
             this.$t("city.LosAngeles"),
