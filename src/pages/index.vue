@@ -136,7 +136,7 @@
                 </div>
             </div>
         </div>
-        <div class="gl-onswiper" @click="goCurrentType(item)">
+        <div class="gl-onswiper" @click="goCurrentType(lostItem)">
           <img src="../assets/images/lost-back.jpeg" alt="">
         </div>
         <!-- <div class="swpier_container" >
