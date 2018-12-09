@@ -430,6 +430,12 @@ export default {
       if (from.name === null && to.meta.index === 1) {
         this.transitionName = "";
       }
+      if(!to.meta||!to.meta.index){
+        this.transitionName = "slide-right";
+      }
+      if(!from.meta||!from.meta.index){
+        this.transitionName = "slide-left";
+      }
       //当然，如果你没有需要设置索引值为0的页面可以直接用着一段
       /*if( to.meta.index < from.meta.index){
                       this.transitionName = 'slide-right';

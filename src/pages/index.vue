@@ -136,13 +136,16 @@
                 </div>
             </div>
         </div>
-        <div class="swpier_container" >
+        <div class="gl-onswiper" @click="goCurrentType(item)">
+          <img src="../assets/images/lost-back.jpeg" alt="">
+        </div>
+        <!-- <div class="swpier_container" >
             <mt-swipe :auto="3000">
                 <mt-swipe-item v-for="(item,index) in slides" :key='index' @click.native='goSwiperItem(item.href)'><img :src="item.url" :key='index' alt=""  >
                 </mt-swipe-item>
             </mt-swipe>
-        </div>
-        <div class=" gl_index_list service_star">
+        </div> -->
+        <div class=" gl_index_list service_star" v-show="false">
             <div class="rank_title service_star_title">
               <div class="left">
                 {{$t('button.lastestList')}}
@@ -265,7 +268,14 @@ export default {
       vGold:require('../assets/images/vGold.png'),
       vSilver:require('../assets/images/vSilver.png'),
       vCopper:require('../assets/images/vCopper.png'),
-      myAssistList:[]
+      myAssistList:[],
+      lostItem:{
+        title: this.$t("formName.exchange"),
+        key: "exchange",
+        type: "assist",
+        form: "other",
+        icon: "icon-coin-yen"
+      },
     };
   },
   computed: {
@@ -821,72 +831,102 @@ export default {
     }
   },
   activated() {
+    let indexlocales={}
+    if(this.language&&(this.language.indexOf('en')>-1||this.language.indexOf('es')>-1)){
+      indexlocales={
+        'study':'Study',
+        'textbook':'TextBook',
+        'formality':'Formalities',
+        // 'exchange':'Exchange',
+        'exchange':'Lost and Found',
+        'medical':'Medical',
+        'carry':'Carrying',
+        'rent':'Renting',
+        'accompany':'Accompany',
+        'daigou':'Second Hand',
+        'other':'Others',
+      }
+    }else{
+      indexlocales={
+        'study':'学习互助',
+        'textbook':'教材',
+        'formality':'办手续',
+        // 'exchange':'换汇',
+        'exchange':'失物招领',
+        'medical':'就医',
+        'carry':'帮带',
+        'rent':'租赁',
+        'accompany':'陪伴',
+        'daigou':'二手市场',
+        'other':'其他',
+      }
+    }
     this.mainmenu = [
       {
-        title: this.$t("formName.study"),
+        title: indexlocales.study,
         key: "learn_cooperation",
         type: "assist",
         form: "assist",
         icon: "icon-pen"
       },
       {
-        title: this.$t("formName.textbook"),
+        title: indexlocales.textbook,
         key: "teaching_material",
         type: "assist",
         form: "other",
         icon: "icon-book"
       },
       {
-        title: this.$t("formName.formality"),
+        title: indexlocales.formality,
         key: "formality",
         type: "assist",
         form: "other",
         icon: "icon-Document_2_yinzhang"
       },
       {
-        title: this.$t("formName.exchange"),
+        title: indexlocales.exchange,
         key: "exchange",
         type: "assist",
         form: "other",
         icon: "icon-coin-yen"
       },
       {
-        title: this.$t("formName.medical"),
+        title: indexlocales.medical,
         key: "medical",
         type: "assist",
         form: "other",
         icon: "icon-local_hospital"
       },
       {
-        title: this.$t("formName.carry"),
+        title: indexlocales.carry,
         key: "carry",
         type: "assist",
         form: "carryAssist",
         icon: "icon-flight_takeoff"
       },
       {
-        title: this.$t("formName.rent"),
+        title: indexlocales.rent,
         key: "rent",
         type: "assist",
         form: "other",
         icon: "icon-office"
       },
       {
-        title: this.$t("formName.accompany"),
+        title: indexlocales.accompany,
         key: "accompany",
         type: "assist",
         form: "accompany",
         icon: "icon-pacman"
       },
       {
-        title: this.$t("formName.daigou"),
+        title: indexlocales.daigou,
         key: "second_hand",
         type: "assist",
         form: "aassist",
         icon: "icon-icon-announce"
       },
       {
-        title: this.$t("formName.other"),
+        title: indexlocales.other,
         key: "other",
         type: "assist",
         form: "other",
@@ -1102,6 +1142,7 @@ ul {
   margin-top: 2.5%;
   border-radius: 3px;
   overflow: hidden;
+  min-height: 84px;
 }
 
 .mainmenu li a {
@@ -1399,6 +1440,7 @@ ul {
   background: #f9f8f4;
   padding-left: .4rem;
   font-size: 12px;
+  display: none;
 }
 #index .icon-exclamation::before {
   margin-right: 0.04rem;
@@ -1410,5 +1452,13 @@ ul {
   top: 0;
   right: 0;
   bottom: 0;
+}
+.gl-onswiper{
+  padding-top: 36px;
+}
+.gl-onswiper img{
+  width: 100%;
+  height: 100%;
+  display: inline-block;
 }
 </style>
