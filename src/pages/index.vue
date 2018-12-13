@@ -1133,7 +1133,7 @@ ul {
 }
 .mainmenu {
   background: #fff;
-  padding: 10px 0.06rem;
+  padding: 0px 0.06rem;
   font-size: 12px;
 }
 .mainmenu li {
@@ -1142,7 +1142,7 @@ ul {
   margin-top: 2.5%;
   border-radius: 3px;
   overflow: hidden;
-  min-height: 84px;
+  min-height: 90px;
 }
 
 .mainmenu li a {
@@ -1455,6 +1455,7 @@ ul {
 }
 .gl-onswiper{
   padding-top: 36px;
+  height: 200px;
 }
 .gl-onswiper img{
   width: 100%;
