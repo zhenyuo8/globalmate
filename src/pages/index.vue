@@ -1,7 +1,7 @@
 <style media="screen" lang="less">
     .gl_index_list{
         ul{
-            padding: 10px .32rem;
+            padding: 0px .32rem;
             background:#fff;
             min-height: 257px;
             li{
@@ -16,6 +16,10 @@
                     right: 0;
                     border-bottom: 1px solid #eee;
                 }
+                &:nth-last-child(2)::after{
+                  border-bottom: none;
+                }
+                
                 .list_repeat_user{
                     display: flex;
                 }
@@ -145,7 +149,20 @@
                 </mt-swipe-item>
             </mt-swipe>
         </div> -->
-        <div class=" gl_index_list service_star" v-show="false">
+        
+    <div class="">
+      <!-- <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p> -->
+      <p class="index_notice"></p>
+      <ul class="mainmenu">
+        <li v-for="(item,index) in mainmenu" :key='index'>
+          <a href="javascript:;">
+            <b :class="item.icon" @click='goCurrentType(item)'></b>
+            <span>{{item.title}}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class=" gl_index_list service_star">
             <div class="rank_title service_star_title">
               <div class="left">
                 {{$t('button.lastestList')}}
@@ -180,19 +197,6 @@
                 <p v-show="myAssistList.length==0">{{$t('noDataDisplay')}}</p>
             </ul>
         </div>
-    <div class="">
-      <!-- <p class="index_notice icon-exclamation">{{$t('formTitle.indexnotice')}}</p> -->
-      <p class="index_notice"></p>
-      <ul class="mainmenu">
-        <li v-for="(item,index) in mainmenu" :key='index'>
-          <a href="javascript:;">
-            <b :class="item.icon" @click='goCurrentType(item)'></b>
-            <span>{{item.title}}</span>
-          </a>
-        </li>
-      </ul>
-    </div>
-
 
 
     <div class="rank service_star">

@@ -44,7 +44,7 @@
       img{
         width: 0.56rem;
         height: 0.56rem;
-        margin-right: 0.1rem;
+        margin-right: 0.2rem;
       }
     }
     &.receive{
