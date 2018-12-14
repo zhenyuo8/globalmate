@@ -72,7 +72,7 @@
           <span class="icon-checkbox" ></span>
         </li>
       </ul>
-      <div class="buttom_action">
+      <div class="buttom_action1">
         <span class="cancel" @click='cancel'>{{$t('button.cancel')}}</span>
         <span class="confirm" @click='confirm'>{{$t('button.confirm')}}</span>
       </div>
@@ -1184,25 +1184,26 @@ export default {
   color: #999;
   font-size: 16px;
 }
-.personalFile .buttom_action {
+.personalFile .buttom_action1 {
   height: 46px;
   background: #fff;
   line-height: 46px;
   margin-top: 10px;
+  display: flex;
 }
-.personalFile .buttom_action span {
+.personalFile .buttom_action1 span {
   display: inline-block;
   width: 40%;
   height: 36px;
-  margin-left: 0.2rem;
+  margin: auto;
   line-height: 36px;
   border-radius: 5px;
   color: #fff;
 }
-.personalFile .buttom_action .cancel {
+.personalFile .buttom_action1 .cancel {
   background: #b2b2b2;
 }
-.personalFile .buttom_action .confirm {
+.personalFile .buttom_action1 .confirm {
   background: rgb(41, 182, 246);
 }
 label i {
